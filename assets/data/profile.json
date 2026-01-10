@@ -1,0 +1,13 @@
+{
+  "success": true,
+  "data": {
+    "id": 1,
+    "full_name": "Test Super Admin User",
+    "email": "test-superadmin@example.com",
+    "status": "active",
+    "created_at": "2026-01-10 04:17:02",
+    "role": "super_admin",
+    "new_email": null
+  },
+  "message": "User profile retrieved successfully for Test Super Admin User (super_admin) by [Test Super Admin User]"
+}
