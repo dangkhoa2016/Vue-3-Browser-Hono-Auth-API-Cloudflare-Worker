@@ -6,6 +6,7 @@ export default {
     },
     navbar: {
       brand: 'Hono Auth Worker',
+      brand_title: 'Trở về trang chủ',
       home: 'Trang chủ',
       profile: 'Hồ sơ',
       about: 'Giới thiệu',
@@ -13,7 +14,8 @@ export default {
       mock_label: 'GIẢ LẬP',
       real_label: 'THẬT',
       switch_to_light: 'Chuyển sang chế độ Sáng',
-      switch_to_dark: 'Chuyển sang chế độ Tối'
+      switch_to_dark: 'Chuyển sang chế độ Tối',
+      change_language: 'Thay đổi Ngôn ngữ'
     },
     loader: {
       assets: 'Tài nguyên',
@@ -52,6 +54,11 @@ export default {
       message: 'Chúng tôi gặp sự cố khi tải nội dung này. Vui lòng kiểm tra kết nối và thử lại.',
       retry: 'Tải lại'
     },
+    common: {
+      loading: 'Đang tải...',
+      retry: 'Thử lại',
+      retry_title: 'Thử tải lại dữ liệu'
+    },
     home: {
       badge: 'Hono Auth Worker v1.0',
       hero: {
@@ -62,10 +69,16 @@ export default {
       },
       cta: {
         get_started: 'Bắt đầu',
-        documentation: 'Tài liệu'
+        get_started_title: 'Bắt đầu xây dựng hệ thống xác thực',
+        documentation: 'Tài liệu',
+        documentation_title: 'Đọc tài liệu hướng dẫn'
       },
       tech: {
-        heading: 'Vận hành bởi nền tảng hiện đại'
+        heading: 'Vận hành bởi nền tảng hiện đại',
+        hono_title: 'Framework web siêu nhanh',
+        d1_title: 'Cơ sở dữ liệu SQL không server',
+        jwt_title: 'Xác thực bảo mật dựa trên token',
+        edge_title: 'Triển khai mạng biên toàn cầu'
       }
     },
     about: {
@@ -129,6 +142,14 @@ export default {
       }
     },
     profile: {
+      account_info: 'Thông tin tài khoản',
+      username: 'Tên người dùng',
+      role: 'Vai trò',
+      status: 'Trạng thái',
+      stats: 'Thống kê',
+      joined: 'Ngày tham gia',
+      user_id: 'Mã người dùng',
+      access_level: 'Cấp độ truy cập',
       title: 'Hồ sơ người dùng',
       welcome: 'Chào mừng trở lại!',
       account_info: 'Thông tin tài khoản',
@@ -146,7 +167,9 @@ export default {
       title: 'Không tìm thấy trang',
       message: 'Trang bạn tìm kiếm không tồn tại.',
       back: 'Quay lại',
-      home: 'Trang chủ'
+      back_title: 'Quay lại trang trước',
+      home: 'Trang chủ',
+      home_title: 'Trở về trang chủ'
     }
   }
 };

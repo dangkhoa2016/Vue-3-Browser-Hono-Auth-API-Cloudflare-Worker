@@ -5,6 +5,7 @@ export default {
       back_to_top: '맨 위로'
     },
     navbar: {
+      change_language: '언어 변경',
       brand: 'Hono Auth Worker',
       home: '홈',
       profile: '프로필',
@@ -129,6 +130,14 @@ export default {
       }
     },
     profile: {
+      account_info: '계정 정보',
+      username: '사용자 이름',
+      role: '역할',
+      status: '상태',
+      stats: '통계',
+      joined: '가입일',
+      user_id: '사용자 ID',
+      access_level: '접근 레벨',
       title: '사용자 프로필',
       welcome: '다시 오신 것을 환영합니다!',
       account_info: '계정 정보',
@@ -142,11 +151,30 @@ export default {
       favorites: '즐겨찾기',
       comments: '댓글'
     },
+    common: {
+      loading: '로딩 중...',
+      retry: '다시 시도',
+      retry_title: '데이터 다시 로드'
+    },
+    home: {
+      cta: {
+        get_started_title: '인증 시스템 구축 시작',
+        documentation_title: '문서 읽기'
+      },
+      tech: {
+        hono_title: '초고속 웹 프레임워크',
+        d1_title: '서버리스 SQL 데이터베이스',
+        jwt_title: '보안 토큰 기반 인증',
+        edge_title: '글로벌 엣지 네트워크 배포'
+      }
+    },
     not_found: {
       title: '페이지를 찾을 수 없습니다',
       message: '찾으시는 페이지가 존재하지 않습니다.',
       back: '뒤로',
-      home: '홈'
+      back_title: '이전 페이지로 돌아가기',
+      home: '홈',
+      home_title: '홈페이지로 돌아가기'
     }
   }
 };

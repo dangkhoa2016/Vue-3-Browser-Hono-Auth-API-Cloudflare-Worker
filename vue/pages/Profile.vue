@@ -101,7 +101,7 @@
                 <div class="w-10 h-10 rounded-lg bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center group-hover:scale-110 transition-transform">
                   <i class="bi bi-calendar-check text-orange-600 dark:text-orange-400"></i>
                 </div>
-                <span class="text-gray-600 dark:text-slate-400 font-medium">Joined</span>
+                <span class="text-gray-600 dark:text-slate-400 font-medium">{{ $t('message.profile.joined') }}</span>
               </div>
               <span class="font-bold text-gray-900 dark:text-slate-100">{{ formatDate(profile.created_at) }}</span>
             </div>
@@ -127,7 +127,7 @@
                   <i class="bi bi-person-fill text-2xl text-blue-600 dark:text-blue-400"></i>
                   <div class="text-4xl font-black text-blue-600 dark:text-blue-400 group-hover:scale-110 transition-transform">{{ profile.id }}</div>
                 </div>
-                <div class="text-sm font-bold text-blue-700 dark:text-blue-300 uppercase tracking-wide">User ID</div>
+                <div class="text-sm font-bold text-blue-700 dark:text-blue-300 uppercase tracking-wide">{{ $t('message.profile.user_id') }}</div>
               </div>
             </div>
             
@@ -138,7 +138,7 @@
                   <i class="bi bi-shield-check text-2xl text-purple-600 dark:text-purple-400"></i>
                   <div class="text-2xl font-black text-purple-600 dark:text-purple-400 group-hover:scale-110 transition-transform uppercase">{{ profile.role.split('_')[0] }}</div>
                 </div>
-                <div class="text-sm font-bold text-purple-700 dark:text-purple-300 uppercase tracking-wide">Access Level</div>
+                <div class="text-sm font-bold text-purple-700 dark:text-purple-300 uppercase tracking-wide">{{ $t('message.profile.access_level') }}</div>
               </div>
             </div>
           </div>

@@ -5,6 +5,7 @@ export default {
       back_to_top: 'トップに戻る'
     },
     navbar: {
+      change_language: '言語を変更',
       brand: 'Hono Auth Worker',
       home: 'ホーム',
       profile: 'プロフィール',
@@ -129,6 +130,14 @@ export default {
       }
     },
     profile: {
+      account_info: 'アカウント情報',
+      username: 'ユーザー名',
+      role: '役割',
+      status: 'ステータス',
+      stats: '統計',
+      joined: '登録日',
+      user_id: 'ユーザーID',
+      access_level: 'アクセスレベル',
       title: 'ユーザープロフィール',
       welcome: 'お帰りなさい！',
       account_info: 'アカウント情報',
@@ -142,11 +151,30 @@ export default {
       favorites: 'お気に入り',
       comments: 'コメント'
     },
+    common: {
+      loading: '読み込み中...',
+      retry: '再試行',
+      retry_title: 'データを再読み込み'
+    },
+    home: {
+      cta: {
+        get_started_title: '認証システムの構築を開始',
+        documentation_title: 'ドキュメントを読む'
+      },
+      tech: {
+        hono_title: '超高速ウェブフレームワーク',
+        d1_title: 'サーバーレスSQLデータベース',
+        jwt_title: 'セキュアトークンベース認証',
+        edge_title: 'グローバルエッジネットワーク展開'
+      }
+    },
     not_found: {
       title: 'ページが見つかりません',
       message: 'お探しのページは存在しません。',
       back: '戻る',
-      home: 'ホーム'
+      back_title: '前のページに戻る',
+      home: 'ホーム',
+      home_title: 'ホームページに戻る'
     }
   }
 };
