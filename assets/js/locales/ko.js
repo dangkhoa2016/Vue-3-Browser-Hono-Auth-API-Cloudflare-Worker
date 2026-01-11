@@ -142,6 +142,7 @@ export default {
       brand_title: '홈페이지로 이동',
       change_language: '언어 변경',
       home: '홈',
+      menu: '메뉴',
       mock_label: 'MOCK',
       profile: '프로필',
       real_label: '실제',
