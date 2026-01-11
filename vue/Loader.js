@@ -169,7 +169,7 @@ export default {
           await safeImport(item, t('message.loader.store'));
         },
         items: [
-          { label: t('message.loader.items.main_store'), url: '/assets/js/stores/main.js' }
+          { label: t('message.loader.items.main_store'), url: '/assets/js/stores/mainStore.js' }
         ]
       }),
       makeStage({

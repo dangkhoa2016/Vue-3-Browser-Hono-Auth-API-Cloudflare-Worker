@@ -64,6 +64,7 @@ export default {
       back_to_top: '맨 위로'
     },
     common: {
+      close: '닫기',
       loading: '로딩 중...',
       retry: '다시 시도',
       retry_title: '데이터 다시 로드'
@@ -128,7 +129,15 @@ export default {
       accept_terms_prefix: '다음에 동의합니다',
       terms_of_service: '서비스 약관',
       and: '및',
-      privacy_policy: '개인정보 보호정책'
+      privacy_policy: '개인정보 보호정책',
+      login_required: '로그인 필요',
+      login_required_message: '프로필을 보려면 로그인하세요',
+      logging_in: '로그인 중...',
+      logout: '로그아웃',
+      logout_confirm_title: '로그아웃 확인',
+      logout_confirm_message: '정말 로그아웃하시겠습니까?',
+      cancel: '취소',
+      confirm: '확인'
     },
     loader: {
       app: '앱',
@@ -156,6 +165,7 @@ export default {
         main_store: '메인 스토어'
       },
       loading_component_title: '컴포넌트 로드 중...',
+      loading_profile: '프로필 로드 중',
       starting_app: '메인 앱 시작 중...',
       store: '스토어',
       system_init_sequence: '시스템 초기화 시퀀스'

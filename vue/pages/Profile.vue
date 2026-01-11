@@ -1,11 +1,25 @@
 <template>
   <div class="max-w-5xl mx-auto space-y-8 py-4">
     <!-- Loading State -->
-    <div v-if="loading" class="flex items-center justify-center py-20">
+    <div v-if="loadingProfile" class="flex items-center justify-center py-20">
       <div class="flex flex-col items-center gap-4">
         <div class="w-16 h-16 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
-        <p class="text-gray-600 dark:text-gray-400 font-medium">{{ $t('message.loader.loading_component_title') }}...</p>
+        <p class="text-gray-600 dark:text-gray-400 font-medium">{{ $t('message.loader.loading_profile') }}...</p>
       </div>
+    </div>
+
+    <!-- Login Required State -->
+    <div v-else-if="showLoginRequired" class="bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-200 dark:border-blue-800 rounded-2xl p-8 text-center">
+      <i class="bi bi-lock-fill text-5xl text-blue-600 dark:text-blue-400 mb-4"></i>
+      <h3 class="text-xl font-bold text-blue-900 dark:text-blue-100 mb-2">{{ $t('message.auth.login_required') }}</h3>
+      <p class="text-blue-700 dark:text-blue-300 mb-4">{{ $t('message.auth.login_required_message') }}</p>
+      <button
+        @click="openLoginModal"
+        class="inline-flex items-center gap-2 px-3 py-1 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition"
+      >
+        <i class="bi bi-box-arrow-in-right text-lg"></i>
+        {{ $t('message.auth.login') }}
+      </button>
     </div>
 
     <!-- Error State -->
@@ -149,33 +163,128 @@
 </template>
 
 <script>
-import { ref, onMounted } from 'vue';
-import { apiClient } from '/assets/js/api.js';
+import { ref, onMounted, onActivated, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { useAuthStore } from '/assets/js/stores/authStore.js';
+import { useModalStore } from '/assets/js/stores/modalStore.js';
+import { apiClient } from '/assets/js/api.js';
 
 export default {
   name: 'Profile',
   setup() {
     const profile = ref(null);
-    const loading = ref(true);
+    const loadingProfile = ref(true);
     const error = ref(null);
     const { locale } = useI18n({ useScope: 'global' });
+    const showLoginRequired = ref(false);
+    
+    // Use Pinia stores
+    const authStore = useAuthStore();
+    const modalStore = useModalStore();
+    
+    // Initialize auth store from localStorage
+    authStore.init();
 
-    const fetchProfile = async () => {
+    const openLoginModal = () => {
+      modalStore.openLogin(
+        // On success callback
+        async (loginData) => {
+          sessionStorage.removeItem('authRequired');
+          sessionStorage.removeItem('intendedRoute');
+          showLoginRequired.value = false;
+          await loadProfile();
+        },
+        // On close callback
+        () => {
+          if (!authStore.isAuthenticated) {
+            showLoginRequired.value = true;
+          }
+        }
+      );
+    };
+    
+    // Check authentication and show modal if needed
+    const checkAuthAndShowModal = () => {
+      // Check if auth is required from router guard
+      const authRequired = sessionStorage.getItem('authRequired');
+      
+      if (!authStore.isAuthenticated || authRequired === 'true') {
+        showLoginRequired.value = true;
+        openLoginModal();
+        return false;
+      }
+      
+      return true;
+    };
+
+    const loadProfile = async () => {
       try {
-        loading.value = true;
-        const response = await apiClient.get('/profile');
-        profile.value = response.data.data;
+        loadingProfile.value = true;
+        error.value = null;
+        
+        // Check authentication
+        const isAuth = checkAuthAndShowModal();
+        if (!isAuth) {
+          loadingProfile.value = false;
+          return;
+        }
+        
+        // Fetch profile from API
+        const response = await apiClient.get('/profile', {
+          headers: {
+            'Authorization': `Bearer ${authStore.token}`
+          }
+        });
+        
+        if (response.data.success) {
+          profile.value = response.data.data;
+          showLoginRequired.value = false;
+        } else {
+          throw new Error(response.data.error || 'Failed to load profile');
+        }
       } catch (err) {
-        error.value = err.message;
-        console.error('Failed to fetch profile:', err);
+        error.value = err.response?.data?.error || err.message || 'Failed to load profile';
+        console.error('Failed to load profile:', err);
+        
+        // If unauthorized, show login
+        if (err.response?.status === 401) {
+          authStore.logout();
+          checkAuthAndShowModal();
+        }
       } finally {
-        loading.value = false;
+        loadingProfile.value = false;
       }
     };
 
-    onMounted(() => {
-      fetchProfile();
+    // Watch for authentication changes
+    watch(
+      () => authStore.isAuthenticated,
+      async (isAuthenticated) => {
+        if (isAuthenticated === false && !showLoginRequired.value) {
+          // User logged out, show modal
+          checkAuthAndShowModal();
+        } else if (isAuthenticated === true && showLoginRequired.value) {
+          // User logged in, reload profile
+          await loadProfile();
+        }
+      },
+      { immediate: false }
+    );
+
+    // Initial load on mount
+    onMounted(async () => {
+      await loadProfile();
+    });
+
+    // Check auth when component is reactivated (from keep-alive)
+    onActivated(async () => {
+      // Recheck authentication when page becomes active
+      if (!authStore.isAuthenticated) {
+        checkAuthAndShowModal();
+      } else {
+        // Refresh profile data
+        await loadProfile();
+      }
     });
 
     const formatDate = (dateString) => {
@@ -206,7 +315,16 @@ export default {
       return icons[role] || 'bi-person';
     };
 
-    return { profile, loading, error, formatDate, getRoleBadgeColor, getRoleIcon };
+    return {
+      profile,
+      loadingProfile,
+      error,
+      showLoginRequired,
+      formatDate,
+      getRoleBadgeColor,
+      getRoleIcon,
+      openLoginModal
+    };
   }
 }
 </script>

@@ -64,6 +64,7 @@ export default {
       back_to_top: 'Nach oben'
     },
     common: {
+      close: 'Schließen',
       loading: 'Laden...',
       retry: 'Wiederholen',
       retry_title: 'Daten erneut laden'
@@ -128,7 +129,15 @@ export default {
       accept_terms_prefix: 'Ich stimme zu',
       terms_of_service: 'Nutzungsbedingungen',
       and: 'und',
-      privacy_policy: 'Datenschutzerklärung'
+      privacy_policy: 'Datenschutzerklärung',
+      login_required: 'Anmeldung erforderlich',
+      login_required_message: 'Bitte melden Sie sich an, um Ihr Profil anzuzeigen',
+      logging_in: 'Anmelden...',
+      logout: 'Abmelden',
+      logout_confirm_title: 'Abmeldung bestätigen',
+      logout_confirm_message: 'Möchten Sie sich wirklich abmelden?',
+      cancel: 'Abbrechen',
+      confirm: 'Bestätigen'
     },
     loader: {
       app: 'App',
@@ -156,6 +165,7 @@ export default {
         main_store: 'Haupt-Store'
       },
       loading_component_title: 'Komponente wird geladen...',
+      loading_profile: 'Profil wird geladen',
       starting_app: 'Starte Hauptanwendung...',
       store: 'Speicher',
       system_init_sequence: 'Systeminitialisierungssequenz'

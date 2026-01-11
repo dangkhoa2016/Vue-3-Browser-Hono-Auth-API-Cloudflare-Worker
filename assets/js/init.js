@@ -43,6 +43,8 @@ async function initMainApp() {
   // Load modules dynamically
   const routerModule = await import('/assets/js/router.js');
   const apiModule = await import('/assets/js/api.js');
+  const authStoreModule = await import('/assets/js/stores/authStore.js');
+  const modalStoreModule = await import('/assets/js/stores/modalStore.js');
   const { router } = routerModule;
   const { setupMock } = apiModule;
 
@@ -51,7 +53,10 @@ async function initMainApp() {
   options.moduleCache['pinia'] = Pinia;
   options.moduleCache['axios'] = window.axios;
   options.moduleCache['/assets/js/router.js'] = routerModule;
-  options.moduleCache['/assets/js/api.js'] = apiModule
+  options.moduleCache['/assets/js/api.js'] = apiModule;
+  options.moduleCache['/assets/js/stores/authStore.js'] = authStoreModule;
+  options.moduleCache['/assets/js/stores/modalStore.js'] = modalStoreModule;
+
   try {
     const App = await loadModule('/vue/App.vue', options);
     const app = createApp(App);

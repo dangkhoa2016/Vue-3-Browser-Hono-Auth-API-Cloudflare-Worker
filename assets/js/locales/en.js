@@ -64,6 +64,7 @@ export default {
       back_to_top: 'Back to top'
     },
     common: {
+      close: 'Close',
       loading: 'Loading...',
       retry: 'Retry',
       retry_title: 'Retry loading data'
@@ -128,7 +129,15 @@ export default {
       accept_terms_prefix: 'I agree to the',
       terms_of_service: 'Terms of Service',
       and: 'and',
-      privacy_policy: 'Privacy Policy'
+      privacy_policy: 'Privacy Policy',
+      login_required: 'Login Required',
+      login_required_message: 'Please login to view your profile',
+      logging_in: 'Logging in...',
+      logout: 'Logout',
+      logout_confirm_title: 'Confirm Logout',
+      logout_confirm_message: 'Are you sure you want to logout?',
+      cancel: 'Cancel',
+      confirm: 'Confirm'
     },
     loader: {
       app: 'App',
@@ -156,6 +165,7 @@ export default {
         main_store: 'Main Store'
       },
       loading_component_title: 'Loading Component...',
+      loading_profile: 'Loading profile',
       starting_app: 'Starting Main App...',
       store: 'Store',
       system_init_sequence: 'System Initialization Sequence'

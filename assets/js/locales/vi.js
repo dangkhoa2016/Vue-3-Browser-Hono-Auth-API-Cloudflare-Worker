@@ -64,6 +64,7 @@ export default {
       back_to_top: 'Lên đầu trang'
     },
     common: {
+      close: 'Đóng',
       loading: 'Đang tải...',
       retry: 'Thử lại',
       retry_title: 'Thử tải lại dữ liệu'
@@ -128,7 +129,15 @@ export default {
       accept_terms_prefix: 'Tôi đồng ý với',
       terms_of_service: 'Điều khoản sử dụng',
       and: 'và',
-      privacy_policy: 'Chính sách bảo mật'
+      privacy_policy: 'Chính sách bảo mật',
+      login_required: 'Yêu cầu đăng nhập',
+      login_required_message: 'Vui lòng đăng nhập để xem hồ sơ của bạn',
+      logging_in: 'Đang đăng nhập...',
+      logout: 'Đăng xuất',
+      logout_confirm_title: 'Xác nhận đăng xuất',
+      logout_confirm_message: 'Bạn có chắc chắn muốn đăng xuất?',
+      cancel: 'Hủy',
+      confirm: 'Xác nhận'
     },
     loader: {
       app: 'Ứng dụng',
@@ -156,6 +165,7 @@ export default {
         main_store: 'Kho chính'
       },
       loading_component_title: 'Đang tải thành phần...',
+      loading_profile: 'Đang tải hồ sơ',
       starting_app: 'Đang khởi động ứng dụng chính...',
       store: 'Kho lưu trữ',
       system_init_sequence: 'Trình tự khởi tạo hệ thống'
