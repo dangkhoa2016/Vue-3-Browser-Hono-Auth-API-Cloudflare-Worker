@@ -29,6 +29,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  padding-top: 40px;
 }
 
 .iso-world {
@@ -72,7 +73,7 @@ body {
 .stack-base .side-1 {
   width: 200px;
   height: 20px;
-  transform: rotateX(-90deg) translateZ(100px) translateY(10px);
+  transform: rotateX(-90deg) translateZ(80px) translateY(10px);
   background: #15192b;
 }
 

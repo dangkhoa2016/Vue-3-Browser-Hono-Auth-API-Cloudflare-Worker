@@ -79,10 +79,10 @@
 <script src="./Loader.js"></script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@500;700&family=Noto+Sans+KR:wght@500;700&family=Noto+Sans+JP:wght@500;700&display=swap');
 
 .loader-overlay {
-  font-family: 'Rajdhani', sans-serif;
+  font-family: 'Noto Sans', 'Noto Sans KR', 'Noto Sans JP', sans-serif;
 }
 
 /* Transitions */
