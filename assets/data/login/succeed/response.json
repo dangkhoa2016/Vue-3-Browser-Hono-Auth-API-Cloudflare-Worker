@@ -1,0 +1,14 @@
+{
+  "success": true,
+  "data": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyOjEiLCJpc3MiOiJob25vLWF1dGgtd29ya2VyIiwiYXVkIjoiaG9uby1hdXRoLWNsaWVudCIsInVzZXJfaWQiOjEsImZ1bGxfbmFtZSI6IlRlc3QgU3VwZXIgQWRtaW4gVXNlciIsImVtYWlsIjoidGVzdC1zdXBlcmFkbWluQGV4YW1wbGUuY29tIiwicm9sZSI6InN1cGVyX2FkbWluIiwianRpIjoiZjJiNDFmOTgtNWQ5OS00YzUwLWE3YjItZWYzNTI5MGZjN2I0IiwiaWF0IjoxNzY4MTM0NTIxLCJleHAiOjE3NjgxMzgxMjEsInNjb3BlIjoidXNlcjpiYXNpYyIsImlwX2hpbnQiOiJlZmY4ZTdjYTUwNjYyN2ZlMTVkZGE1ZTBlNTEyZmNhYWQ3MGI2ZDUyMGYzN2NjNzY1OTdmZGI0ZjJkODNhMWEzIiwidWFfaGludCI6IjA3ZDFkNTM5MDQ3ZWYwMTk5MGZmZDgyNjZkMDE1Nzc1MjAxYWExNTBhMDU0YzA5MzNjZjM1OGRkM2MwMzI3NzUifQ.Bk3cKcIAtU5s7FmILy3KWohJ2scop-o5N7kKz87ykrg",
+    "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJqdGkiOiIwYjVkNDVjMC0yNjAyLTQxNDctODUwZi1jZWNiMzNjOGY1N2UiLCJpYXQiOjE3NjgxMzQ1MjEsImV4cCI6MTc2ODM5MzcyMX0.jfrltdnuyCmvkXEaSQYSoD5l6X2RpnxL1IK5xiEeESQ",
+    "user": {
+      "id": 1,
+      "full_name": "Test Super Admin User",
+      "email": "test-superadmin@example.com",
+      "role": "super_admin"
+    }
+  },
+  "message": "Successfully logged in as Test Super Admin User (super_admin) at 01/11/2026, 12:28:41"
+}

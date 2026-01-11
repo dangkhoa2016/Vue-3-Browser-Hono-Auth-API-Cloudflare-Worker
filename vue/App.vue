@@ -25,7 +25,7 @@
 <script>
 import Navbar from '/vue/components/Navbar.vue';
 import { ref, onMounted, onUnmounted, watch } from 'vue';
-import { useMainStore } from '/assets/js/stores/main.js';
+import { useMainStore } from '/assets/js/stores/mainStore.js';
 import { setupMock } from '/assets/js/api.js';
 
 export default {

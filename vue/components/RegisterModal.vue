@@ -81,11 +81,11 @@
         />
         <label class="ml-2 text-sm text-gray-600 dark:text-gray-400">
           {{ $t('message.auth.accept_terms_prefix') }}
-          <a href="#" class="text-green-600 dark:text-green-400 hover:text-green-500 dark:hover:text-green-300">
+          <a href="javascript:void(0)" @click.prevent class="text-green-600 dark:text-green-400 hover:text-green-500 dark:hover:text-green-300 cursor-pointer">
             {{ $t('message.auth.terms_of_service') }}
           </a>
           {{ $t('message.auth.and') }}
-          <a href="#" class="text-green-600 dark:text-green-400 hover:text-green-500 dark:hover:text-green-300">
+          <a href="javascript:void(0)" @click.prevent class="text-green-600 dark:text-green-400 hover:text-green-500 dark:hover:text-green-300 cursor-pointer">
             {{ $t('message.auth.privacy_policy') }}
           </a>
         </label>
@@ -140,8 +140,6 @@ export default {
     });
 
     const handleRegister = () => {
-      // TODO: Implement API call
-      console.log('Register attempt:', formData);
       // For now, just close the modal
       emit('close');
     };

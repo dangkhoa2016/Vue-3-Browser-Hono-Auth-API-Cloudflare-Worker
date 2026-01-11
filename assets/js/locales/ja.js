@@ -64,6 +64,7 @@ export default {
       back_to_top: 'トップに戻る'
     },
     common: {
+      close: '閉じる',
       loading: '読み込み中...',
       retry: '再試行',
       retry_title: 'データを再読み込み'
@@ -128,7 +129,15 @@ export default {
       accept_terms_prefix: '次に同意します',
       terms_of_service: '利用規約',
       and: 'および',
-      privacy_policy: 'プライバシーポリシー'
+      privacy_policy: 'プライバシーポリシー',
+      login_required: 'ログインが必要です',
+      login_required_message: 'プロフィールを表示するにはログインしてください',
+      logging_in: 'ログイン中...',
+      logout: 'ログアウト',
+      logout_confirm_title: 'ログアウトの確認',
+      logout_confirm_message: '本当にログアウトしますか？',
+      cancel: 'キャンセル',
+      confirm: '確認'
     },
     loader: {
       app: 'アプリ',
@@ -156,6 +165,7 @@ export default {
         main_store: 'メインストア'
       },
       loading_component_title: 'コンポーネントを読み込み中...',
+      loading_profile: 'プロフィールを読み込み中',
       starting_app: 'メインアプリを起動中...',
       store: 'ストア',
       system_init_sequence: 'システム初期化シーケンス'

@@ -24,19 +24,39 @@
         </div>
 
         <div class="flex items-center space-x-1.5 sm:space-x-2 md:space-x-3">
-          <!-- Login Button -->
-          <button @click="showLoginModal = true"
-            class="hidden lg:flex items-center px-2.5 py-1.5 rounded-full text-xs font-medium transition-all duration-200 shadow-sm border border-blue-200 dark:border-blue-800 bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30"
-            :title="$t('message.auth.login')">
-            <i class="bi bi-box-arrow-in-right text-sm mr-1.5"></i> {{ $t('message.auth.login') }}
-          </button>
+          <!-- User Profile (when authenticated) -->
+          <template v-if="isAuthenticated">
+            <div class="hidden lg:flex items-center space-x-2">
+              <router-link to="/profile" 
+                class="flex items-center px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200 shadow-sm border border-purple-200 dark:border-purple-800 bg-white dark:bg-gray-700 text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/30">
+                <i class="bi bi-person-circle text-sm mr-1.5"></i>
+                <span class="max-w-[100px] truncate">{{ user?.full_name || user?.email }}</span>
+              </router-link>
+              <button @click="handleLogout"
+                class="flex items-center px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200 shadow-sm border border-red-200 dark:border-red-800 bg-white dark:bg-gray-700 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30"
+                :title="$t('message.auth.logout')">
+                <i class="bi bi-box-arrow-right text-sm mr-1.5"></i>
+                {{ $t('message.auth.logout') }}
+              </button>
+            </div>
+          </template>
+          
+          <!-- Login/Register (when not authenticated) -->
+          <template v-else>
+            <!-- Login Button -->
+            <button @click="openLoginModal"
+              class="hidden lg:flex items-center px-2.5 py-1.5 rounded-full text-xs font-medium transition-all duration-200 shadow-sm border border-blue-200 dark:border-blue-800 bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30"
+              :title="$t('message.auth.login')">
+              <i class="bi bi-box-arrow-in-right text-sm mr-1.5"></i> {{ $t('message.auth.login') }}
+            </button>
 
-          <!-- Register Button -->
-          <button @click="showRegisterModal = true"
-            class="hidden lg:flex items-center px-2.5 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 shadow-sm border border-transparent bg-blue-600 dark:bg-blue-500 text-white hover:bg-blue-700 dark:hover:bg-blue-600"
-            :title="$t('message.auth.register')">
-            <i class="bi bi-person-plus text-sm mr-1.5"></i> {{ $t('message.auth.register') }}
-          </button>
+            <!-- Register Button -->
+            <button @click="openRegisterModal"
+              class="hidden lg:flex items-center px-2.5 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 shadow-sm border border-transparent bg-blue-600 dark:bg-blue-500 text-white hover:bg-blue-700 dark:hover:bg-blue-600"
+              :title="$t('message.auth.register')">
+              <i class="bi bi-person-plus text-sm mr-1.5"></i> {{ $t('message.auth.register') }}
+            </button>
+          </template>
 
           <!-- Language Selector -->
           <div class="relative" ref="languageDropdownRef">
@@ -110,16 +130,30 @@
 
           <!-- Mobile Auth Buttons -->
           <div class="mt-3 space-y-2">
-            <button @click="showLoginModal = true; showMobileMenu = false"
-              class="w-full flex items-center justify-center px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 shadow-sm border border-blue-200 dark:border-blue-800 bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400">
-              <i class="bi bi-box-arrow-in-right text-base mr-2"></i>
-              {{ $t('message.auth.login') }}
-            </button>
-            <button @click="showRegisterModal = true; showMobileMenu = false"
-              class="w-full flex items-center justify-center px-3 py-2 rounded-lg text-sm font-bold transition-all duration-200 shadow-sm border border-transparent bg-blue-600 dark:bg-blue-500 text-white">
-              <i class="bi bi-person-plus text-base mr-2"></i>
-              {{ $t('message.auth.register') }}
-            </button>
+            <template v-if="isAuthenticated">
+              <router-link to="/profile" @click="showMobileMenu = false"
+                class="w-full flex items-center justify-center px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 shadow-sm border border-purple-200 dark:border-purple-800 bg-white dark:bg-gray-700 text-purple-600 dark:text-purple-400">
+                <i class="bi bi-person-circle text-base mr-2"></i>
+                {{ user?.full_name || user?.email }}
+              </router-link>
+              <button @click="handleLogout; showMobileMenu = false"
+                class="w-full flex items-center justify-center px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 shadow-sm border border-red-200 dark:border-red-800 bg-white dark:bg-gray-700 text-red-600 dark:text-red-400">
+                <i class="bi bi-box-arrow-right text-base mr-2"></i>
+                {{ $t('message.auth.logout') }}
+              </button>
+            </template>
+            <template v-else>
+              <button @click="openLoginModal"
+                class="w-full flex items-center justify-center px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 shadow-sm border border-blue-200 dark:border-blue-800 bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400">
+                <i class="bi bi-box-arrow-in-right text-base mr-2"></i>
+                {{ $t('message.auth.login') }}
+              </button>
+              <button @click="openRegisterModal"
+                class="w-full flex items-center justify-center px-3 py-2 rounded-lg text-sm font-bold transition-all duration-200 shadow-sm border border-transparent bg-blue-600 dark:bg-blue-500 text-white">
+                <i class="bi bi-person-plus text-base mr-2"></i>
+                {{ $t('message.auth.register') }}
+              </button>
+            </template>
           </div>
 
           <!-- Mobile API Toggle -->
@@ -139,27 +173,51 @@
     </div>
 
     <!-- Login Modal -->
-    <LoginModal :show="showLoginModal" @close="showLoginModal = false"
-      @switch-to-register="showLoginModal = false; showRegisterModal = true" />
+    <LoginModal 
+      :show="showLoginModal" 
+      @close="closeModals"
+      @login-success="handleLoginSuccess"
+      @switch-to-register="switchToRegister" />
 
     <!-- Register Modal -->
-    <RegisterModal :show="showRegisterModal" @close="showRegisterModal = false"
-      @switch-to-login="showRegisterModal = false; showLoginModal = true" />
+    <RegisterModal 
+      :show="showRegisterModal" 
+      @close="closeModals"
+      @switch-to-login="switchToLogin" />
+    
+    <!-- Logout Confirm Modal -->
+    <ConfirmModal
+      :show="showLogoutConfirm"
+      :title="$t('message.auth.logout_confirm_title')"
+      :message="$t('message.auth.logout_confirm_message')"
+      :confirm-text="$t('message.auth.confirm')"
+      :cancel-text="$t('message.auth.cancel')"
+      icon="bi bi-box-arrow-right"
+      icon-bg-class="bg-red-100 dark:bg-red-900/30"
+      icon-color-class="text-red-600 dark:text-red-400"
+      confirm-button-class="bg-red-600 hover:bg-red-700 focus:ring-red-500"
+      @confirm="confirmLogout"
+      @cancel="showLogoutConfirm = false"
+    />
   </nav>
 </template>
 
 <script>
 import { computed, ref, onMounted, onUnmounted } from 'vue';
-import { useMainStore } from '/assets/js/stores/main.js';
+import { useMainStore } from '/assets/js/stores/mainStore.js';
+import { useAuthStore } from '/assets/js/stores/authStore.js';
+import { useModalStore } from '/assets/js/stores/modalStore.js';
 import { useI18n } from 'vue-i18n';
 import { SUPPORTED_LANGUAGES, loadLanguageAsync } from '/assets/js/i18n.js';
 import LoginModal from './LoginModal.vue';
 import RegisterModal from './RegisterModal.vue';
+import ConfirmModal from './ConfirmModal.vue';
 
 export default {
   components: {
     LoginModal,
-    RegisterModal
+    RegisterModal,
+    ConfirmModal
   },
   setup() {
     const store = useMainStore();
@@ -167,11 +225,25 @@ export default {
 
     const showLanguageDropdown = ref(false);
     const showMobileMenu = ref(false);
-    const showLoginModal = ref(false);
-    const showRegisterModal = ref(false);
+    const showLogoutConfirm = ref(false);
     const languageDropdownRef = ref(null);
     const currentLanguage = computed(() => locale.value);
     const languages = SUPPORTED_LANGUAGES;
+    
+    // Use Pinia stores
+    const authStore = useAuthStore();
+    const modalStore = useModalStore();
+    
+    // Initialize auth store from localStorage
+    authStore.init();
+    
+    // Auth state
+    const isAuthenticated = computed(() => authStore.isAuthenticated);
+    const user = computed(() => authStore.user);
+    
+    // Modal states from modalStore
+    const showLoginModal = computed(() => modalStore.showLoginModal);
+    const showRegisterModal = computed(() => modalStore.showRegisterModal);
 
     const menuItems = computed(() => ([
       { name: t('message.navbar.home'), path: '/' },
@@ -198,6 +270,55 @@ export default {
       }
     };
 
+    const handleLoginSuccess = async (response) => {
+      if (response.data) {
+        // Extract user and tokens from response.data
+        const { user, access_token, refresh_token } = response.data;
+        
+        // Save to auth store
+        authStore.login(user, access_token, refresh_token);
+        
+        // Clear auth required flags
+        sessionStorage.removeItem('authRequired');
+        sessionStorage.removeItem('intendedRoute');
+        
+        // Let modalStore handle success
+        modalStore.handleLoginSuccess(response);
+      }
+    };
+
+    const handleLogout = () => {
+      showLogoutConfirm.value = true;
+    };
+    
+    const confirmLogout = () => {
+      authStore.logout();
+      showLogoutConfirm.value = false;
+      showMobileMenu.value = false;
+    };
+    
+    const openLoginModal = () => {
+      modalStore.openLogin();
+      showMobileMenu.value = false;
+    };
+    
+    const openRegisterModal = () => {
+      modalStore.openRegister();
+      showMobileMenu.value = false;
+    };
+    
+    const closeModals = () => {
+      modalStore.closeAll();
+    };
+    
+    const switchToRegister = () => {
+      modalStore.switchToRegister();
+    };
+    
+    const switchToLogin = () => {
+      modalStore.switchToLogin();
+    };
+
     onMounted(() => {
       document.addEventListener('click', handleClickOutside);
     });
@@ -212,14 +333,25 @@ export default {
       t,
       showLanguageDropdown,
       showMobileMenu,
+      showLogoutConfirm,
       showLoginModal,
       showRegisterModal,
       languageDropdownRef,
       currentLanguage,
       languages,
+      isAuthenticated,
+      user,
       toggleLanguageDropdown,
       toggleMobileMenu,
-      changeLanguage
+      changeLanguage,
+      handleLoginSuccess,
+      handleLogout,
+      confirmLogout,
+      openLoginModal,
+      openRegisterModal,
+      closeModals,
+      switchToRegister,
+      switchToLogin
     };
   }
 }

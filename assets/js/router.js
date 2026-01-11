@@ -101,9 +101,9 @@ const load = (path) => {
         isLoading.value = true;
         error.value = null;
         await sleep(250); // Small delay to allow loading state to be seen
-        
+
         if (window.NProgress) window.NProgress.start();
-        
+
         const retryCount = 1; // Retry logic is handled better by UI retry button, but we can keep small auto-retry for network blips
         const retryDelay = 1000;
 
@@ -118,7 +118,7 @@ const load = (path) => {
               isLoading.value = false;
               return;
             }
-            
+
             resolvedComponent.value = component;
             if (window.NProgress) window.NProgress.done();
             isLoading.value = false;
@@ -147,7 +147,7 @@ const load = (path) => {
       };
 
       onMounted(fetchComponent);
-      
+
       onActivated(() => {
         if (error.value) {
           fetchComponent();
@@ -168,7 +168,12 @@ const load = (path) => {
 
 const routes = [
   { path: '/', name: 'Home', component: load('/vue/pages/Home.vue') },
-  { path: '/profile', name: 'Profile', component: load('/vue/pages/Profile.vue') },
+  {
+    path: '/profile',
+    name: 'Profile',
+    component: load('/vue/pages/Profile.vue'),
+    meta: { requiresAuth: true }
+  },
   { path: '/about', name: 'About', component: load('/vue/pages/About.vue') },
   { path: '/:pathMatch(.*)*', name: 'NotFound', component: load('/vue/pages/NotFound.vue') },
 ];
@@ -176,4 +181,31 @@ const routes = [
 export const router = createRouter({
   history: createWebHashHistory(),
   routes,
+});
+
+// Authentication guard
+router.beforeEach(async (to, from, next) => {
+  // Check if route requires authentication
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    try {
+      const { useAuthStore } = await import('/assets/js/stores/authStore.js');
+      const authStore = useAuthStore();
+
+      if (!authStore.isAuthenticated) {
+        // Store intended destination
+        sessionStorage.setItem('authRequired', 'true');
+        sessionStorage.setItem('intendedRoute', to.fullPath);
+
+        // Allow navigation but page will show login modal
+        next();
+      } else {
+        next();
+      }
+    } catch (error) {
+      console.error('Auth check failed:', error);
+      next();
+    }
+  } else {
+    next();
+  }
 });
