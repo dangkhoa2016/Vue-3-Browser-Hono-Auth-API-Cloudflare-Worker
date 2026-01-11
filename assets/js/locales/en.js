@@ -6,6 +6,7 @@ export default {
     },
     navbar: {
       brand: 'Hono Auth Worker',
+      brand_title: 'Go to homepage',
       home: 'Home',
       profile: 'Profile',
       about: 'About',
@@ -13,7 +14,8 @@ export default {
       mock_label: 'MOCK',
       real_label: 'REAL',
       switch_to_light: 'Switch to Light Mode',
-      switch_to_dark: 'Switch to Dark Mode'
+      switch_to_dark: 'Switch to Dark Mode',
+      change_language: 'Change Language'
     },
     loader: {
       assets: 'Assets',
@@ -52,6 +54,11 @@ export default {
       message: 'We ran into an issue loading this content. Please check your connection and try again.',
       retry: 'Reload Content'
     },
+    common: {
+      loading: 'Loading...',
+      retry: 'Retry',
+      retry_title: 'Retry loading data'
+    },
     home: {
       badge: 'Hono Auth Worker v1.0',
       hero: {
@@ -62,10 +69,16 @@ export default {
       },
       cta: {
         get_started: 'Get Started',
-        documentation: 'Documentation'
+        get_started_title: 'Start building your auth system',
+        documentation: 'Documentation',
+        documentation_title: 'Read the documentation'
       },
       tech: {
-        heading: 'Powered by Modern Stack'
+        heading: 'Powered by Modern Stack',
+        hono_title: 'Ultra-fast web framework',
+        d1_title: 'Serverless SQL database',
+        jwt_title: 'Secure token-based authentication',
+        edge_title: 'Global edge network deployment'
       }
     },
     about: {
@@ -129,6 +142,14 @@ export default {
       }
     },
     profile: {
+      account_info: 'Account Information',
+      username: 'Username',
+      role: 'Role',
+      status: 'Status',
+      stats: 'Statistics',
+      joined: 'Joined',
+      user_id: 'User ID',
+      access_level: 'Access Level',
       title: 'User Profile',
       welcome: 'Welcome back!',
       account_info: 'Account Info',
@@ -146,7 +167,9 @@ export default {
       title: 'Page Not Found',
       message: 'The page you are looking for does not exist.',
       back: 'Back',
-      home: 'Home'
+      back_title: 'Go back to previous page',
+      home: 'Home',
+      home_title: 'Return to homepage'
     }
   }
 };

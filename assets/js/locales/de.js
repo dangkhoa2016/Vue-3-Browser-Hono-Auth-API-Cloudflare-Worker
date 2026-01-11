@@ -5,6 +5,7 @@ export default {
       back_to_top: 'Nach oben'
     },
     navbar: {
+      change_language: 'Sprache ändern',
       brand: 'Hono Auth Worker',
       home: 'Startseite',
       profile: 'Profil',
@@ -129,6 +130,14 @@ export default {
       }
     },
     profile: {
+      account_info: 'Kontoinformationen',
+      username: 'Benutzername',
+      role: 'Rolle',
+      status: 'Status',
+      stats: 'Statistiken',
+      joined: 'Beigetreten',
+      user_id: 'Benutzer-ID',
+      access_level: 'Zugriffsstufe',
       title: 'Benutzerprofil',
       welcome: 'Willkommen zurück!',
       account_info: 'Kontoinformationen',
@@ -142,11 +151,30 @@ export default {
       favorites: 'Favoriten',
       comments: 'Kommentare'
     },
+    common: {
+      loading: 'Laden...',
+      retry: 'Wiederholen',
+      retry_title: 'Daten erneut laden'
+    },
+    home: {
+      cta: {
+        get_started_title: 'Beginnen Sie mit dem Aufbau Ihres Auth-Systems',
+        documentation_title: 'Dokumentation lesen'
+      },
+      tech: {
+        hono_title: 'Ultraschnelles Web-Framework',
+        d1_title: 'Serverlose SQL-Datenbank',
+        jwt_title: 'Sichere token-basierte Authentifizierung',
+        edge_title: 'Globales Edge-Netzwerk-Deployment'
+      }
+    },
     not_found: {
       title: 'Seite nicht gefunden',
       message: 'Die gesuchte Seite existiert nicht.',
       back: 'Zurück',
-      home: 'Startseite'
+      back_title: 'Zurück zur vorherigen Seite',
+      home: 'Startseite',
+      home_title: 'Zurück zur Startseite'
     }
   }
 };
