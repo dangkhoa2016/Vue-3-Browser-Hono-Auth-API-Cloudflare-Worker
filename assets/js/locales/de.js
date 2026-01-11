@@ -106,6 +106,30 @@ export default {
         jwt_title: 'Sichere token-basierte Authentifizierung'
       }
     },
+    auth: {
+      login: 'Anmelden',
+      register: 'Registrieren',
+      login_subtitle: 'Willkommen zurück! Bitte melden Sie sich an',
+      register_subtitle: 'Erstellen Sie ein neues Konto, um zu beginnen',
+      email: 'E-Mail',
+      password: 'Passwort',
+      confirm_password: 'Passwort bestätigen',
+      full_name: 'Vollständiger Name',
+      email_placeholder: 'Geben Sie Ihre E-Mail ein',
+      password_placeholder: 'Geben Sie Ihr Passwort ein',
+      confirm_password_placeholder: 'Bestätigen Sie Ihr Passwort',
+      full_name_placeholder: 'Geben Sie Ihren Namen ein',
+      remember_me: 'Angemeldet bleiben',
+      forgot_password: 'Passwort vergessen?',
+      no_account: 'Noch kein Konto?',
+      register_now: 'Jetzt registrieren',
+      already_have_account: 'Bereits ein Konto?',
+      login_now: 'Jetzt anmelden',
+      accept_terms_prefix: 'Ich stimme zu',
+      terms_of_service: 'Nutzungsbedingungen',
+      and: 'und',
+      privacy_policy: 'Datenschutzerklärung'
+    },
     loader: {
       app: 'App',
       assets: 'Ressourcen',

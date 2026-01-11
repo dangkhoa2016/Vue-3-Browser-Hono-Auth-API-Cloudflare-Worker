@@ -106,6 +106,30 @@ export default {
         jwt_title: '보안 토큰 기반 인증'
       }
     },
+    auth: {
+      login: '로그인',
+      register: '회원가입',
+      login_subtitle: '다시 오신 것을 환영합니다! 계정에 로그인하세요',
+      register_subtitle: '새 계정을 만들어 시작하세요',
+      email: '이메일',
+      password: '비밀번호',
+      confirm_password: '비밀번호 확인',
+      full_name: '이름',
+      email_placeholder: '이메일을 입력하세요',
+      password_placeholder: '비밀번호를 입력하세요',
+      confirm_password_placeholder: '비밀번호를 확인하세요',
+      full_name_placeholder: '이름을 입력하세요',
+      remember_me: '로그인 유지',
+      forgot_password: '비밀번호를 잊으셨나요?',
+      no_account: '계정이 없으신가요?',
+      register_now: '지금 가입하기',
+      already_have_account: '이미 계정이 있으신가요?',
+      login_now: '지금 로그인',
+      accept_terms_prefix: '다음에 동의합니다',
+      terms_of_service: '서비스 약관',
+      and: '및',
+      privacy_policy: '개인정보 보호정책'
+    },
     loader: {
       app: '앱',
       assets: '자산',
