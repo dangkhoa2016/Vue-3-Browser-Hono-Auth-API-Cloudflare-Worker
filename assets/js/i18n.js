@@ -9,7 +9,7 @@ if (window.i18nInstance) {
   i18n = window.i18nInstance;
   loadedLanguages = window.i18nLoadedLanguages;
 } else {
-  console.log('[i18n] Creating new i18n instance');
+  // console.log('[i18n] Creating new i18n instance');
   i18n = createI18n({
     locale: 'en',
     fallbackLocale: 'en',
@@ -45,7 +45,7 @@ function setI18nLanguage(lang) {
 }
 
 export async function loadLanguageAsync(lang) {
-  console.log(`[i18n] Requested language: ${lang}`, i18n);
+  // console.log(`[i18n] Requested language: ${lang}`, i18n);
 
   // If the language was already loaded
   if (loadedLanguages.includes(lang)) {
@@ -72,12 +72,12 @@ export async function loadLanguageAsync(lang) {
       messages = JSON.parse(JSON.stringify(messages));
     }
 
-    console.log(`[i18n] Loading ${lang}`, messages);
+    // console.log(`[i18n] Loading ${lang}`, messages);
 
     i18n.global.setLocaleMessage(lang, messages);
 
     // console.log(`[i18n] Available locales:`, i18n.global.availableLocales);
-    console.log(`[i18n] Messages for ${lang}:`, i18n.global.getLocaleMessage(lang));
+    // console.log(`[i18n] Messages for ${lang}:`, i18n.global.getLocaleMessage(lang));
 
     loadedLanguages.push(lang);
     return setI18nLanguage(lang);

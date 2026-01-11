@@ -142,6 +142,7 @@ export default {
       brand_title: 'ホームページへ',
       change_language: '言語を変更',
       home: 'ホーム',
+      menu: 'メニュー',
       mock_label: 'モック',
       profile: 'プロフィール',
       real_label: '本番',

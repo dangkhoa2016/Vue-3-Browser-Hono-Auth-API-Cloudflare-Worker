@@ -142,6 +142,7 @@ export default {
       brand_title: 'Trở về trang chủ',
       change_language: 'Thay đổi Ngôn ngữ',
       home: 'Trang chủ',
+      menu: 'Menu',
       mock_label: 'GIẢ LẬP',
       profile: 'Hồ sơ',
       real_label: 'THẬT',

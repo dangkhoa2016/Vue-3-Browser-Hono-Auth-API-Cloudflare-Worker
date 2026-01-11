@@ -142,6 +142,7 @@ export default {
       brand_title: 'Go to homepage',
       change_language: 'Change Language',
       home: 'Home',
+      menu: 'Menu',
       mock_label: 'MOCK',
       profile: 'Profile',
       real_label: 'REAL',
