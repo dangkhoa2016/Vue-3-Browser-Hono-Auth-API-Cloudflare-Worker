@@ -30,11 +30,17 @@
 
       <!-- CTA Buttons -->
       <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-        <button class="w-full sm:w-auto px-8 py-4 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-lg shadow-xl shadow-blue-500/30 transition-all hover:-translate-y-1 active:scale-95 flex items-center justify-center gap-2 group">
+        <button 
+          class="w-full sm:w-auto px-8 py-4 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-lg shadow-xl shadow-blue-500/30 transition-all hover:-translate-y-1 active:scale-95 flex items-center justify-center gap-2 group"
+          :title="$t('message.home.cta.get_started_title')"
+        >
           <i class="bi bi-rocket-takeoff group-hover:rotate-12 transition-transform"></i>
           {{ $t('message.home.cta.get_started') }}
         </button>
-        <button class="w-full sm:w-auto px-8 py-4 rounded-full bg-white dark:bg-gray-800 text-gray-900 dark:text-white font-bold text-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all hover:-translate-y-1 active:scale-95 flex items-center justify-center gap-2">
+        <button 
+          class="w-full sm:w-auto px-8 py-4 rounded-full bg-white dark:bg-gray-800 text-gray-900 dark:text-white font-bold text-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all hover:-translate-y-1 active:scale-95 flex items-center justify-center gap-2"
+          :title="$t('message.home.cta.documentation_title')"
+        >
           <i class="bi bi-github"></i>
           {{ $t('message.home.cta.documentation') }}
         </button>
@@ -44,19 +50,31 @@
       <div class="pt-16 border-t border-gray-200 dark:border-gray-800 max-w-5xl mx-auto">
          <p class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-8">{{ $t('message.home.tech.heading') }}</p>
          <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
-            <div class="flex flex-col items-center gap-3 p-4 rounded-xl bg-white/50 dark:bg-gray-800/50 hover:bg-white dark:hover:bg-gray-800 transition-colors backdrop-blur-sm border border-transparent hover:border-gray-200 dark:hover:border-gray-700 group">
+            <div 
+              class="flex flex-col items-center gap-3 p-4 rounded-xl bg-white/50 dark:bg-gray-800/50 hover:bg-white dark:hover:bg-gray-800 transition-colors backdrop-blur-sm border border-transparent hover:border-gray-200 dark:hover:border-gray-700 group"
+              :title="$t('message.home.tech.hono_title')"
+            >
               <i class="bi bi-lightning-charge-fill text-3xl text-yellow-500 group-hover:scale-110 transition-transform"></i>
               <span class="font-bold text-gray-700 dark:text-gray-200">Hono.js</span>
             </div>
-            <div class="flex flex-col items-center gap-3 p-4 rounded-xl bg-white/50 dark:bg-gray-800/50 hover:bg-white dark:hover:bg-gray-800 transition-colors backdrop-blur-sm border border-transparent hover:border-gray-200 dark:hover:border-gray-700 group">
+            <div 
+              class="flex flex-col items-center gap-3 p-4 rounded-xl bg-white/50 dark:bg-gray-800/50 hover:bg-white dark:hover:bg-gray-800 transition-colors backdrop-blur-sm border border-transparent hover:border-gray-200 dark:hover:border-gray-700 group"
+              :title="$t('message.home.tech.d1_title')"
+            >
               <i class="bi bi-database-fill text-3xl text-blue-500 group-hover:scale-110 transition-transform"></i>
               <span class="font-bold text-gray-700 dark:text-gray-200">Cloudflare D1</span>
             </div>
-            <div class="flex flex-col items-center gap-3 p-4 rounded-xl bg-white/50 dark:bg-gray-800/50 hover:bg-white dark:hover:bg-gray-800 transition-colors backdrop-blur-sm border border-transparent hover:border-gray-200 dark:hover:border-gray-700 group">
+            <div 
+              class="flex flex-col items-center gap-3 p-4 rounded-xl bg-white/50 dark:bg-gray-800/50 hover:bg-white dark:hover:bg-gray-800 transition-colors backdrop-blur-sm border border-transparent hover:border-gray-200 dark:hover:border-gray-700 group"
+              :title="$t('message.home.tech.jwt_title')"
+            >
               <i class="bi bi-shield-lock-fill text-3xl text-green-500 group-hover:scale-110 transition-transform"></i>
               <span class="font-bold text-gray-700 dark:text-gray-200">JWT Auth</span>
             </div>
-            <div class="flex flex-col items-center gap-3 p-4 rounded-xl bg-white/50 dark:bg-gray-800/50 hover:bg-white dark:hover:bg-gray-800 transition-colors backdrop-blur-sm border border-transparent hover:border-gray-200 dark:hover:border-gray-700 group">
+            <div 
+              class="flex flex-col items-center gap-3 p-4 rounded-xl bg-white/50 dark:bg-gray-800/50 hover:bg-white dark:hover:bg-gray-800 transition-colors backdrop-blur-sm border border-transparent hover:border-gray-200 dark:hover:border-gray-700 group"
+              :title="$t('message.home.tech.edge_title')"
+            >
               <i class="bi bi-globe-americas text-3xl text-purple-500 group-hover:scale-110 transition-transform"></i>
               <span class="font-bold text-gray-700 dark:text-gray-200">Cloudflare Edge</span>
             </div>

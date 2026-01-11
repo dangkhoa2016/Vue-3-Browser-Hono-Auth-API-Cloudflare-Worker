@@ -12,10 +12,18 @@
       <p class="text-xl text-gray-500 dark:text-gray-400 mb-8">{{ $t('message.not_found.message') }}</p>
       
       <div class="flex justify-center gap-4">
-        <button @click="goBack" class="px-6 py-2 rounded-full border border-gray-300 text-gray-700 dark:text-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex items-center">
+        <button 
+          @click="goBack" 
+          class="px-6 py-2 rounded-full border border-gray-300 text-gray-700 dark:text-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex items-center"
+          :title="$t('message.not_found.back_title')"
+        >
           <i class="bi bi-arrow-left mr-2"></i> {{ $t('message.not_found.back') }}
         </button>
-        <router-link to="/" class="px-6 py-2 rounded-full bg-blue-600 text-white hover:bg-blue-700 shadow-lg hover:shadow-xl transition-all flex items-center">
+        <router-link 
+          to="/" 
+          class="px-6 py-2 rounded-full bg-blue-600 text-white hover:bg-blue-700 shadow-lg hover:shadow-xl transition-all flex items-center"
+          :title="$t('message.not_found.home_title')"
+        >
           <i class="bi bi-house-door mr-2"></i> {{ $t('message.not_found.home') }}
         </router-link>
       </div>
