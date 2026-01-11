@@ -106,6 +106,30 @@ export default {
         jwt_title: 'Xác thực bảo mật dựa trên token'
       }
     },
+    auth: {
+      login: 'Đăng nhập',
+      register: 'Đăng ký',
+      login_subtitle: 'Chào mừng trở lại! Vui lòng đăng nhập vào tài khoản',
+      register_subtitle: 'Tạo tài khoản mới để bắt đầu',
+      email: 'Email',
+      password: 'Mật khẩu',
+      confirm_password: 'Xác nhận mật khẩu',
+      full_name: 'Họ và tên',
+      email_placeholder: 'Nhập email của bạn',
+      password_placeholder: 'Nhập mật khẩu',
+      confirm_password_placeholder: 'Xác nhận mật khẩu',
+      full_name_placeholder: 'Nhập họ và tên',
+      remember_me: 'Ghi nhớ đăng nhập',
+      forgot_password: 'Quên mật khẩu?',
+      no_account: 'Chưa có tài khoản?',
+      register_now: 'Đăng ký ngay',
+      already_have_account: 'Đã có tài khoản?',
+      login_now: 'Đăng nhập ngay',
+      accept_terms_prefix: 'Tôi đồng ý với',
+      terms_of_service: 'Điều khoản sử dụng',
+      and: 'và',
+      privacy_policy: 'Chính sách bảo mật'
+    },
     loader: {
       app: 'Ứng dụng',
       assets: 'Tài nguyên',

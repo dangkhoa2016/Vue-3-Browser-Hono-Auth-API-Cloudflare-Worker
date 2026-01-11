@@ -106,6 +106,30 @@ export default {
         jwt_title: 'セキュアトークンベース認証'
       }
     },
+    auth: {
+      login: 'ログイン',
+      register: '登録',
+      login_subtitle: 'お帰りなさい！アカウントにログインしてください',
+      register_subtitle: '新しいアカウントを作成して開始',
+      email: 'メール',
+      password: 'パスワード',
+      confirm_password: 'パスワード確認',
+      full_name: '氏名',
+      email_placeholder: 'メールアドレスを入力',
+      password_placeholder: 'パスワードを入力',
+      confirm_password_placeholder: 'パスワードを確認',
+      full_name_placeholder: '氏名を入力',
+      remember_me: 'ログインを記憶',
+      forgot_password: 'パスワードをお忘れですか？',
+      no_account: 'アカウントがありませんか？',
+      register_now: '今すぐ登録',
+      already_have_account: '既にアカウントをお持ちですか？',
+      login_now: '今すぐログイン',
+      accept_terms_prefix: '次に同意します',
+      terms_of_service: '利用規約',
+      and: 'および',
+      privacy_policy: 'プライバシーポリシー'
+    },
     loader: {
       app: 'アプリ',
       assets: 'アセット',

@@ -106,6 +106,30 @@ export default {
         jwt_title: 'Secure token-based authentication'
       }
     },
+    auth: {
+      login: 'Login',
+      register: 'Register',
+      login_subtitle: 'Welcome back! Please login to your account',
+      register_subtitle: 'Create a new account to get started',
+      email: 'Email',
+      password: 'Password',
+      confirm_password: 'Confirm Password',
+      full_name: 'Full Name',
+      email_placeholder: 'Enter your email',
+      password_placeholder: 'Enter your password',
+      confirm_password_placeholder: 'Confirm your password',
+      full_name_placeholder: 'Enter your full name',
+      remember_me: 'Remember me',
+      forgot_password: 'Forgot password?',
+      no_account: "Don't have an account?",
+      register_now: 'Register now',
+      already_have_account: 'Already have an account?',
+      login_now: 'Login now',
+      accept_terms_prefix: 'I agree to the',
+      terms_of_service: 'Terms of Service',
+      and: 'and',
+      privacy_policy: 'Privacy Policy'
+    },
     loader: {
       app: 'App',
       assets: 'Assets',
