@@ -102,9 +102,9 @@ export default {
           await loadStyle(item, t('message.loader.assets'));
         },
         items: [
-          { label: 'NProgress CSS', url: 'https://unpkg.com/nprogress@0.2.0/nprogress.css' },
-          { label: 'Bootstrap Icons', url: 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css' },
-          { label: 'App Styles', url: '/assets/css/styles.css' },
+          { label: t('message.loader.items.nprogress_css'), url: 'https://unpkg.com/nprogress@0.2.0/nprogress.css' },
+          { label: t('message.loader.items.bootstrap_icons'), url: 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css' },
+          { label: t('message.loader.items.app_styles'), url: '/assets/css/styles.css' },
         ]
       }),
       makeStage({
@@ -115,7 +115,7 @@ export default {
         },
         items: [
           { 
-            label: 'Tailwind CSS', 
+            label: t('message.loader.items.tailwind_css'), 
             url: 'https://cdn.tailwindcss.com',
             run: async (stageLabel) => {
               // Load Tailwind
@@ -144,12 +144,12 @@ export default {
               await sleep(300);
             }
           },
-          { label: 'Vue Demi', url: 'https://unpkg.com/vue-demi', crossOrigin: 'anonymous' },
-          { label: 'Pinia', url: 'https://cdn.jsdelivr.net/npm/pinia@3.0.4/dist/pinia.iife.prod.js', crossOrigin: 'anonymous' },
-          { label: 'NProgress JS', url: 'https://unpkg.com/nprogress@0.2.0/nprogress.js', crossOrigin: 'anonymous' },
-          { label: 'Axios', url: 'https://unpkg.com/axios/dist/axios.min.js', crossOrigin: 'anonymous' },
-          { label: 'Axios Mock Adapter', url: 'https://unpkg.com/axios-mock-adapter/dist/axios-mock-adapter.min.js', crossOrigin: 'anonymous' },
-          { label: 'Vue Router', url: 'https://unpkg.com/vue-router@4/dist/vue-router.global.js', crossOrigin: 'anonymous' },
+          { label: t('message.loader.items.vue_demi'), url: 'https://unpkg.com/vue-demi', crossOrigin: 'anonymous' },
+          { label: t('message.loader.items.pinia'), url: 'https://cdn.jsdelivr.net/npm/pinia@3.0.4/dist/pinia.iife.prod.js', crossOrigin: 'anonymous' },
+          { label: t('message.loader.items.nprogress_js'), url: 'https://unpkg.com/nprogress@0.2.0/nprogress.js', crossOrigin: 'anonymous' },
+          { label: t('message.loader.items.axios'), url: 'https://unpkg.com/axios/dist/axios.min.js', crossOrigin: 'anonymous' },
+          { label: t('message.loader.items.axios_mock'), url: 'https://unpkg.com/axios-mock-adapter/dist/axios-mock-adapter.min.js', crossOrigin: 'anonymous' },
+          { label: t('message.loader.items.vue_router'), url: 'https://unpkg.com/vue-router@4/dist/vue-router.global.js', crossOrigin: 'anonymous' },
         ]
       }),
       makeStage({
@@ -159,7 +159,7 @@ export default {
           await safeFetch(item.url, t('message.loader.components'));
         },
         items: [
-          { label: 'App.vue', url: '/vue/App.vue' }
+          { label: t('message.loader.items.app_vue'), url: '/vue/App.vue' }
         ]
       }),
       makeStage({
@@ -169,7 +169,7 @@ export default {
           await safeImport(item, t('message.loader.store'));
         },
         items: [
-          { label: 'Main Store', url: '/assets/js/stores/main.js' }
+          { label: t('message.loader.items.main_store'), url: '/assets/js/stores/main.js' }
         ]
       }),
       makeStage({
