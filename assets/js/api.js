@@ -27,6 +27,7 @@ export const API_ENDPOINTS = {
 const MOCK_CONFIG = {
   DELAY_RESPONSE: 0,
   LOGIN_PROCESSING_DELAY: 0,
+  REGISTER_PROCESSING_DELAY: 0,
   TEST_EMAIL: 'test-superadmin@example.com',
   TEST_PASSWORD: 'password123',
 };
@@ -34,6 +35,7 @@ const MOCK_CONFIG = {
 // Mock API Patterns - Generated from API_ENDPOINTS
 const MOCK_PATTERNS = {
   LOGIN: new RegExp(`${API_ENDPOINTS.LOGIN.replace(/\//g, '\\/')}($|\\?)`),
+  REGISTER: new RegExp(`${API_ENDPOINTS.REGISTER.replace(/\//g, '\\/')}($|\\?)`),
   PROFILE: new RegExp(`${API_ENDPOINTS.PROFILE.replace(/\//g, '\\/')}($|\\?)`),
 };
 
@@ -43,6 +45,13 @@ const DATA_PATHS = {
   LOGIN_VALIDATE_EMAIL_FORMAT: '/assets/data/login/fail/validate-1.json',
   LOGIN_VALIDATE_PASSWORD_EMPTY: '/assets/data/login/fail/validate-2.json',
   LOGIN_SUCCESS: '/assets/data/login/succeed/response.json',
+  REGISTER_VALIDATE_EMAIL_EMPTY: '/assets/data/register/fail/validate-1.json',
+  REGISTER_VALIDATE_EMAIL_FORMAT: '/assets/data/register/fail/validate-2.json',
+  REGISTER_VALIDATE_PASSWORD_EMPTY: '/assets/data/register/fail/validate-3.json',
+  REGISTER_VALIDATE_PASSWORD_SHORT: '/assets/data/register/fail/validate-4.json',
+  REGISTER_VALIDATE_FULLNAME_EMPTY: '/assets/data/register/fail/validate-5.json',
+  REGISTER_SUCCESS_ACTIVE: '/assets/data/register/succeed/response2.json',
+  REGISTER_SUCCESS_INACTIVE: '/assets/data/register/succeed/response1.json',
   LOGIN_INVALID_CREDENTIALS: '/assets/data/login/fail/invalid-email-or-password.json',
   PROFILE: '/assets/data/profile/succeed.json',
 };
@@ -165,6 +174,55 @@ export const setupMock = (enable) => {
           // Invalid credentials
           const data = await loadJson(DATA_PATHS.LOGIN_INVALID_CREDENTIALS);
           return [401, data];
+        } catch (error) {
+          return [500, { success: false, error: 'Internal server error' }];
+        }
+      });
+
+      // Register
+      mock.onPost(MOCK_PATTERNS.REGISTER).reply(async (config) => {
+        // console.log(`[Mock API] Register request received, sleeping ${MOCK_CONFIG.REGISTER_PROCESSING_DELAY}ms to simulate processing...`);
+        await sleep(MOCK_CONFIG.REGISTER_PROCESSING_DELAY);
+
+        try {
+          const body = JSON.parse(config.data);
+          const { email, password, full_name } = body;
+
+          // Validate empty full_name
+          if (!full_name || full_name.trim() === '') {
+            const data = await loadJson(DATA_PATHS.REGISTER_VALIDATE_FULLNAME_EMPTY);
+            return [HTTP_STATUS.CLIENT_ERROR_MIN, data];
+          }
+
+          // Validate empty email
+          if (!email || email.trim() === '') {
+            const data = await loadJson(DATA_PATHS.REGISTER_VALIDATE_EMAIL_EMPTY);
+            return [HTTP_STATUS.CLIENT_ERROR_MIN, data];
+          }
+
+          // Validate email format
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!emailRegex.test(email)) {
+            const data = await loadJson(DATA_PATHS.REGISTER_VALIDATE_EMAIL_FORMAT);
+            return [HTTP_STATUS.CLIENT_ERROR_MIN, data];
+          }
+
+          // Validate empty password
+          if (!password || password.trim() === '') {
+            const data = await loadJson(DATA_PATHS.REGISTER_VALIDATE_PASSWORD_EMPTY);
+            return [HTTP_STATUS.CLIENT_ERROR_MIN, data];
+          }
+
+          // Validate password length
+          if (password.length < 6) {
+            const data = await loadJson(DATA_PATHS.REGISTER_VALIDATE_PASSWORD_SHORT);
+            return [HTTP_STATUS.CLIENT_ERROR_MIN, data];
+          }
+
+          // Success - return inactive status (change to REGISTER_SUCCESS_ACTIVE to test active flow)
+          const responseFile = Math.random() < 0.5 ? DATA_PATHS.REGISTER_SUCCESS_ACTIVE : DATA_PATHS.REGISTER_SUCCESS_INACTIVE;
+          const data = await loadJson(responseFile);
+          return [201, data];
         } catch (error) {
           return [500, { success: false, error: 'Internal server error' }];
         }
