@@ -16,8 +16,12 @@ const HTTP_STATUS = {
   CLIENT_ERROR_MAX: 500,
 };
 
-// Authentication Endpoints
-const AUTH_ENDPOINTS = ['/auth/login', '/auth/register', '/auth/signup'];
+// API Endpoints
+export const API_ENDPOINTS = {
+  LOGIN: '/api/auth/login',
+  REGISTER: '/api/auth/register',
+  PROFILE: '/api/user/profile',
+};
 
 // Mock API Configuration
 const MOCK_CONFIG = {
@@ -27,10 +31,10 @@ const MOCK_CONFIG = {
   TEST_PASSWORD: 'password123',
 };
 
-// Mock API Patterns
+// Mock API Patterns - Generated from API_ENDPOINTS
 const MOCK_PATTERNS = {
-  LOGIN: /\/api\/auth\/login($|\?)/,
-  PROFILE: /\/profile($|\?)/,
+  LOGIN: new RegExp(`${API_ENDPOINTS.LOGIN.replace(/\//g, '\\/')}($|\\?)`),
+  PROFILE: new RegExp(`${API_ENDPOINTS.PROFILE.replace(/\//g, '\\/')}($|\\?)`),
 };
 
 // Data Paths
@@ -60,7 +64,9 @@ apiClient.interceptors.response.use(undefined, async (err) => {
   }
 
   // Check if this is an authentication endpoint (login/register)
-  const isAuthEndpoint = config.url && AUTH_ENDPOINTS.some(endpoint => config.url.includes(endpoint));
+  const isAuthEndpoint = config.url && Object.values(API_ENDPOINTS)
+    .filter(endpoint => endpoint.includes('/auth/'))
+    .some(endpoint => config.url.includes(endpoint));
 
   // Don't retry for authentication endpoints with client errors (4xx)
   // These are typically validation errors or wrong credentials that won't succeed on retry

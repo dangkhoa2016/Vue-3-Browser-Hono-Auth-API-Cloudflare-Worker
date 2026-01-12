@@ -71,7 +71,14 @@
     <div v-else-if="error" class="bg-red-50 dark:bg-red-900/20 border-2 border-red-200 dark:border-red-800 rounded-2xl p-8 text-center">
       <i class="bi bi-exclamation-triangle-fill text-5xl text-red-600 dark:text-red-400 mb-4"></i>
       <h3 class="text-xl font-bold text-red-900 dark:text-red-100 mb-2">{{ $t('message.errors.failed_to_load', { item: 'Profile' }) }}</h3>
-      <p class="text-red-700 dark:text-red-300">{{ error }}</p>
+      <p class="text-red-700 dark:text-red-300 mb-4">{{ error }}</p>
+      <button
+        @click="loadProfile"
+        class="inline-flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition"
+      >
+        <i class="bi bi-arrow-clockwise text-lg"></i>
+        {{ $t('message.common.retry') }}
+      </button>
     </div>
 
     <!-- Profile Content -->
@@ -212,7 +219,7 @@ import { ref, onMounted, onActivated, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useAuthStore } from '/assets/js/stores/authStore.js';
 import { useModalStore } from '/assets/js/stores/modalStore.js';
-import { apiClient } from '/assets/js/api.js';
+import { apiClient, API_ENDPOINTS } from '/assets/js/api.js';
 
 export default {
   name: 'Profile',
@@ -273,9 +280,9 @@ export default {
           loadingProfile.value = false;
           return;
         }
-        
+
         // Fetch profile from API
-        const response = await apiClient.get('/profile', {
+        const response = await apiClient.get(API_ENDPOINTS.PROFILE, {
           headers: {
             'Authorization': `Bearer ${authStore.token}`
           }
@@ -368,7 +375,8 @@ export default {
       formatDate,
       getRoleBadgeColor,
       getRoleIcon,
-      openLoginModal
+      openLoginModal,
+      loadProfile
     };
   }
 }
