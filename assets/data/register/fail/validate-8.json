@@ -1,0 +1,25 @@
+{
+  "success": false,
+  "error": "Validation error - Validation failed: 3 errors",
+  "errors": [
+    {
+      "field": "email",
+      "message": "Email address is required",
+      "code": "too_small"
+    },
+    {
+      "field": "password",
+      "message": "Password is required",
+      "code": "too_small"
+    },
+    {
+      "field": "full_name",
+      "message": "Full name is required",
+      "code": "too_small"
+    }
+  ],
+  "schemaName": "registerUserSchema",
+  "validationTime": "2ms",
+  "errorCount": 3,
+  "details": "Validation failed: 3 errors"
+}

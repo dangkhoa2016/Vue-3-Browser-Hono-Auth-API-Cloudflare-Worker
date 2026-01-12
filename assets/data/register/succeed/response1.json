@@ -1,0 +1,17 @@
+{
+  "success": true,
+  "data": {
+    "id": 3,
+    "full_name": "New Registered User",
+    "email": "newreg@example.com",
+    "status": "inactive",
+    "created_at": "2026-01-12 13:18:46",
+    "email_notification": {
+      "sent": false,
+      "skipped": true,
+      "provider": null,
+      "reason": "EMAIL_DISABLED"
+    }
+  },
+  "message": "Account created for New Registered User. Email notifications are currently disabled by administrator. Please contact support for account activation."
+}

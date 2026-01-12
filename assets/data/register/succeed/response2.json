@@ -1,0 +1,17 @@
+{
+  "success": true,
+  "data": {
+    "id": 3,
+    "full_name": "New User",
+    "email": "new-user@example.com",
+    "status": "active",
+    "created_at": "2026-01-12 13:24:51",
+    "email_notification": {
+      "sent": false,
+      "skipped": true,
+      "provider": null,
+      "reason": "AUTO_ACTIVATED"
+    }
+  },
+  "message": "User New User registered successfully with user role"
+}
