@@ -1,10 +1,55 @@
 <template>
   <div class="max-w-5xl mx-auto space-y-8 py-4">
-    <!-- Loading State -->
-    <div v-if="loadingProfile" class="flex items-center justify-center py-20">
-      <div class="flex flex-col items-center gap-4">
-        <div class="w-16 h-16 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
-        <p class="text-gray-600 dark:text-gray-400 font-medium">{{ $t('message.loader.loading_profile') }}...</p>
+    <!-- Loading State - Skeleton -->
+    <div v-if="loadingProfile" class="space-y-6 animate-pulse">
+      <!-- Header Skeleton -->
+      <div class="relative overflow-hidden bg-gradient-to-br from-gray-300 to-gray-400 dark:from-gray-700 dark:to-gray-800 rounded-2xl shadow-xl p-8">
+        <div class="flex items-center space-x-6">
+          <div class="h-24 w-24 rounded-full bg-gray-200 dark:bg-gray-600"></div>
+          <div class="flex-1 space-y-3">
+            <div class="h-8 bg-gray-200 dark:bg-gray-600 rounded-lg w-48"></div>
+            <div class="h-6 bg-gray-200 dark:bg-gray-600 rounded-lg w-64"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Content Grid Skeleton -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Account Info Skeleton -->
+        <div class="lg:col-span-2 bg-white dark:bg-slate-900 rounded-2xl shadow-lg p-8 border border-gray-100 dark:border-slate-800">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="w-10 h-10 rounded-lg bg-gray-200 dark:bg-gray-700"></div>
+            <div class="h-7 bg-gray-200 dark:bg-gray-700 rounded-lg w-40"></div>
+          </div>
+          
+          <div class="space-y-4">
+            <div v-for="i in 5" :key="i" class="flex items-center justify-between p-4 rounded-xl bg-gray-50 dark:bg-slate-800/50">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-lg bg-gray-200 dark:bg-gray-700"></div>
+                <div class="h-5 bg-gray-200 dark:bg-gray-700 rounded w-24"></div>
+              </div>
+              <div class="h-5 bg-gray-200 dark:bg-gray-700 rounded w-32"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stats Skeleton -->
+        <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-lg p-8 border border-gray-100 dark:border-slate-800">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="w-10 h-10 rounded-lg bg-gray-200 dark:bg-gray-700"></div>
+            <div class="h-7 bg-gray-200 dark:bg-gray-700 rounded-lg w-28"></div>
+          </div>
+          
+          <div class="space-y-4">
+            <div v-for="i in 2" :key="i" class="bg-gray-100 dark:bg-slate-800/50 p-6 rounded-2xl">
+              <div class="flex items-center justify-between mb-2">
+                <div class="w-8 h-8 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                <div class="h-10 bg-gray-200 dark:bg-gray-700 rounded w-16"></div>
+              </div>
+              <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-24"></div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
