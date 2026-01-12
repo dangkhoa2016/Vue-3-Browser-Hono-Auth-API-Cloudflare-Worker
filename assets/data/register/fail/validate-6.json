@@ -1,0 +1,15 @@
+{
+  "success": false,
+  "error": "Validation error - Validation failed: 1 error",
+  "errors": [
+    {
+      "field": "full_name",
+      "message": "Full name must be at least 2 characters long",
+      "code": "too_small"
+    }
+  ],
+  "schemaName": "registerUserSchema",
+  "validationTime": "4ms",
+  "errorCount": 1,
+  "details": "Validation failed: 1 error"
+}

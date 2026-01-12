@@ -1,0 +1,15 @@
+{
+  "success": false,
+  "error": "Validation error - Validation failed: 1 error",
+  "errors": [
+    {
+      "field": "email",
+      "message": "Email address cannot exceed 255 characters",
+      "code": "too_big"
+    }
+  ],
+  "schemaName": "registerUserSchema",
+  "validationTime": "6ms",
+  "errorCount": 1,
+  "details": "Validation failed: 1 error"
+}

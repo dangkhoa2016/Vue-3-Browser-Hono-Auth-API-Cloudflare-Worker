@@ -1,0 +1,15 @@
+{
+  "success": false,
+  "error": "Validation error - Validation failed: 1 error",
+  "errors": [
+    {
+      "field": "email",
+      "message": "Please provide a valid email address (e.g., user@example.com)",
+      "code": "invalid_string"
+    }
+  ],
+  "schemaName": "registerUserSchema",
+  "validationTime": "9ms",
+  "errorCount": 1,
+  "details": "Validation failed: 1 error"
+}
