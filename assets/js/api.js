@@ -19,7 +19,7 @@ const HTTP_STATUS = {
 // API Endpoints
 export const API_ENDPOINTS = {
   LOGIN: '/api/auth/login',
-  REGISTER: '/api/auth/register',
+  REGISTER: '/api/user/register',
   PROFILE: '/api/user/profile',
 };
 
