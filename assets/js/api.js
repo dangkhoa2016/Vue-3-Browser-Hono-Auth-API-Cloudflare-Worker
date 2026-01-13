@@ -123,12 +123,22 @@ apiClient.interceptors.response.use(undefined, async (err) => {
 let mock;
 
 const loadJson = async (path) => {
-  const res = await fetch(path);
-  if (!res.ok) {
-    const t = i18n.global.t;
-    throw new Error(t('message.errors.failed_to_load', { item: path, message: res.statusText || t('message.errors.unknown_error') }));
+  const t = i18n.global.t;
+
+  try {
+    const res = await fetch(path);
+
+    if (!res.ok) {
+      const message = res.statusText || t('message.errors.unknown_error');
+      throw new Error(message);
+    }
+
+    return await res.json();
+  } catch (error) {
+    console.log(`[API] Failed to load JSON from ${path}:`, error);
+    const message = (error && error.message) || t('message.errors.unknown_error');
+    throw new Error(t('message.errors.failed_to_load', { item: path, message }));
   }
-  return await res.json();
 };
 
 export const setupMock = (enable) => {
@@ -175,7 +185,9 @@ export const setupMock = (enable) => {
           const data = await loadJson(DATA_PATHS.LOGIN_INVALID_CREDENTIALS);
           return [401, data];
         } catch (error) {
-          return [500, { success: false, error: 'Internal server error' }];
+          console.error('[Mock API] Login handler error:', error);
+          const message = (error && error.message) || 'Internal server error';
+          return [500, { success: false, error: message }];
         }
       });
 
@@ -224,14 +236,22 @@ export const setupMock = (enable) => {
           const data = await loadJson(responseFile);
           return [201, data];
         } catch (error) {
-          return [500, { success: false, error: 'Internal server error' }];
+          console.error('[Mock API] Register handler error:', error);
+          const message = (error && error.message) || 'Internal server error';
+          return [500, { success: false, error: message }];
         }
       });
 
       // Profile
       mock.onGet(MOCK_PATTERNS.PROFILE).reply(async (config) => {
-        const data = await loadJson(DATA_PATHS.PROFILE);
-        return [200, data];
+        try {
+          const data = await loadJson(DATA_PATHS.PROFILE);
+          return [200, data];
+        } catch (error) {
+          console.error('[Mock API] Profile handler error:', error);
+          const message = (error && error.message) || 'Internal server error';
+          return [500, { success: false, error: message }];
+        }
       });
     }
   } else {
