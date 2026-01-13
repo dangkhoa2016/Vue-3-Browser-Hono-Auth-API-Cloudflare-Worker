@@ -20,7 +20,7 @@ const load = (path) => {
         </div>
 
         <div v-else-if="error" class="flex items-center justify-center p-4">
-          <div class="max-w-lg w-full bg-white/90 backdrop-blur-lg rounded-3xl shadow-2xl overflow-hidden border border-white/20">
+          <div class="max-w-lg w-full bg-white/90 backdrop-blur-lg rounded-3xl shadow-2xl overflow-hidden border border-white/20 bg-gradient-to-br from-white via-slate-50 to-slate-100 text-slate-800 dark:bg-slate-900/90 dark:from-slate-900 dark:via-slate-900 dark:to-slate-950 dark:text-slate-100 dark:border-slate-700/60">
             <div class="relative p-8 md-p-12 text-center">
                <!-- Background Decoration -->
               <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-rose-400 via-fuchsia-500 to-indigo-500"></div>
@@ -32,21 +32,21 @@ const load = (path) => {
                 </div>
               </div>
               
-              <h2 class="text-2xl font-black text-slate-800 mb-4 tracking-tight">
+              <h2 class="text-2xl font-black text-slate-800 dark:text-slate-100 mb-4 tracking-tight">
                 {{ error.message && (error.message.includes('404') || error.message.includes('Failed to fetch') || error.message.includes('Not Found')) ? $t('message.loader.component_not_found') : $t('message.page_load_error.title') }}
               </h2>
               
-              <p class="text-slate-500 text-lg mb-8 leading-relaxed max-w-sm mx-auto">
+              <p class="text-slate-600 dark:text-slate-200/80 text-lg mb-8 leading-relaxed max-w-sm mx-auto">
                 {{ $t('message.page_load_error.message') }}
               </p>
               
               <div class="mb-8 text-left">
-                <div class="p-4 bg-red-50 rounded-xl border border-red-100 overflow-hidden">
-                  <div class="text-xs font-bold text-red-500 uppercase tracking-wider mb-2 flex items-center justify-between">
+                <div class="p-4 bg-red-50 dark:bg-red-900/30 rounded-xl border border-red-100 dark:border-red-800 overflow-hidden">
+                  <div class="text-xs font-bold text-red-500 dark:text-red-300 uppercase tracking-wider mb-2 flex items-center justify-between">
                     <span><i class="bi bi-bug-fill mr-2"></i> {{ $t('message.loader.error_details') }}</span>
-                    <span class="text-[10px] bg-red-100 px-2 py-0.5 rounded text-red-600 font-mono">${path}</span>
+                    <span class="text-[10px] bg-red-100 dark:bg-red-900/60 px-2 py-0.5 rounded text-red-600 dark:text-red-200 font-mono">${path}</span>
                   </div>
-                  <pre class="font-mono text-xs text-red-600 break-words whitespace-pre-wrap max-h-48 overflow-y-auto scrollbar-thin">{{ error.stack || error.message || error }}</pre>
+                  <pre class="font-mono text-xs text-red-600 dark:text-red-200 break-words whitespace-pre-wrap max-h-48 overflow-y-auto scrollbar-thin">{{ error.stack || error.message || error }}</pre>
                 </div>
               </div>
               
