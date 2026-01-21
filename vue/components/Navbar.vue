@@ -20,6 +20,35 @@
               ]">
               {{ item.name }}
             </router-link>
+
+            <!-- About / API dropdown -->
+            <div class="relative" ref="aboutDropdownRef"
+              @mouseenter="openAboutDropdown"
+              @mouseleave="closeAboutDropdown">
+              <button @click="toggleAboutDropdown"
+                class="inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-all duration-200"
+                :class="showAboutDropdown
+                  ? 'border-blue-500 text-gray-900 dark:text-white'
+                  : 'border-transparent text-gray-500 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:border-blue-300'"
+              >
+                {{ t('message.navbar.this_project') }}
+                <i class="bi bi-chevron-down text-[11px] ml-1"></i>
+              </button>
+              <transition name="dropdown">
+                <div v-if="showAboutDropdown"
+                  class="absolute left-0 mt-2 w-max min-w-[230px] bg-white dark:bg-gray-700 rounded-lg shadow-lg border border-gray-200 dark:border-gray-600 py-1 z-40 whitespace-nowrap">
+                  <router-link to="/about" @click="showAboutDropdown = false"
+                    class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 whitespace-nowrap">
+                    {{ t('message.navbar.about') }}
+                  </router-link>
+                  <router-link to="/api-info" @click="showAboutDropdown = false"
+                    class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 whitespace-nowrap">
+                    {{ t('message.navbar.api_explorer') }}
+                    <span class="text-[11px] text-gray-500 ml-1">({{ t('message.auth.login_required') }})</span>
+                  </router-link>
+                </div>
+              </transition>
+            </div>
           </div>
         </div>
 
@@ -126,6 +155,27 @@
               ]">
               {{ item.name }}
             </router-link>
+
+            <!-- Mobile dropdown items rendered flat -->
+            <router-link to="/about" @click="showMobileMenu = false"
+              class="block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
+              :class="[
+                $route.path === '/about'
+                  ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
+                  : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
+              ]">
+              {{ t('message.navbar.about') }}
+            </router-link>
+            <router-link to="/api-info" @click="showMobileMenu = false"
+              class="block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
+              :class="[
+                $route.path === '/api-info'
+                  ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
+                  : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
+              ]">
+              {{ t('message.navbar.api_explorer') }}
+              <span class="text-[11px] text-gray-500 ml-1">({{ t('message.auth.login_required') }})</span>
+            </router-link>
           </div>
 
           <!-- Mobile Auth Buttons -->
@@ -136,7 +186,7 @@
                 <i class="bi bi-person-circle text-base mr-2"></i>
                 {{ user?.full_name || user?.email }}
               </router-link>
-              <button @click="handleLogout; showMobileMenu = false"
+              <button @click="() => { handleLogout(); showMobileMenu = false; }"
                 class="w-full flex items-center justify-center px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 shadow-sm border border-red-200 dark:border-red-800 bg-white dark:bg-gray-700 text-red-600 dark:text-red-400">
                 <i class="bi bi-box-arrow-right text-base mr-2"></i>
                 {{ $t('message.auth.logout') }}
@@ -247,9 +297,12 @@ export default {
 
     const menuItems = computed(() => ([
       { name: t('message.navbar.home'), path: '/' },
-      { name: t('message.navbar.profile'), path: '/profile' },
-      { name: t('message.navbar.about'), path: '/about' }
+      { name: t('message.navbar.profile'), path: '/profile' }
     ]));
+
+    const showAboutDropdown = ref(false);
+    const aboutDropdownRef = ref(null);
+    let aboutDropdownTimer = null;
 
     const toggleLanguageDropdown = () => {
       showLanguageDropdown.value = !showLanguageDropdown.value;
@@ -267,6 +320,37 @@ export default {
     const handleClickOutside = (event) => {
       if (languageDropdownRef.value && !languageDropdownRef.value.contains(event.target)) {
         showLanguageDropdown.value = false;
+      }
+      if (aboutDropdownRef.value && !aboutDropdownRef.value.contains(event.target)) {
+        showAboutDropdown.value = false;
+      }
+    };
+
+    const openAboutDropdown = () => {
+      if (aboutDropdownTimer) {
+        clearTimeout(aboutDropdownTimer);
+        aboutDropdownTimer = null;
+      }
+      showAboutDropdown.value = true;
+    };
+
+    const closeAboutDropdown = () => {
+      if (aboutDropdownTimer) {
+        clearTimeout(aboutDropdownTimer);
+      }
+      aboutDropdownTimer = setTimeout(() => {
+        showAboutDropdown.value = false;
+      }, 120);
+    };
+
+    const toggleAboutDropdown = () => {
+      if (showAboutDropdown.value) {
+        if (aboutDropdownTimer) {
+          clearTimeout(aboutDropdownTimer);
+        }
+        showAboutDropdown.value = false;
+      } else {
+        openAboutDropdown();
       }
     };
 
@@ -325,6 +409,9 @@ export default {
 
     onUnmounted(() => {
       document.removeEventListener('click', handleClickOutside);
+      if (aboutDropdownTimer) {
+        clearTimeout(aboutDropdownTimer);
+      }
     });
 
     return {
@@ -334,9 +421,11 @@ export default {
       showLanguageDropdown,
       showMobileMenu,
       showLogoutConfirm,
+      showAboutDropdown,
       showLoginModal,
       showRegisterModal,
       languageDropdownRef,
+      aboutDropdownRef,
       currentLanguage,
       languages,
       isAuthenticated,
@@ -344,6 +433,9 @@ export default {
       toggleLanguageDropdown,
       toggleMobileMenu,
       changeLanguage,
+      openAboutDropdown,
+      closeAboutDropdown,
+      toggleAboutDropdown,
       handleLoginSuccess,
       handleLogout,
       confirmLogout,

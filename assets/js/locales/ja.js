@@ -182,6 +182,7 @@ export default {
     },
     navbar: {
       about: '概要',
+      api_explorer: 'API エクスプローラー',
       brand: 'Hono Auth Worker',
       brand_title: 'ホームページへ',
       change_language: '言語を変更',
@@ -192,7 +193,25 @@ export default {
       real_label: '本番',
       switch_to_dark: 'ダークモードに切り替え',
       switch_to_light: 'ライトモードに切り替え',
+      this_project: 'このプロジェクト',
       toggle_api_mode: 'API モードを切り替え'
+    },
+    api_explorer: {
+      title: 'ロールベース API エクスプローラー',
+      subtitle: 'アクセス可能なエンドポイントはロールに応じて表示されます。',
+      header_message: 'API 情報',
+      role: 'ロール',
+      environment: '環境',
+      status: 'ステータス',
+      total_available: 'アクセス可能なエンドポイント',
+      total_system: 'システムエンドポイント',
+      categories: 'カテゴリ',
+      endpoints: 'エンドポイント',
+      endpoint_count: '{count} エンドポイント',
+      no_endpoints: 'このロールで利用可能なエンドポイントはありません。',
+      error_loading: 'API 情報の読み込みに失敗しました',
+      login_required_title: 'ログインが必要です',
+      login_required_message: 'ロールベースのエンドポイントを表示するにはログインしてください。'
     },
     not_found: {
       back: '戻る',

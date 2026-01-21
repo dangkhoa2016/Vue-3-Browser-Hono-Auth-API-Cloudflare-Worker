@@ -21,6 +21,7 @@ export const API_ENDPOINTS = {
   LOGIN: '/api/auth/login',
   REGISTER: '/api/user/register',
   PROFILE: '/api/user/profile',
+  API_INFO: '/api',
 };
 
 // Mock API Configuration
@@ -37,6 +38,7 @@ const MOCK_PATTERNS = {
   LOGIN: new RegExp(`${API_ENDPOINTS.LOGIN.replace(/\//g, '\\/')}($|\\?)`),
   REGISTER: new RegExp(`${API_ENDPOINTS.REGISTER.replace(/\//g, '\\/')}($|\\?)`),
   PROFILE: new RegExp(`${API_ENDPOINTS.PROFILE.replace(/\//g, '\\/')}($|\\?)`),
+  API_INFO: new RegExp(`${API_ENDPOINTS.API_INFO.replace(/\//g, '\\/')}($|\\?)`),
 };
 
 // Data Paths
@@ -54,6 +56,7 @@ const DATA_PATHS = {
   REGISTER_SUCCESS_INACTIVE: '/assets/data/register/succeed/response1.json',
   LOGIN_INVALID_CREDENTIALS: '/assets/data/login/fail/invalid-email-or-password.json',
   PROFILE: '/assets/data/profile/succeed.json',
+  API_INFO: '/assets/data/profile/api.json',
 };
 
 export const apiClient = axios.create({
@@ -249,6 +252,18 @@ export const setupMock = (enable) => {
           return [200, data];
         } catch (error) {
           console.error('[Mock API] Profile handler error:', error);
+          const message = (error && error.message) || 'Internal server error';
+          return [500, { success: false, error: message }];
+        }
+      });
+
+      // API info
+      mock.onGet(MOCK_PATTERNS.API_INFO).reply(async () => {
+        try {
+          const data = await loadJson(DATA_PATHS.API_INFO);
+          return [200, data];
+        } catch (error) {
+          console.error('[Mock API] API info handler error:', error);
           const message = (error && error.message) || 'Internal server error';
           return [500, { success: false, error: message }];
         }
