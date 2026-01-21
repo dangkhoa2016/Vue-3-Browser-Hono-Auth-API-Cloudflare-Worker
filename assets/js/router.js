@@ -174,6 +174,12 @@ const routes = [
     component: load('/vue/pages/Profile.vue'),
     meta: { requiresAuth: true }
   },
+  {
+    path: '/api-info',
+    name: 'ApiExplorer',
+    component: load('/vue/pages/ApiExplorer.vue'),
+    meta: { requiresAuth: true }
+  },
   { path: '/about', name: 'About', component: load('/vue/pages/About.vue') },
   { path: '/:pathMatch(.*)*', name: 'NotFound', component: load('/vue/pages/NotFound.vue') },
 ];

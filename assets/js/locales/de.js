@@ -182,6 +182,7 @@ export default {
     },
     navbar: {
       about: 'Über',
+      api_explorer: 'API-Explorer',
       brand: 'Hono Auth Worker',
       brand_title: 'Zur Startseite',
       change_language: 'Sprache ändern',
@@ -192,7 +193,25 @@ export default {
       real_label: 'ECHT',
       switch_to_dark: 'Zu dunklem Modus wechseln',
       switch_to_light: 'Zu hellem Modus wechseln',
+      this_project: 'Dieses Projekt',
       toggle_api_mode: 'API-Modus umschalten'
+    },
+    api_explorer: {
+      title: 'Rollenbasierter API-Explorer',
+      subtitle: 'Die zugänglichen Endpunkte werden nach Ihrer Rolle gefiltert.',
+      header_message: 'API-Informationen',
+      role: 'Rolle',
+      environment: 'Umgebung',
+      status: 'Status',
+      total_available: 'Zugängliche Endpunkte',
+      total_system: 'Systemendpunkte',
+      categories: 'Kategorien',
+      endpoints: 'Endpunkte',
+      endpoint_count: '{count} Endpunkte',
+      no_endpoints: 'Für diese Rolle sind keine Endpunkte verfügbar.',
+      error_loading: 'API-Informationen konnten nicht geladen werden',
+      login_required_title: 'Anmeldung erforderlich',
+      login_required_message: 'Bitte melden Sie sich an, um rollenbasierte Endpunkte zu sehen.'
     },
     not_found: {
       back: 'Zurück',

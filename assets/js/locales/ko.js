@@ -182,6 +182,7 @@ export default {
     },
     navbar: {
       about: '소개',
+      api_explorer: 'API 탐색기',
       brand: 'Hono Auth Worker',
       brand_title: '홈페이지로 이동',
       change_language: '언어 변경',
@@ -192,7 +193,25 @@ export default {
       real_label: '실제',
       switch_to_dark: '다크 모드로 전환',
       switch_to_light: '라이트 모드로 전환',
+      this_project: '이 프로젝트',
       toggle_api_mode: 'API 모드 전환'
+    },
+    api_explorer: {
+      title: '역할 기반 API 탐색기',
+      subtitle: '접근 가능한 엔드포인트가 역할에 따라 필터링됩니다.',
+      header_message: 'API 정보',
+      role: '역할',
+      environment: '환경',
+      status: '상태',
+      total_available: '접근 가능한 엔드포인트',
+      total_system: '시스템 엔드포인트',
+      categories: '카테고리',
+      endpoints: '엔드포인트',
+      endpoint_count: '{count}개 엔드포인트',
+      no_endpoints: '이 역할에 대해 사용할 수 있는 엔드포인트가 없습니다.',
+      error_loading: 'API 정보를 불러오지 못했습니다',
+      login_required_title: '로그인 필요',
+      login_required_message: '역할 기반 엔드포인트를 보려면 로그인하세요.'
     },
     not_found: {
       back: '뒤로',
