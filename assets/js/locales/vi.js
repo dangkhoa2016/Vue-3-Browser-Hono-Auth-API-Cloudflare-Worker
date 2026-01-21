@@ -182,6 +182,7 @@ export default {
     },
     navbar: {
       about: 'Giới thiệu',
+      api_explorer: 'API Explorer',
       brand: 'Hono Auth Worker',
       brand_title: 'Trở về trang chủ',
       change_language: 'Thay đổi Ngôn ngữ',
@@ -192,7 +193,25 @@ export default {
       real_label: 'THẬT',
       switch_to_dark: 'Chuyển sang chế độ Tối',
       switch_to_light: 'Chuyển sang chế độ Sáng',
+      this_project: 'Dự án này',
       toggle_api_mode: 'Chuyển chế độ API'
+    },
+    api_explorer: {
+      title: 'API Explorer theo vai trò',
+      subtitle: 'Các endpoint được lọc theo vai trò của bạn.',
+      header_message: 'Thông tin API',
+      role: 'Vai trò',
+      environment: 'Môi trường',
+      status: 'Trạng thái',
+      total_available: 'Endpoint có thể truy cập',
+      total_system: 'Tổng endpoint hệ thống',
+      categories: 'Danh mục',
+      endpoints: 'Danh sách endpoint',
+      endpoint_count: '{count} endpoint',
+      no_endpoints: 'Không có endpoint nào cho vai trò này.',
+      error_loading: 'Tải thông tin API thất bại',
+      login_required_title: 'Yêu cầu đăng nhập',
+      login_required_message: 'Vui lòng đăng nhập để xem các endpoint theo vai trò.'
     },
     not_found: {
       back: 'Quay lại',
