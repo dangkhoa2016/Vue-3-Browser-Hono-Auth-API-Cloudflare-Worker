@@ -122,7 +122,7 @@
                 <div class="w-10 h-10 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center group-hover:scale-110 transition-transform">
                   <i class="bi bi-person-fill text-blue-600 dark:text-blue-400"></i>
                 </div>
-                <span class="text-gray-600 dark:text-slate-400 font-medium">{{ $t('message.profile.username') }}</span>
+                <span class="text-gray-600 dark:text-slate-400 font-medium">{{ $t('message.profile.full_name') }}</span>
               </div>
               <span class="font-bold text-gray-900 dark:text-slate-100">{{ profile.full_name }}</span>
             </div>

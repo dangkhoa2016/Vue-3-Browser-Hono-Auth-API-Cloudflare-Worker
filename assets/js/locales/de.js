@@ -220,7 +220,7 @@ export default {
       status: 'Status',
       title: 'Benutzerprofil',
       user_id: 'Benutzer-ID',
-      username: 'Benutzername',
+      full_name: 'Vollständiger Name',
       visitor: 'Besucher',
       welcome: 'Willkommen zurück!'
     },
