@@ -220,7 +220,7 @@ export default {
       status: 'Trạng thái',
       title: 'Hồ sơ người dùng',
       user_id: 'Mã người dùng',
-      username: 'Tên người dùng',
+      full_name: 'Họ và tên',
       visitor: 'Khách',
       welcome: 'Chào mừng trở lại!'
     },

@@ -220,7 +220,7 @@ export default {
       status: 'ステータス',
       title: 'ユーザープロフィール',
       user_id: 'ユーザーID',
-      username: 'ユーザー名',
+      full_name: '氏名',
       visitor: 'ビジター',
       welcome: 'お帰りなさい！'
     },

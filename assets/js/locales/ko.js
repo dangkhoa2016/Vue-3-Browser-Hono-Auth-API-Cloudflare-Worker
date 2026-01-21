@@ -220,7 +220,7 @@ export default {
       status: '상태',
       title: '사용자 프로필',
       user_id: '사용자 ID',
-      username: '사용자명',
+      full_name: '성명',
       visitor: '방문자',
       welcome: '다시 오신 것을 환영합니다!'
     },
