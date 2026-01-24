@@ -10,13 +10,13 @@
               class="text-lg sm:text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 hidden xs:inline">{{
                 t('message.navbar.brand') }}</span>
           </router-link>
-          <div class="hidden lg:ml-8 lg:flex lg:space-x-8">
+          <div class="hidden lg:ml-4 lg:flex lg:space-x-1">
             <router-link v-for="item in menuItems" :key="item.path" :to="item.path"
-              class="inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-all duration-200"
+              class="inline-flex items-center px-2 lg:px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200 whitespace-nowrap"
               :class="[
                 $route.path === item.path
-                  ? 'border-blue-500 text-gray-900 dark:text-white'
-                  : 'border-transparent text-gray-500 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:border-blue-300'
+                  ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/40 dark:text-blue-300'
+                  : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-blue-600 dark:hover:text-blue-300'
               ]">
               {{ item.name }}
             </router-link>
@@ -26,13 +26,13 @@
               @mouseenter="openAboutDropdown"
               @mouseleave="closeAboutDropdown">
               <button @click="toggleAboutDropdown"
-                class="inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-all duration-200"
+                class="inline-flex items-center px-2 lg:px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200 whitespace-nowrap"
                 :class="showAboutDropdown
-                  ? 'border-blue-500 text-gray-900 dark:text-white'
-                  : 'border-transparent text-gray-500 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:border-blue-300'"
+                  ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/40 dark:text-blue-300'
+                  : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-blue-600 dark:hover:text-blue-300'"
               >
-                {{ t('message.navbar.this_project') }}
-                <i class="bi bi-chevron-down text-[11px] ml-1"></i>
+                <span class="truncate max-w-[110px] xl:max-w-none">{{ t('message.navbar.this_project') }}</span>
+                <i class="bi bi-chevron-down text-[11px] ml-1.5 transition-transform duration-200" :class="{ 'rotate-180': showAboutDropdown }"></i>
               </button>
               <transition name="dropdown">
                 <div v-if="showAboutDropdown"
@@ -55,17 +55,16 @@
         <div class="flex items-center space-x-1.5 sm:space-x-2 md:space-x-3">
           <!-- User Profile (when authenticated) -->
           <template v-if="isAuthenticated">
-            <div class="hidden lg:flex items-center space-x-2">
+            <div class="hidden lg:flex items-center ml-1 border-l border-gray-200 dark:border-gray-700 pl-2 space-x-1">
               <router-link to="/profile" 
-                class="flex items-center px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200 shadow-sm border border-purple-200 dark:border-purple-800 bg-white dark:bg-gray-700 text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/30">
-                <i class="bi bi-person-circle text-sm mr-1.5"></i>
-                <span class="max-w-[100px] truncate">{{ user?.full_name || user?.email }}</span>
+                class="flex items-center px-2 py-2 rounded-lg text-sm font-medium transition-colors duration-200 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-blue-600 group">
+                <i class="bi bi-person-circle text-lg mr-2 text-gray-400 group-hover:text-blue-500 transition-colors"></i>
+                <span class="hidden xl:block max-w-[150px] truncate">{{ user?.full_name || user?.email }}</span>
               </router-link>
               <button @click="handleLogout"
-                class="flex items-center px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200 shadow-sm border border-red-200 dark:border-red-800 bg-white dark:bg-gray-700 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30"
+                class="flex items-center justify-center w-9 h-9 rounded-lg text-gray-500 hover:bg-red-50 hover:text-red-600 dark:text-gray-400 dark:hover:bg-red-900/20 dark:hover:text-red-400 transition-colors"
                 :title="$t('message.auth.logout')">
-                <i class="bi bi-box-arrow-right text-sm mr-1.5"></i>
-                {{ $t('message.auth.logout') }}
+                <i class="bi bi-box-arrow-right text-lg"></i>
               </button>
             </div>
           </template>
@@ -90,11 +89,11 @@
           <!-- Language Selector -->
           <div class="relative" ref="languageDropdownRef">
             <button @click="toggleLanguageDropdown"
-              class="flex items-center px-2 sm:px-2.5 py-1.5 rounded-full text-xs font-medium transition-all duration-200 shadow-sm border bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600"
+              class="flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
               :title="t('message.navbar.change_language')">
-              <i class="bi bi-translate text-sm"></i>
-              <span class="uppercase ml-1 text-xs">{{ currentLanguage }}</span>
-              <i class="bi bi-chevron-down text-xs ml-0.5 transition-transform"
+              <i class="bi bi-translate text-lg"></i>
+              <span class="uppercase ml-2 text-xs font-semibold">{{ currentLanguage }}</span>
+              <i class="bi bi-chevron-down text-[10px] ml-1 transition-transform"
                 :class="{ 'rotate-180': showLanguageDropdown }"></i>
             </button>
 
@@ -117,14 +116,14 @@
 
           <!-- Mock API Toggle -->
           <button @click="store.setMockApi(!store.mockApi)"
-            class="hidden md:flex items-center px-2.5 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 shadow-sm border"
+            class="hidden md:flex items-center px-3 py-2 rounded-lg text-xs font-medium transition-colors duration-200"
             :class="store.mockApi
-              ? 'bg-green-50 border-green-200 text-green-700 dark:bg-green-900/30 dark:border-green-800 dark:text-green-300 hover:bg-green-100'
-              : 'bg-yellow-50 border-yellow-200 text-yellow-700 dark:bg-yellow-900/30 dark:border-yellow-800 dark:text-yellow-300 hover:bg-yellow-100'"
+              ? 'text-green-700 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/20'
+              : 'text-amber-700 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-900/20'"
             :title="t('message.navbar.toggle_api_mode')">
-            <span class="w-1.5 h-1.5 rounded-full mr-1.5 animate-pulse"
-              :class="store.mockApi ? 'bg-green-500' : 'bg-yellow-500'"></span>
-            <span class="hidden lg:inline">{{ store.mockApi ? t('message.navbar.mock_label') : t('message.navbar.real_label') }}</span>
+            <span class="w-2 h-2 rounded-full mr-2 shadow-sm"
+              :class="store.mockApi ? 'bg-green-500' : 'bg-amber-500'"></span>
+            <span class="hidden lg:inline font-medium uppercase tracking-wider text-[11px]">{{ store.mockApi ? t('message.navbar.mock_label') : t('message.navbar.real_label') }}</span>
           </button>
 
           <!-- Dark Mode Toggle -->
@@ -156,26 +155,37 @@
               {{ item.name }}
             </router-link>
 
-            <!-- Mobile dropdown items rendered flat -->
-            <router-link to="/about" @click="showMobileMenu = false"
-              class="block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
-              :class="[
-                $route.path === '/about'
-                  ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
-                  : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
-              ]">
-              {{ t('message.navbar.about') }}
-            </router-link>
-            <router-link to="/api-info" @click="showMobileMenu = false"
-              class="block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
-              :class="[
-                $route.path === '/api-info'
-                  ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
-                  : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
-              ]">
-              {{ t('message.navbar.api_explorer') }}
-              <span class="text-[11px] text-gray-500 ml-1">({{ t('message.auth.login_required') }})</span>
-            </router-link>
+            <!-- Mobile "This Project" Group -->
+            <div>
+              <button @click="toggleMobileAboutMenu"
+                class="w-full flex items-center justify-between px-3 py-2 rounded-md text-base font-medium transition-colors duration-200 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700">
+                <span>{{ t('message.navbar.this_project') }}</span>
+                <i class="bi bi-chevron-down text-xs transition-transform duration-200"
+                   :class="{ 'rotate-180': showMobileAboutMenu }"></i>
+              </button>
+
+              <div v-show="showMobileAboutMenu" class="space-y-1">
+                <router-link to="/about" @click="showMobileMenu = false"
+                  class="block pl-6 pr-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
+                  :class="[
+                    $route.path === '/about'
+                      ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
+                      : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700'
+                  ]">
+                  {{ t('message.navbar.about') }}
+                </router-link>
+                <router-link to="/api-info" @click="showMobileMenu = false"
+                  class="block pl-6 pr-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
+                  :class="[
+                    $route.path === '/api-info'
+                      ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
+                      : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700'
+                  ]">
+                  {{ t('message.navbar.api_explorer') }}
+                  <span class="text-[11px] text-gray-500 ml-1">({{ t('message.auth.login_required') }})</span>
+                </router-link>
+              </div>
+            </div>
           </div>
 
           <!-- Mobile Auth Buttons -->
@@ -301,6 +311,7 @@ export default {
     ]));
 
     const showAboutDropdown = ref(false);
+    const showMobileAboutMenu = ref(false);
     const aboutDropdownRef = ref(null);
     let aboutDropdownTimer = null;
 
@@ -310,6 +321,10 @@ export default {
 
     const toggleMobileMenu = () => {
       showMobileMenu.value = !showMobileMenu.value;
+    };
+
+    const toggleMobileAboutMenu = () => {
+      showMobileAboutMenu.value = !showMobileAboutMenu.value;
     };
 
     const changeLanguage = async (langCode) => {
@@ -422,6 +437,7 @@ export default {
       showMobileMenu,
       showLogoutConfirm,
       showAboutDropdown,
+      showMobileAboutMenu,
       showLoginModal,
       showRegisterModal,
       languageDropdownRef,
@@ -432,6 +448,7 @@ export default {
       user,
       toggleLanguageDropdown,
       toggleMobileMenu,
+      toggleMobileAboutMenu,
       changeLanguage,
       openAboutDropdown,
       closeAboutDropdown,
