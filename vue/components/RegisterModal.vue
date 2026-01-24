@@ -34,8 +34,8 @@
 
       <!-- Error Alert -->
       <div v-if="error" class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-3">
-        <div class="flex items-start">
-          <i class="bi bi-exclamation-triangle-fill text-red-600 dark:text-red-400 mt-0.5 mr-2"></i>
+        <div class="flex items-center">
+          <i class="bi bi-exclamation-triangle-fill text-red-600 dark:text-red-400 mr-2 text-lg"></i>
           <div class="flex-1">
             <p class="text-sm font-medium text-red-800 dark:text-red-300">{{ error }}</p>
             <ul v-if="fieldErrors.length" class="mt-1 text-xs text-red-700 dark:text-red-400 list-disc list-inside">
