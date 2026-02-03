@@ -1,175 +1,170 @@
 export default {
   message: {
-    title: 'Vue 3 Browser - Hono Auth API - Cloudflare Worker',
+    about: {
+      advanced: {
+        admin_roles: {
+          body: 'Complete role-based access control system.',
+          title: 'Admin & Roles:'
+        },
+        email_service: {
+          body: 'User activation via email (Brevo integration).',
+          title: 'Email Service:'
+        },
+        enterprise_audit: {
+          body: 'Complete logging with 50+ audit endpoints.',
+          title: 'Enterprise Audit:'
+        },
+        rate_limiting: {
+          body: 'IP-based tracking for login attempts.',
+          title: 'Rate Limiting:'
+        },
+        zod_validation: {
+          body: 'Comprehensive schema validation with i18n support.',
+          title: 'Zod Validation:'
+        }
+      },
+      advanced_title: 'Advanced Capabilities',
+      description: 'A comprehensive Cloudflare Workers project using the Hono.js framework with D1 database to build a production-ready JWT authentication system.',
+      features: {
+        d1: {
+          body: 'SQLite compatible with global distribution.',
+          title: 'Cloudflare D1:'
+        },
+        hono: {
+          body: 'Fast and lightweight JavaScript framework.',
+          title: 'Hono.js Framework:'
+        },
+        i18n: {
+          body: 'Automatic language detection & unlimited support.',
+          title: 'Dynamic I18n:'
+        },
+        jwt: {
+          body: 'Secure access & refresh tokens with bcrypt hashing.',
+          title: 'JWT Auth:'
+        },
+        token_security: {
+          body: 'Blacklist, rotation, and logout-all enforcement.',
+          title: 'Token Security:'
+        }
+      },
+      key_features_title: 'Key Features',
+      testing_intro: 'The project includes a comprehensive modular test suite covering:',
+      testing_items: {
+        email_activation: 'Email & Account Activation',
+        enterprise_audit: 'Enterprise Audit System',
+        i18n_validation: 'I18n & Multilingual Validation',
+        rbac: 'Role-Based Access Control (RBAC)',
+        security_performance: 'Security & Performance',
+        system_integration: 'System & Integration Tests'
+      },
+      testing_title: 'Testing Framework',
+      title: 'About Hono Auth Worker'
+    },
     app: {
       back_to_top: 'Back to top'
-    },
-    navbar: {
-      brand: 'Hono Auth Worker',
-      brand_title: 'Go to homepage',
-      home: 'Home',
-      profile: 'Profile',
-      about: 'About',
-      toggle_api_mode: 'Toggle API Mode',
-      mock_label: 'MOCK',
-      real_label: 'REAL',
-      switch_to_light: 'Switch to Light Mode',
-      switch_to_dark: 'Switch to Dark Mode',
-      change_language: 'Change Language'
-    },
-    loader: {
-      assets: 'Assets',
-      libraries: 'Libraries',
-      components: 'Components',
-      store: 'Store',
-      app: 'App',
-      finalizing: 'Finalizing',
-      initializing: 'Initializing...',
-      loading: 'Loading {item}...',
-      starting_app: 'Starting Main App...',
-      error_loading: 'Error loading [{stage}]: {message}',
-      system_init_sequence: 'System Initialization Sequence',
-      loading_component_title: 'Loading Component...',
-      component_not_found: 'Component Not Found',
-      error_details: 'Error Details'
-    },
-    errors: {
-      failed_to_load: 'Failed to load {item}: {message}',
-      network_error: 'Network Error',
-      not_found: 'Not Found',
-      something_went_wrong: 'Something went wrong',
-      init_failed: 'initMainApp reported failure',
-      init_undefined: 'initMainApp is not defined',
-      unknown_error: 'Unknown error',
-      network_error_checking: 'Network error checking {item}: {message}',
-      script_execution_failed: 'Script execution failed: {message}',
-      failed_to_load_script: 'Failed to load script tag: {item}'
-    },
-    error_modal: {
-      title: 'System Error',
-      retry: 'Retry System'
-    },
-    page_load_error: {
-      title: 'Page Load Failed',
-      message: 'We ran into an issue loading this content. Please check your connection and try again.',
-      retry: 'Reload Content'
     },
     common: {
       loading: 'Loading...',
       retry: 'Retry',
       retry_title: 'Retry loading data'
     },
+    error_modal: {
+      retry: 'Retry System',
+      title: 'System Error'
+    },
+    errors: {
+      failed_to_load: 'Failed to load {item}: {message}',
+      failed_to_load_script: 'Failed to load script tag: {item}',
+      init_failed: 'initMainApp reported failure',
+      init_undefined: 'initMainApp is not defined',
+      network_error: 'Network Error',
+      network_error_checking: 'Network error checking {item}: {message}',
+      not_found: 'Not Found',
+      script_execution_failed: 'Script execution failed: {message}',
+      something_went_wrong: 'Something went wrong',
+      unknown_error: 'Unknown error'
+    },
     home: {
       badge: 'Hono Auth Worker v1.0',
+      cta: {
+        documentation: 'Documentation',
+        documentation_title: 'Read the documentation',
+        get_started: 'Get Started',
+        get_started_title: 'Start building your auth system'
+      },
       hero: {
-        title_start: 'The Ultimate',
+        subtitle: 'Production-ready boilerplate combining Hono.js, D1 Database, and JWT authentication for high-performance edge applications.',
         title_emphasis: 'Auth Solution',
         title_end: 'for Cloudflare Workers',
-        subtitle: 'Production-ready boilerplate combining Hono.js, D1 Database, and JWT authentication for high-performance edge applications.'
-      },
-      cta: {
-        get_started: 'Get Started',
-        get_started_title: 'Start building your auth system',
-        documentation: 'Documentation',
-        documentation_title: 'Read the documentation'
+        title_start: 'The Ultimate'
       },
       tech: {
+        d1_title: 'Serverless SQL database',
+        edge_title: 'Global edge network deployment',
         heading: 'Powered by Modern Stack',
         hono_title: 'Ultra-fast web framework',
-        d1_title: 'Serverless SQL database',
-        jwt_title: 'Secure token-based authentication',
-        edge_title: 'Global edge network deployment'
+        jwt_title: 'Secure token-based authentication'
       }
     },
-    about: {
-      title: 'About Hono Auth Worker',
-      description: 'A comprehensive Cloudflare Workers project using the Hono.js framework with D1 database to build a production-ready JWT authentication system.',
-      key_features_title: 'Key Features',
-      features: {
-        hono: {
-          title: 'Hono.js Framework:',
-          body: 'Fast and lightweight JavaScript framework.'
-        },
-        d1: {
-          title: 'Cloudflare D1:',
-          body: 'SQLite compatible with global distribution.'
-        },
-        jwt: {
-          title: 'JWT Auth:',
-          body: 'Secure access & refresh tokens with bcrypt hashing.'
-        },
-        token_security: {
-          title: 'Token Security:',
-          body: 'Blacklist, rotation, and logout-all enforcement.'
-        },
-        i18n: {
-          title: 'Dynamic I18n:',
-          body: 'Automatic language detection & unlimited support.'
-        }
-      },
-      advanced_title: 'Advanced Capabilities',
-      advanced: {
-        admin_roles: {
-          title: 'Admin & Roles:',
-          body: 'Complete role-based access control system.'
-        },
-        email_service: {
-          title: 'Email Service:',
-          body: 'User activation via email (Brevo integration).'
-        },
-        zod_validation: {
-          title: 'Zod Validation:',
-          body: 'Comprehensive schema validation with i18n support.'
-        },
-        enterprise_audit: {
-          title: 'Enterprise Audit:',
-          body: 'Complete logging with 50+ audit endpoints.'
-        },
-        rate_limiting: {
-          title: 'Rate Limiting:',
-          body: 'IP-based tracking for login attempts.'
-        }
-      },
-      testing_title: 'Testing Framework',
-      testing_intro: 'The project includes a comprehensive modular test suite covering:',
-      testing_items: {
-        system_integration: 'System & Integration Tests',
-        rbac: 'Role-Based Access Control (RBAC)',
-        i18n_validation: 'I18n & Multilingual Validation',
-        enterprise_audit: 'Enterprise Audit System',
-        security_performance: 'Security & Performance',
-        email_activation: 'Email & Account Activation'
-      }
+    loader: {
+      app: 'App',
+      assets: 'Assets',
+      component_not_found: 'Component Not Found',
+      components: 'Components',
+      error_details: 'Error Details',
+      error_loading: 'Error loading [{stage}]: {message}',
+      finalizing: 'Finalizing',
+      initializing: 'Initializing...',
+      libraries: 'Libraries',
+      loading: 'Loading {item}...',
+      loading_component_title: 'Loading Component...',
+      starting_app: 'Starting Main App...',
+      store: 'Store',
+      system_init_sequence: 'System Initialization Sequence'
     },
-    profile: {
-      account_info: 'Account Information',
-      username: 'Username',
-      role: 'Role',
-      status: 'Status',
-      stats: 'Statistics',
-      joined: 'Joined',
-      user_id: 'User ID',
-      access_level: 'Access Level',
-      title: 'User Profile',
-      welcome: 'Welcome back!',
-      account_info: 'Account Info',
-      username: 'Username',
-      guest_user: 'Guest User',
-      role: 'Role',
-      visitor: 'Visitor',
-      status: 'Status',
-      active: 'Active',
-      stats: 'Stats',
-      favorites: 'Favorites',
-      comments: 'Comments'
+    navbar: {
+      about: 'About',
+      brand: 'Hono Auth Worker',
+      brand_title: 'Go to homepage',
+      change_language: 'Change Language',
+      home: 'Home',
+      mock_label: 'MOCK',
+      profile: 'Profile',
+      real_label: 'REAL',
+      switch_to_dark: 'Switch to Dark Mode',
+      switch_to_light: 'Switch to Light Mode',
+      toggle_api_mode: 'Toggle API Mode'
     },
     not_found: {
-      title: 'Page Not Found',
-      message: 'The page you are looking for does not exist.',
       back: 'Back',
       back_title: 'Go back to previous page',
       home: 'Home',
-      home_title: 'Return to homepage'
-    }
+      home_title: 'Return to homepage',
+      message: 'The page you are looking for does not exist.',
+      title: 'Page Not Found'
+    },
+    page_load_error: {
+      message: 'We ran into an issue loading this content. Please check your connection and try again.',
+      retry: 'Reload Content',
+      title: 'Page Load Failed'
+    },
+    profile: {
+      access_level: 'Access Level',
+      account_info: 'Account Info',
+      active: 'Active',
+      comments: 'Comments',
+      favorites: 'Favorites',
+      guest_user: 'Guest User',
+      joined: 'Joined',
+      role: 'Role',
+      stats: 'Stats',
+      status: 'Status',
+      title: 'User Profile',
+      user_id: 'User ID',
+      username: 'Username',
+      visitor: 'Visitor',
+      welcome: 'Welcome back!'
+    },
+    title: 'Vue 3 Browser - Hono Auth API - Cloudflare Worker'
   }
 };
