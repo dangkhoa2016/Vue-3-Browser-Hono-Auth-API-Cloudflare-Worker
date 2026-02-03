@@ -1,180 +1,170 @@
 export default {
   message: {
-    title: 'Vue 3 Browser - Hono Auth API - Cloudflare Worker',
-    app: {
-      back_to_top: 'Nach oben'
-    },
-    navbar: {
-      change_language: 'Sprache ändern',
-      brand: 'Hono Auth Worker',
-      home: 'Startseite',
-      profile: 'Profil',
-      about: 'Über',
-      toggle_api_mode: 'API-Modus umschalten',
-      mock_label: 'MOCK',
-      real_label: 'ECHT',
-      switch_to_light: 'Zu hellem Modus wechseln',
-      switch_to_dark: 'Zu dunklem Modus wechseln'
-    },
-    loader: {
-      assets: 'Ressourcen',
-      libraries: 'Bibliotheken',
-      components: 'Komponenten',
-      store: 'Speicher',
-      app: 'App',
-      finalizing: 'Abschließen',
-      initializing: 'Initialisierung...',
-      loading: 'Lade {item}...',
-      starting_app: 'Starte Hauptanwendung...',
-      error_loading: 'Fehler beim Laden von [{stage}]: {message}',
-      system_init_sequence: 'Systeminitialisierungssequenz',
-      loading_component_title: 'Komponente wird geladen...',
-      component_not_found: 'Komponente nicht gefunden',
-      error_details: 'Fehlerdetails'
-    },
-    errors: {
-      failed_to_load: 'Fehler beim Laden von {item}: {message}',
-      network_error: 'Netzwerkfehler',
-      not_found: 'Nicht gefunden',
-      something_went_wrong: 'Etwas ist schief gelaufen',
-      init_failed: 'initMainApp meldete Fehler',
-      init_undefined: 'initMainApp ist nicht definiert',
-      unknown_error: 'Unbekannter Fehler',
-      network_error_checking: 'Netzwerkfehler beim Überprüfen von {item}: {message}',
-      script_execution_failed: 'Skriptausführung fehlgeschlagen: {message}',
-      failed_to_load_script: 'Fehler beim Laden des Skript-Tags: {item}'
-    },
-    error_modal: {
-      title: 'Systemfehler',
-      retry: 'Wiederholen'
-    },
-    page_load_error: {
-      title: 'Laden der Seite fehlgeschlagen',
-      message: 'Beim Laden dieses Inhalts ist ein Fehler aufgetreten. Bitte überprüfen Sie Ihre Verbindung und versuchen Sie es erneut.',
-      retry: 'Inhalt neu laden'
-    },
-    home: {
-      badge: 'Hono Auth Worker v1.0',
-      hero: {
-        title_start: 'Die ultimative',
-        title_emphasis: 'Auth-Lösung',
-        title_end: 'für Cloudflare Workers',
-        subtitle: 'Produktionsreifes Boilerplate, das Hono.js, D1-Datenbank und JWT-Authentifizierung für leistungsstarke Edge-Anwendungen kombiniert.'
-      },
-      cta: {
-        get_started: 'Loslegen',
-        documentation: 'Dokumentation'
-      },
-      tech: {
-        heading: 'Angetrieben von modernem Stack'
-      }
-    },
     about: {
-      title: 'Über Hono Auth Worker',
-      description: 'Ein umfassendes Cloudflare-Workers-Projekt mit Hono.js und D1-Datenbank für ein produktionsreifes JWT-Authentifizierungssystem.',
-      key_features_title: 'Wesentliche Funktionen',
-      features: {
-        hono: {
-          title: 'Hono.js Framework:',
-          body: 'Schnelles und leichtgewichtiges JavaScript-Framework.'
+      advanced: {
+        admin_roles: {
+          body: 'Vollständiges rollenbasiertes Zugriffskontrollsystem.',
+          title: 'Admin & Rollen:'
         },
-        d1: {
-          title: 'Cloudflare D1:',
-          body: 'SQLite-kompatibel mit globaler Verteilung.'
+        email_service: {
+          body: 'Benutzeraktivierung per E-Mail (Brevo-Integration).',
+          title: 'E-Mail-Dienst:'
         },
-        jwt: {
-          title: 'JWT Auth:',
-          body: 'Sichere Zugriffs- und Refresh-Token mit bcrypt-Hashing.'
+        enterprise_audit: {
+          body: 'Vollständiges Logging mit über 50 Audit-Endpunkten.',
+          title: 'Enterprise Audit:'
         },
-        token_security: {
-          title: 'Token-Sicherheit:',
-          body: 'Blacklist, Rotation und erzwungenes Abmelden aller Sitzungen.'
+        rate_limiting: {
+          body: 'IP-basierte Nachverfolgung von Anmeldeversuchen.',
+          title: 'Rate Limiting:'
         },
-        i18n: {
-          title: 'Dynamisches I18n:',
-          body: 'Automatische Spracherkennung und unbegrenzte Unterstützung.'
+        zod_validation: {
+          body: 'Umfassende Schemaprüfung mit i18n-Unterstützung.',
+          title: 'Zod-Validierung:'
         }
       },
       advanced_title: 'Erweiterte Funktionen',
-      advanced: {
-        admin_roles: {
-          title: 'Admin & Rollen:',
-          body: 'Vollständiges rollenbasiertes Zugriffskontrollsystem.'
+      description: 'Ein umfassendes Cloudflare-Workers-Projekt mit Hono.js und D1-Datenbank für ein produktionsreifes JWT-Authentifizierungssystem.',
+      features: {
+        d1: {
+          body: 'SQLite-kompatibel mit globaler Verteilung.',
+          title: 'Cloudflare D1:'
         },
-        email_service: {
-          title: 'E-Mail-Dienst:',
-          body: 'Benutzeraktivierung per E-Mail (Brevo-Integration).'
+        hono: {
+          body: 'Schnelles und leichtgewichtiges JavaScript-Framework.',
+          title: 'Hono.js Framework:'
         },
-        zod_validation: {
-          title: 'Zod-Validierung:',
-          body: 'Umfassende Schemaprüfung mit i18n-Unterstützung.'
+        i18n: {
+          body: 'Automatische Spracherkennung und unbegrenzte Unterstützung.',
+          title: 'Dynamisches I18n:'
         },
-        enterprise_audit: {
-          title: 'Enterprise Audit:',
-          body: 'Vollständiges Logging mit über 50 Audit-Endpunkten.'
+        jwt: {
+          body: 'Sichere Zugriffs- und Refresh-Token mit bcrypt-Hashing.',
+          title: 'JWT Auth:'
         },
-        rate_limiting: {
-          title: 'Rate Limiting:',
-          body: 'IP-basierte Nachverfolgung von Anmeldeversuchen.'
+        token_security: {
+          body: 'Blacklist, Rotation und erzwungenes Abmelden aller Sitzungen.',
+          title: 'Token-Sicherheit:'
         }
       },
-      testing_title: 'Test-Framework',
+      key_features_title: 'Wesentliche Funktionen',
       testing_intro: 'Das Projekt enthält eine umfassende modulare Testsuite für:',
       testing_items: {
-        system_integration: 'System- und Integrationstests',
-        rbac: 'Rollenbasierte Zugriffskontrolle (RBAC)',
-        i18n_validation: 'i18n- und Mehrsprachen-Validierung',
+        email_activation: 'E-Mail- & Kontoaktivierung',
         enterprise_audit: 'Enterprise-Audit-System',
+        i18n_validation: 'i18n- und Mehrsprachen-Validierung',
+        rbac: 'Rollenbasierte Zugriffskontrolle (RBAC)',
         security_performance: 'Sicherheit & Performance',
-        email_activation: 'E-Mail- & Kontoaktivierung'
-      }
+        system_integration: 'System- und Integrationstests'
+      },
+      testing_title: 'Test-Framework',
+      title: 'Über Hono Auth Worker'
     },
-    profile: {
-      account_info: 'Kontoinformationen',
-      username: 'Benutzername',
-      role: 'Rolle',
-      status: 'Status',
-      stats: 'Statistiken',
-      joined: 'Beigetreten',
-      user_id: 'Benutzer-ID',
-      access_level: 'Zugriffsstufe',
-      title: 'Benutzerprofil',
-      welcome: 'Willkommen zurück!',
-      account_info: 'Kontoinformationen',
-      username: 'Benutzername',
-      guest_user: 'Gastbenutzer',
-      role: 'Rolle',
-      visitor: 'Besucher',
-      status: 'Status',
-      active: 'Aktiv',
-      stats: 'Statistiken',
-      favorites: 'Favoriten',
-      comments: 'Kommentare'
+    app: {
+      back_to_top: 'Nach oben'
     },
     common: {
       loading: 'Laden...',
       retry: 'Wiederholen',
       retry_title: 'Daten erneut laden'
     },
+    error_modal: {
+      retry: 'Wiederholen',
+      title: 'Systemfehler'
+    },
+    errors: {
+      failed_to_load: 'Fehler beim Laden von {item}: {message}',
+      failed_to_load_script: 'Fehler beim Laden des Skript-Tags: {item}',
+      init_failed: 'initMainApp meldete Fehler',
+      init_undefined: 'initMainApp ist nicht definiert',
+      network_error: 'Netzwerkfehler',
+      network_error_checking: 'Netzwerkfehler beim Überprüfen von {item}: {message}',
+      not_found: 'Nicht gefunden',
+      script_execution_failed: 'Skriptausführung fehlgeschlagen: {message}',
+      something_went_wrong: 'Etwas ist schief gelaufen',
+      unknown_error: 'Unbekannter Fehler'
+    },
     home: {
+      badge: 'Hono Auth Worker v1.0',
       cta: {
-        get_started_title: 'Beginnen Sie mit dem Aufbau Ihres Auth-Systems',
-        documentation_title: 'Dokumentation lesen'
+        documentation: 'Dokumentation',
+        documentation_title: 'Dokumentation lesen',
+        get_started: 'Loslegen',
+        get_started_title: 'Beginnen Sie mit dem Aufbau Ihres Auth-Systems'
+      },
+      hero: {
+        subtitle: 'Produktionsreifes Boilerplate, das Hono.js, D1-Datenbank und JWT-Authentifizierung für leistungsstarke Edge-Anwendungen kombiniert.',
+        title_emphasis: 'Auth-Lösung',
+        title_end: 'für Cloudflare Workers',
+        title_start: 'Die ultimative'
       },
       tech: {
-        hono_title: 'Ultraschnelles Web-Framework',
         d1_title: 'Serverlose SQL-Datenbank',
-        jwt_title: 'Sichere token-basierte Authentifizierung',
-        edge_title: 'Globales Edge-Netzwerk-Deployment'
+        edge_title: 'Globales Edge-Netzwerk-Deployment',
+        heading: 'Angetrieben von modernem Stack',
+        hono_title: 'Ultraschnelles Web-Framework',
+        jwt_title: 'Sichere token-basierte Authentifizierung'
       }
     },
+    loader: {
+      app: 'App',
+      assets: 'Ressourcen',
+      component_not_found: 'Komponente nicht gefunden',
+      components: 'Komponenten',
+      error_details: 'Fehlerdetails',
+      error_loading: 'Fehler beim Laden von [{stage}]: {message}',
+      finalizing: 'Abschließen',
+      initializing: 'Initialisierung...',
+      libraries: 'Bibliotheken',
+      loading: 'Lade {item}...',
+      loading_component_title: 'Komponente wird geladen...',
+      starting_app: 'Starte Hauptanwendung...',
+      store: 'Speicher',
+      system_init_sequence: 'Systeminitialisierungssequenz'
+    },
+    navbar: {
+      about: 'Über',
+      brand: 'Hono Auth Worker',
+      brand_title: 'Zur Startseite',
+      change_language: 'Sprache ändern',
+      home: 'Startseite',
+      mock_label: 'MOCK',
+      profile: 'Profil',
+      real_label: 'ECHT',
+      switch_to_dark: 'Zu dunklem Modus wechseln',
+      switch_to_light: 'Zu hellem Modus wechseln',
+      toggle_api_mode: 'API-Modus umschalten'
+    },
     not_found: {
-      title: 'Seite nicht gefunden',
-      message: 'Die gesuchte Seite existiert nicht.',
       back: 'Zurück',
       back_title: 'Zurück zur vorherigen Seite',
       home: 'Startseite',
-      home_title: 'Zurück zur Startseite'
-    }
+      home_title: 'Zurück zur Startseite',
+      message: 'Die gesuchte Seite existiert nicht.',
+      title: 'Seite nicht gefunden'
+    },
+    page_load_error: {
+      message: 'Beim Laden dieses Inhalts ist ein Fehler aufgetreten. Bitte überprüfen Sie Ihre Verbindung und versuchen Sie es erneut.',
+      retry: 'Inhalt neu laden',
+      title: 'Laden der Seite fehlgeschlagen'
+    },
+    profile: {
+      access_level: 'Zugriffsstufe',
+      account_info: 'Kontoinformationen',
+      active: 'Aktiv',
+      comments: 'Kommentare',
+      favorites: 'Favoriten',
+      guest_user: 'Gastbenutzer',
+      joined: 'Beigetreten',
+      role: 'Rolle',
+      stats: 'Statistiken',
+      status: 'Status',
+      title: 'Benutzerprofil',
+      user_id: 'Benutzer-ID',
+      username: 'Benutzername',
+      visitor: 'Besucher',
+      welcome: 'Willkommen zurück!'
+    },
+    title: 'Vue 3 Browser - Hono Auth API - Cloudflare Worker'
   }
 };
