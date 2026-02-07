@@ -277,6 +277,23 @@ export default {
       }
     });
 
+    // Watch for authentication changes
+    watch(
+      () => authStore.isAuthenticated,
+      async (isAuthenticated) => {
+        if (isAuthenticated === false && !showLoginRequired.value) {
+          // User logged out, show login required and reset API info
+          apiInfo.value = null;
+          error.value = null;
+          showLoginRequired.value = true;
+        } else if (isAuthenticated === true && showLoginRequired.value) {
+          // User logged in, reload API info
+          await loadApiInfo();
+        }
+      },
+      { immediate: false }
+    );
+
     onMounted(loadApiInfo);
     onActivated(() => {
       loadApiInfo();
