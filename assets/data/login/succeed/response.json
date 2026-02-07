@@ -1,8 +1,12 @@
 {
   "success": true,
   "data": {
-    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyOjEiLCJpc3MiOiJob25vLWF1dGgtd29ya2VyIiwiYXVkIjoiaG9uby1hdXRoLWNsaWVudCIsInVzZXJfaWQiOjEsImZ1bGxfbmFtZSI6IlRlc3QgU3VwZXIgQWRtaW4gVXNlciIsImVtYWlsIjoidGVzdC1zdXBlcmFkbWluQGV4YW1wbGUuY29tIiwicm9sZSI6InN1cGVyX2FkbWluIiwianRpIjoiZjJiNDFmOTgtNWQ5OS00YzUwLWE3YjItZWYzNTI5MGZjN2I0IiwiaWF0IjoxNzY4MTM0NTIxLCJleHAiOjE3NjgxMzgxMjEsInNjb3BlIjoidXNlcjpiYXNpYyIsImlwX2hpbnQiOiJlZmY4ZTdjYTUwNjYyN2ZlMTVkZGE1ZTBlNTEyZmNhYWQ3MGI2ZDUyMGYzN2NjNzY1OTdmZGI0ZjJkODNhMWEzIiwidWFfaGludCI6IjA3ZDFkNTM5MDQ3ZWYwMTk5MGZmZDgyNjZkMDE1Nzc1MjAxYWExNTBhMDU0YzA5MzNjZjM1OGRkM2MwMzI3NzUifQ.Bk3cKcIAtU5s7FmILy3KWohJ2scop-o5N7kKz87ykrg",
-    "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJqdGkiOiIwYjVkNDVjMC0yNjAyLTQxNDctODUwZi1jZWNiMzNjOGY1N2UiLCJpYXQiOjE3NjgxMzQ1MjEsImV4cCI6MTc2ODM5MzcyMX0.jfrltdnuyCmvkXEaSQYSoD5l6X2RpnxL1IK5xiEeESQ",
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.....L0C0SMsOOPC2rh810rBI_3tiTaRzrcRoweebb2Xh6O0",
+    "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.....29gLeOjAykLJkWfxUkvzy0Qyw1hwX1O2GeOSg3PPE7A",
+    "expires_in": 300,
+    "expires_at": 1770128860,
+    "refresh_expires_in": 259200,
+    "refresh_expires_at": 1770387760,
     "user": {
       "id": 1,
       "full_name": "Test Super Admin User",
@@ -10,5 +14,5 @@
       "role": "super_admin"
     }
   },
-  "message": "Successfully logged in as Test Super Admin User (super_admin) at 01/11/2026, 12:28:41"
+  "message": "Đăng nhập thành công với tư cách Test Super Admin User (super_admin) lúc 02/03/2026, 14:22:40"
 }
