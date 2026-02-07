@@ -1,0 +1,15 @@
+{
+  "success": false,
+  "error": "Validation error - Validation failed: 1 error",
+  "errors": [
+    {
+      "field": "refresh_token",
+      "message": "Invalid refresh token format",
+      "code": "invalid_string"
+    }
+  ],
+  "schemaName": "refreshTokenSchema",
+  "validationTime": "0ms",
+  "errorCount": 1,
+  "details": "Validation failed: 1 error"
+}
