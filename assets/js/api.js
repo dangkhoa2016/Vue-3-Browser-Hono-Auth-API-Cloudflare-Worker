@@ -19,6 +19,7 @@ const HTTP_STATUS = {
 // API Endpoints
 export const API_ENDPOINTS = {
   LOGIN: '/api/auth/login',
+  REFRESH_TOKEN: '/api/auth/refresh_token',
   REGISTER: '/api/user/register',
   PROFILE: '/api/user/profile',
   API_INFO: '/api',
@@ -36,6 +37,7 @@ const MOCK_CONFIG = {
 // Mock API Patterns - Generated from API_ENDPOINTS
 const MOCK_PATTERNS = {
   LOGIN: new RegExp(`${API_ENDPOINTS.LOGIN.replace(/\//g, '\\/')}($|\\?)`),
+  REFRESH_TOKEN: new RegExp(`${API_ENDPOINTS.REFRESH_TOKEN.replace(/\//g, '\\/')}($|\\?)`),
   REGISTER: new RegExp(`${API_ENDPOINTS.REGISTER.replace(/\//g, '\\/')}($|\\?)`),
   PROFILE: new RegExp(`${API_ENDPOINTS.PROFILE.replace(/\//g, '\\/')}($|\\?)`),
   API_INFO: new RegExp(`${API_ENDPOINTS.API_INFO.replace(/\//g, '\\/')}($|\\?)`),
@@ -47,6 +49,10 @@ const DATA_PATHS = {
   LOGIN_VALIDATE_EMAIL_FORMAT: '/assets/data/login/fail/validate-1.json',
   LOGIN_VALIDATE_PASSWORD_EMPTY: '/assets/data/login/fail/validate-2.json',
   LOGIN_SUCCESS: '/assets/data/login/succeed/response.json',
+  LOGIN_INVALID_CREDENTIALS: '/assets/data/login/fail/invalid-email-or-password.json',
+  REFRESH_TOKEN_SUCCESS: '/assets/data/refresh_token/succeed/response.json',
+  REFRESH_TOKEN_EXPIRED: '/assets/data/refresh_token/fail/expired.json',
+  REFRESH_TOKEN_INVALID: '/assets/data/refresh_token/fail/invalid.json',
   REGISTER_VALIDATE_EMAIL_EMPTY: '/assets/data/register/fail/validate-1.json',
   REGISTER_VALIDATE_EMAIL_FORMAT: '/assets/data/register/fail/validate-2.json',
   REGISTER_VALIDATE_PASSWORD_EMPTY: '/assets/data/register/fail/validate-3.json',
@@ -54,7 +60,6 @@ const DATA_PATHS = {
   REGISTER_VALIDATE_FULLNAME_EMPTY: '/assets/data/register/fail/validate-5.json',
   REGISTER_SUCCESS_ACTIVE: '/assets/data/register/succeed/response2.json',
   REGISTER_SUCCESS_INACTIVE: '/assets/data/register/succeed/response1.json',
-  LOGIN_INVALID_CREDENTIALS: '/assets/data/login/fail/invalid-email-or-password.json',
   PROFILE: '/assets/data/profile/succeed.json',
   API_INFO: '/assets/data/profile/api.json',
 };
@@ -65,10 +70,108 @@ export const apiClient = axios.create({
   retryDelay: API_CONFIG.RETRY_DELAY,
 });
 
+// Add request interceptor to inject current language and handle token refresh
+apiClient.interceptors.request.use(async (config) => {
+  // Language injection
+  let lang = 'en'; // Default fallback
+
+  // Get current language from i18n instance
+  if (i18n && i18n.global) {
+    if (i18n.mode === 'legacy') {
+      lang = i18n.global.locale || 'en';
+    } else {
+      lang = i18n.global.locale.value || 'en';
+    }
+  } else {
+    // Try localStorage if i18n not initialized or available
+    lang = localStorage.getItem('user-locale') || 'en';
+  }
+
+  // Set Accept-Language header for backend detection
+  config.headers['Accept-Language'] = lang;
+
+  // Token refresh logic
+  // Skip token refresh for the refresh endpoint itself
+  if (!config.url.includes(API_ENDPOINTS.REFRESH_TOKEN)) {
+    try {
+      // Dynamically import authStore to avoid circular dependency
+      const { useAuthStore } = await import('./stores/authStore.js');
+      const authStore = useAuthStore();
+
+      // Check if we need to refresh the token
+      if (authStore.shouldRefreshToken) {
+        console.log('[API] Access token expired, refreshing...');
+        const newToken = await authStore.refreshAccessToken();
+        
+        if (newToken) {
+          // Update Authorization header with new token
+          config.headers['Authorization'] = `Bearer ${newToken}`;
+        } else {
+          // If refresh failed, token will be null and user will be logged out
+          console.warn('[API] Token refresh failed, request will proceed without auth');
+        }
+      } else if (authStore.token) {
+        // Use existing valid token
+        config.headers['Authorization'] = `Bearer ${authStore.token}`;
+      }
+    } catch (error) {
+      console.warn('[API] Error in token refresh interceptor:', error);
+    }
+  }
+
+  return config;
+}, (error) => {
+  return Promise.reject(error);
+});
+
 apiClient.interceptors.response.use(undefined, async (err) => {
   const config = err.config;
 
   console.warn('[API] Request failed:', err.message || err);
+  
+  // Handle 401 Unauthorized - Try to refresh token
+  if (err.response && err.response.status === 401) {
+    // Skip refresh for the refresh token endpoint itself
+    if (config.url && !config.url.includes(API_ENDPOINTS.REFRESH_TOKEN)) {
+      // Skip if we already tried to refresh for this request
+      if (!config._retryWithRefresh) {
+        console.log('[API] Got 401, attempting to refresh token...');
+        
+        try {
+          // Dynamically import authStore to avoid circular dependency
+          const { useAuthStore } = await import('./stores/authStore.js');
+          const authStore = useAuthStore();
+
+          // Check if we have a refresh token
+          if (authStore.refreshToken && !authStore.isRefreshTokenExpired) {
+            // Try to refresh the token
+            const newToken = await authStore.refreshAccessToken();
+            
+            if (newToken) {
+              // Mark this request as already retried with refresh
+              config._retryWithRefresh = true;
+              // Update the Authorization header with new token
+              config.headers['Authorization'] = `Bearer ${newToken}`;
+              
+              console.log('[API] Token refreshed, retrying original request...');
+              // Retry the original request with new token
+              return apiClient(config);
+            }
+          }
+          
+          // If we get here, refresh failed or no refresh token available
+          console.warn('[API] Cannot refresh token, user needs to login');
+        } catch (error) {
+          console.error('[API] Error during token refresh:', error);
+        }
+      } else {
+        console.warn('[API] Already tried refresh for this request, giving up');
+      }
+    }
+    
+    // If refresh failed or not applicable, reject with original error
+    return Promise.reject(err);
+  }
   
   // If config does not exist or the retry option is not set, reject
   if (!config || !config.retry) {
@@ -89,7 +192,7 @@ apiClient.interceptors.response.use(undefined, async (err) => {
     return Promise.reject(err);
   }
 
-  // Don't retry for any 4xx errors (client errors) as they won't succeed on retry
+  // Don't retry for any 4xx errors (client errors) except 401 (already handled above)
   if (err.response && 
       err.response.status >= HTTP_STATUS.CLIENT_ERROR_MIN && 
       err.response.status < HTTP_STATUS.CLIENT_ERROR_MAX) {
@@ -181,6 +284,10 @@ export const setupMock = (enable) => {
           // Check credentials
           if (email === MOCK_CONFIG.TEST_EMAIL && password === MOCK_CONFIG.TEST_PASSWORD) {
             const data = await loadJson(DATA_PATHS.LOGIN_SUCCESS);
+            // Update timestamps to current time + expiry
+            const now = Math.floor(Date.now() / 1000);
+            data.data.expires_at = now + data.data.expires_in;
+            data.data.refresh_expires_at = now + data.data.refresh_expires_in;
             return [200, data];
           }
 
@@ -189,6 +296,41 @@ export const setupMock = (enable) => {
           return [401, data];
         } catch (error) {
           console.error('[Mock API] Login handler error:', error);
+          const message = (error && error.message) || 'Internal server error';
+          return [500, { success: false, error: message }];
+        }
+      });
+
+      // Refresh Token
+      mock.onPost(MOCK_PATTERNS.REFRESH_TOKEN).reply(async (config) => {
+        await sleep(MOCK_CONFIG.LOGIN_PROCESSING_DELAY);
+
+        try {
+          const body = JSON.parse(config.data);
+          const { refresh_token } = body;
+
+          // Validate refresh_token exists
+          if (!refresh_token || refresh_token.trim() === '') {
+            const data = await loadJson(DATA_PATHS.REFRESH_TOKEN_INVALID);
+            return [HTTP_STATUS.CLIENT_ERROR_MIN, data];
+          }
+
+          // Simulate token expiry check (10% chance of expired token for testing)
+          const isExpired = Math.random() < 0.1;
+          if (isExpired) {
+            const data = await loadJson(DATA_PATHS.REFRESH_TOKEN_EXPIRED);
+            return [401, data];
+          }
+
+          // Success - return new tokens with updated timestamps
+          const data = await loadJson(DATA_PATHS.REFRESH_TOKEN_SUCCESS);
+          // Update timestamps to current time + expiry
+          const now = Math.floor(Date.now() / 1000);
+          data.data.expires_at = now + data.data.expires_in;
+          data.data.refresh_expires_at = now + data.data.refresh_expires_in;
+          return [200, data];
+        } catch (error) {
+          console.error('[Mock API] Refresh token handler error:', error);
           const message = (error && error.message) || 'Internal server error';
           return [500, { success: false, error: message }];
         }

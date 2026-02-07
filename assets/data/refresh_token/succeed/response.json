@@ -1,0 +1,18 @@
+{
+  "success": true,
+  "data": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.....NEW_ACCESS_TOKEN",
+    "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.....NEW_REFRESH_TOKEN",
+    "expires_in": 300,
+    "expires_at": 1770128860,
+    "refresh_expires_in": 259200,
+    "refresh_expires_at": 1770387760,
+    "user": {
+      "id": 1,
+      "full_name": "Test Super Admin User",
+      "email": "test-superadmin@example.com",
+      "role": "super_admin"
+    }
+  },
+  "message": "Token đã được làm mới thành công"
+}

@@ -371,11 +371,11 @@ export default {
 
     const handleLoginSuccess = async (response) => {
       if (response.data) {
-        // Extract user and tokens from response.data
-        const { user, access_token, refresh_token } = response.data;
+        // Extract user, tokens and expiry timestamps from response.data
+        const { user, access_token, refresh_token, expires_at, refresh_expires_at } = response.data;
         
-        // Save to auth store
-        authStore.login(user, access_token, refresh_token);
+        // Save to auth store with expiry information
+        authStore.login(user, access_token, refresh_token, expires_at, refresh_expires_at);
         
         // Clear auth required flags
         sessionStorage.removeItem('authRequired');
