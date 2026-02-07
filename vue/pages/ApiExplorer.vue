@@ -155,6 +155,7 @@
 import { ref, computed, onMounted, onActivated, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { apiClient, API_ENDPOINTS } from '/assets/js/api.js';
+import { useMainStore } from '/assets/js/stores/mainStore.js';
 import { useAuthStore } from '/assets/js/stores/authStore.js';
 import { useModalStore } from '/assets/js/stores/modalStore.js';
 
@@ -167,9 +168,10 @@ export default {
     const showLoginRequired = ref(false);
     const collapsed = ref({});
 
+    const mainStore = useMainStore();
     const authStore = useAuthStore();
     const modalStore = useModalStore();
-    const { t } = useI18n({ useScope: 'global' });
+    const { t, locale } = useI18n({ useScope: 'global' });
 
     authStore.init();
 
@@ -268,6 +270,12 @@ export default {
         [name]: !collapsed.value[name]
       };
     };
+
+    watch([() => mainStore.mockApi, locale], () => {
+      if (!mainStore.mockApi) {
+        loadApiInfo();
+      }
+    });
 
     onMounted(loadApiInfo);
     onActivated(() => {
