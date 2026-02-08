@@ -194,7 +194,16 @@ export default {
       switch_to_dark: 'Zu dunklem Modus wechseln',
       switch_to_light: 'Zu hellem Modus wechseln',
       this_project: 'Dieses Projekt',
-      toggle_api_mode: 'API-Modus umschalten'
+      toggle_api_mode: 'API-Modus umschalten',
+      admin: 'Admin',
+      admin_dashboard: 'Dashboard',
+      user_management: 'Benutzerverwaltung',
+      system_stats: 'Systemstatistiken',
+      system_health: 'Systemzustand',
+      audit_logs: 'Audit-Protokolle',
+      security_incidents: 'Sicherheitsvorfälle',
+      realtime_monitoring: 'Echtzeitüberwachung',
+      kv_admin: 'KV-Verwaltung'
     },
     api_explorer: {
       title: 'Rollenbasierter API-Explorer',

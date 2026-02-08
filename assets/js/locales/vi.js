@@ -194,7 +194,16 @@ export default {
       switch_to_dark: 'Chuyển sang chế độ Tối',
       switch_to_light: 'Chuyển sang chế độ Sáng',
       this_project: 'Dự án này',
-      toggle_api_mode: 'Chuyển chế độ API'
+      toggle_api_mode: 'Chuyển chế độ API',
+      admin: 'Quản trị',
+      admin_dashboard: 'Bảng điều khiển',
+      user_management: 'Quản lý người dùng',
+      system_stats: 'Thống kê hệ thống',
+      system_health: 'Tình trạng hệ thống',
+      audit_logs: 'Nhật ký kiểm tra',
+      security_incidents: 'Sự cố bảo mật',
+      realtime_monitoring: 'Giám sát thời gian thực',
+      kv_admin: 'Quản trị KV'
     },
     api_explorer: {
       title: 'API Explorer theo vai trò',
