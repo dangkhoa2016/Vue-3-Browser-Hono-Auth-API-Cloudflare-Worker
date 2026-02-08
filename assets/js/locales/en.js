@@ -194,7 +194,16 @@ export default {
       switch_to_dark: 'Switch to Dark Mode',
       switch_to_light: 'Switch to Light Mode',
       this_project: 'This Project',
-      toggle_api_mode: 'Toggle API Mode'
+      toggle_api_mode: 'Toggle API Mode',
+      admin: 'Admin',
+      admin_dashboard: 'Dashboard',
+      user_management: 'User Management',
+      system_stats: 'System Stats',
+      system_health: 'System Health',
+      audit_logs: 'Audit Logs',
+      security_incidents: 'Security Incidents',
+      realtime_monitoring: 'Realtime Monitoring',
+      kv_admin: 'KV Admin'
     },
     api_explorer: {
       title: 'Role-based API Explorer',

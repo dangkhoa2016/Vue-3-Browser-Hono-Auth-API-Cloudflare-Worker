@@ -21,6 +21,32 @@
               {{ item.name }}
             </router-link>
 
+            <!-- Admin dropdown -->
+            <div v-if="isAuthenticated && isAdmin" class="relative" ref="adminDropdownRef"
+              @mouseenter="openAdminDropdown"
+              @mouseleave="closeAdminDropdown">
+              <button @click="toggleAdminDropdown"
+                class="inline-flex items-center px-2 lg:px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200 whitespace-nowrap"
+                :class="showAdminDropdown
+                  ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/40 dark:text-blue-300'
+                  : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-blue-600 dark:hover:text-blue-300'"
+              >
+                <i class="bi bi-shield-lock text-[14px] mr-1.5"></i>
+                <span class="truncate max-w-[110px] xl:max-w-none">{{ t('message.navbar.admin') }}</span>
+                <i class="bi bi-chevron-down text-[11px] ml-1.5 transition-transform duration-200" :class="{ 'rotate-180': showAdminDropdown }"></i>
+              </button>
+              <transition name="dropdown">
+                <div v-if="showAdminDropdown"
+                  class="absolute left-0 mt-2 w-max min-w-[230px] bg-white dark:bg-gray-700 rounded-lg shadow-lg border border-gray-200 dark:border-gray-600 py-1 z-40 whitespace-nowrap">
+                  <router-link v-for="item in adminMenuItems" :key="item.path" :to="item.path" @click="showAdminDropdown = false"
+                    class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 whitespace-nowrap">
+                    <i :class="item.icon" class="text-base mr-2"></i>
+                    {{ item.name }}
+                  </router-link>
+                </div>
+              </transition>
+            </div>
+
             <!-- About / API dropdown -->
             <div class="relative" ref="aboutDropdownRef"
               @mouseenter="openAboutDropdown"
@@ -154,6 +180,32 @@
               ]">
               {{ item.name }}
             </router-link>
+
+            <!-- Mobile Admin Group -->
+            <div v-if="isAuthenticated && isAdmin">
+              <button @click="toggleMobileAdminMenu"
+                class="w-full flex items-center justify-between px-3 py-2 rounded-md text-base font-medium transition-colors duration-200 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700">
+                <span class="flex items-center">
+                  <i class="bi bi-shield-lock text-base mr-2"></i>
+                  {{ t('message.navbar.admin') }}
+                </span>
+                <i class="bi bi-chevron-down text-xs transition-transform duration-200"
+                   :class="{ 'rotate-180': showMobileAdminMenu }"></i>
+              </button>
+
+              <div v-show="showMobileAdminMenu" class="space-y-1">
+                <router-link v-for="item in adminMenuItems" :key="item.path" :to="item.path" @click="showMobileMenu = false"
+                  class="flex items-center pl-6 pr-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
+                  :class="[
+                    $route.path === item.path
+                      ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
+                      : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700'
+                  ]">
+                  <i :class="item.icon" class="text-base mr-2"></i>
+                  {{ item.name }}
+                </router-link>
+              </div>
+            </div>
 
             <!-- Mobile "This Project" Group -->
             <div>
@@ -315,6 +367,34 @@ export default {
     const aboutDropdownRef = ref(null);
     let aboutDropdownTimer = null;
 
+    const showAdminDropdown = ref(false);
+    const showMobileAdminMenu = ref(false);
+    const adminDropdownRef = ref(null);
+    let adminDropdownTimer = null;
+
+    // Check if user has admin access
+    const isAdmin = computed(() => {
+      const userRole = user.value?.role?.toLowerCase();
+      return userRole === 'admin' || userRole === 'super_admin';
+    });
+
+    const isSuperAdmin = computed(() => {
+      const userRole = user.value?.role?.toLowerCase();
+      return userRole === 'super_admin';
+    });
+
+    // Admin menu items
+    const adminMenuItems = computed(() => [
+      { name: t('message.navbar.admin_dashboard'), path: '/admin/dashboard', icon: 'bi-speedometer2' },
+      { name: t('message.navbar.user_management'), path: '/admin/users', icon: 'bi-people' },
+      { name: t('message.navbar.system_stats'), path: '/admin/stats', icon: 'bi-graph-up' },
+      { name: t('message.navbar.system_health'), path: '/admin/system-health', icon: 'bi-heart-pulse' },
+      { name: t('message.navbar.audit_logs'), path: '/admin/audit-logs', icon: 'bi-journal-text' },
+      { name: t('message.navbar.security_incidents'), path: '/admin/security-incidents', icon: 'bi-shield-exclamation' },
+      { name: t('message.navbar.realtime_monitoring'), path: '/admin/monitoring', icon: 'bi-activity' },
+      ...(isSuperAdmin.value ? [{ name: t('message.navbar.kv_admin'), path: '/admin/kv', icon: 'bi-database' }] : [])
+    ]);
+
     const toggleLanguageDropdown = () => {
       showLanguageDropdown.value = !showLanguageDropdown.value;
     };
@@ -338,6 +418,9 @@ export default {
       }
       if (aboutDropdownRef.value && !aboutDropdownRef.value.contains(event.target)) {
         showAboutDropdown.value = false;
+      }
+      if (adminDropdownRef.value && !adminDropdownRef.value.contains(event.target)) {
+        showAdminDropdown.value = false;
       }
     };
 
@@ -367,6 +450,38 @@ export default {
       } else {
         openAboutDropdown();
       }
+    };
+
+    const openAdminDropdown = () => {
+      if (adminDropdownTimer) {
+        clearTimeout(adminDropdownTimer);
+        adminDropdownTimer = null;
+      }
+      showAdminDropdown.value = true;
+    };
+
+    const closeAdminDropdown = () => {
+      if (adminDropdownTimer) {
+        clearTimeout(adminDropdownTimer);
+      }
+      adminDropdownTimer = setTimeout(() => {
+        showAdminDropdown.value = false;
+      }, 120);
+    };
+
+    const toggleAdminDropdown = () => {
+      if (showAdminDropdown.value) {
+        if (adminDropdownTimer) {
+          clearTimeout(adminDropdownTimer);
+        }
+        showAdminDropdown.value = false;
+      } else {
+        openAdminDropdown();
+      }
+    };
+
+    const toggleMobileAdminMenu = () => {
+      showMobileAdminMenu.value = !showMobileAdminMenu.value;
     };
 
     const handleLoginSuccess = async (response) => {
@@ -427,6 +542,9 @@ export default {
       if (aboutDropdownTimer) {
         clearTimeout(aboutDropdownTimer);
       }
+      if (adminDropdownTimer) {
+        clearTimeout(adminDropdownTimer);
+      }
     });
 
     return {
@@ -438,21 +556,31 @@ export default {
       showLogoutConfirm,
       showAboutDropdown,
       showMobileAboutMenu,
+      showAdminDropdown,
+      showMobileAdminMenu,
       showLoginModal,
       showRegisterModal,
       languageDropdownRef,
       aboutDropdownRef,
+      adminDropdownRef,
       currentLanguage,
       languages,
       isAuthenticated,
+      isAdmin,
+      isSuperAdmin,
       user,
+      adminMenuItems,
       toggleLanguageDropdown,
       toggleMobileMenu,
       toggleMobileAboutMenu,
+      toggleMobileAdminMenu,
       changeLanguage,
       openAboutDropdown,
       closeAboutDropdown,
       toggleAboutDropdown,
+      openAdminDropdown,
+      closeAdminDropdown,
+      toggleAdminDropdown,
       handleLoginSuccess,
       handleLogout,
       confirmLogout,

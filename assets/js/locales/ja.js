@@ -194,7 +194,16 @@ export default {
       switch_to_dark: 'ダークモードに切り替え',
       switch_to_light: 'ライトモードに切り替え',
       this_project: 'このプロジェクト',
-      toggle_api_mode: 'API モードを切り替え'
+      toggle_api_mode: 'APIモード切替',
+      admin: '管理者',
+      admin_dashboard: 'ダッシュボード',
+      user_management: 'ユーザー管理',
+      system_stats: 'システム統計',
+      system_health: 'システムヘルス',
+      audit_logs: '監査ログ',
+      security_incidents: 'セキュリティインシデント',
+      realtime_monitoring: 'リアルタイム監視',
+      kv_admin: 'KV管理'
     },
     api_explorer: {
       title: 'ロールベース API エクスプローラー',
