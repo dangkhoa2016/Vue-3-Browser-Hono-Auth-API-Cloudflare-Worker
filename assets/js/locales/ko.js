@@ -194,7 +194,16 @@ export default {
       switch_to_dark: '다크 모드로 전환',
       switch_to_light: '라이트 모드로 전환',
       this_project: '이 프로젝트',
-      toggle_api_mode: 'API 모드 전환'
+      toggle_api_mode: 'API 모드 전환',
+      admin: '관리자',
+      admin_dashboard: '대시보드',
+      user_management: '사용자 관리',
+      system_stats: '시스템 통계',
+      system_health: '시스템 상태',
+      audit_logs: '감사 로그',
+      security_incidents: '보안 사고',
+      realtime_monitoring: '실시간 모니터링',
+      kv_admin: 'KV 관리'
     },
     api_explorer: {
       title: '역할 기반 API 탐색기',
