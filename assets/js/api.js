@@ -23,6 +23,7 @@ export const API_ENDPOINTS = {
   REGISTER: '/api/user/register',
   PROFILE: '/api/user/profile',
   API_INFO: '/api',
+  USERS: '/api/admin/users',
 };
 
 // Mock API Configuration
@@ -41,6 +42,7 @@ const MOCK_PATTERNS = {
   REGISTER: new RegExp(`${API_ENDPOINTS.REGISTER.replace(/\//g, '\\/')}($|\\?)`),
   PROFILE: new RegExp(`${API_ENDPOINTS.PROFILE.replace(/\//g, '\\/')}($|\\?)`),
   API_INFO: new RegExp(`${API_ENDPOINTS.API_INFO.replace(/\//g, '\\/')}($|\\?)`),
+  USERS: new RegExp(`${API_ENDPOINTS.USERS.replace(/\//g, '\\/')}($|\\?)`),
 };
 
 // Data Paths
@@ -62,6 +64,7 @@ const DATA_PATHS = {
   REGISTER_SUCCESS_INACTIVE: '/assets/data/register/succeed/response1.json',
   PROFILE: '/assets/data/profile/succeed.json',
   API_INFO: '/assets/data/profile/api.json',
+  USERS: '/assets/data/users/succeed/super-admin+users.json',
 };
 
 export const apiClient = axios.create({
@@ -406,6 +409,29 @@ export const setupMock = (enable) => {
           return [200, data];
         } catch (error) {
           console.error('[Mock API] API info handler error:', error);
+          const message = (error && error.message) || 'Internal server error';
+          return [500, { success: false, error: message }];
+        }
+      });
+
+      // Users
+      mock.onGet(MOCK_PATTERNS.USERS).reply(async (config) => {
+        try {
+          const data = await loadJson(DATA_PATHS.USERS);
+          const params = config.params || {};
+          const page = Number.parseInt(params.page, 10) || data.data?.pagination?.page || 1;
+          const limit = Number.parseInt(params.limit, 10) || data.data?.pagination?.limit || data.data?.users?.length || 10;
+
+          if (data.data && data.data.pagination) {
+            const total = data.data.pagination.total || data.data.users.length;
+            data.data.pagination.page = page;
+            data.data.pagination.limit = limit;
+            data.data.pagination.totalPages = data.data.pagination.totalPages || Math.max(1, Math.ceil(total / limit));
+          }
+
+          return [200, data];
+        } catch (error) {
+          console.error('[Mock API] Users handler error:', error);
           const message = (error && error.message) || 'Internal server error';
           return [500, { success: false, error: message }];
         }
