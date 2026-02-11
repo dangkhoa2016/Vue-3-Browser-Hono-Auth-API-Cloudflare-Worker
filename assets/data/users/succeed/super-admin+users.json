@@ -1,0 +1,104 @@
+{
+  "success": true,
+  "data": {
+    "users": [
+      {
+        "id": 27,
+        "full_name": "Test User",
+        "email": "weak_1770473301055_0.15100789576199203@example.com",
+        "role": "user",
+        "status": "inactive",
+        "created_at": "2026-02-07 14:08:21",
+        "updated_at": "2026-02-07 14:08:21"
+      },
+      {
+        "id": 28,
+        "full_name": "Test User",
+        "email": "weak_1770473301201_0.9364695290024048@example.com",
+        "role": "user",
+        "status": "inactive",
+        "created_at": "2026-02-07 14:08:21",
+        "updated_at": "2026-02-07 14:08:21"
+      },
+      {
+        "id": 29,
+        "full_name": "Test User",
+        "email": "weak_1770473301346_0.9978755965723944@example.com",
+        "role": "user",
+        "status": "inactive",
+        "created_at": "2026-02-07 14:08:21",
+        "updated_at": "2026-02-07 14:08:21"
+      },
+      {
+        "id": 24,
+        "full_name": "Test User",
+        "email": "test_1770473299196@example.com",
+        "role": "user",
+        "status": "inactive",
+        "created_at": "2026-02-07 14:08:19",
+        "updated_at": "2026-02-07 14:08:19"
+      },
+      {
+        "id": 25,
+        "full_name": "Pending User",
+        "email": "inactive_1770473299425@example.com",
+        "role": "user",
+        "status": "inactive",
+        "created_at": "2026-02-07 14:08:19",
+        "updated_at": "2026-02-07 14:08:19"
+      },
+      {
+        "id": 26,
+        "full_name": "Email Notice User",
+        "email": "email_notice_1770473299675@example.com",
+        "role": "user",
+        "status": "inactive",
+        "created_at": "2026-02-07 14:08:19",
+        "updated_at": "2026-02-07 14:08:19"
+      },
+      {
+        "id": 21,
+        "full_name": "Test User",
+        "email": "weak_1770473131271_0.02464012623617773@example.com",
+        "role": "user",
+        "status": "inactive",
+        "created_at": "2026-02-07 14:05:31",
+        "updated_at": "2026-02-07 14:05:31"
+      },
+      {
+        "id": 22,
+        "full_name": "Test User",
+        "email": "weak_1770473131436_0.41848017970640417@example.com",
+        "role": "user",
+        "status": "inactive",
+        "created_at": "2026-02-07 14:05:31",
+        "updated_at": "2026-02-07 14:05:31"
+      },
+      {
+        "id": 23,
+        "full_name": "Test User",
+        "email": "weak_1770473131615_0.20131640084965552@example.com",
+        "role": "user",
+        "status": "inactive",
+        "created_at": "2026-02-07 14:05:31",
+        "updated_at": "2026-02-07 14:05:31"
+      },
+      {
+        "id": 18,
+        "full_name": "Test User",
+        "email": "test_1770473129011@example.com",
+        "role": "user",
+        "status": "inactive",
+        "created_at": "2026-02-07 14:05:29",
+        "updated_at": "2026-02-07 14:05:29"
+      }
+    ],
+    "pagination": {
+      "total": 29,
+      "page": 1,
+      "limit": 10,
+      "totalPages": 3
+    }
+  },
+  "message": "Successfully retrieved 10 users (showing 10 on page 1 of 3). Requested by Test Super Admin User (Super Administrator)"
+}
