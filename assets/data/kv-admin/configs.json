@@ -1,0 +1,22 @@
+{
+  "success": true,
+  "data": {
+    "configs": {
+      "RATE_LIMIT_DISABLED": false,
+      "DEFAULT_PAGE_SIZE": 25,
+      "DEBUG": true
+    },
+    "defaults": {
+      "RATE_LIMIT_DISABLED": false,
+      "DEFAULT_PAGE_SIZE": 10,
+      "DEBUG": false,
+      "TOKEN_EXPIRY_MINUTES": 60
+    },
+    "allowedKeys": [
+      "RATE_LIMIT_DISABLED",
+      "DEFAULT_PAGE_SIZE",
+      "DEBUG",
+      "TOKEN_EXPIRY_MINUTES"
+    ]
+  }
+}

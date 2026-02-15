@@ -307,6 +307,38 @@ export default {
       access_denied_message: '이 페이지를 볼 권한이 없습니다.',
       login_required_message: '사용자 관리에 접근하려면 로그인하세요.'
     },
+    kv_admin_page: {
+      title: 'KV 구성',
+      subtitle: '유효한 키/값과 오버라이드 상태를 확인합니다.',
+      stats_total: '전체 키',
+      stats_overrides: '오버라이드',
+      stats_allowed: '허용 키',
+      reload: '새로고침',
+      search_placeholder: '키 또는 값 검색',
+      show_overrides_only: '오버라이드만',
+      last_updated: '마지막 업데이트',
+      table_title: '구성 값',
+      table_subtitle: '기본값과 KV 오버라이드에서 해석된 유효 값입니다.',
+      column_key: '키',
+      column_value: '값',
+      column_default: '기본값',
+      column_source: '출처',
+      column_actions: '작업',
+      source_kv: 'KV',
+      source_default: '기본값',
+      source_unknown: '알 수 없음',
+      empty_title: '구성을 찾을 수 없음',
+      empty_message: '검색어나 필터를 조정해 보세요.',
+      access_denied_title: '접근 거부',
+      access_denied_message: '슈퍼 관리자만 KV 구성을 볼 수 있습니다.',
+      login_required_message: '슈퍼 관리자 계정으로 로그인하세요.',
+      copy_key: '키 복사',
+      copy_value: '값 복사',
+      expand: '펼치기',
+      collapse: '접기',
+      copied: '복사됨',
+      error_loading: 'KV 구성을 불러오지 못했습니다'
+    },
     title: 'Vue 3 Browser - Hono Auth API - Cloudflare Worker'
   }
 };

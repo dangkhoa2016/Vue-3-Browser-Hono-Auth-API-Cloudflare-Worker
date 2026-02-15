@@ -304,6 +304,38 @@ export default {
       access_denied_message: 'Bạn không có quyền xem trang này.',
       login_required_message: 'Vui lòng đăng nhập để quản lý người dùng.'
     },
+    kv_admin_page: {
+      title: 'Cấu hình KV',
+      subtitle: 'Xem giá trị key/value và các giá trị bị ghi đè.',
+      stats_total: 'Tổng key',
+      stats_overrides: 'Ghi đè',
+      stats_allowed: 'Key cho phép',
+      reload: 'Tải lại',
+      search_placeholder: 'Tìm theo key hoặc giá trị',
+      show_overrides_only: 'Chỉ ghi đè',
+      last_updated: 'Cập nhật lần cuối',
+      table_title: 'Giá trị cấu hình',
+      table_subtitle: 'Giá trị hiệu lực từ mặc định và KV ghi đè.',
+      column_key: 'Key',
+      column_value: 'Giá trị',
+      column_default: 'Mặc định',
+      column_source: 'Nguồn',
+      column_actions: 'Thao tác',
+      source_kv: 'KV',
+      source_default: 'Mặc định',
+      source_unknown: 'Không rõ',
+      empty_title: 'Không có cấu hình',
+      empty_message: 'Hãy điều chỉnh tìm kiếm hoặc bộ lọc.',
+      access_denied_title: 'Không có quyền truy cập',
+      access_denied_message: 'Chỉ super admin mới được xem cấu hình KV.',
+      login_required_message: 'Vui lòng đăng nhập bằng tài khoản super admin.',
+      copy_key: 'Sao chép key',
+      copy_value: 'Sao chép giá trị',
+      expand: 'Mở rộng',
+      collapse: 'Thu gọn',
+      copied: 'Đã sao chép',
+      error_loading: 'Tải cấu hình KV thất bại'
+    },
     title: 'Vue 3 Browser - Hono Auth API - Cloudflare Worker'
   }
 };

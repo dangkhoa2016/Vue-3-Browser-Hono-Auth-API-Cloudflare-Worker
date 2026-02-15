@@ -304,6 +304,38 @@ export default {
       access_denied_message: 'このページを表示する権限がありません。',
       login_required_message: 'ユーザー管理にアクセスするにはログインしてください。'
     },
+    kv_admin_page: {
+      title: 'KV設定',
+      subtitle: '有効なキー/値を表示し、上書きされている値を確認します。',
+      stats_total: '総キー数',
+      stats_overrides: '上書き',
+      stats_allowed: '許可キー',
+      reload: '再読み込み',
+      search_placeholder: 'キーまたは値で検索',
+      show_overrides_only: '上書きのみ',
+      last_updated: '最終更新',
+      table_title: '設定値',
+      table_subtitle: 'デフォルトとKV上書きから解決された有効値。',
+      column_key: 'キー',
+      column_value: '値',
+      column_default: 'デフォルト',
+      column_source: 'ソース',
+      column_actions: '操作',
+      source_kv: 'KV',
+      source_default: 'デフォルト',
+      source_unknown: '不明',
+      empty_title: '設定が見つかりません',
+      empty_message: '検索条件を調整してください。',
+      access_denied_title: 'アクセス拒否',
+      access_denied_message: 'KV設定はスーパー管理者のみ閲覧可能です。',
+      login_required_message: 'スーパー管理者でログインしてください。',
+      copy_key: 'キーをコピー',
+      copy_value: '値をコピー',
+      expand: '展開',
+      collapse: '折りたたむ',
+      copied: 'コピーしました',
+      error_loading: 'KV設定の読み込みに失敗しました'
+    },
     title: 'Vue 3 Browser - Hono Auth API - Cloudflare Worker'
   }
 };

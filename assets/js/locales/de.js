@@ -304,6 +304,38 @@ export default {
       access_denied_message: 'Sie haben keine Berechtigung, diese Seite zu sehen.',
       login_required_message: 'Bitte melden Sie sich an, um die Benutzerverwaltung zu öffnen.'
     },
+    kv_admin_page: {
+      title: 'KV-Konfiguration',
+      subtitle: 'Zeigt effektive Schlüssel/Werte und welche überschrieben wurden.',
+      stats_total: 'Gesamte Schlüssel',
+      stats_overrides: 'Überschreibungen',
+      stats_allowed: 'Erlaubte Schlüssel',
+      reload: 'Neu laden',
+      search_placeholder: 'Schlüssel oder Wert suchen',
+      show_overrides_only: 'Nur überschrieben',
+      last_updated: 'Zuletzt aktualisiert',
+      table_title: 'Konfigurationswerte',
+      table_subtitle: 'Effektive Werte aus Defaults und KV-Überschreibungen.',
+      column_key: 'Schlüssel',
+      column_value: 'Wert',
+      column_default: 'Standard',
+      column_source: 'Quelle',
+      column_actions: 'Aktionen',
+      source_kv: 'KV',
+      source_default: 'Standard',
+      source_unknown: 'Unbekannt',
+      empty_title: 'Keine Konfigurationen gefunden',
+      empty_message: 'Passen Sie Suche oder Filter an.',
+      access_denied_title: 'Zugriff verweigert',
+      access_denied_message: 'Nur Super-Admins dürfen KV-Konfigurationen sehen.',
+      login_required_message: 'Bitte als Super-Admin anmelden.',
+      copy_key: 'Schlüssel kopieren',
+      copy_value: 'Wert kopieren',
+      expand: 'Erweitern',
+      collapse: 'Einklappen',
+      copied: 'Kopiert',
+      error_loading: 'KV-Konfigurationen konnten nicht geladen werden'
+    },
     title: 'Vue 3 Browser - Hono Auth API - Cloudflare Worker'
   }
 };
