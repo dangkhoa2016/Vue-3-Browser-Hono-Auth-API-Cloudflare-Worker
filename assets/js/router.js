@@ -186,6 +186,12 @@ const routes = [
     component: load('/vue/pages/AdminUsers.vue'),
     meta: { requiresAuth: true }
   },
+  {
+    path: '/admin/kv',
+    name: 'KvAdminConfigs',
+    component: load('/vue/pages/KvAdminConfigs.vue'),
+    meta: { requiresAuth: true }
+  },
   { path: '/about', name: 'About', component: load('/vue/pages/About.vue') },
   { path: '/:pathMatch(.*)*', name: 'NotFound', component: load('/vue/pages/NotFound.vue') },
 ];
