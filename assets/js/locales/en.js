@@ -304,6 +304,38 @@ export default {
       access_denied_message: 'You do not have permission to view this page.',
       login_required_message: 'Please login to access user management.'
     },
+    kv_admin_page: {
+      title: 'KV Configuration',
+      subtitle: 'View effective key/value pairs and see which values are overridden.',
+      stats_total: 'Total keys',
+      stats_overrides: 'Overrides',
+      stats_allowed: 'Allowed keys',
+      reload: 'Reload',
+      search_placeholder: 'Search key or value',
+      show_overrides_only: 'Overrides only',
+      last_updated: 'Last updated',
+      table_title: 'Configuration values',
+      table_subtitle: 'Effective values resolved from defaults and KV overrides.',
+      column_key: 'Key',
+      column_value: 'Value',
+      column_default: 'Default',
+      column_source: 'Source',
+      column_actions: 'Actions',
+      source_kv: 'KV',
+      source_default: 'Default',
+      source_unknown: 'Unknown',
+      empty_title: 'No configurations found',
+      empty_message: 'Try adjusting your search or filters.',
+      access_denied_title: 'Access denied',
+      access_denied_message: 'Only super admins can view KV configurations.',
+      login_required_message: 'Please login with a super admin account.',
+      copy_key: 'Copy key',
+      copy_value: 'Copy value',
+      expand: 'Expand',
+      collapse: 'Collapse',
+      copied: 'Copied',
+      error_loading: 'Failed to load KV configs'
+    },
     title: 'Vue 3 Browser - Hono Auth API - Cloudflare Worker'
   }
 };
