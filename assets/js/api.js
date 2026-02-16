@@ -26,6 +26,7 @@ export const API_ENDPOINTS = {
   USERS: '/api/admin/users',
   ADMIN_USER_ROLE: '/api/admin/users/:id/role', // Helper for pattern matching
   KV_ADMIN_CONFIGS: '/api/kv-admin/configs',
+  KV_ADMIN_CONFIGS_SPECIFIC: '/api/kv-admin/configs/:key',
 };
 
 // Mock API Configuration
