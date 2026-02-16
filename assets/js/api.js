@@ -27,6 +27,10 @@ export const API_ENDPOINTS = {
   ADMIN_USER_ROLE: '/api/admin/users/:id/role', // Helper for pattern matching
   KV_ADMIN_CONFIGS: '/api/kv-admin/configs',
   KV_ADMIN_CONFIGS_SPECIFIC: '/api/kv-admin/configs/:key',
+  // Audit endpoints
+  AUDIT_LOGS: '/api/audit/logs',
+  AUDIT_STATS: '/api/audit/stats',
+  AUDIT_EXPORT: '/api/audit/export',
 };
 
 // Mock API Configuration
@@ -46,6 +50,11 @@ const MOCK_PATTERNS = {
   PROFILE: new RegExp(`${API_ENDPOINTS.PROFILE.replace(/\//g, '\\/')}($|\\?)`),
   API_INFO: new RegExp(`${API_ENDPOINTS.API_INFO.replace(/\//g, '\\/')}($|\\?)`),
   USERS: new RegExp(`${API_ENDPOINTS.USERS.replace(/\//g, '\\/')}(?:\\/.*|\\?.*|)$`),
+
+  // Audit patterns
+  AUDIT_LOGS: new RegExp(`${API_ENDPOINTS.AUDIT_LOGS.replace(/\//g, '\\/')}($|\\?)`),
+  AUDIT_STATS: new RegExp(`${API_ENDPOINTS.AUDIT_STATS.replace(/\//g, '\\/')}($|\\?)`),
+  AUDIT_EXPORT: new RegExp(`${API_ENDPOINTS.AUDIT_EXPORT.replace(/\//g, '\\/')}($|\\?)`),
 };
 
 // Data Paths
@@ -70,6 +79,8 @@ export const DATA_PATHS = {
   USERS_LIST: '/assets/data/users/list/succeed/super-admin+users.json',
   CREATE_USER_SUCCESS: '/assets/data/users/create/succeed/response.json',
   UPDATE_USER_SUCCESS: '/assets/data/users/update/succeed/response.json',
+  // Audit data
+  AUDIT_LOGS_SUCCESS: '/assets/data/audit/logs/succeed/response.json',
 };
 
 export const apiClient = axios.create({
@@ -478,6 +489,29 @@ export const setupMock = (enable) => {
           return [200, { success: true, message }];
         } catch (error) {
           console.error('[Mock API] Delete user handler error:', error);
+          const message = (error && error.message) || 'Internal server error';
+          return [500, { success: false, error: message }];
+        }
+      });
+      
+      // Audit: logs
+      mock.onGet(MOCK_PATTERNS.AUDIT_LOGS).reply(async (config) => {
+        try {
+          const data = await loadJson(DATA_PATHS.AUDIT_LOGS_SUCCESS);
+          const params = config.params || {};
+          const page = Number.parseInt(params.page, 10) || data.data?.pagination?.page || 1;
+          const limit = Number.parseInt(params.limit, 10) || data.data?.pagination?.limit || data.data?.logs?.length || 20;
+
+          if (data.data && data.data.pagination) {
+            const total = data.data.pagination.total || (data.data.logs && data.data.logs.length) || 0;
+            data.data.pagination.page = page;
+            data.data.pagination.limit = limit;
+            data.data.pagination.totalPages = data.data.pagination.totalPages || Math.max(1, Math.ceil(total / limit));
+          }
+
+          return [200, data];
+        } catch (error) {
+          console.error('[Mock API] Audit logs handler error:', error);
           const message = (error && error.message) || 'Internal server error';
           return [500, { success: false, error: message }];
         }
