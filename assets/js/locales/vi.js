@@ -64,6 +64,13 @@ export default {
       back_to_top: 'Lên đầu trang'
     },
     common: {
+      actions: 'Hành động',
+      create: 'Tạo',
+      save: 'Lưu',
+      cancel: 'Hủy',
+      edit: 'Sửa',
+      delete: 'Xóa',
+      confirm_delete: 'Bạn có chắc chắn muốn xóa người dùng này?',
       close: 'Đóng',
       loading: 'Đang tải...',
       retry: 'Thử lại',
@@ -74,6 +81,7 @@ export default {
       title: 'Lỗi Hệ Thống'
     },
     errors: {
+      error_title: 'Lỗi',
       failed_to_load: 'Không thể tải {item}: {message}',
       failed_to_load_script: 'Không thể tải thẻ script: {item}',
       init_failed: 'initMainApp báo cáo thất bại',
@@ -138,6 +146,7 @@ export default {
       privacy_policy: 'Chính sách bảo mật',
       login_required: 'Yêu cầu đăng nhập',
       login_required_message: 'Vui lòng đăng nhập để xem hồ sơ của bạn',
+      password_min_length: 'Mật khẩu phải có ít nhất {min} ký tự',
       logging_in: 'Đang đăng nhập...',
       registering: 'Đang đăng ký...',
       logout: 'Đăng xuất',
@@ -262,10 +271,11 @@ export default {
       server_filtering: 'Lọc phía máy chủ',
       client_filtering: 'Lọc phía máy khách',
       title: 'Quản lý người dùng',
+      list_title: 'Danh sách người dùng',
       subtitle: 'Quản lý tài khoản, vai trò và trạng thái trong hệ thống.',
       stats_total: 'Tổng người dùng',
       stats_active: 'Hoạt động',
-      stats_inactive: 'Không hoạt động',
+      stats_inactive: 'Đã ngừng',
       table_title: 'Danh sách người dùng',
       table_subtitle: 'Lọc, tìm kiếm và xem chi tiết người dùng.',
       search_placeholder: 'Tìm theo tên hoặc email',

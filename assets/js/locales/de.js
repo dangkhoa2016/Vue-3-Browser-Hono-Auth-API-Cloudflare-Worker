@@ -64,6 +64,13 @@ export default {
       back_to_top: 'Nach oben'
     },
     common: {
+      actions: 'Aktionen',
+      create: 'Erstellen',
+      save: 'Speichern',
+      cancel: 'Abbrechen',
+      edit: 'Bearbeiten',
+      delete: 'Löschen',
+      confirm_delete: 'Sind Sie sicher, dass Sie diesen Benutzer löschen möchten?',
       close: 'Schließen',
       loading: 'Laden...',
       retry: 'Wiederholen',
@@ -74,6 +81,7 @@ export default {
       title: 'Systemfehler'
     },
     errors: {
+      error_title: 'Fehler',
       failed_to_load: 'Fehler beim Laden von {item}: {message}',
       failed_to_load_script: 'Fehler beim Laden des Skript-Tags: {item}',
       init_failed: 'initMainApp meldete Fehler',
@@ -138,6 +146,7 @@ export default {
       privacy_policy: 'Datenschutzerklärung',
       login_required: 'Anmeldung erforderlich',
       login_required_message: 'Bitte melden Sie sich an, um Ihr Profil anzuzeigen',
+      password_min_length: 'Das Passwort muss mindestens {min} Zeichen lang sein',
       logging_in: 'Anmelden...',
       registering: 'Registrieren...',
       logout: 'Abmelden',
@@ -262,6 +271,7 @@ export default {
       server_filtering: 'Server-Filterung',
       client_filtering: 'Client-Filterung',
       title: 'Benutzerverwaltung',
+      list_title: 'Benutzerliste',
       subtitle: 'Konten, Rollen und Status im System verwalten.',
       stats_total: 'Gesamtbenutzer',
       stats_active: 'Aktiv',

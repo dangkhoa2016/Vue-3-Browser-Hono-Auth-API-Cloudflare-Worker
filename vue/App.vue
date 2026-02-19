@@ -11,6 +11,8 @@
       </router-view>
     </main>
     
+    <ToastNotification />
+
     <button 
       @click="scrollToTop"
       class="fixed bottom-8 right-8 p-3 rounded-full shadow-lg bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-300 z-50 transform translate-y-20 opacity-0"
@@ -24,13 +26,15 @@
 
 <script>
 import Navbar from '/vue/components/Navbar.vue';
+import ToastNotification from '/vue/components/ToastNotification.vue';
 import { ref, onMounted, onUnmounted, watch } from 'vue';
 import { useMainStore } from '/assets/js/stores/mainStore.js';
 import { setupMock } from '/assets/js/api.js';
 
 export default {
   components: {
-    Navbar
+    Navbar,
+    ToastNotification
   },
   setup() {
     const store = useMainStore();

@@ -64,6 +64,13 @@ export default {
       back_to_top: '맨 위로'
     },
     common: {
+      actions: '작업',
+      create: '생성',
+      save: '저장',
+      cancel: '취소',
+      edit: '편집',
+      delete: '삭제',
+      confirm_delete: '이 사용자를 삭제하시겠습니까?',
       close: '닫기',
       loading: '로딩 중...',
       retry: '다시 시도',
@@ -74,6 +81,7 @@ export default {
       title: '시스템 오류'
     },
     errors: {
+      error_title: '오류',
       failed_to_load: '{item} 로드 실패: {message}',
       failed_to_load_script: '스크립트 태그 로드 실패: {item}',
       init_failed: 'initMainApp 실패 보고됨',
@@ -138,6 +146,7 @@ export default {
       privacy_policy: '개인정보 보호정책',
       login_required: '로그인 필요',
       login_required_message: '프로필을 보려면 로그인하세요',
+      password_min_length: '비밀번호는 최소 {min}자 이상이어야 합니다',
       logging_in: '로그인 중...',
       registering: '가입 중...',
       logout: '로그아웃',
@@ -262,6 +271,7 @@ export default {
       server_filtering: '서버 필터링',
       client_filtering: '클라이언트 필터링',
       title: '사용자 관리',
+      list_title: '사용자 목록',
       subtitle: '계정, 역할, 상태를 관리합니다.',
       stats_total: '전체 사용자',
       stats_active: '활성',
