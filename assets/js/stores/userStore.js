@@ -1,8 +1,7 @@
 const { defineStore } = Pinia;
-import { apiClient, API_ENDPOINTS } from '../api.js';
+import { apiClient, API_ENDPOINTS, DATA_PATHS } from '../api.js';
 import { useMainStore } from './mainStore.js';
-
-const MOCK_USERS_PATH = '/assets/data/users/succeed/super-admin+users.json';
+import { i18n } from '../i18n.js';
 
 export const useUserStore = defineStore('users', {
   state: () => ({
@@ -39,9 +38,18 @@ export const useUserStore = defineStore('users', {
         }
 
         if (mainStore.mockApi) {
-          const res = await fetch(MOCK_USERS_PATH, { cache: 'no-store' });
+          const res = await fetch(DATA_PATHS.USERS_LIST, { cache: 'no-store' });
           if (!res.ok) {
-            throw new Error(res.statusText || 'Failed to load users');
+            console.log('Failed to load mock users:', res.status, res.statusText);
+            
+            if (res.status === 404) {
+               // Friendly 404 error
+               console.error(`Mock data not found at: ${DATA_PATHS.USERS_LIST}`);
+               const notFoundText = i18n.global.t('message.errors.not_found');
+               // Simplified error message to avoid duplication in UI
+               throw new Error(`404 (${notFoundText})`);
+            }
+            throw new Error(res.statusText || i18n.global.t('message.errors.unknown_error'));
           }
           responseData = await res.json();
         } else {
@@ -53,7 +61,8 @@ export const useUserStore = defineStore('users', {
 
         if (!responseData || !responseData.success) {
           const message = responseData && (responseData.error || responseData.message);
-          throw new Error(message || 'Failed to load users');
+          const defaultError = i18n.global.t('message.errors.unknown_error');
+          throw new Error(message || defaultError);
         }
 
         const payload = responseData.data || {};
@@ -128,9 +137,80 @@ export const useUserStore = defineStore('users', {
         this.lastUpdated = new Date().toISOString();
       } catch (error) {
         this.users = [];
+        this.pagination = {
+          total: 0,
+          page: 1,
+          limit: 10,
+          totalPages: 1
+        };
         this.error = (error && error.message) || 'Unknown error';
       } finally {
         this.loading = false;
+      }
+    },
+
+    async createUser(userData) {
+      // Don't set global loading here to avoid flashing the list
+      this.error = null;
+      try {
+        const response = await apiClient.post(API_ENDPOINTS.USERS, userData);
+        if (response.data.success) {
+          // Do not fetch users here, let the component decide when to reload
+          return { success: true, data: response.data.data, message: response.data.message };
+        } else {
+          throw new Error(response.data.message || 'Failed to create user');
+        }
+      } catch (error) {
+        // Don't set global error here either, let the component handle it
+        throw error;
+      }
+    },
+
+    async updateUser(userId, userData) {
+      // Don't set global loading here
+      this.error = null;
+      try {
+        const response = await apiClient.put(`${API_ENDPOINTS.USERS}/${userId}`, userData);
+        if (response.data.success) {
+          // Do not fetch users here, let the component decide when to reload
+          return { success: true, data: response.data.data, message: response.data.message };
+        } else {
+          throw new Error(response.data.message || 'Failed to update user');
+        }
+      } catch (error) {
+        throw error;
+      }
+    },
+    
+    async updateUserRole(userId, role) {
+      // Don't set global loading here
+      this.error = null;
+      try {
+        const response = await apiClient.put(`${API_ENDPOINTS.USERS}/${userId}/role`, { role });
+        if (response.data.success) {
+          // Do not fetch users here, let the component decide when to reload
+          return { success: true, data: response.data.data, message: response.data.message };
+        } else {
+          throw new Error(response.data.message || 'Failed to update user role');
+        }
+      } catch (error) {
+        throw error;
+      }
+    },
+
+    async deleteUser(userId) {
+      // For delete, we might want to show loading on the list, but let's be consistent
+      this.error = null;
+      try {
+        const response = await apiClient.delete(`${API_ENDPOINTS.USERS}/${userId}`);
+        if (response.data.success) {
+          // Do not fetch users here, let the component decide when to reload
+          return { success: true, message: response.data.message };
+        } else {
+          throw new Error(response.data.message || 'Failed to delete user');
+        }
+      } catch (error) {
+        throw error;
       }
     }
   }

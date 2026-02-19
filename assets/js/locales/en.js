@@ -64,6 +64,15 @@ export default {
       back_to_top: 'Back to top'
     },
     common: {
+      clear: 'Clear',
+      confirm_title: 'Confirm',
+      confirm_message: 'Are you sure you want to delete {model} with id: {id}?',
+      actions: 'Actions',
+      create: 'Create',
+      save: 'Save',
+      cancel: 'Cancel',
+      edit: 'Edit',
+      delete: 'Delete',
       close: 'Close',
       loading: 'Loading...',
       retry: 'Retry',
@@ -74,6 +83,7 @@ export default {
       title: 'System Error'
     },
     errors: {
+      error_title: 'Error',
       failed_to_load: 'Failed to load {item}: {message}',
       failed_to_load_script: 'Failed to load script tag: {item}',
       init_failed: 'initMainApp reported failure',
@@ -138,6 +148,7 @@ export default {
       privacy_policy: 'Privacy Policy',
       login_required: 'Login Required',
       login_required_message: 'Please login to view your profile',
+      password_min_length: 'Password must be at least {min} characters long',
       logging_in: 'Logging in...',
       registering: 'Registering...',
       logout: 'Logout',
@@ -254,6 +265,9 @@ export default {
     },
     admin_users: {
       badge: 'Account Administration',
+      models: {
+        user: 'user'
+      },
       deleted_success: 'Deleted user {name} with id: #{id} successfully',
       delete_failed_title: 'Delete failed',
       delete_failed_detail: 'Failed to delete user: {reason}',
@@ -262,6 +276,7 @@ export default {
       server_filtering: 'Server filtering',
       client_filtering: 'Client filtering',
       title: 'User Management',
+      list_title: 'User List',
       subtitle: 'Manage accounts, roles, and status across the system.',
       stats_total: 'Total users',
       stats_active: 'Active',

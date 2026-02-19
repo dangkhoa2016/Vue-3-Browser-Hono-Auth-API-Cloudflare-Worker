@@ -64,6 +64,15 @@ export default {
       back_to_top: 'トップに戻る'
     },
     common: {
+      clear: 'クリア',
+      confirm_title: '確認',
+      confirm_message: '{model}（ID: {id}）を削除してもよろしいですか？',
+      actions: 'アクション',
+      create: '作成',
+      save: '保存',
+      cancel: 'キャンセル',
+      edit: '編集',
+      delete: '削除',
       close: '閉じる',
       loading: '読み込み中...',
       retry: '再試行',
@@ -74,6 +83,7 @@ export default {
       title: 'システムエラー'
     },
     errors: {
+      error_title: 'エラー',
       failed_to_load: '{item} の読み込みに失敗しました: {message}',
       failed_to_load_script: 'スクリプトタグの読み込みに失敗しました: {item}',
       init_failed: 'initMainApp が失敗を報告しました',
@@ -138,6 +148,7 @@ export default {
       privacy_policy: 'プライバシーポリシー',
       login_required: 'ログインが必要です',
       login_required_message: 'プロフィールを表示するにはログインしてください',
+      password_min_length: 'パスワードは少なくとも{min}文字以上である必要があります',
       logging_in: 'ログイン中...',
       registering: '登録中...',
       logout: 'ログアウト',
@@ -254,6 +265,9 @@ export default {
     },
     admin_users: {
       badge: 'アカウント管理',
+      models: {
+        user: 'ユーザー'
+      },
       deleted_success: 'ユーザー {name}（ID: #{id}）を削除しました',
       delete_failed_title: '削除に失敗しました',
       delete_failed_detail: 'ユーザーを削除できませんでした: {reason}',
@@ -262,6 +276,7 @@ export default {
       server_filtering: 'サーバー側フィルタリング',
       client_filtering: 'クライアント側フィルタリング',
       title: 'ユーザー管理',
+      list_title: 'ユーザー一覧',
       subtitle: 'アカウント、ロール、ステータスを管理します。',
       stats_total: '総ユーザー数',
       stats_active: '有効',
