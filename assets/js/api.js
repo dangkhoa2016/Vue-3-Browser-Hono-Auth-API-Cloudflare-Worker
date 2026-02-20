@@ -462,6 +462,24 @@ export const setupMock = (enable) => {
           return [500, { success: false, error: message }];
         }
       });
+
+      // Delete User
+      mock.onDelete(MOCK_PATTERNS.USERS).reply(async (config) => {
+        try {
+          // Optionally parse ID from URL for more realistic behavior
+          const url = config.url || '';
+          const match = url.match(/\/api\/admin\/users\/(\d+)(?:$|[?\/])/);
+          const userId = match ? match[1] : null;
+
+          // For mock, we simply return success. Could simulate 404 if needed.
+          const message = i18n && i18n.global ? i18n.global.t('message.admin_users.deleted_success') : 'User deleted';
+          return [200, { success: true, message }];
+        } catch (error) {
+          console.error('[Mock API] Delete user handler error:', error);
+          const message = (error && error.message) || 'Internal server error';
+          return [500, { success: false, error: message }];
+        }
+      });
     }
   } else {
     if (mock) {

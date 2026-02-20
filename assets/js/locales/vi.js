@@ -64,13 +64,15 @@ export default {
       back_to_top: 'Lên đầu trang'
     },
     common: {
+      clear: 'Xóa',
+      confirm_title: 'Xác nhận',
+      confirm_message: 'Bạn có chắc chắn sẽ xoá {model} với id: {id} không?',
       actions: 'Hành động',
       create: 'Tạo',
       save: 'Lưu',
       cancel: 'Hủy',
       edit: 'Sửa',
       delete: 'Xóa',
-      confirm_delete: 'Bạn có chắc chắn muốn xóa người dùng này?',
       close: 'Đóng',
       loading: 'Đang tải...',
       retry: 'Thử lại',
@@ -263,6 +265,9 @@ export default {
     },
     admin_users: {
       badge: 'Quản trị tài khoản',
+      models: {
+        user: 'người dùng'
+      },
       deleted_success: 'Đã xóa người dùng {name} với id: #{id} thành công',
       delete_failed_title: 'Xóa không thành công',
       delete_failed_detail: 'Không thể xóa người dùng: {reason}',

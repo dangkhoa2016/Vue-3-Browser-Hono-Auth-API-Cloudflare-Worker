@@ -18,7 +18,10 @@
           <i v-else-if="toast.type === 'warning'" class="bi bi-exclamation-triangle-fill text-xl text-amber-500"></i>
           <i v-else class="bi bi-info-circle-fill text-xl text-blue-500"></i>
         </div>
-        <div class="flex-1 text-sm font-medium pr-2">{{ toast.message }}</div>
+        <div class="flex-1 text-sm font-medium pr-2">
+          <div v-if="toast.title" class="font-bold text-sm mb-1">{{ toast.title }}</div>
+          <div>{{ toast.message }}</div>
+        </div>
         <button
           @click="remove(toast.id)"
           class="flex-shrink-0 text-current opacity-60 hover:opacity-100 transition-opacity"

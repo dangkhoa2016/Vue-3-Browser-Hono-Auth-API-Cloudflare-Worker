@@ -5,7 +5,7 @@
         <h3 class="text-lg font-bold text-slate-800 dark:text-slate-100">
           {{ mode === 'create' ? $t('message.admin_users.create_user', 'Create User') : $t('message.admin_users.edit_user', 'Edit User') }}
         </h3>
-        <button @click="$emit('close')" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition">
+        <button :disabled="loading" @click="$emit('close')" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition">
           <i class="bi bi-x-lg"></i>
         </button>
       </div>
@@ -22,6 +22,7 @@
               v-model="formData.full_name"
               type="text"
               required
+              :disabled="loading"
               class="w-full pl-11 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 focus:bg-white dark:focus:bg-slate-800 transition-all outline-none"
               :placeholder="$t('message.admin_users.column_full_name')"
             />
@@ -39,6 +40,7 @@
               v-model="formData.email"
               type="email"
               required
+              :disabled="loading"
               class="w-full pl-11 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 focus:bg-white dark:focus:bg-slate-800 transition-all outline-none"
               placeholder="name@example.com"
             />
@@ -57,6 +59,7 @@
               type="password"
               required
               minlength="8"
+              :disabled="loading"
               class="w-full pl-11 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 focus:bg-white dark:focus:bg-slate-800 transition-all outline-none"
               placeholder="••••••••"
             />
@@ -76,6 +79,7 @@
               <i class="bi bi-shield-lock absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-teal-500 transition-colors text-lg"></i>
               <select
                 v-model="formData.role"
+                :disabled="loading"
                 class="w-full pl-11 pr-10 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 focus:bg-white dark:focus:bg-slate-800 transition-all outline-none appearance-none"
               >
                 <option value="user">User</option>
@@ -95,6 +99,7 @@
               <i class="bi bi-activity absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-teal-500 transition-colors text-lg"></i>
               <select
                 v-model="formData.status"
+                :disabled="loading"
                 class="w-full pl-11 pr-10 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 focus:bg-white dark:focus:bg-slate-800 transition-all outline-none appearance-none"
               >
                 <option value="active">{{ $t('message.admin_users.status_active') }}</option>
@@ -119,6 +124,7 @@
         <div class="pt-2 flex items-center justify-end gap-3 border-t border-slate-100 dark:border-slate-800 mt-6">
           <button
             type="button"
+            :disabled="loading"
             @click="$emit('close')"
             class="px-5 py-2.5 text-sm font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors focus:outline-none focus:ring-2 focus:ring-slate-200 dark:focus:ring-slate-700"
           >

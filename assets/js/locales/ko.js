@@ -65,12 +65,14 @@ export default {
     },
     common: {
       actions: '작업',
+      confirm_title: '확인',
+      confirm_message: '{model} (ID: {id}) 를 삭제하시겠습니까?',
       create: '생성',
       save: '저장',
       cancel: '취소',
       edit: '편집',
       delete: '삭제',
-      confirm_delete: '이 사용자를 삭제하시겠습니까?',
+      clear: '지우기',
       close: '닫기',
       loading: '로딩 중...',
       retry: '다시 시도',
@@ -271,6 +273,12 @@ export default {
       server_filtering: '서버 필터링',
       client_filtering: '클라이언트 필터링',
       title: '사용자 관리',
+        deleted_success: '사용자 {name} (ID: #{id})가 성공적으로 삭제되었습니다',
+        models: {
+          user: '사용자'
+        },
+        delete_failed_title: '삭제 실패',
+        delete_failed_detail: '사용자를 삭제할 수 없습니다: {reason}',
       list_title: '사용자 목록',
       subtitle: '계정, 역할, 상태를 관리합니다.',
       stats_total: '전체 사용자',

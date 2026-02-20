@@ -64,13 +64,15 @@ export default {
       back_to_top: 'Nach oben'
     },
     common: {
+      clear: 'Leeren',
+      confirm_title: 'Bestätigen',
+      confirm_message: 'Sind Sie sicher, dass Sie {model} mit der ID: {id} löschen möchten?',
       actions: 'Aktionen',
       create: 'Erstellen',
       save: 'Speichern',
       cancel: 'Abbrechen',
       edit: 'Bearbeiten',
       delete: 'Löschen',
-      confirm_delete: 'Sind Sie sicher, dass Sie diesen Benutzer löschen möchten?',
       close: 'Schließen',
       loading: 'Laden...',
       retry: 'Wiederholen',
@@ -263,6 +265,9 @@ export default {
     },
     admin_users: {
       badge: 'Kontoverwaltung',
+      models: {
+        user: 'Benutzer'
+      },
       deleted_success: 'Benutzer {name} mit ID: #{id} wurde erfolgreich gelöscht',
       delete_failed_title: 'Löschen fehlgeschlagen',
       delete_failed_detail: 'Benutzer konnte nicht gelöscht werden: {reason}',

@@ -64,13 +64,15 @@ export default {
       back_to_top: 'Back to top'
     },
     common: {
+      clear: 'Clear',
+      confirm_title: 'Confirm',
+      confirm_message: 'Are you sure you want to delete {model} with id: {id}?',
       actions: 'Actions',
       create: 'Create',
       save: 'Save',
       cancel: 'Cancel',
       edit: 'Edit',
       delete: 'Delete',
-      confirm_delete: 'Are you sure you want to delete this user?',
       close: 'Close',
       loading: 'Loading...',
       retry: 'Retry',
@@ -263,6 +265,9 @@ export default {
     },
     admin_users: {
       badge: 'Account Administration',
+      models: {
+        user: 'user'
+      },
       deleted_success: 'Deleted user {name} with id: #{id} successfully',
       delete_failed_title: 'Delete failed',
       delete_failed_detail: 'Failed to delete user: {reason}',

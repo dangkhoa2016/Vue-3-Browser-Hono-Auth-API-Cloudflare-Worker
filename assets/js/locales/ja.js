@@ -64,13 +64,15 @@ export default {
       back_to_top: 'トップに戻る'
     },
     common: {
+      clear: 'クリア',
+      confirm_title: '確認',
+      confirm_message: '{model}（ID: {id}）を削除してもよろしいですか？',
       actions: 'アクション',
       create: '作成',
       save: '保存',
       cancel: 'キャンセル',
       edit: '編集',
       delete: '削除',
-      confirm_delete: 'このユーザーを削除してもよろしいですか？',
       close: '閉じる',
       loading: '読み込み中...',
       retry: '再試行',
@@ -263,6 +265,9 @@ export default {
     },
     admin_users: {
       badge: 'アカウント管理',
+      models: {
+        user: 'ユーザー'
+      },
       deleted_success: 'ユーザー {name}（ID: #{id}）を削除しました',
       delete_failed_title: '削除に失敗しました',
       delete_failed_detail: 'ユーザーを削除できませんでした: {reason}',
