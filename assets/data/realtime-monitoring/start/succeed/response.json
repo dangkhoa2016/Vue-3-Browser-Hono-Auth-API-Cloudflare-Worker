@@ -1,0 +1,9 @@
+{
+  "success": true,
+  "message": "Real-time monitoring started successfully",
+  "data": {
+    "intervalMs": 5000,
+    "enableThreatDetection": true,
+    "startedAt": "2026-02-22T14:51:13.836Z"
+  }
+}

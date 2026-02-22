@@ -199,6 +199,12 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
+    path: '/admin/monitoring',
+    name: 'AdminRealtimeMonitoring',
+    component: load('/vue/pages/AdminRealtimeMonitoring.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
     path: '/admin/kv',
     name: 'KvAdminConfigs',
     component: load('/vue/pages/KvAdminConfigs.vue'),
