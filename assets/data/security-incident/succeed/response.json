@@ -1,0 +1,1294 @@
+{
+  "success": true,
+  "data": {
+    "incidents": [
+      {
+        "id": "SEC_1771664949043_16",
+        "type": "privilege_escalation",
+        "severity": "medium",
+        "status": "detected",
+        "title": "Test Incident (th)",
+        "description": "Testing i18n support for th",
+        "metadata": {
+          "language": "th",
+          "testCase": "i18n_support",
+          "createdBy": 3,
+          "creatorEmail": "test-admin@example.com",
+          "manual": true
+        },
+        "detected_at": "2026-02-21T09:09:09.043Z",
+        "updated_at": "2026-02-21T09:09:09.043Z",
+        "resolved_at": null,
+        "assignee": null,
+        "notes": null,
+        "tags": [
+          "manual"
+        ],
+        "created_by": "3.0"
+      },
+      {
+        "id": "SEC_1771664948361_15",
+        "type": "privilege_escalation",
+        "severity": "medium",
+        "status": "detected",
+        "title": "Test Incident (ja)",
+        "description": "Testing i18n support for ja",
+        "metadata": {
+          "language": "ja",
+          "testCase": "i18n_support",
+          "createdBy": 3,
+          "creatorEmail": "test-admin@example.com",
+          "manual": true
+        },
+        "detected_at": "2026-02-21T09:09:08.361Z",
+        "updated_at": "2026-02-21T09:09:08.361Z",
+        "resolved_at": null,
+        "assignee": null,
+        "notes": null,
+        "tags": [
+          "manual"
+        ],
+        "created_by": "3.0"
+      },
+      {
+        "id": "SEC_1771664947879_14",
+        "type": "privilege_escalation",
+        "severity": "medium",
+        "status": "detected",
+        "title": "Test Incident (de)",
+        "description": "Testing i18n support for de",
+        "metadata": {
+          "language": "de",
+          "testCase": "i18n_support",
+          "createdBy": 3,
+          "creatorEmail": "test-admin@example.com",
+          "manual": true
+        },
+        "detected_at": "2026-02-21T09:09:07.879Z",
+        "updated_at": "2026-02-21T09:09:07.879Z",
+        "resolved_at": null,
+        "assignee": null,
+        "notes": null,
+        "tags": [
+          "manual"
+        ],
+        "created_by": "3.0"
+      },
+      {
+        "id": "SEC_1771664947437_13",
+        "type": "privilege_escalation",
+        "severity": "medium",
+        "status": "detected",
+        "title": "Test Incident (es)",
+        "description": "Testing i18n support for es",
+        "metadata": {
+          "language": "es",
+          "testCase": "i18n_support",
+          "createdBy": 3,
+          "creatorEmail": "test-admin@example.com",
+          "manual": true
+        },
+        "detected_at": "2026-02-21T09:09:07.437Z",
+        "updated_at": "2026-02-21T09:09:07.437Z",
+        "resolved_at": null,
+        "assignee": null,
+        "notes": null,
+        "tags": [
+          "manual"
+        ],
+        "created_by": "3.0"
+      },
+      {
+        "id": "SEC_1771664946846_12",
+        "type": "privilege_escalation",
+        "severity": "medium",
+        "status": "detected",
+        "title": "Test Incident (fr)",
+        "description": "Testing i18n support for fr",
+        "metadata": {
+          "language": "fr",
+          "testCase": "i18n_support",
+          "createdBy": 3,
+          "creatorEmail": "test-admin@example.com",
+          "manual": true
+        },
+        "detected_at": "2026-02-21T09:09:06.846Z",
+        "updated_at": "2026-02-21T09:09:06.846Z",
+        "resolved_at": null,
+        "assignee": null,
+        "notes": null,
+        "tags": [
+          "manual"
+        ],
+        "created_by": "3.0"
+      },
+      {
+        "id": "SEC_1771664946409_11",
+        "type": "privilege_escalation",
+        "severity": "medium",
+        "status": "detected",
+        "title": "Test Incident (vi)",
+        "description": "Testing i18n support for vi",
+        "metadata": {
+          "language": "vi",
+          "testCase": "i18n_support",
+          "createdBy": 3,
+          "creatorEmail": "test-admin@example.com",
+          "manual": true
+        },
+        "detected_at": "2026-02-21T09:09:06.409Z",
+        "updated_at": "2026-02-21T09:09:06.409Z",
+        "resolved_at": null,
+        "assignee": null,
+        "notes": null,
+        "tags": [
+          "manual"
+        ],
+        "created_by": "3.0"
+      },
+      {
+        "id": "SEC_1771664945813_10",
+        "type": "privilege_escalation",
+        "severity": "medium",
+        "status": "detected",
+        "title": "Test Incident (en)",
+        "description": "Testing i18n support for en",
+        "metadata": {
+          "language": "en",
+          "testCase": "i18n_support",
+          "createdBy": 3,
+          "creatorEmail": "test-admin@example.com",
+          "manual": true
+        },
+        "detected_at": "2026-02-21T09:09:05.813Z",
+        "updated_at": "2026-02-21T09:09:05.813Z",
+        "resolved_at": null,
+        "assignee": null,
+        "notes": null,
+        "tags": [
+          "manual"
+        ],
+        "created_by": "3.0"
+      },
+      {
+        "id": "SEC_1771664944908_9",
+        "type": "test_large_payload",
+        "severity": "low",
+        "status": "detected",
+        "title": "Large Payload Test",
+        "description": "Testing large payload handling",
+        "metadata": {
+          "key_0": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_1": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_2": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_3": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_4": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_5": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_6": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_7": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_8": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_9": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_10": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_11": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_12": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_13": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_14": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_15": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_16": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_17": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_18": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_19": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_20": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_21": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_22": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_23": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_24": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_25": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_26": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_27": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_28": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_29": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_30": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_31": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_32": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_33": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_34": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_35": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_36": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_37": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_38": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_39": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_40": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_41": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_42": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_43": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_44": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_45": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_46": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_47": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_48": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_49": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_50": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_51": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_52": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_53": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_54": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_55": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_56": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_57": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_58": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_59": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_60": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_61": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_62": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_63": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_64": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_65": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_66": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_67": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_68": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_69": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_70": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_71": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_72": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_73": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_74": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_75": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_76": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_77": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_78": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_79": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_80": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_81": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_82": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_83": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_84": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_85": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_86": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_87": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_88": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_89": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_90": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_91": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_92": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_93": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_94": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_95": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_96": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_97": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_98": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "key_99": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+          "createdBy": 3,
+          "creatorEmail": "test-admin@example.com",
+          "manual": true
+        },
+        "detected_at": "2026-02-21T09:09:04.908Z",
+        "updated_at": "2026-02-21T09:09:04.908Z",
+        "resolved_at": null,
+        "assignee": null,
+        "notes": null,
+        "tags": [
+          "manual"
+        ],
+        "created_by": "3.0"
+      },
+      {
+        "id": "SEC_1771664943896_8",
+        "type": "brute_force_login",
+        "severity": "high",
+        "status": "detected",
+        "title": "Security Threat: brute_force_login",
+        "description": "Simulated brute force login attempt for testing",
+        "metadata": {
+          "type": "brute_force_login",
+          "severity": "high",
+          "title": "Simulated Brute Force Attack",
+          "description": "Simulated brute force login attempt for testing",
+          "metadata": {
+            "sourceIp": "192.168.1.100",
+            "attemptCount": 15,
+            "targetUser": "test@example.com",
+            "timeWindow": "5 minutes",
+            "simulation": true
+          },
+          "tags": [
+            "simulation",
+            "test"
+          ],
+          "sourceSystem": "threat_detection_engine"
+        },
+        "detected_at": "2026-02-21T09:09:03.896Z",
+        "updated_at": "2026-02-21T09:09:03.896Z",
+        "resolved_at": null,
+        "assignee": null,
+        "notes": null,
+        "tags": [
+          "automated",
+          "threat_detection"
+        ],
+        "created_by": "system"
+      },
+      {
+        "id": "SEC_1771664943736_7",
+        "type": "brute_force_login",
+        "severity": "high",
+        "status": "detected",
+        "title": "Security Threat: brute_force_login",
+        "description": "Simulated brute force login attempt for testing",
+        "metadata": {
+          "type": "brute_force_login",
+          "severity": "high",
+          "title": "Simulated Brute Force Attack",
+          "description": "Simulated brute force login attempt for testing",
+          "metadata": {
+            "sourceIp": "192.168.1.100",
+            "attemptCount": 15,
+            "targetUser": "test@example.com",
+            "timeWindow": "5 minutes",
+            "simulation": true
+          },
+          "tags": [
+            "simulation",
+            "test"
+          ],
+          "sourceSystem": "threat_detection_engine"
+        },
+        "detected_at": "2026-02-21T09:09:03.736Z",
+        "updated_at": "2026-02-21T09:09:03.736Z",
+        "resolved_at": null,
+        "assignee": null,
+        "notes": null,
+        "tags": [
+          "automated",
+          "threat_detection"
+        ],
+        "created_by": "system"
+      },
+      {
+        "id": "SEC_1771664943503_6",
+        "type": "brute_force_login",
+        "severity": "high",
+        "status": "detected",
+        "title": "Security Threat: brute_force_login",
+        "description": "Simulated brute force login attempt for testing",
+        "metadata": {
+          "type": "brute_force_login",
+          "severity": "high",
+          "title": "Simulated Brute Force Attack",
+          "description": "Simulated brute force login attempt for testing",
+          "metadata": {
+            "sourceIp": "192.168.1.100",
+            "attemptCount": 15,
+            "targetUser": "test@example.com",
+            "timeWindow": "5 minutes",
+            "simulation": true
+          },
+          "tags": [
+            "simulation",
+            "test"
+          ],
+          "sourceSystem": "threat_detection_engine"
+        },
+        "detected_at": "2026-02-21T09:09:03.503Z",
+        "updated_at": "2026-02-21T09:09:03.503Z",
+        "resolved_at": null,
+        "assignee": null,
+        "notes": null,
+        "tags": [
+          "automated",
+          "threat_detection"
+        ],
+        "created_by": "system"
+      },
+      {
+        "id": "SEC_1771664943322_5",
+        "type": "brute_force_login",
+        "severity": "high",
+        "status": "detected",
+        "title": "Security Threat: brute_force_login",
+        "description": "Simulated brute force login attempt for testing",
+        "metadata": {
+          "type": "brute_force_login",
+          "severity": "high",
+          "title": "Simulated Brute Force Attack",
+          "description": "Simulated brute force login attempt for testing",
+          "metadata": {
+            "sourceIp": "192.168.1.100",
+            "attemptCount": 15,
+            "targetUser": "test@example.com",
+            "timeWindow": "5 minutes",
+            "simulation": true
+          },
+          "tags": [
+            "simulation",
+            "test"
+          ],
+          "sourceSystem": "threat_detection_engine"
+        },
+        "detected_at": "2026-02-21T09:09:03.322Z",
+        "updated_at": "2026-02-21T09:09:03.322Z",
+        "resolved_at": null,
+        "assignee": null,
+        "notes": null,
+        "tags": [
+          "automated",
+          "threat_detection"
+        ],
+        "created_by": "system"
+      },
+      {
+        "id": "SEC_1771664940580_4",
+        "type": "data_breach",
+        "severity": "critical",
+        "status": "resolved",
+        "title": "Advanced Test Data Breach Incident",
+        "description": "Testing advanced incident management capabilities",
+        "metadata": {
+          "affectedSystems": [
+            "database",
+            "api"
+          ],
+          "estimatedRecords": 1000,
+          "discoveryMethod": "automated_scan",
+          "createdBy": 3,
+          "creatorEmail": "test-admin@example.com",
+          "manual": true
+        },
+        "detected_at": "2026-02-21T09:09:00.580Z",
+        "updated_at": "2026-02-21T09:09:00.880Z",
+        "resolved_at": null,
+        "assignee": null,
+        "notes": "Incident fully resolved and documented",
+        "tags": [
+          "manual"
+        ],
+        "created_by": "3.0"
+      },
+      {
+        "id": "SEC_1771664940243_3",
+        "type": "brute_force_login",
+        "severity": "critical",
+        "status": "detected",
+        "title": "Service Integration Test Incident",
+        "description": "Testing service integration capabilities",
+        "metadata": {
+          "testCase": "service_integration",
+          "automated": true,
+          "createdBy": 3,
+          "creatorEmail": "test-admin@example.com",
+          "manual": true
+        },
+        "detected_at": "2026-02-21T09:09:00.243Z",
+        "updated_at": "2026-02-21T09:09:00.243Z",
+        "resolved_at": null,
+        "assignee": null,
+        "notes": null,
+        "tags": [
+          "manual"
+        ],
+        "created_by": "3.0"
+      },
+      {
+        "id": "SEC_1771664938490_2",
+        "type": "brute_force_login",
+        "severity": "high",
+        "status": "detected",
+        "title": "Security Threat: brute_force_login",
+        "description": "Simulated brute force login attempt for testing",
+        "metadata": {
+          "type": "brute_force_login",
+          "severity": "high",
+          "title": "Simulated Brute Force Attack",
+          "description": "Simulated brute force login attempt for testing",
+          "metadata": {
+            "sourceIp": "192.168.1.100",
+            "attemptCount": 15,
+            "targetUser": "test@example.com",
+            "timeWindow": "5 minutes",
+            "simulation": true
+          },
+          "tags": [
+            "simulation",
+            "test"
+          ],
+          "sourceSystem": "threat_detection_engine"
+        },
+        "detected_at": "2026-02-21T09:08:58.490Z",
+        "updated_at": "2026-02-21T09:08:58.490Z",
+        "resolved_at": null,
+        "assignee": null,
+        "notes": null,
+        "tags": [
+          "automated",
+          "threat_detection"
+        ],
+        "created_by": "system"
+      },
+      {
+        "id": "SEC_1771664937265_1",
+        "type": "privilege_escalation",
+        "severity": "high",
+        "status": "investigating",
+        "title": "Suspicious Privilege Escalation Attempt",
+        "description": "User attempting to access admin endpoints without proper authorization",
+        "metadata": {
+          "userId": "test_user_123",
+          "attemptedEndpoint": "/api/admin/users",
+          "sourceIp": "192.168.1.100",
+          "createdBy": 3,
+          "creatorEmail": "test-admin@example.com",
+          "manual": true
+        },
+        "detected_at": "2026-02-21T09:08:57.265Z",
+        "updated_at": "2026-02-21T09:09:05.193Z",
+        "resolved_at": null,
+        "assignee": "550e8400-e29b-41d4-a716-446655440000",
+        "notes": "Analyst 3 investigation",
+        "tags": [
+          "manual"
+        ],
+        "created_by": "3.0"
+      },
+      {
+        "id": "SEC_1771664856713_15",
+        "type": "privilege_escalation",
+        "severity": "medium",
+        "status": "detected",
+        "title": "Test Incident (th)",
+        "description": "Testing i18n support for th",
+        "metadata": {
+          "language": "th",
+          "testCase": "i18n_support",
+          "createdBy": 3,
+          "creatorEmail": "test-admin@example.com",
+          "manual": true
+        },
+        "detected_at": "2026-02-21T09:07:36.713Z",
+        "updated_at": "2026-02-21T09:07:36.713Z",
+        "resolved_at": null,
+        "assignee": null,
+        "notes": null,
+        "tags": [
+          "manual"
+        ],
+        "created_by": "3.0"
+      },
+      {
+        "id": "SEC_1771664856274_14",
+        "type": "privilege_escalation",
+        "severity": "medium",
+        "status": "detected",
+        "title": "Test Incident (ja)",
+        "description": "Testing i18n support for ja",
+        "metadata": {
+          "language": "ja",
+          "testCase": "i18n_support",
+          "createdBy": 3,
+          "creatorEmail": "test-admin@example.com",
+          "manual": true
+        },
+        "detected_at": "2026-02-21T09:07:36.274Z",
+        "updated_at": "2026-02-21T09:07:36.274Z",
+        "resolved_at": null,
+        "assignee": null,
+        "notes": null,
+        "tags": [
+          "manual"
+        ],
+        "created_by": "3.0"
+      },
+      {
+        "id": "SEC_1771664855943_13",
+        "type": "privilege_escalation",
+        "severity": "medium",
+        "status": "detected",
+        "title": "Test Incident (de)",
+        "description": "Testing i18n support for de",
+        "metadata": {
+          "language": "de",
+          "testCase": "i18n_support",
+          "createdBy": 3,
+          "creatorEmail": "test-admin@example.com",
+          "manual": true
+        },
+        "detected_at": "2026-02-21T09:07:35.943Z",
+        "updated_at": "2026-02-21T09:07:35.943Z",
+        "resolved_at": null,
+        "assignee": null,
+        "notes": null,
+        "tags": [
+          "manual"
+        ],
+        "created_by": "3.0"
+      },
+      {
+        "id": "SEC_1771664855543_12",
+        "type": "privilege_escalation",
+        "severity": "medium",
+        "status": "detected",
+        "title": "Test Incident (es)",
+        "description": "Testing i18n support for es",
+        "metadata": {
+          "language": "es",
+          "testCase": "i18n_support",
+          "createdBy": 3,
+          "creatorEmail": "test-admin@example.com",
+          "manual": true
+        },
+        "detected_at": "2026-02-21T09:07:35.543Z",
+        "updated_at": "2026-02-21T09:07:35.543Z",
+        "resolved_at": null,
+        "assignee": null,
+        "notes": null,
+        "tags": [
+          "manual"
+        ],
+        "created_by": "3.0"
+      },
+      {
+        "id": "SEC_1771664855062_11",
+        "type": "privilege_escalation",
+        "severity": "medium",
+        "status": "detected",
+        "title": "Test Incident (fr)",
+        "description": "Testing i18n support for fr",
+        "metadata": {
+          "language": "fr",
+          "testCase": "i18n_support",
+          "createdBy": 3,
+          "creatorEmail": "test-admin@example.com",
+          "manual": true
+        },
+        "detected_at": "2026-02-21T09:07:35.062Z",
+        "updated_at": "2026-02-21T09:07:35.062Z",
+        "resolved_at": null,
+        "assignee": null,
+        "notes": null,
+        "tags": [
+          "manual"
+        ],
+        "created_by": "3.0"
+      },
+      {
+        "id": "SEC_1771664854627_10",
+        "type": "privilege_escalation",
+        "severity": "medium",
+        "status": "detected",
+        "title": "Test Incident (vi)",
+        "description": "Testing i18n support for vi",
+        "metadata": {
+          "language": "vi",
+          "testCase": "i18n_support",
+          "createdBy": 3,
+          "creatorEmail": "test-admin@example.com",
+          "manual": true
+        },
+        "detected_at": "2026-02-21T09:07:34.627Z",
+        "updated_at": "2026-02-21T09:07:34.627Z",
+        "resolved_at": null,
+        "assignee": null,
+        "notes": null,
+        "tags": [
+          "manual"
+        ],
+        "created_by": "3.0"
+      },
+      {
+        "id": "SEC_1771664854259_9",
+        "type": "privilege_escalation",
+        "severity": "medium",
+        "status": "detected",
+        "title": "Test Incident (en)",
+        "description": "Testing i18n support for en",
+        "metadata": {
+          "language": "en",
+          "testCase": "i18n_support",
+          "createdBy": 3,
+          "creatorEmail": "test-admin@example.com",
+          "manual": true
+        },
+        "detected_at": "2026-02-21T09:07:34.259Z",
+        "updated_at": "2026-02-21T09:07:34.259Z",
+        "resolved_at": null,
+        "assignee": null,
+        "notes": null,
+        "tags": [
+          "manual"
+        ],
+        "created_by": "3.0"
+      },
+      {
+        "id": "SEC_1771664853949_8",
+        "type": "brute_force_login",
+        "severity": "high",
+        "status": "detected",
+        "title": "Security Threat: brute_force_login",
+        "description": "Simulated brute force login attempt for testing",
+        "metadata": {
+          "type": "brute_force_login",
+          "severity": "high",
+          "title": "Simulated Brute Force Attack",
+          "description": "Simulated brute force login attempt for testing",
+          "metadata": {
+            "sourceIp": "192.168.1.100",
+            "attemptCount": 15,
+            "targetUser": "test@example.com",
+            "timeWindow": "5 minutes",
+            "simulation": true
+          },
+          "tags": [
+            "simulation",
+            "test"
+          ],
+          "sourceSystem": "threat_detection_engine"
+        },
+        "detected_at": "2026-02-21T09:07:33.949Z",
+        "updated_at": "2026-02-21T09:07:33.949Z",
+        "resolved_at": null,
+        "assignee": null,
+        "notes": null,
+        "tags": [
+          "automated",
+          "threat_detection"
+        ],
+        "created_by": "system"
+      },
+      {
+        "id": "SEC_1771664853700_7",
+        "type": "brute_force_login",
+        "severity": "high",
+        "status": "detected",
+        "title": "Security Threat: brute_force_login",
+        "description": "Simulated brute force login attempt for testing",
+        "metadata": {
+          "type": "brute_force_login",
+          "severity": "high",
+          "title": "Simulated Brute Force Attack",
+          "description": "Simulated brute force login attempt for testing",
+          "metadata": {
+            "sourceIp": "192.168.1.100",
+            "attemptCount": 15,
+            "targetUser": "test@example.com",
+            "timeWindow": "5 minutes",
+            "simulation": true
+          },
+          "tags": [
+            "simulation",
+            "test"
+          ],
+          "sourceSystem": "threat_detection_engine"
+        },
+        "detected_at": "2026-02-21T09:07:33.700Z",
+        "updated_at": "2026-02-21T09:07:33.700Z",
+        "resolved_at": null,
+        "assignee": null,
+        "notes": null,
+        "tags": [
+          "automated",
+          "threat_detection"
+        ],
+        "created_by": "system"
+      },
+      {
+        "id": "SEC_1771664853571_6",
+        "type": "brute_force_login",
+        "severity": "high",
+        "status": "detected",
+        "title": "Security Threat: brute_force_login",
+        "description": "Simulated brute force login attempt for testing",
+        "metadata": {
+          "type": "brute_force_login",
+          "severity": "high",
+          "title": "Simulated Brute Force Attack",
+          "description": "Simulated brute force login attempt for testing",
+          "metadata": {
+            "sourceIp": "192.168.1.100",
+            "attemptCount": 15,
+            "targetUser": "test@example.com",
+            "timeWindow": "5 minutes",
+            "simulation": true
+          },
+          "tags": [
+            "simulation",
+            "test"
+          ],
+          "sourceSystem": "threat_detection_engine"
+        },
+        "detected_at": "2026-02-21T09:07:33.571Z",
+        "updated_at": "2026-02-21T09:07:33.571Z",
+        "resolved_at": null,
+        "assignee": null,
+        "notes": null,
+        "tags": [
+          "automated",
+          "threat_detection"
+        ],
+        "created_by": "system"
+      },
+      {
+        "id": "SEC_1771664853395_5",
+        "type": "brute_force_login",
+        "severity": "high",
+        "status": "detected",
+        "title": "Security Threat: brute_force_login",
+        "description": "Simulated brute force login attempt for testing",
+        "metadata": {
+          "type": "brute_force_login",
+          "severity": "high",
+          "title": "Simulated Brute Force Attack",
+          "description": "Simulated brute force login attempt for testing",
+          "metadata": {
+            "sourceIp": "192.168.1.100",
+            "attemptCount": 15,
+            "targetUser": "test@example.com",
+            "timeWindow": "5 minutes",
+            "simulation": true
+          },
+          "tags": [
+            "simulation",
+            "test"
+          ],
+          "sourceSystem": "threat_detection_engine"
+        },
+        "detected_at": "2026-02-21T09:07:33.395Z",
+        "updated_at": "2026-02-21T09:07:33.395Z",
+        "resolved_at": null,
+        "assignee": null,
+        "notes": null,
+        "tags": [
+          "automated",
+          "threat_detection"
+        ],
+        "created_by": "system"
+      },
+      {
+        "id": "SEC_1771664852126_4",
+        "type": "data_breach",
+        "severity": "critical",
+        "status": "detected",
+        "title": "Advanced Test Data Breach Incident",
+        "description": "Testing advanced incident management capabilities",
+        "metadata": {
+          "affectedSystems": [
+            "database",
+            "api"
+          ],
+          "estimatedRecords": 1000,
+          "discoveryMethod": "automated_scan",
+          "createdBy": 3,
+          "creatorEmail": "test-admin@example.com",
+          "manual": true
+        },
+        "detected_at": "2026-02-21T09:07:32.126Z",
+        "updated_at": "2026-02-21T09:07:32.126Z",
+        "resolved_at": null,
+        "assignee": null,
+        "notes": null,
+        "tags": [
+          "manual"
+        ],
+        "created_by": "3.0"
+      },
+      {
+        "id": "SEC_1771664851868_3",
+        "type": "brute_force_login",
+        "severity": "critical",
+        "status": "detected",
+        "title": "Service Integration Test Incident",
+        "description": "Testing service integration capabilities",
+        "metadata": {
+          "testCase": "service_integration",
+          "automated": true,
+          "createdBy": 3,
+          "creatorEmail": "test-admin@example.com",
+          "manual": true
+        },
+        "detected_at": "2026-02-21T09:07:31.868Z",
+        "updated_at": "2026-02-21T09:07:31.868Z",
+        "resolved_at": null,
+        "assignee": null,
+        "notes": null,
+        "tags": [
+          "manual"
+        ],
+        "created_by": "3.0"
+      },
+      {
+        "id": "SEC_1771664849559_2",
+        "type": "brute_force_login",
+        "severity": "high",
+        "status": "detected",
+        "title": "Security Threat: brute_force_login",
+        "description": "Simulated brute force login attempt for testing",
+        "metadata": {
+          "type": "brute_force_login",
+          "severity": "high",
+          "title": "Simulated Brute Force Attack",
+          "description": "Simulated brute force login attempt for testing",
+          "metadata": {
+            "sourceIp": "192.168.1.100",
+            "attemptCount": 15,
+            "targetUser": "test@example.com",
+            "timeWindow": "5 minutes",
+            "simulation": true
+          },
+          "tags": [
+            "simulation",
+            "test"
+          ],
+          "sourceSystem": "threat_detection_engine"
+        },
+        "detected_at": "2026-02-21T09:07:29.559Z",
+        "updated_at": "2026-02-21T09:07:29.559Z",
+        "resolved_at": null,
+        "assignee": null,
+        "notes": null,
+        "tags": [
+          "automated",
+          "threat_detection"
+        ],
+        "created_by": "system"
+      },
+      {
+        "id": "SEC_1771664848164_1",
+        "type": "privilege_escalation",
+        "severity": "high",
+        "status": "detected",
+        "title": "Suspicious Privilege Escalation Attempt",
+        "description": "User attempting to access admin endpoints without proper authorization",
+        "metadata": {
+          "userId": "test_user_123",
+          "attemptedEndpoint": "/api/admin/users",
+          "sourceIp": "192.168.1.100",
+          "createdBy": 3,
+          "creatorEmail": "test-admin@example.com",
+          "manual": true
+        },
+        "detected_at": "2026-02-21T09:07:28.164Z",
+        "updated_at": "2026-02-21T09:07:28.164Z",
+        "resolved_at": null,
+        "assignee": null,
+        "notes": null,
+        "tags": [
+          "manual"
+        ],
+        "created_by": "3.0"
+      },
+      {
+        "id": "INC-1771661021274-1855",
+        "type": "BRUTE_FORCE",
+        "severity": "low",
+        "status": "detected",
+        "title": "BRUTE_FORCE Detected",
+        "description": "Detected BRUTE_FORCE activity from IP 227.185.148.49 targeting system resources.",
+        "metadata": {},
+        "detected_at": "2026-02-21 02:08:54",
+        "updated_at": "2026-02-21 02:08:54",
+        "resolved_at": null,
+        "assignee": null,
+        "notes": null,
+        "tags": [],
+        "created_by": "system"
+      },
+      {
+        "id": "INC-1771661021274-2320",
+        "type": "UNAUTHORIZED_ACCESS",
+        "severity": "low",
+        "status": "investigating",
+        "title": "UNAUTHORIZED_ACCESS Detected",
+        "description": "Detected UNAUTHORIZED_ACCESS activity from IP 16.122.252.132 targeting system resources.",
+        "metadata": {},
+        "detected_at": "2026-02-20 15:14:09",
+        "updated_at": "2026-02-20 15:14:09",
+        "resolved_at": null,
+        "assignee": null,
+        "notes": null,
+        "tags": [],
+        "created_by": "system"
+      },
+      {
+        "id": "incident-test-001",
+        "type": "suspicious_login",
+        "severity": "medium",
+        "status": "investigating",
+        "title": "Multiple Failed Login Attempts",
+        "description": "Detected multiple failed login attempts from suspicious IP address",
+        "metadata": {
+          "ip": "192.168.1.999",
+          "attempts": 5,
+          "pattern": "brute_force"
+        },
+        "detected_at": "2026-02-20 08:55:46",
+        "updated_at": "2026-02-20 09:00:46",
+        "resolved_at": null,
+        "assignee": null,
+        "notes": null,
+        "tags": [],
+        "created_by": "system"
+      },
+      {
+        "id": "INC-1771661021274-4742",
+        "type": "DATA_LEAK",
+        "severity": "high",
+        "status": "investigating",
+        "title": "DATA_LEAK Detected",
+        "description": "Detected DATA_LEAK activity from IP 45.96.184.85 targeting system resources.",
+        "metadata": {},
+        "detected_at": "2026-02-20 05:51:30",
+        "updated_at": "2026-02-20 05:51:30",
+        "resolved_at": null,
+        "assignee": null,
+        "notes": null,
+        "tags": [],
+        "created_by": "system"
+      },
+      {
+        "id": "INC-1771661021274-3267",
+        "type": "DATA_LEAK",
+        "severity": "medium",
+        "status": "investigating",
+        "title": "DATA_LEAK Detected",
+        "description": "Detected DATA_LEAK activity from IP 209.54.46.44 targeting system resources.",
+        "metadata": {},
+        "detected_at": "2026-02-20 04:48:25",
+        "updated_at": "2026-02-20 04:48:25",
+        "resolved_at": null,
+        "assignee": null,
+        "notes": null,
+        "tags": [],
+        "created_by": "system"
+      },
+      {
+        "id": "INC-1771661021274-7395",
+        "type": "SUSPICIOUS_LOGIN",
+        "severity": "low",
+        "status": "false_positive",
+        "title": "SUSPICIOUS_LOGIN Detected",
+        "description": "Detected SUSPICIOUS_LOGIN activity from IP 78.69.161.28 targeting system resources.",
+        "metadata": {},
+        "detected_at": "2026-02-19 19:17:40",
+        "updated_at": "2026-02-19 19:17:40",
+        "resolved_at": null,
+        "assignee": null,
+        "notes": null,
+        "tags": [],
+        "created_by": "system"
+      },
+      {
+        "id": "INC-1771661021274-8436",
+        "type": "BRUTE_FORCE",
+        "severity": "high",
+        "status": "false_positive",
+        "title": "BRUTE_FORCE Detected",
+        "description": "Detected BRUTE_FORCE activity from IP 236.245.131.127 targeting system resources.",
+        "metadata": {},
+        "detected_at": "2026-02-19 10:14:42",
+        "updated_at": "2026-02-19 10:14:42",
+        "resolved_at": null,
+        "assignee": null,
+        "notes": null,
+        "tags": [],
+        "created_by": "system"
+      },
+      {
+        "id": "INC-1771661021274-6523",
+        "type": "SUSPICIOUS_LOGIN",
+        "severity": "critical",
+        "status": "investigating",
+        "title": "SUSPICIOUS_LOGIN Detected",
+        "description": "Detected SUSPICIOUS_LOGIN activity from IP 171.180.152.243 targeting system resources.",
+        "metadata": {},
+        "detected_at": "2026-02-18 15:40:49",
+        "updated_at": "2026-02-18 15:40:49",
+        "resolved_at": null,
+        "assignee": null,
+        "notes": null,
+        "tags": [],
+        "created_by": "system"
+      },
+      {
+        "id": "INC-1771661021274-1839",
+        "type": "API_ABUSE",
+        "severity": "critical",
+        "status": "investigating",
+        "title": "API_ABUSE Detected",
+        "description": "Detected API_ABUSE activity from IP 79.191.143.48 targeting system resources.",
+        "metadata": {},
+        "detected_at": "2026-02-18 14:41:32",
+        "updated_at": "2026-02-18 14:41:32",
+        "resolved_at": null,
+        "assignee": null,
+        "notes": null,
+        "tags": [],
+        "created_by": "system"
+      },
+      {
+        "id": "INC-1771661021274-8524",
+        "type": "UNAUTHORIZED_ACCESS",
+        "severity": "high",
+        "status": "false_positive",
+        "title": "UNAUTHORIZED_ACCESS Detected",
+        "description": "Detected UNAUTHORIZED_ACCESS activity from IP 166.131.73.207 targeting system resources.",
+        "metadata": {},
+        "detected_at": "2026-02-18 11:16:42",
+        "updated_at": "2026-02-18 11:16:42",
+        "resolved_at": null,
+        "assignee": null,
+        "notes": null,
+        "tags": [],
+        "created_by": "system"
+      },
+      {
+        "id": "INC-1771661021274-9577",
+        "type": "BRUTE_FORCE",
+        "severity": "critical",
+        "status": "false_positive",
+        "title": "BRUTE_FORCE Detected",
+        "description": "Detected BRUTE_FORCE activity from IP 77.94.112.172 targeting system resources.",
+        "metadata": {},
+        "detected_at": "2026-02-18 10:04:12",
+        "updated_at": "2026-02-18 10:04:12",
+        "resolved_at": null,
+        "assignee": null,
+        "notes": null,
+        "tags": [],
+        "created_by": "system"
+      },
+      {
+        "id": "INC-1771661021274-9238",
+        "type": "API_ABUSE",
+        "severity": "high",
+        "status": "detected",
+        "title": "API_ABUSE Detected",
+        "description": "Detected API_ABUSE activity from IP 95.27.34.121 targeting system resources.",
+        "metadata": {},
+        "detected_at": "2026-02-18 06:28:11",
+        "updated_at": "2026-02-18 06:28:11",
+        "resolved_at": null,
+        "assignee": null,
+        "notes": null,
+        "tags": [],
+        "created_by": "system"
+      },
+      {
+        "id": "INC-1771661021274-4774",
+        "type": "DATA_LEAK",
+        "severity": "critical",
+        "status": "contained",
+        "title": "DATA_LEAK Detected",
+        "description": "Detected DATA_LEAK activity from IP 162.95.225.3 targeting system resources.",
+        "metadata": {},
+        "detected_at": "2026-02-17 11:55:22",
+        "updated_at": "2026-02-17 11:55:22",
+        "resolved_at": null,
+        "assignee": null,
+        "notes": null,
+        "tags": [],
+        "created_by": "system"
+      },
+      {
+        "id": "INC-1771661021274-6754",
+        "type": "DATA_LEAK",
+        "severity": "medium",
+        "status": "detected",
+        "title": "DATA_LEAK Detected",
+        "description": "Detected DATA_LEAK activity from IP 25.62.252.178 targeting system resources.",
+        "metadata": {},
+        "detected_at": "2026-02-17 11:17:05",
+        "updated_at": "2026-02-17 11:17:05",
+        "resolved_at": null,
+        "assignee": null,
+        "notes": null,
+        "tags": [],
+        "created_by": "system"
+      },
+      {
+        "id": "INC-1771661021274-9937",
+        "type": "UNAUTHORIZED_ACCESS",
+        "severity": "critical",
+        "status": "detected",
+        "title": "UNAUTHORIZED_ACCESS Detected",
+        "description": "Detected UNAUTHORIZED_ACCESS activity from IP 219.235.11.68 targeting system resources.",
+        "metadata": {},
+        "detected_at": "2026-02-16 18:50:58",
+        "updated_at": "2026-02-16 18:50:58",
+        "resolved_at": null,
+        "assignee": null,
+        "notes": null,
+        "tags": [],
+        "created_by": "system"
+      },
+      {
+        "id": "INC-1771661021274-3144",
+        "type": "SUSPICIOUS_LOGIN",
+        "severity": "medium",
+        "status": "resolved",
+        "title": "SUSPICIOUS_LOGIN Detected",
+        "description": "Detected SUSPICIOUS_LOGIN activity from IP 71.222.207.24 targeting system resources.",
+        "metadata": {},
+        "detected_at": "2026-02-16 09:37:29",
+        "updated_at": "2026-02-16 09:37:29",
+        "resolved_at": null,
+        "assignee": null,
+        "notes": null,
+        "tags": [],
+        "created_by": "system"
+      },
+      {
+        "id": "INC-1771661021274-3284",
+        "type": "UNAUTHORIZED_ACCESS",
+        "severity": "critical",
+        "status": "investigating",
+        "title": "UNAUTHORIZED_ACCESS Detected",
+        "description": "Detected UNAUTHORIZED_ACCESS activity from IP 131.183.7.43 targeting system resources.",
+        "metadata": {},
+        "detected_at": "2026-02-15 12:41:38",
+        "updated_at": "2026-02-15 12:41:38",
+        "resolved_at": null,
+        "assignee": null,
+        "notes": null,
+        "tags": [],
+        "created_by": "system"
+      },
+      {
+        "id": "INC-1771661021274-1192",
+        "type": "SUSPICIOUS_LOGIN",
+        "severity": "high",
+        "status": "investigating",
+        "title": "SUSPICIOUS_LOGIN Detected",
+        "description": "Detected SUSPICIOUS_LOGIN activity from IP 70.118.57.222 targeting system resources.",
+        "metadata": {},
+        "detected_at": "2026-02-15 07:21:13",
+        "updated_at": "2026-02-15 07:21:13",
+        "resolved_at": null,
+        "assignee": null,
+        "notes": null,
+        "tags": [],
+        "created_by": "system"
+      },
+      {
+        "id": "INC-1771661021274-1143",
+        "type": "DATA_LEAK",
+        "severity": "high",
+        "status": "resolved",
+        "title": "DATA_LEAK Detected",
+        "description": "Detected DATA_LEAK activity from IP 70.117.6.91 targeting system resources.",
+        "metadata": {},
+        "detected_at": "2026-02-15 06:51:11",
+        "updated_at": "2026-02-15 06:51:11",
+        "resolved_at": null,
+        "assignee": null,
+        "notes": null,
+        "tags": [],
+        "created_by": "system"
+      }
+    ],
+    "pagination": {
+      "page": 1,
+      "limit": 50,
+      "total": 52,
+      "pages": 2
+    }
+  },
+  "message": "Test Super Admin User successfully retrieved 50 security incidents (page 1, limit 50, filters: page, limit)"
+}

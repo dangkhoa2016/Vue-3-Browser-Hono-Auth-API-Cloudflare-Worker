@@ -193,6 +193,12 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
+    path: '/admin/security-incidents',
+    name: 'AdminSecurityIncidents',
+    component: load('/vue/pages/AdminSecurityIncidents.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
     path: '/admin/kv',
     name: 'KvAdminConfigs',
     component: load('/vue/pages/KvAdminConfigs.vue'),
