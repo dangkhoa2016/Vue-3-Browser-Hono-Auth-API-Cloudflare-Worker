@@ -1,0 +1,59 @@
+{
+  "success": true,
+  "data": {
+    "monitoring": {
+      "active": true,
+      "lastProcessedId": 925,
+      "uptime": 353384
+    },
+    "eventStream": {
+      "totalEvents": 7,
+      "activeSubscribers": 0,
+      "eventsPerMinute": 7,
+      "lastEventTime": "2026-02-22T14:50:57.378Z",
+      "bufferSize": 7,
+      "subscriberDetails": []
+    },
+    "threatDetection": {
+      "statistics": {
+        "totalThreatsDetected": 0,
+        "activeThreats": 0,
+        "falsePositives": 0,
+        "resolvedThreats": 0
+      },
+      "activeThreats": [],
+      "threatRules": [
+        {
+          "id": "brute_force_login",
+          "name": "Brute Force Login Attempts",
+          "severity": "high",
+          "enabled": true,
+          "description": "Multiple failed login attempts from same IP"
+        },
+        {
+          "id": "privilege_escalation",
+          "name": "Privilege Escalation Attempt",
+          "severity": "critical",
+          "enabled": true,
+          "description": "Unauthorized role changes or admin access attempts"
+        },
+        {
+          "id": "suspicious_data_access",
+          "name": "Suspicious Data Access Pattern",
+          "severity": "medium",
+          "enabled": true,
+          "description": "Unusual data access patterns or bulk operations"
+        },
+        {
+          "id": "anomalous_time_access",
+          "name": "Anomalous Time-based Access",
+          "severity": "low",
+          "enabled": true,
+          "description": "Access during unusual hours"
+        }
+      ],
+      "recentThreats": []
+    }
+  },
+  "message": "Real-time monitoring started successfully"
+}

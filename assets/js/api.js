@@ -33,6 +33,20 @@ export const API_ENDPOINTS = {
   AUDIT_EXPORT: '/api/audit/export',
   // Security incidents (match backend route)
   SECURITY_INCIDENTS: '/api/security-incident/incidents',
+  // Realtime monitoring
+  REALTIME_MONITORING_STATUS: '/api/realtime-monitoring/monitoring/status',
+  REALTIME_MONITORING_START: '/api/realtime-monitoring/monitoring/start',
+  REALTIME_MONITORING_STOP: '/api/realtime-monitoring/monitoring/stop',
+  REALTIME_MONITORING_THREATS: '/api/realtime-monitoring/monitoring/threats',
+  REALTIME_MONITORING_ANALYZE: '/api/realtime-monitoring/monitoring/analyze',
+  REALTIME_MONITORING_SIMULATE: '/api/realtime-monitoring/monitoring/simulate',
+  REALTIME_MONITORING_ALERTS_STATUS: '/api/realtime-monitoring/alerts/status',
+  REALTIME_MONITORING_ALERTS_HISTORY: '/api/realtime-monitoring/alerts/history',
+  REALTIME_MONITORING_DASHBOARD_OVERVIEW: '/api/realtime-monitoring/dashboard/overview',
+  REALTIME_MONITORING_DASHBOARD_REALTIME: '/api/realtime-monitoring/dashboard/realtime',
+  REALTIME_MONITORING_DASHBOARD_TIMELINE: '/api/realtime-monitoring/dashboard/timeline',
+  REALTIME_MONITORING_DASHBOARD_HEALTH: '/api/realtime-monitoring/dashboard/health',
+  REALTIME_MONITORING_DASHBOARD_EXPORT: '/api/realtime-monitoring/dashboard/export',
 };
 
 // Mock API Configuration
@@ -59,6 +73,20 @@ const MOCK_PATTERNS = {
   AUDIT_EXPORT: new RegExp(`${API_ENDPOINTS.AUDIT_EXPORT.replace(/\//g, '\\/')}($|\\?)`),
   // Security incidents
   SECURITY_INCIDENTS: new RegExp(`${API_ENDPOINTS.SECURITY_INCIDENTS.replace(/\//g, '\\/')}($|\\?)`),
+  // Realtime monitoring
+  REALTIME_MONITORING_STATUS: new RegExp(`${API_ENDPOINTS.REALTIME_MONITORING_STATUS.replace(/\//g, '\\/')}($|\\?)`),
+  REALTIME_MONITORING_START: new RegExp(`${API_ENDPOINTS.REALTIME_MONITORING_START.replace(/\//g, '\\/')}($|\\?)`),
+  REALTIME_MONITORING_STOP: new RegExp(`${API_ENDPOINTS.REALTIME_MONITORING_STOP.replace(/\//g, '\\/')}($|\\?)`),
+  REALTIME_MONITORING_THREATS: new RegExp(`${API_ENDPOINTS.REALTIME_MONITORING_THREATS.replace(/\//g, '\\/')}(?:\\/.*|\\?.*|)$`),
+  REALTIME_MONITORING_ANALYZE: new RegExp(`${API_ENDPOINTS.REALTIME_MONITORING_ANALYZE.replace(/\//g, '\\/')}($|\\?)`),
+  REALTIME_MONITORING_SIMULATE: new RegExp(`${API_ENDPOINTS.REALTIME_MONITORING_SIMULATE.replace(/\//g, '\\/')}($|\\?)`),
+  REALTIME_MONITORING_ALERTS_STATUS: new RegExp(`${API_ENDPOINTS.REALTIME_MONITORING_ALERTS_STATUS.replace(/\//g, '\\/')}($|\\?)`),
+  REALTIME_MONITORING_ALERTS_HISTORY: new RegExp(`${API_ENDPOINTS.REALTIME_MONITORING_ALERTS_HISTORY.replace(/\//g, '\\/')}($|\\?)`),
+  REALTIME_MONITORING_DASHBOARD_OVERVIEW: new RegExp(`${API_ENDPOINTS.REALTIME_MONITORING_DASHBOARD_OVERVIEW.replace(/\//g, '\\/')}($|\\?)`),
+  REALTIME_MONITORING_DASHBOARD_REALTIME: new RegExp(`${API_ENDPOINTS.REALTIME_MONITORING_DASHBOARD_REALTIME.replace(/\//g, '\\/')}($|\\?)`),
+  REALTIME_MONITORING_DASHBOARD_TIMELINE: new RegExp(`${API_ENDPOINTS.REALTIME_MONITORING_DASHBOARD_TIMELINE.replace(/\//g, '\\/')}($|\\?)`),
+  REALTIME_MONITORING_DASHBOARD_HEALTH: new RegExp(`${API_ENDPOINTS.REALTIME_MONITORING_DASHBOARD_HEALTH.replace(/\//g, '\\/')}($|\\?)`),
+  REALTIME_MONITORING_DASHBOARD_EXPORT: new RegExp(`${API_ENDPOINTS.REALTIME_MONITORING_DASHBOARD_EXPORT.replace(/\//g, '\\/')}($|\\?)`),
 };
 
 // Data Paths
@@ -87,6 +115,12 @@ export const DATA_PATHS = {
   AUDIT_LOGS_SUCCESS: '/assets/data/audit/logs/succeed/response.json',
   // Security incident data
   SECURITY_INCIDENTS: '/assets/data/security-incident/succeed/response.json',
+  // Realtime monitoring data
+  REALTIME_MONITORING_REALTIME: '/assets/data/realtime-monitoring/realtime/succeed/response.json',
+  REALTIME_MONITORING_STATUS_SUCCESS: '/assets/data/realtime-monitoring/status/succeed/response.json',
+  REALTIME_MONITORING_START_SUCCESS: '/assets/data/realtime-monitoring/start/succeed/response.json',
+  REALTIME_MONITORING_STOP_SUCCESS: '/assets/data/realtime-monitoring/stop/succeed/response.json',
+  REALTIME_MONITORING_EXPORT_SUCCESS: '/assets/data/realtime-monitoring/export/succeed/response.json',
 };
 
 export const apiClient = axios.create({
@@ -277,6 +311,56 @@ export const setupMock = (enable) => {
     if (!mock) {
       console.log('Enabling Mock API');
       mock = new MockAdapter(apiClient, { delayResponse: MOCK_CONFIG.DELAY_RESPONSE });
+      let mockMonitoringActive = false;
+
+      const parseBody = (config) => {
+        if (!config || typeof config.data === 'undefined' || config.data === null) {
+          return {};
+        }
+        try {
+          return typeof config.data === 'string' ? JSON.parse(config.data) : config.data;
+        } catch (_error) {
+          return {};
+        }
+      };
+
+      const getRealtimePayload = async () => {
+        const base = await loadJson(DATA_PATHS.REALTIME_MONITORING_REALTIME);
+        const payload = base?.data || {};
+        const now = new Date().toISOString();
+
+        return {
+          rawResponse: base,
+          rawData: payload,
+          statusData: {
+            startedAt: payload.timestamp || now,
+            isActive: mockMonitoringActive,
+            lastHeartbeat: now
+          },
+          overviewData: {
+            ...(payload.overview || {}),
+            monitoringActive: mockMonitoringActive
+          },
+          realtimeData: {
+            timestamp: payload.timestamp || now,
+            isActive: mockMonitoringActive,
+            lastUpdated: now
+          },
+          threatsData: {
+            ...(payload.threats || {}),
+            activeThreatsCount: Array.isArray(payload.threats?.activeThreats)
+              ? payload.threats.activeThreats.length
+              : (payload.threats?.activeThreatsCount || 0),
+            resolvedThreatsCount: Array.isArray(payload.threats?.resolvedThreats)
+              ? payload.threats.resolvedThreats.length
+              : (payload.threats?.resolvedThreatsCount || 0)
+          },
+          alertsStatusData: payload.alertsStatus || {},
+          alertsHistoryData: payload.alertsHistory || { alerts: [], pagination: { page: 1, limit: 20, total: 0, totalPages: 1 } },
+          timelineData: payload.timeline || { points: [] },
+          healthData: payload.health || { status: 'healthy' }
+        };
+      };
 
       // Login
       mock.onPost(MOCK_PATTERNS.LOGIN).reply(async (config) => {
@@ -541,6 +625,238 @@ export const setupMock = (enable) => {
           return [200, data];
         } catch (error) {
           console.error('[Mock API] Security incidents handler error:', error);
+          const message = (error && error.message) || 'Internal server error';
+          return [500, { success: false, error: message }];
+        }
+      });
+
+      // Realtime monitoring: status
+      mock.onGet(MOCK_PATTERNS.REALTIME_MONITORING_STATUS).reply(async () => {
+        try {
+          const data = await loadJson(DATA_PATHS.REALTIME_MONITORING_STATUS_SUCCESS);
+
+          return [200, {
+            ...data,
+            data: {
+              ...(data?.data || {}),
+              monitoring: {
+                ...(data?.data?.monitoring || {}),
+                active: typeof mockMonitoringActive === 'boolean'
+                  ? mockMonitoringActive
+                  : Boolean(data?.data?.monitoring?.active)
+              }
+            }
+          }];
+        } catch (error) {
+          console.error('[Mock API] Monitoring status handler error:', error);
+          const message = (error && error.message) || 'Internal server error';
+          return [500, { success: false, error: message }];
+        }
+      });
+
+      // Realtime monitoring: start
+      mock.onPost(MOCK_PATTERNS.REALTIME_MONITORING_START).reply(async (config) => {
+        try {
+          const body = parseBody(config);
+          const data = await loadJson(DATA_PATHS.REALTIME_MONITORING_START_SUCCESS);
+          mockMonitoringActive = true;
+
+          return [200, {
+            ...data,
+            data: {
+              ...(data?.data || {}),
+              intervalMs: Number(body.intervalMs) || Number(data?.data?.intervalMs) || 5000,
+              enableThreatDetection: typeof body.enableThreatDetection === 'boolean'
+                ? body.enableThreatDetection
+                : (typeof data?.data?.enableThreatDetection === 'boolean' ? data.data.enableThreatDetection : true),
+              startedAt: new Date().toISOString()
+            }
+          }];
+        } catch (error) {
+          console.error('[Mock API] Monitoring start handler error:', error);
+          const message = (error && error.message) || 'Internal server error';
+          return [500, { success: false, error: message }];
+        }
+      });
+
+      // Realtime monitoring: stop
+      mock.onPost(MOCK_PATTERNS.REALTIME_MONITORING_STOP).reply(async () => {
+        try {
+          const data = await loadJson(DATA_PATHS.REALTIME_MONITORING_STOP_SUCCESS);
+          mockMonitoringActive = false;
+          return [200, {
+            ...data,
+            data: {
+              ...(data?.data || {}),
+              stoppedAt: new Date().toISOString()
+            }
+          }];
+        } catch (error) {
+          console.error('[Mock API] Monitoring stop handler error:', error);
+          const message = (error && error.message) || 'Internal server error';
+          return [500, { success: false, error: message }];
+        }
+      });
+
+      // Realtime monitoring: threats
+      mock.onGet(MOCK_PATTERNS.REALTIME_MONITORING_THREATS).reply(async () => {
+        try {
+          const { threatsData } = await getRealtimePayload();
+          return [200, { success: true, data: threatsData, message: 'Threat data loaded' }];
+        } catch (error) {
+          console.error('[Mock API] Monitoring threats handler error:', error);
+          const message = (error && error.message) || 'Internal server error';
+          return [500, { success: false, error: message }];
+        }
+      });
+
+      // Realtime monitoring: analyze
+      mock.onPost(MOCK_PATTERNS.REALTIME_MONITORING_ANALYZE).reply(async (config) => {
+        try {
+          const body = parseBody(config);
+          return [200, {
+            success: true,
+            data: {
+              hours: Number(body.hours) || 1,
+              threatsDetected: Math.floor(Math.random() * 5),
+              anomalies: Math.floor(Math.random() * 3),
+              generatedAt: new Date().toISOString()
+            },
+            message: 'Threat analysis completed'
+          }];
+        } catch (error) {
+          console.error('[Mock API] Monitoring analyze handler error:', error);
+          const message = (error && error.message) || 'Internal server error';
+          return [500, { success: false, error: message }];
+        }
+      });
+
+      // Realtime monitoring: simulate
+      mock.onPost(MOCK_PATTERNS.REALTIME_MONITORING_SIMULATE).reply(async (config) => {
+        try {
+          const body = parseBody(config);
+          return [200, {
+            success: true,
+            data: {
+              id: `sim_${Date.now()}`,
+              type: body.eventType || body.type || 'test_event',
+              action: body.action || body.eventType || 'test_event',
+              severity: body.severity || 'medium',
+              timestamp: new Date().toISOString()
+            },
+            message: 'Event simulated'
+          }];
+        } catch (error) {
+          console.error('[Mock API] Monitoring simulate handler error:', error);
+          const message = (error && error.message) || 'Internal server error';
+          return [500, { success: false, error: message }];
+        }
+      });
+
+      // Realtime monitoring: alert status
+      mock.onGet(MOCK_PATTERNS.REALTIME_MONITORING_ALERTS_STATUS).reply(async () => {
+        try {
+          const { alertsStatusData } = await getRealtimePayload();
+          return [200, { success: true, data: alertsStatusData, message: 'Alert status loaded' }];
+        } catch (error) {
+          console.error('[Mock API] Alerts status handler error:', error);
+          const message = (error && error.message) || 'Internal server error';
+          return [500, { success: false, error: message }];
+        }
+      });
+
+      // Realtime monitoring: alert history
+      mock.onGet(MOCK_PATTERNS.REALTIME_MONITORING_ALERTS_HISTORY).reply(async () => {
+        try {
+          const { alertsHistoryData } = await getRealtimePayload();
+          return [200, { success: true, data: alertsHistoryData, message: 'Alert history loaded' }];
+        } catch (error) {
+          console.error('[Mock API] Alerts history handler error:', error);
+          const message = (error && error.message) || 'Internal server error';
+          return [500, { success: false, error: message }];
+        }
+      });
+
+      // Realtime monitoring: dashboard overview
+      mock.onGet(MOCK_PATTERNS.REALTIME_MONITORING_DASHBOARD_OVERVIEW).reply(async () => {
+        try {
+          const { overviewData } = await getRealtimePayload();
+          return [200, { success: true, data: overviewData, message: 'Overview loaded' }];
+        } catch (error) {
+          console.error('[Mock API] Dashboard overview handler error:', error);
+          const message = (error && error.message) || 'Internal server error';
+          return [500, { success: false, error: message }];
+        }
+      });
+
+      // Realtime monitoring: dashboard realtime
+      mock.onGet(MOCK_PATTERNS.REALTIME_MONITORING_DASHBOARD_REALTIME).reply(async () => {
+        try {
+          const { rawResponse, rawData } = await getRealtimePayload();
+
+          return [200, {
+            ...rawResponse,
+            data: rawData
+          }];
+        } catch (error) {
+          console.error('[Mock API] Dashboard realtime handler error:', error);
+          const message = (error && error.message) || 'Internal server error';
+          return [500, { success: false, error: message }];
+        }
+      });
+
+      // Realtime monitoring: dashboard timeline
+      mock.onGet(MOCK_PATTERNS.REALTIME_MONITORING_DASHBOARD_TIMELINE).reply(async () => {
+        try {
+          const { timelineData } = await getRealtimePayload();
+          return [200, { success: true, data: timelineData, message: 'Timeline loaded' }];
+        } catch (error) {
+          console.error('[Mock API] Dashboard timeline handler error:', error);
+          const message = (error && error.message) || 'Internal server error';
+          return [500, { success: false, error: message }];
+        }
+      });
+
+      // Realtime monitoring: dashboard health
+      mock.onGet(MOCK_PATTERNS.REALTIME_MONITORING_DASHBOARD_HEALTH).reply(async () => {
+        try {
+          const { healthData } = await getRealtimePayload();
+          return [200, { success: true, data: healthData, message: 'Health check loaded' }];
+        } catch (error) {
+          console.error('[Mock API] Dashboard health handler error:', error);
+          const message = (error && error.message) || 'Internal server error';
+          return [500, { success: false, error: message }];
+        }
+      });
+
+      mock.onPost(MOCK_PATTERNS.REALTIME_MONITORING_DASHBOARD_EXPORT).reply(async (config) => {
+        try {
+          const body = parseBody(config);
+          const data = await loadJson(DATA_PATHS.REALTIME_MONITORING_EXPORT_SUCCESS);
+          const format = String(body?.format || 'json').toLowerCase();
+          const timeRange = String(body?.timeRange || 'last_24h');
+
+          return [200, {
+            ...data,
+            data: {
+              ...(data?.data || {}),
+              metadata: {
+                ...(data?.data?.metadata || {}),
+                format,
+                timeRange,
+                exportedAt: new Date().toISOString()
+              }
+            },
+            meta: {
+              ...(data?.meta || {}),
+              filename: format === 'csv'
+                ? `audit_dashboard_${timeRange}_${new Date().toISOString().slice(0, 10)}.csv`
+                : (data?.meta?.filename || `audit_dashboard_${timeRange}_${new Date().toISOString().slice(0, 10)}.json`),
+              contentType: format === 'csv' ? 'text/csv' : (data?.meta?.contentType || 'application/json')
+            }
+          }];
+        } catch (error) {
+          console.error('[Mock API] Dashboard export handler error:', error);
           const message = (error && error.message) || 'Internal server error';
           return [500, { success: false, error: message }];
         }
