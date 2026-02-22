@@ -107,7 +107,7 @@ export default {
       hero: {
         subtitle: 'Hono.js、D1データベース、JWT認証を組み合わせた、高性能エッジアプリケーション用の本番対応ボイラープレート。',
         title_emphasis: '認証ソリューション',
-        title_end: 'Cloudflare Workers向け',
+        title_end: 'クラウドフレア Workers向け',
         title_start: '究極の'
       },
       tech: {

@@ -107,7 +107,7 @@ export default {
       hero: {
         subtitle: 'Hono.js, D1 데이터베이스, JWT 인증을 결합한 고성능 엣지 애플리케이션용 프로덕션 지원 보일러플레이트.',
         title_emphasis: '인증 솔루션',
-        title_end: 'Cloudflare Workers용',
+        title_end: '클라우드플레어 Workers용',
         title_start: '최고의'
       },
       tech: {

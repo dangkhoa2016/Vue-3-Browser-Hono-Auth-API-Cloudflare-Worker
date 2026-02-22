@@ -52,7 +52,7 @@ export default {
       testing_items: {
         email_activation: 'Email & kích hoạt tài khoản',
         enterprise_audit: 'Hệ thống kiểm toán doanh nghiệp',
-        i18n_validation: 'Kiểm thử i18n & đa ngôn ngữ',
+        i18n_validation: 'kiểm thử i18n & đa ngôn ngữ',
         rbac: 'Kiểm soát truy cập dựa trên vai trò (RBAC)',
         security_performance: 'Bảo mật & hiệu năng',
         system_integration: 'Kiểm thử hệ thống & tích hợp'

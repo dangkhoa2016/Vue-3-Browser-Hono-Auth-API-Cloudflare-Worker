@@ -52,7 +52,7 @@ export default {
       testing_items: {
         email_activation: 'Email & Account Activation',
         enterprise_audit: 'Enterprise Audit System',
-        i18n_validation: 'I18n & Multilingual Validation',
+        i18n_validation: 'i18n & Multilingual Validation',
         rbac: 'Role-Based Access Control (RBAC)',
         security_performance: 'Security & Performance',
         system_integration: 'System & Integration Tests'
