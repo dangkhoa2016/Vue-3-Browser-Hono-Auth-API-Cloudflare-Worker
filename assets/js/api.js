@@ -31,6 +31,8 @@ export const API_ENDPOINTS = {
   AUDIT_LOGS: '/api/audit/logs',
   AUDIT_STATS: '/api/audit/stats',
   AUDIT_EXPORT: '/api/audit/export',
+  // Security incidents (match backend route)
+  SECURITY_INCIDENTS: '/api/security-incident/incidents',
 };
 
 // Mock API Configuration
@@ -55,6 +57,8 @@ const MOCK_PATTERNS = {
   AUDIT_LOGS: new RegExp(`${API_ENDPOINTS.AUDIT_LOGS.replace(/\//g, '\\/')}($|\\?)`),
   AUDIT_STATS: new RegExp(`${API_ENDPOINTS.AUDIT_STATS.replace(/\//g, '\\/')}($|\\?)`),
   AUDIT_EXPORT: new RegExp(`${API_ENDPOINTS.AUDIT_EXPORT.replace(/\//g, '\\/')}($|\\?)`),
+  // Security incidents
+  SECURITY_INCIDENTS: new RegExp(`${API_ENDPOINTS.SECURITY_INCIDENTS.replace(/\//g, '\\/')}($|\\?)`),
 };
 
 // Data Paths
@@ -81,6 +85,8 @@ export const DATA_PATHS = {
   UPDATE_USER_SUCCESS: '/assets/data/users/update/succeed/response.json',
   // Audit data
   AUDIT_LOGS_SUCCESS: '/assets/data/audit/logs/succeed/response.json',
+  // Security incident data
+  SECURITY_INCIDENTS: '/assets/data/security-incident/succeed/response.json',
 };
 
 export const apiClient = axios.create({
@@ -512,6 +518,29 @@ export const setupMock = (enable) => {
           return [200, data];
         } catch (error) {
           console.error('[Mock API] Audit logs handler error:', error);
+          const message = (error && error.message) || 'Internal server error';
+          return [500, { success: false, error: message }];
+        }
+      });
+
+      // Security incidents
+      mock.onGet(MOCK_PATTERNS.SECURITY_INCIDENTS).reply(async (config) => {
+        try {
+          const data = await loadJson(DATA_PATHS.SECURITY_INCIDENTS);
+          const params = config.params || {};
+          const page = Number.parseInt(params.page, 10) || data.data?.pagination?.page || 1;
+          const limit = Number.parseInt(params.limit, 10) || data.data?.pagination?.limit || data.data?.incidents?.length || 50;
+
+          if (data.data && data.data.pagination) {
+            const total = data.data.pagination.total || (data.data.incidents && data.data.incidents.length) || 0;
+            data.data.pagination.page = page;
+            data.data.pagination.limit = limit;
+            data.data.pagination.totalPages = data.data.pagination.totalPages || Math.max(1, Math.ceil(total / limit));
+          }
+
+          return [200, data];
+        } catch (error) {
+          console.error('[Mock API] Security incidents handler error:', error);
           const message = (error && error.message) || 'Internal server error';
           return [500, { success: false, error: message }];
         }
