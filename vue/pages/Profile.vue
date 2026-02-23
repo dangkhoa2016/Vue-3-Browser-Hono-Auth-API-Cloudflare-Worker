@@ -72,6 +72,7 @@
       <i class="bi bi-exclamation-triangle-fill text-5xl text-red-600 dark:text-red-400 mb-4"></i>
       <h3 class="text-xl font-bold text-red-900 dark:text-red-100 mb-2">{{ $t('message.errors.failed_to_load', { item: 'Profile' }) }}</h3>
       <p class="text-red-700 dark:text-red-300 mb-4">{{ error }}</p>
+
       <button
         @click="loadProfile"
         class="inline-flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition"
@@ -106,125 +107,152 @@
       <!-- Content Grid -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <!-- Account Info Card -->
-        <div class="lg:col-span-2 bg-white dark:bg-slate-900 rounded-2xl shadow-lg hover:shadow-xl p-8 transition-all duration-300 border border-gray-100 dark:border-slate-800 hover:border-blue-200 dark:hover:border-blue-900">
-          <div class="flex items-center justify-between mb-6">
-            <h2 class="text-2xl font-bold text-gray-900 dark:text-slate-100 flex items-center gap-3">
-              <div class="w-10 h-10 rounded-lg bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center">
+        <div class="lg:col-span-2 bg-white dark:bg-slate-900 rounded-2xl shadow-lg p-5 sm:p-8 border border-gray-100 dark:border-slate-800">
+          <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-6">
+            <h2 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-slate-100 flex items-center gap-3">
+              <div class="w-9 h-9 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
                 <i class="bi bi-person-circle text-blue-600 dark:text-blue-400 text-xl"></i>
               </div>
               {{ $t('message.profile.account_info') }}
             </h2>
-            <div class="flex items-center gap-2">
+            <div class="w-full sm:w-auto flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
               <button
                 v-if="!isEditing"
                 @click="startEditingProfile"
-                class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition"
+                class="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-3 sm:px-4 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white text-sm sm:text-base font-semibold rounded-lg transition"
               >
                 <i class="bi bi-pencil-square"></i>
                 {{ $t('message.common.edit') }}
               </button>
               <template v-else>
-                <button
-                  @click="cancelEditingProfile"
-                  :disabled="isSavingProfile"
-                  class="inline-flex items-center gap-2 px-4 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-gray-800 dark:text-slate-100 font-semibold rounded-lg shadow-md hover:shadow-lg transition disabled:opacity-60 disabled:cursor-not-allowed"
-                >
-                  <i class="bi bi-x-lg"></i>
-                  {{ $t('message.common.cancel') }}
-                </button>
-                <button
-                  @click="saveProfile"
-                  :disabled="!canSubmitProfile"
-                  class="inline-flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition disabled:opacity-60 disabled:cursor-not-allowed"
-                >
-                  <i class="bi" :class="isSavingProfile ? 'bi-hourglass-split' : 'bi-check-lg'"></i>
-                  {{ isSavingProfile ? $t('message.common.loading') : $t('message.common.save') }}
-                </button>
+                <div class="flex max-[420px]:flex-col max-[450px]:justify-between gap-2">
+                  <button
+                    @click="cancelEditingProfile"
+                    :disabled="isSavingProfile"
+                    class="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-3 sm:px-4 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-gray-800 dark:text-slate-100 text-sm sm:text-base font-semibold rounded-lg transition disabled:opacity-60 disabled:cursor-not-allowed"
+                  >
+                    <i class="bi bi-x-lg"></i>
+                    {{ $t('message.common.cancel') }}
+                  </button>
+                  <button
+                    @click="saveProfile"
+                    :disabled="!canSubmitProfile"
+                    class="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-3 sm:px-4 py-2 bg-green-600 hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600 text-white text-sm sm:text-base font-semibold rounded-lg transition disabled:opacity-60 disabled:cursor-not-allowed"
+                  >
+                    <i class="bi" :class="isSavingProfile ? 'bi-hourglass-split' : 'bi-check-lg'"></i>
+                    {{ isSavingProfile ? $t('message.common.loading') : $t('message.common.save') }}
+                  </button>
+                </div>
               </template>
             </div>
           </div>
           
           <div class="space-y-4">
-            <div class="flex items-center justify-between p-4 rounded-xl bg-gray-50 dark:bg-slate-800/50 hover:bg-gray-100 dark:hover:bg-slate-800 transition-all group">
-              <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center group-hover:scale-110 transition-transform">
+            <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/90 dark:bg-slate-800/40">
+              <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div class="flex items-center gap-3 min-w-0">
+                <div class="w-10 h-10 rounded-lg bg-blue-100/80 dark:bg-blue-900/30 flex items-center justify-center">
                   <i class="bi bi-person-fill text-blue-600 dark:text-blue-400"></i>
                 </div>
                 <span class="text-gray-600 dark:text-slate-400 font-medium">{{ $t('message.profile.full_name') }}</span>
               </div>
-              <span v-if="!isEditing" class="font-bold text-gray-900 dark:text-slate-100">{{ profile.full_name }}</span>
-              <input
-                v-else
-                v-model="editForm.full_name"
-                type="text"
-                autocomplete="name"
-                class="w-full max-w-xs px-3 py-2 rounded-lg border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-gray-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
+                <span v-if="!isEditing" class="font-semibold text-gray-900 dark:text-slate-100 break-words sm:text-right">{{ profile.full_name }}</span>
+                <input
+                  v-else
+                  v-model="editForm.full_name"
+                  type="text"
+                  autocomplete="name"
+                  class="w-full sm:w-auto sm:min-w-[16rem] sm:max-w-xs px-3 py-2 rounded-lg border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-gray-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
             </div>
 
-            <div class="flex items-center justify-between p-4 rounded-xl bg-gray-50 dark:bg-slate-800/50 hover:bg-gray-100 dark:hover:bg-slate-800 transition-all group">
-              <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-lg bg-cyan-100 dark:bg-cyan-900/30 flex items-center justify-center group-hover:scale-110 transition-transform">
+            <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/90 dark:bg-slate-800/40">
+              <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div class="flex items-center gap-3 min-w-0">
+                <div class="w-10 h-10 rounded-lg bg-cyan-100/80 dark:bg-cyan-900/30 flex items-center justify-center">
                   <i class="bi bi-envelope-fill text-cyan-600 dark:text-cyan-400"></i>
                 </div>
                 <span class="text-gray-600 dark:text-slate-400 font-medium">{{ $t('message.common.email') }}</span>
               </div>
-              <span v-if="!isEditing" class="font-bold text-gray-900 dark:text-slate-100">{{ profile.email }}</span>
-              <input
-                v-else
-                v-model="editForm.email"
-                type="email"
-                autocomplete="email"
-                class="w-full max-w-xs px-3 py-2 rounded-lg border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-gray-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
+                <span v-if="!isEditing" class="font-semibold text-gray-900 dark:text-slate-100 break-all sm:text-right">{{ profile.email }}</span>
+                <input
+                  v-else
+                  v-model="editForm.email"
+                  type="email"
+                  autocomplete="email"
+                  class="w-full sm:w-auto sm:min-w-[16rem] sm:max-w-xs px-3 py-2 rounded-lg border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-gray-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
             </div>
 
             <div
               v-if="profile.new_email"
-              class="flex items-center justify-between p-4 rounded-xl bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800"
+              class="p-4 rounded-xl border border-amber-200 dark:border-amber-800 bg-amber-50/80 dark:bg-amber-900/20"
             >
-              <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-lg bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center">
-                  <i class="bi bi-envelope-check-fill text-amber-600 dark:text-amber-400"></i>
+              <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div class="flex items-start gap-3 min-w-0">
+                  <div class="w-10 h-10 rounded-lg bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center shrink-0">
+                    <i class="bi bi-envelope-check-fill text-amber-600 dark:text-amber-400"></i>
+                  </div>
+                  <div class="min-w-0">
+                    <p class="text-amber-700 dark:text-amber-300 font-medium">{{ $t('message.profile.pending_email') }}</p>
+                    <p class="font-semibold text-amber-800 dark:text-amber-200 break-all sm:break-normal sm:truncate">{{ profile.new_email }}</p>
+                  </div>
                 </div>
-                <span class="text-amber-700 dark:text-amber-300 font-medium">{{ $t('message.profile.pending_email') }}</span>
+                <button
+                  @click="clearPendingEmail"
+                  :disabled="isClearingPendingEmail || isSavingProfile"
+                  class="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-3 py-2 rounded-lg bg-amber-600 hover:bg-amber-700 text-white text-sm font-semibold whitespace-nowrap transition disabled:opacity-60 disabled:cursor-not-allowed"
+                >
+                  <i class="bi" :class="isClearingPendingEmail ? 'bi-hourglass-split' : 'bi-trash3'" />
+                  <span v-if="isClearingPendingEmail">{{ $t('message.common.loading') }}</span>
+                  <template v-else>
+                    {{ $t('message.profile.clear_pending_email') }}
+                  </template>
+                </button>
               </div>
-              <span class="font-bold text-amber-800 dark:text-amber-200">{{ profile.new_email }}</span>
             </div>
             
-            <div class="flex items-center justify-between p-4 rounded-xl bg-gray-50 dark:bg-slate-800/50 hover:bg-gray-100 dark:hover:bg-slate-800 transition-all group">
-              <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-lg bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <i :class="getRoleIcon(profile.role)" class="text-purple-600 dark:text-purple-400"></i>
+            <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/90 dark:bg-slate-800/40">
+              <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div class="flex items-center gap-3 min-w-0">
+                  <div class="w-10 h-10 rounded-lg bg-purple-100/80 dark:bg-purple-900/30 flex items-center justify-center shrink-0">
+                    <i :class="getRoleIcon(profile.role)" class="text-purple-600 dark:text-purple-400"></i>
+                  </div>
+                  <span class="text-gray-600 dark:text-slate-400 font-medium">{{ $t('message.profile.role') }}</span>
                 </div>
-                <span class="text-gray-600 dark:text-slate-400 font-medium">{{ $t('message.profile.role') }}</span>
+                <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold bg-slate-200 text-slate-800 dark:bg-slate-700 dark:text-slate-100 w-fit sm:ml-auto">
+                  {{ profile.role.replace('_', ' ').toUpperCase() }}
+                </span>
               </div>
-              <span :class="`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-bold bg-gradient-to-r ${getRoleBadgeColor(profile.role)} text-white shadow-lg`">
-                {{ profile.role.replace('_', ' ').toUpperCase() }}
-              </span>
             </div>
             
-            <div class="flex items-center justify-between p-4 rounded-xl bg-gray-50 dark:bg-slate-800/50 hover:bg-gray-100 dark:hover:bg-slate-800 transition-all group">
-              <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-lg bg-green-100 dark:bg-green-900/30 flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <i class="bi bi-check-circle-fill text-green-600 dark:text-green-400"></i>
+            <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/90 dark:bg-slate-800/40">
+              <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div class="flex items-center gap-3 min-w-0">
+                  <div class="w-10 h-10 rounded-lg bg-green-100/80 dark:bg-green-900/30 flex items-center justify-center shrink-0">
+                    <i class="bi bi-check-circle-fill text-green-600 dark:text-green-400"></i>
+                  </div>
+                  <span class="text-gray-600 dark:text-slate-400 font-medium">{{ $t('message.profile.status') }}</span>
                 </div>
-                <span class="text-gray-600 dark:text-slate-400 font-medium">{{ $t('message.profile.status') }}</span>
+                <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-200 w-fit sm:ml-auto">
+                  <span class="w-2 h-2 rounded-full bg-current opacity-70"></span>
+                  {{ profile.status.toUpperCase() }}
+                </span>
               </div>
-              <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-bold bg-gradient-to-r from-green-400 to-emerald-500 text-white shadow-lg shadow-green-500/30">
-                <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
-                {{ profile.status.toUpperCase() }}
-              </span>
             </div>
 
-            <div class="flex items-center justify-between p-4 rounded-xl bg-gray-50 dark:bg-slate-800/50 hover:bg-gray-100 dark:hover:bg-slate-800 transition-all group">
-              <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-lg bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <i class="bi bi-calendar-check text-orange-600 dark:text-orange-400"></i>
+            <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/90 dark:bg-slate-800/40">
+              <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div class="flex items-center gap-3 min-w-0">
+                  <div class="w-10 h-10 rounded-lg bg-orange-100/80 dark:bg-orange-900/30 flex items-center justify-center shrink-0">
+                    <i class="bi bi-calendar-check text-orange-600 dark:text-orange-400"></i>
+                  </div>
+                  <span class="text-gray-600 dark:text-slate-400 font-medium">{{ $t('message.profile.joined') }}</span>
                 </div>
-                <span class="text-gray-600 dark:text-slate-400 font-medium">{{ $t('message.profile.joined') }}</span>
+                <span class="font-semibold text-gray-900 dark:text-slate-100 break-words sm:text-right">{{ formatDate(profile.created_at) }}</span>
               </div>
-              <span class="font-bold text-gray-900 dark:text-slate-100">{{ formatDate(profile.created_at) }}</span>
             </div>
           </div>
         </div>
@@ -287,6 +315,7 @@ export default {
     const showLoginRequired = ref(false);
     const isEditing = ref(false);
     const isSavingProfile = ref(false);
+    const isClearingPendingEmail = ref(false);
     const editForm = ref({
       full_name: '',
       email: ''
@@ -409,6 +438,56 @@ export default {
         }
       } finally {
         isSavingProfile.value = false;
+      }
+    };
+
+    const clearPendingEmail = async () => {
+      if (!profile.value?.new_email || isClearingPendingEmail.value) {
+        return;
+      }
+
+      isClearingPendingEmail.value = true;
+
+      try {
+        const response = await apiClient.delete(API_ENDPOINTS.CLEAR_PENDING_EMAIL, {
+          headers: {
+            Authorization: `Bearer ${authStore.token}`
+          }
+        });
+
+        if (!response.data?.success) {
+          throw new Error(response.data?.error || t('message.errors.something_went_wrong'));
+        }
+
+        const updatedProfile = response.data.data || {};
+
+        profile.value = {
+          ...profile.value,
+          ...updatedProfile,
+          new_email: Object.prototype.hasOwnProperty.call(updatedProfile, 'new_email') ? updatedProfile.new_email : null,
+          emailVerificationPending: false
+        };
+
+        if (authStore.user) {
+          authStore.user = {
+            ...authStore.user,
+            new_email: profile.value.new_email
+          };
+          localStorage.setItem('user', JSON.stringify(authStore.user));
+        }
+
+        const serverMessage = response?.data?.message;
+        toastStore.success(serverMessage || t('message.profile.pending_email_cleared'));
+      } catch (err) {
+        const message = extractErrorMessage(err, t('message.profile.clear_pending_email_failed'));
+        toastStore.error(message);
+
+        if (err?.response?.status === 401) {
+          authStore.logout();
+          checkAuthAndShowModal();
+        }
+      } finally {
+        isClearingPendingEmail.value = false;
       }
     };
 
@@ -561,6 +640,7 @@ export default {
       showLoginRequired,
       isEditing,
       isSavingProfile,
+      isClearingPendingEmail,
       editForm,
       canSubmitProfile,
       formatDate,
@@ -570,7 +650,8 @@ export default {
       loadProfile,
       startEditingProfile,
       cancelEditingProfile,
-      saveProfile
+      saveProfile,
+      clearPendingEmail
     };
   }
 }

@@ -8,7 +8,12 @@
 		"status": "active",
 		"created_at": "2026-02-20 09:25:46",
 		"role": "admin",
-		"emailVerificationPending": true
+		"emailVerificationPending": true,
+		"pendingEmailAction": {
+			"canClear": true,
+			"endpoint": "/api/user/pending-email",
+			"method": "DELETE"
+		}
 	},
 	"message": "Profile updated. Please check your new email address test-user1@example.com to verify and complete the change."
 }
