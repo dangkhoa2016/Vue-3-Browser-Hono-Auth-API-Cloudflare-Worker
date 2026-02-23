@@ -1,0 +1,9 @@
+{
+  "success": true,
+  "data": {
+    "message": "Role changed from User to Administrator for Eve Product. Changed by Test Super Admin User (Super Administrator) Changed at 2/23/2026, 6:20:26 AM Changes effective immediately",
+    "userId": 15,
+    "newRole": "admin"
+  },
+  "message": "Role changed from User to Administrator for Eve Product. Changed by Test Super Admin User (Super Administrator) Changed at 2/23/2026, 6:20:26 AM Changes effective immediately"
+}

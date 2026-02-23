@@ -79,7 +79,7 @@
               <i class="bi bi-shield-lock absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-teal-500 transition-colors text-lg"></i>
               <select
                 v-model="formData.role"
-                :disabled="loading"
+                :disabled="loading || mode === 'edit'"
                 class="w-full pl-11 pr-10 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 focus:bg-white dark:focus:bg-slate-800 transition-all outline-none appearance-none"
               >
                 <option value="user">User</option>
@@ -88,6 +88,9 @@
               </select>
               <i class="bi bi-chevron-down absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs pointer-events-none"></i>
             </div>
+            <p v-if="mode === 'edit'" class="mt-1 text-xs text-slate-500 dark:text-slate-400 ml-1">
+              {{ $t('message.admin_users.role_change_requires_dedicated_endpoint', 'Role can only be changed via dedicated change-role action') }}
+            </p>
           </div>
 
           <!-- Status (Edit only) -->
