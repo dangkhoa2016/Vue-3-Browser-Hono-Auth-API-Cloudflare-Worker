@@ -22,6 +22,7 @@ export const API_ENDPOINTS = {
   REFRESH_TOKEN: '/api/auth/refresh_token',
   REGISTER: '/api/user/register',
   PROFILE: '/api/user/profile',
+  CLEAR_PENDING_EMAIL: '/api/user/pending-email',
   API_INFO: '/api',
   USERS: '/api/admin/users',
   ADMIN_USER_ROLE: '/api/admin/users/:id/role', // Helper for pattern matching
@@ -67,6 +68,7 @@ const MOCK_PATTERNS = {
   REFRESH_TOKEN: new RegExp(`${API_ENDPOINTS.REFRESH_TOKEN.replace(/\//g, '\\/')}($|\\?)`),
   REGISTER: new RegExp(`${API_ENDPOINTS.REGISTER.replace(/\//g, '\\/')}($|\\?)`),
   PROFILE: new RegExp(`${API_ENDPOINTS.PROFILE.replace(/\//g, '\\/')}($|\\?)`),
+  CLEAR_PENDING_EMAIL: new RegExp(`${API_ENDPOINTS.CLEAR_PENDING_EMAIL.replace(/\//g, '\\/')}($|\\?)`),
   API_INFO: new RegExp(`${API_ENDPOINTS.API_INFO.replace(/\//g, '\\/')}($|\\?)`),
   USERS: new RegExp(`${API_ENDPOINTS.USERS.replace(/\//g, '\\/')}(?:\\/.*|\\?.*|)$`),
   ADMIN_USER_ROLE: new RegExp(`${API_ENDPOINTS.USERS.replace(/\//g, '\\/')}\\/\\d+\\/role($|\\?)`),
@@ -341,6 +343,7 @@ export const setupMock = (enable) => {
       console.log('Enabling Mock API');
       mock = new MockAdapter(apiClient, { delayResponse: MOCK_CONFIG.DELAY_RESPONSE });
       let mockMonitoringActive = false;
+      let mockPendingEmail = null;
 
       const parseBody = (config) => {
         if (!config || typeof config.data === 'undefined' || config.data === null) {
@@ -529,6 +532,16 @@ export const setupMock = (enable) => {
       mock.onGet(MOCK_PATTERNS.PROFILE).reply(async (config) => {
         try {
           const data = await loadJson(DATA_PATHS.PROFILE);
+          data.data = {
+            ...(data?.data || {}),
+            new_email: mockPendingEmail,
+            emailVerificationPending: Boolean(mockPendingEmail),
+            pendingEmailAction: {
+              canClear: Boolean(mockPendingEmail),
+              endpoint: API_ENDPOINTS.CLEAR_PENDING_EMAIL,
+              method: 'DELETE'
+            }
+          };
           return [200, data];
         } catch (error) {
           console.error('[Mock API] Profile handler error:', error);
@@ -572,6 +585,7 @@ export const setupMock = (enable) => {
           }
 
           const emailChanged = nextEmail.toLowerCase() !== String(currentProfile.email || '').trim().toLowerCase();
+          mockPendingEmail = emailChanged ? nextEmail : null;
 
           let serverMessage = String(updateResponse?.message || '').trim();
           if (emailChanged && serverMessage) {
@@ -585,8 +599,13 @@ export const setupMock = (enable) => {
               ...currentProfile,
               full_name: nextFullName,
               email: emailChanged ? (serverUpdateData.email || currentProfile.email) : nextEmail,
-              new_email: emailChanged ? nextEmail : null,
-              emailVerificationPending: emailChanged
+              new_email: mockPendingEmail,
+              emailVerificationPending: Boolean(mockPendingEmail),
+              pendingEmailAction: {
+                canClear: Boolean(mockPendingEmail),
+                endpoint: API_ENDPOINTS.CLEAR_PENDING_EMAIL,
+                method: 'DELETE'
+              }
             },
             message: emailChanged
               ? (serverMessage || t('message.profile.update_verify_email'))
@@ -594,6 +613,43 @@ export const setupMock = (enable) => {
           }];
         } catch (error) {
           console.error('[Mock API] Update profile handler error:', error);
+          const message = (error && error.message) || 'Internal server error';
+          return [500, { success: false, error: message }];
+        }
+      });
+
+      mock.onDelete(MOCK_PATTERNS.CLEAR_PENDING_EMAIL).reply(async () => {
+        try {
+          const t = i18n.global.t;
+
+          if (!mockPendingEmail) {
+            return [400, {
+              success: false,
+              error: t('message.profile.clear_pending_email_not_found')
+            }];
+          }
+
+          const current = await loadJson(DATA_PATHS.PROFILE);
+          const currentProfile = current?.data || {};
+
+          mockPendingEmail = null;
+
+          return [200, {
+            success: true,
+            data: {
+              ...currentProfile,
+              new_email: null,
+              emailVerificationPending: false,
+              pendingEmailAction: {
+                canClear: false,
+                endpoint: API_ENDPOINTS.CLEAR_PENDING_EMAIL,
+                method: 'DELETE'
+              }
+            },
+            message: t('message.profile.pending_email_cleared')
+          }];
+        } catch (error) {
+          console.error('[Mock API] Clear pending email handler error:', error);
           const message = (error && error.message) || 'Internal server error';
           return [500, { success: false, error: message }];
         }
