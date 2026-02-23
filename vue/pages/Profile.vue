@@ -114,6 +114,34 @@
               </div>
               {{ $t('message.profile.account_info') }}
             </h2>
+            <div class="flex items-center gap-2">
+              <button
+                v-if="!isEditing"
+                @click="startEditingProfile"
+                class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition"
+              >
+                <i class="bi bi-pencil-square"></i>
+                {{ $t('message.common.edit') }}
+              </button>
+              <template v-else>
+                <button
+                  @click="cancelEditingProfile"
+                  :disabled="isSavingProfile"
+                  class="inline-flex items-center gap-2 px-4 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-gray-800 dark:text-slate-100 font-semibold rounded-lg shadow-md hover:shadow-lg transition disabled:opacity-60 disabled:cursor-not-allowed"
+                >
+                  <i class="bi bi-x-lg"></i>
+                  {{ $t('message.common.cancel') }}
+                </button>
+                <button
+                  @click="saveProfile"
+                  :disabled="!canSubmitProfile"
+                  class="inline-flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition disabled:opacity-60 disabled:cursor-not-allowed"
+                >
+                  <i class="bi" :class="isSavingProfile ? 'bi-hourglass-split' : 'bi-check-lg'"></i>
+                  {{ isSavingProfile ? $t('message.common.loading') : $t('message.common.save') }}
+                </button>
+              </template>
+            </div>
           </div>
           
           <div class="space-y-4">
@@ -124,7 +152,14 @@
                 </div>
                 <span class="text-gray-600 dark:text-slate-400 font-medium">{{ $t('message.profile.full_name') }}</span>
               </div>
-              <span class="font-bold text-gray-900 dark:text-slate-100">{{ profile.full_name }}</span>
+              <span v-if="!isEditing" class="font-bold text-gray-900 dark:text-slate-100">{{ profile.full_name }}</span>
+              <input
+                v-else
+                v-model="editForm.full_name"
+                type="text"
+                autocomplete="name"
+                class="w-full max-w-xs px-3 py-2 rounded-lg border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-gray-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
             </div>
 
             <div class="flex items-center justify-between p-4 rounded-xl bg-gray-50 dark:bg-slate-800/50 hover:bg-gray-100 dark:hover:bg-slate-800 transition-all group">
@@ -132,9 +167,29 @@
                 <div class="w-10 h-10 rounded-lg bg-cyan-100 dark:bg-cyan-900/30 flex items-center justify-center group-hover:scale-110 transition-transform">
                   <i class="bi bi-envelope-fill text-cyan-600 dark:text-cyan-400"></i>
                 </div>
-                <span class="text-gray-600 dark:text-slate-400 font-medium">Email</span>
+                <span class="text-gray-600 dark:text-slate-400 font-medium">{{ $t('message.common.email') }}</span>
               </div>
-              <span class="font-bold text-gray-900 dark:text-slate-100">{{ profile.email }}</span>
+              <span v-if="!isEditing" class="font-bold text-gray-900 dark:text-slate-100">{{ profile.email }}</span>
+              <input
+                v-else
+                v-model="editForm.email"
+                type="email"
+                autocomplete="email"
+                class="w-full max-w-xs px-3 py-2 rounded-lg border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-gray-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+
+            <div
+              v-if="profile.new_email"
+              class="flex items-center justify-between p-4 rounded-xl bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800"
+            >
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-lg bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center">
+                  <i class="bi bi-envelope-check-fill text-amber-600 dark:text-amber-400"></i>
+                </div>
+                <span class="text-amber-700 dark:text-amber-300 font-medium">{{ $t('message.profile.pending_email') }}</span>
+              </div>
+              <span class="font-bold text-amber-800 dark:text-amber-200">{{ profile.new_email }}</span>
             </div>
             
             <div class="flex items-center justify-between p-4 rounded-xl bg-gray-50 dark:bg-slate-800/50 hover:bg-gray-100 dark:hover:bg-slate-800 transition-all group">
@@ -215,10 +270,11 @@
 </template>
 
 <script>
-import { ref, onMounted, onActivated, watch } from 'vue';
+import { ref, computed, onMounted, onActivated, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useAuthStore } from '/assets/js/stores/authStore.js';
 import { useModalStore } from '/assets/js/stores/modalStore.js';
+import { useToastStore } from '/assets/js/stores/toastStore.js';
 import { apiClient, API_ENDPOINTS } from '/assets/js/api.js';
 
 export default {
@@ -227,15 +283,134 @@ export default {
     const profile = ref(null);
     const loadingProfile = ref(true);
     const error = ref(null);
-    const { locale } = useI18n({ useScope: 'global' });
+    const { locale, t } = useI18n({ useScope: 'global' });
     const showLoginRequired = ref(false);
+    const isEditing = ref(false);
+    const isSavingProfile = ref(false);
+    const editForm = ref({
+      full_name: '',
+      email: ''
+    });
     
     // Use Pinia stores
     const authStore = useAuthStore();
     const modalStore = useModalStore();
+    const toastStore = useToastStore();
     
     // Initialize auth store from localStorage
     authStore.init();
+
+    const normalizeText = (value) => String(value || '').trim();
+
+    const syncEditFormWithProfile = () => {
+      editForm.value = {
+        full_name: normalizeText(profile.value?.full_name),
+        email: normalizeText(profile.value?.email)
+      };
+    };
+
+    const canSubmitProfile = computed(() => {
+      if (!profile.value || isSavingProfile.value) {
+        return false;
+      }
+
+      const nextFullName = normalizeText(editForm.value.full_name);
+      const nextEmail = normalizeText(editForm.value.email);
+      const currentFullName = normalizeText(profile.value.full_name);
+      const currentEmail = normalizeText(profile.value.email);
+
+      if (!nextFullName || !nextEmail) {
+        return false;
+      }
+
+      return nextFullName !== currentFullName || nextEmail !== currentEmail;
+    });
+
+    const startEditingProfile = () => {
+      if (!profile.value) {
+        return;
+      }
+      syncEditFormWithProfile();
+      isEditing.value = true;
+      error.value = null;
+    };
+
+    const cancelEditingProfile = () => {
+      syncEditFormWithProfile();
+      isEditing.value = false;
+    };
+
+    const resetEditingState = () => {
+      isEditing.value = false;
+      isSavingProfile.value = false;
+      editForm.value = {
+        full_name: '',
+        email: ''
+      };
+    };
+
+    const extractErrorMessage = (err, fallbackMessage) => {
+      return err?.response?.data?.message || err?.response?.data?.error || err?.message || fallbackMessage;
+    };
+
+    const saveProfile = async () => {
+      if (!profile.value || !canSubmitProfile.value) {
+        return;
+      }
+
+      isSavingProfile.value = true;
+
+      try {
+        const payload = {
+          full_name: normalizeText(editForm.value.full_name),
+          email: normalizeText(editForm.value.email)
+        };
+
+        const response = await apiClient.put(API_ENDPOINTS.PROFILE, payload, {
+          headers: {
+            Authorization: `Bearer ${authStore.token}`
+          }
+        });
+
+        if (!response.data?.success) {
+          throw new Error(response.data?.error || t('message.errors.something_went_wrong'));
+        }
+
+        const updatedProfile = response.data.data || {};
+
+        profile.value = {
+          ...profile.value,
+          ...updatedProfile,
+          full_name: updatedProfile.full_name || payload.full_name,
+          email: updatedProfile.email || profile.value.email,
+          new_email: Object.prototype.hasOwnProperty.call(updatedProfile, 'new_email') ? updatedProfile.new_email : profile.value.new_email
+        };
+
+        if (authStore.user) {
+          authStore.user = {
+            ...authStore.user,
+            full_name: profile.value.full_name,
+            email: profile.value.email,
+            new_email: profile.value.new_email
+          };
+          localStorage.setItem('user', JSON.stringify(authStore.user));
+        }
+
+        isEditing.value = false;
+        const serverMessage = response?.data?.message;
+        toastStore.success(serverMessage || t('message.profile.update_success'));
+      } catch (err) {
+        const message = extractErrorMessage(err, t('message.errors.something_went_wrong'));
+        toastStore.error(message);
+
+        if (err?.response?.status === 401) {
+          authStore.logout();
+          checkAuthAndShowModal();
+        }
+      } finally {
+        isSavingProfile.value = false;
+      }
+    };
 
     const openLoginModal = () => {
       modalStore.openLogin(
@@ -290,6 +465,7 @@ export default {
         
         if (response.data.success) {
           profile.value = response.data.data;
+          syncEditFormWithProfile();
           showLoginRequired.value = false;
         } else {
           throw new Error(response.data.error || 'Failed to load profile');
@@ -314,10 +490,21 @@ export default {
       async (isAuthenticated) => {
         if (isAuthenticated === false && !showLoginRequired.value) {
           // User logged out, show modal
+          resetEditingState();
           checkAuthAndShowModal();
         } else if (isAuthenticated === true && showLoginRequired.value) {
           // User logged in, reload profile
           await loadProfile();
+        }
+      },
+      { immediate: false }
+    );
+
+    watch(
+      () => authStore.user?.id,
+      (newUserId, oldUserId) => {
+        if (newUserId !== oldUserId) {
+          resetEditingState();
         }
       },
       { immediate: false }
@@ -372,11 +559,18 @@ export default {
       loadingProfile,
       error,
       showLoginRequired,
+      isEditing,
+      isSavingProfile,
+      editForm,
+      canSubmitProfile,
       formatDate,
       getRoleBadgeColor,
       getRoleIcon,
       openLoginModal,
-      loadProfile
+      loadProfile,
+      startEditingProfile,
+      cancelEditingProfile,
+      saveProfile
     };
   }
 }

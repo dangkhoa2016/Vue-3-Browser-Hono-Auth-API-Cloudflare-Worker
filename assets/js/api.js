@@ -111,6 +111,7 @@ export const DATA_PATHS = {
   REGISTER_SUCCESS_ACTIVE: '/assets/data/register/succeed/response2.json',
   REGISTER_SUCCESS_INACTIVE: '/assets/data/register/succeed/response1.json',
   PROFILE: '/assets/data/profile/succeed.json',
+  PROFILE_UPDATE_SUCCESS: '/assets/data/profile/update/succeed/response.json',
   API_INFO: '/assets/data/profile/api.json',
   USERS_LIST: '/assets/data/users/list/succeed/super-admin+users.json',
   CREATE_USER_SUCCESS: '/assets/data/users/create/succeed/response.json',
@@ -531,6 +532,68 @@ export const setupMock = (enable) => {
           return [200, data];
         } catch (error) {
           console.error('[Mock API] Profile handler error:', error);
+          const message = (error && error.message) || 'Internal server error';
+          return [500, { success: false, error: message }];
+        }
+      });
+
+      mock.onPut(MOCK_PATTERNS.PROFILE).reply(async (config) => {
+        try {
+          const t = i18n.global.t;
+          const body = parseBody(config);
+          const current = await loadJson(DATA_PATHS.PROFILE);
+          const updateResponse = await loadJson(DATA_PATHS.PROFILE_UPDATE_SUCCESS);
+          const currentProfile = current?.data || {};
+          const serverUpdateData = updateResponse?.data || {};
+
+          const nextFullName = String(body.full_name || '').trim();
+          const nextEmail = String(body.email || '').trim();
+
+          if (!nextFullName) {
+            return [400, {
+              success: false,
+              error: t('message.profile.validation_full_name_required')
+            }];
+          }
+
+          if (!nextEmail) {
+            return [400, {
+              success: false,
+              error: t('message.profile.validation_email_required')
+            }];
+          }
+
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!emailRegex.test(nextEmail)) {
+            return [400, {
+              success: false,
+              error: t('message.profile.validation_email_invalid')
+            }];
+          }
+
+          const emailChanged = nextEmail.toLowerCase() !== String(currentProfile.email || '').trim().toLowerCase();
+
+          let serverMessage = String(updateResponse?.message || '').trim();
+          if (emailChanged && serverMessage) {
+            serverMessage = serverMessage.replace(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/, nextEmail);
+          }
+
+          return [200, {
+            success: updateResponse?.success ?? true,
+            data: {
+              ...serverUpdateData,
+              ...currentProfile,
+              full_name: nextFullName,
+              email: emailChanged ? (serverUpdateData.email || currentProfile.email) : nextEmail,
+              new_email: emailChanged ? nextEmail : null,
+              emailVerificationPending: emailChanged
+            },
+            message: emailChanged
+              ? (serverMessage || t('message.profile.update_verify_email'))
+              : t('message.profile.update_success')
+          }];
+        } catch (error) {
+          console.error('[Mock API] Update profile handler error:', error);
           const message = (error && error.message) || 'Internal server error';
           return [500, { success: false, error: message }];
         }
