@@ -1,5 +1,6 @@
 const { defineStore } = Pinia;
 import { apiClient, API_ENDPOINTS } from '../api.js';
+import { i18n } from '../i18n.js';
 
 // Pinia auth store
 export const useAuthStore = defineStore('auth', {
@@ -11,6 +12,8 @@ export const useAuthStore = defineStore('auth', {
     expiresAt: null,
     refreshExpiresAt: null,
     isRefreshing: false,
+    requiresReauth: false,
+    reauthNoticeShown: false,
   }),
 
   // Getters
@@ -41,6 +44,8 @@ export const useAuthStore = defineStore('auth', {
       this.refreshToken = refreshToken;
       this.expiresAt = expiresAt;
       this.refreshExpiresAt = refreshExpiresAt;
+      this.requiresReauth = false;
+      this.reauthNoticeShown = false;
       
       // Save to localStorage
       if (userData) {
@@ -60,7 +65,47 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
+    async notifySessionExpired() {
+      if (this.reauthNoticeShown) {
+        return;
+      }
+
+      this.reauthNoticeShown = true;
+
+      try {
+        const { useToastStore } = await import('./toastStore.js');
+        const toastStore = useToastStore();
+        const message = i18n.global.t(
+          'message.auth.relogin_required_reason',
+          'Your session has expired or is invalid. Please login again to continue.'
+        );
+        const title = i18n.global.t('message.auth.login_required', 'Login Required');
+        toastStore.warning(message, 7000, title);
+      } catch (error) {
+        console.warn('[AuthStore] Could not show re-login toast:', error);
+      }
+    },
+
+    async requireReauthentication() {
+      this.logout();
+      this.requiresReauth = true;
+
+      await this.notifySessionExpired();
+
+      try {
+        const { useModalStore } = await import('./modalStore.js');
+        const modalStore = useModalStore();
+        modalStore.openLogin();
+      } catch (error) {
+        console.warn('[AuthStore] Could not open login modal:', error);
+      }
+    },
+
     async refreshAccessToken() {
+      if (this.requiresReauth) {
+        return null;
+      }
+
       // Prevent multiple simultaneous refresh attempts
       if (this.isRefreshing) {
         console.log('[AuthStore] Token refresh already in progress, waiting...');
@@ -79,17 +124,7 @@ export const useAuthStore = defineStore('auth', {
       // Check if refresh token is expired
       if (this.isRefreshTokenExpired) {
         console.log('[AuthStore] Refresh token expired, logout required');
-        this.logout();
-        
-        // Open login modal to prompt user to re-authenticate
-        try {
-          const { useModalStore } = await import('./modalStore.js');
-          const modalStore = useModalStore();
-          modalStore.openLogin();
-        } catch (error) {
-          console.warn('[AuthStore] Could not open login modal:', error);
-        }
-        
+        await this.requireReauthentication();
         return null;
       }
 
@@ -111,17 +146,7 @@ export const useAuthStore = defineStore('auth', {
           return access_token;
         } else {
           console.error('[AuthStore] Token refresh failed:', response.data.error);
-          this.logout();
-          
-          // Open login modal
-          try {
-            const { useModalStore } = await import('./modalStore.js');
-            const modalStore = useModalStore();
-            modalStore.openLogin();
-          } catch (error) {
-            console.warn('[AuthStore] Could not open login modal:', error);
-          }
-          
+          await this.requireReauthentication();
           return null;
         }
       } catch (error) {
@@ -130,16 +155,7 @@ export const useAuthStore = defineStore('auth', {
         // If refresh fails with 401 or 403, the refresh token is invalid
         if (error.response && (error.response.status === 401 || error.response.status === 403)) {
           console.log('[AuthStore] Refresh token invalid, logout required');
-          this.logout();
-          
-          // Open login modal
-          try {
-            const { useModalStore } = await import('./modalStore.js');
-            const modalStore = useModalStore();
-            modalStore.openLogin();
-          } catch (err) {
-            console.warn('[AuthStore] Could not open login modal:', err);
-          }
+          await this.requireReauthentication();
         }
         
         return null;
@@ -155,6 +171,8 @@ export const useAuthStore = defineStore('auth', {
       this.expiresAt = null;
       this.refreshExpiresAt = null;
       this.isRefreshing = false;
+      this.requiresReauth = false;
+      this.reauthNoticeShown = false;
       
       // Clear localStorage
       localStorage.removeItem('user');
@@ -188,6 +206,9 @@ export const useAuthStore = defineStore('auth', {
         if (savedRefreshExpiresAt) {
           this.refreshExpiresAt = parseInt(savedRefreshExpiresAt, 10);
         }
+
+        this.requiresReauth = false;
+        this.reauthNoticeShown = false;
 
         // Check if refresh token is expired on init
         if (this.refreshToken && this.isRefreshTokenExpired) {

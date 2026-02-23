@@ -49,6 +49,9 @@ export const API_ENDPOINTS = {
   REALTIME_MONITORING_DASHBOARD_EXPORT: '/api/realtime-monitoring/dashboard/export',
 };
 
+export const buildAdminUserRoleEndpoint = (userId) =>
+  API_ENDPOINTS.ADMIN_USER_ROLE.replace(':id', String(userId));
+
 // Mock API Configuration
 const MOCK_CONFIG = {
   DELAY_RESPONSE: 0,
@@ -66,6 +69,7 @@ const MOCK_PATTERNS = {
   PROFILE: new RegExp(`${API_ENDPOINTS.PROFILE.replace(/\//g, '\\/')}($|\\?)`),
   API_INFO: new RegExp(`${API_ENDPOINTS.API_INFO.replace(/\//g, '\\/')}($|\\?)`),
   USERS: new RegExp(`${API_ENDPOINTS.USERS.replace(/\//g, '\\/')}(?:\\/.*|\\?.*|)$`),
+  ADMIN_USER_ROLE: new RegExp(`${API_ENDPOINTS.USERS.replace(/\//g, '\\/')}\\/\\d+\\/role($|\\?)`),
 
   // Audit patterns
   AUDIT_LOGS: new RegExp(`${API_ENDPOINTS.AUDIT_LOGS.replace(/\//g, '\\/')}($|\\?)`),
@@ -111,6 +115,7 @@ export const DATA_PATHS = {
   USERS_LIST: '/assets/data/users/list/succeed/super-admin+users.json',
   CREATE_USER_SUCCESS: '/assets/data/users/create/succeed/response.json',
   UPDATE_USER_SUCCESS: '/assets/data/users/update/succeed/response.json',
+  CHANGE_USER_ROLE_SUCCESS: '/assets/data/users/change-role/succeed/response.json',
   // Audit data
   AUDIT_LOGS_SUCCESS: '/assets/data/audit/logs/succeed/response.json',
   // Security incident data
@@ -149,14 +154,37 @@ apiClient.interceptors.request.use(async (config) => {
   // Set Accept-Language header for backend detection
   config.headers['Accept-Language'] = lang;
 
+  // Dynamically import auth store once for request auth guards
+  let authStore = null;
+  try {
+    const { useAuthStore } = await import('./stores/authStore.js');
+    authStore = useAuthStore();
+  } catch (error) {
+    console.warn('[API] Error loading auth store in request interceptor:', error);
+  }
+
+  const isAuthRequest = Boolean(config.url) && (
+    config.url.includes(API_ENDPOINTS.LOGIN) ||
+    config.url.includes(API_ENDPOINTS.REGISTER) ||
+    config.url.includes(API_ENDPOINTS.REFRESH_TOKEN)
+  );
+
+  // Block all non-auth requests until user logs in again after session expiry/refresh failure
+  if (authStore?.requiresReauth && !isAuthRequest) {
+    const message = i18n.global.t(
+      'message.auth.relogin_required_reason',
+      'Your session has expired or is invalid. Please login again to continue.'
+    );
+    const blockedError = new Error(message);
+    blockedError.code = 'REAUTH_REQUIRED';
+    blockedError.isAuthBlocked = true;
+    return Promise.reject(blockedError);
+  }
+
   // Token refresh logic
   // Skip token refresh for the refresh endpoint itself
-  if (!config.url.includes(API_ENDPOINTS.REFRESH_TOKEN)) {
+  if (authStore && !config.url.includes(API_ENDPOINTS.REFRESH_TOKEN)) {
     try {
-      // Dynamically import authStore to avoid circular dependency
-      const { useAuthStore } = await import('./stores/authStore.js');
-      const authStore = useAuthStore();
-
       // Check if we need to refresh the token
       if (authStore.shouldRefreshToken) {
         console.log('[API] Access token expired, refreshing...');
@@ -554,9 +582,51 @@ export const setupMock = (enable) => {
         }
       });
 
-      // Update User (and Role)
-      mock.onPut(MOCK_PATTERNS.USERS).reply(async () => {
+      // Update User Role (dedicated endpoint)
+      mock.onPut(MOCK_PATTERNS.ADMIN_USER_ROLE).reply(async (config) => {
         try {
+          const body = parseBody(config);
+          const url = config.url || '';
+          const match = url.match(/\/api\/admin\/users\/(\d+)\/role(?:$|\?)/);
+          const userId = match ? Number.parseInt(match[1], 10) : null;
+          const role = String(body.role || '').trim().toLowerCase();
+          const allowedRoles = ['user', 'admin', 'super_admin'];
+
+          if (!allowedRoles.includes(role)) {
+            return [400, {
+              success: false,
+              message: `Invalid role: ${role}`
+            }];
+          }
+
+          const data = await loadJson(DATA_PATHS.CHANGE_USER_ROLE_SUCCESS);
+          const responseData = {
+            ...data,
+            data: {
+              ...(data?.data || {}),
+              ...(userId ? { userId } : {}),
+              newRole: role
+            }
+          };
+          return [200, responseData];
+        } catch (error) {
+          console.error('[Mock API] Update user role handler error:', error);
+          const message = (error && error.message) || 'Internal server error';
+          return [500, { success: false, error: message }];
+        }
+      });
+
+      // Update User (without role changes)
+      mock.onPut(MOCK_PATTERNS.USERS).reply(async (config) => {
+        try {
+          const url = config.url || '';
+          if (/\/api\/admin\/users\/\d+\/role(?:$|\?)/.test(url)) {
+            return [404, {
+              success: false,
+              message: 'Use dedicated role endpoint handler'
+            }];
+          }
+
           const data = await loadJson(DATA_PATHS.UPDATE_USER_SUCCESS);
           return [200, data];
         } catch (error) {

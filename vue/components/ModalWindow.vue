@@ -1,6 +1,6 @@
 <template>
   <transition name="modal">
-    <div v-if="show" class="fixed inset-0 z-50 flex items-center justify-center p-4" @click.self="handleOutsideClick">
+    <div v-if="show" :class="['fixed inset-0 flex items-center justify-center p-4', zIndexClass]" @click.self="handleOutsideClick">
       <div class="w-full flex items-center justify-center">
         <!-- Background overlay -->
         <div class="fixed inset-0 transition-opacity bg-gray-500 dark:bg-gray-900 bg-opacity-75 dark:bg-opacity-75" @click="handleOutsideClick"></div>
@@ -82,6 +82,10 @@ export default {
     closeOnClickOutside: {
       type: Boolean,
       default: true
+    },
+    zIndexClass: {
+      type: String,
+      default: 'z-50'
     }
   },
   emits: ['close'],

@@ -216,6 +216,14 @@
                   <td class="whitespace-nowrap px-6 py-4 text-right max-[992px]:flex max-[992px]:items-center max-[992px]:justify-between max-[992px]:px-4 max-[992px]:py-2.5 max-[992px]:before:content-[attr(data-label)] max-[992px]:before:text-[11px] max-[992px]:before:uppercase max-[992px]:before:tracking-[0.2em] max-[992px]:before:text-slate-500 dark:max-[992px]:before:text-slate-400 max-[992px]:before:pr-3" :data-label="$t('message.common.actions', 'Actions')">
                     <div class="flex items-center justify-end gap-2">
                       <button
+                        v-if="isAdmin && !isCurrentUser(userItem)"
+                        @click="openRoleModal(userItem)"
+                        class="rounded-lg p-2 text-slate-400 transition hover:bg-slate-100 hover:text-amber-600 dark:hover:bg-slate-800 dark:hover:text-amber-400"
+                        :title="$t('message.admin_users.change_role', 'Change Role')"
+                      >
+                        <i class="bi bi-shield-shaded"></i>
+                      </button>
+                      <button
                         @click="openEditModal(userItem)"
                         class="rounded-lg p-2 text-slate-400 transition hover:bg-slate-100 hover:text-indigo-600 dark:hover:bg-slate-800 dark:hover:text-indigo-400"
                         :title="$t('message.common.edit') || 'Edit'"
@@ -262,6 +270,17 @@
       @cancel="cancelDelete"
     />
 
+    <RoleChangeModal
+      :show="showRoleModal"
+      :user="selectedRoleUser"
+      :role-value="selectedRoleValue"
+      :role-options="roleChangeOptions"
+      :loading="isChangingRole"
+      @close="closeRoleModal"
+      @save="submitRoleChange"
+      @update:role-value="selectedRoleValue = $event"
+    />
+
     <!-- User Modal Component -->
     <UserModal
       :show="showModal"
@@ -285,12 +304,14 @@ import { useUserStore } from '/assets/js/stores/userStore.js';
 import { useToastStore } from '/assets/js/stores/toastStore.js';
 import UserModal from '../components/UserModal.vue';
 import ConfirmDeleteModal from '../components/ConfirmDeleteModal.vue';
+import RoleChangeModal from '../components/RoleChangeModal.vue';
 
 export default {
   name: 'AdminUsers',
   components: {
     UserModal,
-    ConfirmDeleteModal
+    ConfirmDeleteModal,
+    RoleChangeModal
   },
   setup() {
     const { t } = useI18n({ useScope: 'global' });
@@ -323,11 +344,45 @@ export default {
     const isSubmitting = ref(false);
     const showConfirm = ref(null); // { id, full_name }
     const isDeleting = ref(false);
+    const showRoleModal = ref(false);
+    const selectedRoleUser = ref(null);
+    const selectedRoleValue = ref('user');
+    const isChangingRole = ref(false);
 
     const isAdmin = computed(() => {
       const role = authStore.user?.role?.toLowerCase();
       return role === 'admin' || role === 'super_admin';
     });
+
+    const isSuperAdmin = computed(() => {
+      const role = authStore.user?.role?.toLowerCase();
+      return role === 'super_admin';
+    });
+
+    const roleOptions = ['super_admin', 'admin', 'user'];
+    const adminRoleOptions = ['admin', 'user'];
+
+    const roleChangeOptions = computed(() => {
+      if (isSuperAdmin.value) {
+        return roleOptions;
+      }
+      if (isAdmin.value) {
+        return adminRoleOptions;
+      }
+      return [];
+    });
+
+    const isCurrentUser = (userItem) => {
+      const currentUserId = authStore.user?.id;
+      const rowUserId = userItem?.id;
+      if (currentUserId === null || typeof currentUserId === 'undefined') {
+        return false;
+      }
+      if (rowUserId === null || typeof rowUserId === 'undefined') {
+        return false;
+      }
+      return String(currentUserId) === String(rowUserId);
+    };
 
     const loading = computed(() => userStore.loading);
     const error = computed(() => userStore.error);
@@ -444,8 +499,8 @@ export default {
         : t('message.admin_users.status_inactive');
     };
 
-    // CRUD Actions
     const openCreateModal = () => {
+      selectedUserId.value = null;
       userForm.value = {};
       formError.value = null;
       modalMode.value = 'create';
@@ -462,6 +517,7 @@ export default {
 
     const closeModal = () => {
       showModal.value = false;
+      selectedUserId.value = null;
       userForm.value = {};
       formError.value = null;
     };
@@ -480,8 +536,7 @@ export default {
           res = await userStore.updateUser(selectedUserId.value, {
             full_name: formData.full_name,
             email: formData.email,
-            status: formData.status,
-            role: formData.role
+            status: formData.status
           });
         }
         
@@ -490,6 +545,7 @@ export default {
           toastStore.success(res.message);
 
           closeModal();
+          forceSkeletonOnLoading.value = true;
           await loadUsers(); // Refresh list
         }
       } catch (err) {
@@ -497,6 +553,76 @@ export default {
         formError.value = err.message || t('message.errors.unknown_error');
       } finally {
         isSubmitting.value = false;
+      }
+    };
+
+    const openRoleModal = (userItem) => {
+      if (!isAdmin.value) {
+        return;
+      }
+
+      selectedRoleUser.value = userItem;
+      const currentRole = (userItem.role || '').toLowerCase();
+      selectedRoleValue.value = roleChangeOptions.value.includes(currentRole)
+        ? currentRole
+        : roleChangeOptions.value[0] || 'user';
+      showRoleModal.value = true;
+    };
+
+    const closeRoleModal = (force = false) => {
+      if (isChangingRole.value && !force) {
+        return;
+      }
+      showRoleModal.value = false;
+      selectedRoleUser.value = null;
+      selectedRoleValue.value = 'user';
+    };
+
+    const submitRoleChange = async () => {
+      if (!isAdmin.value || !selectedRoleUser.value || isChangingRole.value) {
+        return;
+      }
+
+      const currentRole = (selectedRoleUser.value.role || '').toLowerCase();
+      const newRole = String(selectedRoleValue.value || '').trim().toLowerCase();
+      if (!newRole) {
+        return;
+      }
+
+      if (!roleChangeOptions.value.includes(newRole)) {
+        toastStore.error(
+          t('message.admin_users.invalid_role', {
+            role: newRole,
+            allowed: roleChangeOptions.value.join(', ')
+          }, `Invalid role: ${newRole}. Allowed: ${roleChangeOptions.value.join(', ')}`)
+        );
+        return;
+      }
+
+      if (newRole === currentRole) {
+        return;
+      }
+
+      isChangingRole.value = true;
+      try {
+        const res = await userStore.updateUserRole(selectedRoleUser.value.id, newRole);
+        toastStore.success(
+          (res && res.message) ||
+          t('message.admin_users.role_updated_success', {
+            name: selectedRoleUser.value.full_name,
+            role: newRole
+          }, `Updated role for ${selectedRoleUser.value.full_name} to ${newRole}`)
+        );
+        closeRoleModal(true);
+        forceSkeletonOnLoading.value = true;
+        await loadUsers(pagination.value.page);
+      } catch (err) {
+        const reason = (err && err.response && err.response.data && err.response.data.message) || err.message || t('message.errors.unknown_error');
+        toastStore.error(
+          t('message.admin_users.role_updated_failed', { reason }, `Failed to update role: ${reason}`)
+        );
+      } finally {
+        isChangingRole.value = false;
       }
     };
 
@@ -640,11 +766,12 @@ export default {
       error,
       loading,
       isAdmin,
+      isSuperAdmin,
       search,
       roleFilter,
       statusFilter,
       useServerFilter,
-      roleOptions: ['super_admin', 'admin', 'user'],
+      roleOptions,
       users,
       pagination,
       showDataSkeleton,
@@ -660,6 +787,7 @@ export default {
       formatStatus,
       roleBadgeClass,
       statusBadgeClass,
+      isCurrentUser,
       // CRUD
       showModal,
       modalMode,
@@ -670,6 +798,14 @@ export default {
       openEditModal,
       closeModal,
       handleSaveUser,
+      showRoleModal,
+      selectedRoleUser,
+      selectedRoleValue,
+      roleChangeOptions,
+      isChangingRole,
+      openRoleModal,
+      closeRoleModal,
+      submitRoleChange,
       // delete modal state & actions
       showConfirm,
       isDeleting,

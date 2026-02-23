@@ -1,5 +1,5 @@
 const { defineStore } = Pinia;
-import { apiClient, API_ENDPOINTS, DATA_PATHS } from '../api.js';
+import { apiClient, API_ENDPOINTS, DATA_PATHS, buildAdminUserRoleEndpoint } from '../api.js';
 import { useMainStore } from './mainStore.js';
 import { i18n } from '../i18n.js';
 
@@ -186,7 +186,16 @@ export const useUserStore = defineStore('users', {
       // Don't set global loading here
       this.error = null;
       try {
-        const response = await apiClient.put(`${API_ENDPOINTS.USERS}/${userId}/role`, { role });
+        const normalizedRole = String(role || '').trim().toLowerCase();
+        const allowedRoles = ['super_admin', 'admin', 'user'];
+
+        if (!allowedRoles.includes(normalizedRole)) {
+          throw new Error(`Invalid role: ${normalizedRole}`);
+        }
+
+        const response = await apiClient.put(buildAdminUserRoleEndpoint(userId), {
+          role: normalizedRole
+        });
         if (response.data.success) {
           // Do not fetch users here, let the component decide when to reload
           return { success: true, data: response.data.data, message: response.data.message };

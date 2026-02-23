@@ -149,6 +149,7 @@ export default {
       privacy_policy: '개인정보 보호정책',
       login_required: '로그인 필요',
       login_required_message: '프로필을 보려면 로그인하세요',
+      relogin_required_reason: '세션이 만료되었거나 유효하지 않습니다. 계속하려면 다시 로그인하세요.',
       password_min_length: '비밀번호는 최소 {min}자 이상이어야 합니다',
       logging_in: '로그인 중...',
       registering: '가입 중...',
@@ -306,20 +307,22 @@ export default {
     },
     admin_users: {
       badge: '계정 관리',
-      deleted_success: '사용자 {name} (ID: #{id})를 성공적으로 삭제했습니다',
+      models: {
+        user: '사용자'
+      },
+      deleted_success: '사용자 {name} (ID: #{id})가 성공적으로 삭제되었습니다',
       delete_failed_title: '삭제 실패',
-      delete_failed_detail: '사용자 삭제에 실패했습니다: {reason}',
+      delete_failed_detail: '사용자를 삭제할 수 없습니다: {reason}',
+      change_role: '역할 변경',
+      change_role_for: '{name}의 역할 변경',
+      invalid_role: '잘못된 역할입니다: {role}. 허용: {allowed}',
+      role_updated_success: '{name}의 역할을 {role}(으)로 변경했습니다',
+      role_updated_failed: '역할 변경에 실패했습니다: {reason}',
       create_user: '사용자 생성',
       edit_user: '사용자 편집',
       server_filtering: '서버 필터링',
       client_filtering: '클라이언트 필터링',
       title: '사용자 관리',
-        deleted_success: '사용자 {name} (ID: #{id})가 성공적으로 삭제되었습니다',
-        models: {
-          user: '사용자'
-        },
-        delete_failed_title: '삭제 실패',
-        delete_failed_detail: '사용자를 삭제할 수 없습니다: {reason}',
       list_title: '사용자 목록',
       subtitle: '계정, 역할, 상태를 관리합니다.',
       stats_total: '전체 사용자',

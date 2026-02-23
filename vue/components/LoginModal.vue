@@ -6,6 +6,7 @@
     icon="bi bi-box-arrow-in-right"
     icon-bg-class="bg-blue-100 dark:bg-blue-900/30"
     icon-color-class="text-blue-600 dark:text-blue-400"
+    z-index-class="z-[3000]"
     :close-on-click-outside="false"
     @close="handleClose"
   >
