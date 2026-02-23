@@ -1,0 +1,14 @@
+{
+	"success": true,
+	"data": {
+		"id": 2,
+		"full_name": "Test Regular User",
+		"email": "test-user@example.com",
+		"new_email": "test-user1@example.com",
+		"status": "active",
+		"created_at": "2026-02-20 09:25:46",
+		"role": "admin",
+		"emailVerificationPending": true
+	},
+	"message": "Profile updated. Please check your new email address test-user1@example.com to verify and complete the change."
+}
