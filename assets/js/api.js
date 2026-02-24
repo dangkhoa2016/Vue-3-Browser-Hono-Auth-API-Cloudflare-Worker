@@ -22,6 +22,7 @@ export const API_ENDPOINTS = {
   REFRESH_TOKEN: '/api/auth/refresh_token',
   REGISTER: '/api/user/register',
   PROFILE: '/api/user/profile',
+  CHANGE_PASSWORD: '/api/user/change-password',
   CLEAR_PENDING_EMAIL: '/api/user/pending-email',
   API_INFO: '/api',
   USERS: '/api/admin/users',
@@ -68,6 +69,7 @@ const MOCK_PATTERNS = {
   REFRESH_TOKEN: new RegExp(`${API_ENDPOINTS.REFRESH_TOKEN.replace(/\//g, '\\/')}($|\\?)`),
   REGISTER: new RegExp(`${API_ENDPOINTS.REGISTER.replace(/\//g, '\\/')}($|\\?)`),
   PROFILE: new RegExp(`${API_ENDPOINTS.PROFILE.replace(/\//g, '\\/')}($|\\?)`),
+  CHANGE_PASSWORD: new RegExp(`${API_ENDPOINTS.CHANGE_PASSWORD.replace(/\//g, '\\/')}($|\\?)`),
   CLEAR_PENDING_EMAIL: new RegExp(`${API_ENDPOINTS.CLEAR_PENDING_EMAIL.replace(/\//g, '\\/')}($|\\?)`),
   API_INFO: new RegExp(`${API_ENDPOINTS.API_INFO.replace(/\//g, '\\/')}($|\\?)`),
   USERS: new RegExp(`${API_ENDPOINTS.USERS.replace(/\//g, '\\/')}(?:\\/.*|\\?.*|)$`),
@@ -119,6 +121,9 @@ export const DATA_PATHS = {
   CREATE_USER_SUCCESS: '/assets/data/users/create/succeed/response.json',
   UPDATE_USER_SUCCESS: '/assets/data/users/update/succeed/response.json',
   CHANGE_USER_ROLE_SUCCESS: '/assets/data/users/change-role/succeed/response.json',
+  CHANGE_PASSWORD_FAIL: '/assets/data/users/change-password/fail/validate-1.json',
+  CHANGE_PASSWORD_INVALID_CURRENT: '/assets/data/users/change-password/fail/invalid-current-password.json',
+  CHANGE_PASSWORD_SUCCESS: '/assets/data/users/change-password/succeed/response.json',
   // Audit data
   AUDIT_LOGS_SUCCESS: '/assets/data/audit/logs/succeed/response.json',
   // Security incident data
@@ -650,6 +655,60 @@ export const setupMock = (enable) => {
           }];
         } catch (error) {
           console.error('[Mock API] Clear pending email handler error:', error);
+          const message = (error && error.message) || 'Internal server error';
+          return [500, { success: false, error: message }];
+        }
+      });
+
+      mock.onPut(MOCK_PATTERNS.CHANGE_PASSWORD).reply(async (config) => {
+        try {
+          const t = i18n.global.t;
+          const body = parseBody(config);
+          const currentPassword = String(body.currentPassword || '').trim();
+          const newPassword = String(body.newPassword || '').trim();
+          const confirmPassword = String(body.confirmPassword || '').trim();
+          const failPayload = await loadJson(DATA_PATHS.CHANGE_PASSWORD_FAIL);
+          const defaultValidationMessage = String(failPayload?.errors?.[0]?.message || '').trim();
+          const baseErrorText = String(failPayload?.error || '').trim();
+          const baseDetailsText = String(failPayload?.details || '').trim();
+          const buildValidationError = (field, message, code = 'invalid_type') => {
+            const errors = [{ field, message, code }];
+            const count = errors.length;
+            return {
+              ...failPayload,
+              success: false,
+              errors,
+              errorCount: count,
+              error: baseErrorText || t('message.errors.something_went_wrong'),
+              details: baseDetailsText || baseErrorText || t('message.errors.something_went_wrong')
+            };
+          };
+
+          if (!currentPassword || !newPassword || !confirmPassword) {
+            const missingField = !currentPassword
+              ? 'currentPassword'
+              : (!newPassword ? 'newPassword' : 'confirmPassword');
+            return [400, buildValidationError(missingField, t('message.profile.password_required_fields'), 'too_small')];
+          }
+
+          if (newPassword.length < 6) {
+            return [400, buildValidationError('newPassword', defaultValidationMessage || t('message.errors.something_went_wrong'), 'too_small')];
+          }
+
+          if (newPassword !== confirmPassword) {
+            return [400, buildValidationError('confirmPassword', t('message.auth.password_mismatch'), 'custom')];
+          }
+
+          if (currentPassword !== MOCK_CONFIG.TEST_PASSWORD) {
+            const invalidCurrentPayload = await loadJson(DATA_PATHS.CHANGE_PASSWORD_INVALID_CURRENT);
+            return [400, invalidCurrentPayload];
+          }
+
+          // Success: use succeed/response.json
+          const successPayload = await loadJson(DATA_PATHS.CHANGE_PASSWORD_SUCCESS);
+          return [200, successPayload];
+        } catch (error) {
+          console.error('[Mock API] Change password handler error:', error);
           const message = (error && error.message) || 'Internal server error';
           return [500, { success: false, error: message }];
         }

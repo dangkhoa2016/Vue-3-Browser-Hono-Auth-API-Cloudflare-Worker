@@ -255,6 +255,77 @@
               </div>
             </div>
           </div>
+
+          <div class="mt-8 pt-6 border-t border-slate-200 dark:border-slate-700">
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-4">
+              <h3 class="text-lg sm:text-xl font-bold text-gray-900 dark:text-slate-100 flex items-center gap-3">
+                <div class="w-9 h-9 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
+                  <i class="bi bi-key-fill text-amber-600 dark:text-amber-400 text-lg"></i>
+                </div>
+                {{ $t('message.profile.change_password') }}
+              </h3>
+              <button
+                v-if="!isChangingPassword"
+                @click="startChangingPassword"
+                :disabled="isEditing || isSavingProfile"
+                class="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-3 sm:px-4 py-2 bg-amber-600 hover:bg-amber-700 dark:bg-amber-500 dark:hover:bg-amber-600 text-white text-sm sm:text-base font-semibold rounded-lg transition disabled:opacity-60 disabled:cursor-not-allowed"
+              >
+                <i class="bi bi-shield-lock"></i>
+                {{ $t('message.profile.change_password_action') }}
+              </button>
+            </div>
+
+            <div v-if="isChangingPassword" class="space-y-4">
+              <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/90 dark:bg-slate-800/40">
+                <label class="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">{{ $t('message.profile.current_password') }}</label>
+                <input
+                  v-model="passwordForm.currentPassword"
+                  type="password"
+                  autocomplete="current-password"
+                  class="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-gray-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                />
+              </div>
+
+              <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/90 dark:bg-slate-800/40">
+                <label class="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">{{ $t('message.profile.new_password') }}</label>
+                <input
+                  v-model="passwordForm.newPassword"
+                  type="password"
+                  autocomplete="new-password"
+                  class="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-gray-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                />
+              </div>
+
+              <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/90 dark:bg-slate-800/40">
+                <label class="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">{{ $t('message.profile.confirm_password') }}</label>
+                <input
+                  v-model="passwordForm.confirmPassword"
+                  type="password"
+                  autocomplete="new-password"
+                  class="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-gray-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                />
+              </div>
+
+              <div class="flex flex-col sm:flex-row gap-2">
+                <button
+                  @click="cancelChangingPassword"
+                  :disabled="isSavingPassword"
+                  class="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-3 sm:px-4 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-gray-800 dark:text-slate-100 text-sm sm:text-base font-semibold rounded-lg transition disabled:opacity-60 disabled:cursor-not-allowed"
+                >
+                  <i class="bi bi-x-lg"></i>
+                  {{ $t('message.common.cancel') }}
+                </button>
+                <button
+                  @click="changePassword"
+                  :disabled="!canSubmitPassword"
+                  class="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-3 sm:px-4 py-2 bg-amber-600 hover:bg-amber-700 dark:bg-amber-500 dark:hover:bg-amber-600 text-white text-sm sm:text-base font-semibold rounded-lg transition disabled:opacity-60 disabled:cursor-not-allowed"
+                >
+                  <i class="bi" :class="isSavingPassword ? 'bi-hourglass-split' : 'bi-check-lg'"></i>
+                  {{ isSavingPassword ? $t('message.common.loading') : $t('message.profile.change_password_submit') }}
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- Stats Card -->
@@ -316,9 +387,16 @@ export default {
     const isEditing = ref(false);
     const isSavingProfile = ref(false);
     const isClearingPendingEmail = ref(false);
+    const isChangingPassword = ref(false);
+    const isSavingPassword = ref(false);
     const editForm = ref({
       full_name: '',
       email: ''
+    });
+    const passwordForm = ref({
+      currentPassword: '',
+      newPassword: '',
+      confirmPassword: ''
     });
     
     // Use Pinia stores
@@ -355,6 +433,18 @@ export default {
       return nextFullName !== currentFullName || nextEmail !== currentEmail;
     });
 
+    const canSubmitPassword = computed(() => {
+      if (!isChangingPassword.value || isSavingPassword.value) {
+        return false;
+      }
+
+      const currentPassword = normalizeText(passwordForm.value.currentPassword);
+      const newPassword = normalizeText(passwordForm.value.newPassword);
+      const confirmPassword = normalizeText(passwordForm.value.confirmPassword);
+
+      return Boolean(currentPassword && newPassword && confirmPassword);
+    });
+
     const startEditingProfile = () => {
       if (!profile.value) {
         return;
@@ -372,14 +462,69 @@ export default {
     const resetEditingState = () => {
       isEditing.value = false;
       isSavingProfile.value = false;
+      isChangingPassword.value = false;
+      isSavingPassword.value = false;
       editForm.value = {
         full_name: '',
         email: ''
       };
+      passwordForm.value = {
+        currentPassword: '',
+        newPassword: '',
+        confirmPassword: ''
+      };
+    };
+
+    const resetPasswordForm = () => {
+      passwordForm.value = {
+        currentPassword: '',
+        newPassword: '',
+        confirmPassword: ''
+      };
+    };
+
+    const startChangingPassword = () => {
+      isChangingPassword.value = true;
+      resetPasswordForm();
+      error.value = null;
+    };
+
+    const cancelChangingPassword = () => {
+      isChangingPassword.value = false;
+      isSavingPassword.value = false;
+      resetPasswordForm();
     };
 
     const extractErrorMessage = (err, fallbackMessage) => {
-      return err?.response?.data?.message || err?.response?.data?.error || err?.message || fallbackMessage;
+      const responseData = err?.response?.data;
+      const detailErrors = Array.isArray(responseData?.errors) ? responseData.errors : [];
+
+      // Handle invalid/malformed token error (401)
+      if (err?.response?.status === 401) {
+        return t('message.auth.relogin_required_reason');
+      }
+
+      if (detailErrors.length > 0) {
+        const detailMessage = detailErrors
+          .map((item) => {
+            const message = normalizeText(item?.message);
+            const field = normalizeText(item?.field);
+
+            if (!message) {
+              return '';
+            }
+
+            return field ? `${field}: ${message}` : message;
+          })
+          .filter(Boolean)
+          .join(' | ');
+
+        if (detailMessage) {
+          return detailMessage;
+        }
+      }
+
+      return responseData?.message || responseData?.error || err?.message || fallbackMessage;
     };
 
     const saveProfile = async () => {
@@ -491,6 +636,53 @@ export default {
       }
     };
 
+    const changePassword = async () => {
+      if (!canSubmitPassword.value) {
+        return;
+      }
+
+      const currentPassword = normalizeText(passwordForm.value.currentPassword);
+      const newPassword = normalizeText(passwordForm.value.newPassword);
+      const confirmPassword = normalizeText(passwordForm.value.confirmPassword);
+
+      if (newPassword !== confirmPassword) {
+        toastStore.error(t('message.auth.password_mismatch'));
+        return;
+      }
+
+      isSavingPassword.value = true;
+
+      try {
+        const response = await apiClient.put(API_ENDPOINTS.CHANGE_PASSWORD, {
+          currentPassword,
+          newPassword,
+          confirmPassword
+        }, {
+          headers: {
+            Authorization: `Bearer ${authStore.token}`
+          }
+        });
+
+        if (!response.data?.success) {
+          throw new Error(response.data?.error || t('message.errors.something_went_wrong'));
+        }
+
+        const serverMessage = response?.data?.message;
+        toastStore.success(serverMessage || t('message.profile.password_change_success'));
+        cancelChangingPassword();
+      } catch (err) {
+        const message = extractErrorMessage(err, t('message.profile.password_change_failed'));
+        toastStore.error(message);
+
+        if (err?.response?.status === 401) {
+          authStore.logout();
+          checkAuthAndShowModal();
+        }
+      } finally {
+        isSavingPassword.value = false;
+      }
+    };
+
     const openLoginModal = () => {
       modalStore.openLogin(
         // On success callback
@@ -527,7 +719,7 @@ export default {
       try {
         loadingProfile.value = true;
         error.value = null;
-        
+
         // Check authentication
         const isAuth = checkAuthAndShowModal();
         if (!isAuth) {
@@ -541,7 +733,7 @@ export default {
             'Authorization': `Bearer ${authStore.token}`
           }
         });
-        
+
         if (response.data.success) {
           profile.value = response.data.data;
           syncEditFormWithProfile();
@@ -550,14 +742,26 @@ export default {
           throw new Error(response.data.error || 'Failed to load profile');
         }
       } catch (err) {
-        error.value = err.response?.data?.error || err.message || 'Failed to load profile';
-        console.error('Failed to load profile:', err);
-        
-        // If unauthorized, show login
-        if (err.response?.status === 401) {
+        // Handle invalid/malformed token error (401)
+        if (
+          err?.response?.status === 401 &&
+          (
+            err?.response?.data?.error === 'Invalid or malformed authentication token' ||
+            err?.response?.data?.message === 'Invalid or malformed authentication token'
+          )
+        ) {
+          error.value = t('message.auth.relogin_required_reason', 'Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.');
           authStore.logout();
           checkAuthAndShowModal();
+        } else {
+          error.value = err.response?.data?.error || err.message || 'Failed to load profile';
+          // If unauthorized, show login
+          if (err.response?.status === 401) {
+            authStore.logout();
+            checkAuthAndShowModal();
+          }
         }
+        console.error('Failed to load profile:', err);
       } finally {
         loadingProfile.value = false;
       }
@@ -641,8 +845,12 @@ export default {
       isEditing,
       isSavingProfile,
       isClearingPendingEmail,
+      isChangingPassword,
+      isSavingPassword,
       editForm,
+      passwordForm,
       canSubmitProfile,
+      canSubmitPassword,
       formatDate,
       getRoleBadgeColor,
       getRoleIcon,
@@ -650,8 +858,11 @@ export default {
       loadProfile,
       startEditingProfile,
       cancelEditingProfile,
+      startChangingPassword,
+      cancelChangingPassword,
       saveProfile,
-      clearPendingEmail
+      clearPendingEmail,
+      changePassword
     };
   }
 }

@@ -1,0 +1,15 @@
+{
+	"success": false,
+	"error": "Validation error - Validation failed: 1 error",
+	"errors": [
+		{
+			"field": "newPassword",
+			"message": "Password must be at least 6 character long",
+			"code": "too_small"
+		}
+	],
+	"schemaName": "changePasswordSchema",
+	"validationTime": "3ms",
+	"errorCount": 1,
+	"details": "Validation failed: 1 error"
+}
