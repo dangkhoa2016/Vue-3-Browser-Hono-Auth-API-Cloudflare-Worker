@@ -1,0 +1,16 @@
+{
+  "success": true,
+  "data": {
+    "totalUsers": 31,
+    "activeUsers": 25,
+    "inactiveUsers": 4,
+    "suspendedUsers": 2,
+    "usersByRole": {
+      "admin": 4,
+      "super_admin": 4,
+      "user": 23
+    },
+    "recentRegistrations": 16
+  },
+  "message": "System statistics retrieved successfully"
+}

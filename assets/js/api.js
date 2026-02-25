@@ -26,6 +26,7 @@ export const API_ENDPOINTS = {
   CLEAR_PENDING_EMAIL: '/api/user/pending-email',
   API_INFO: '/api',
   USERS: '/api/admin/users',
+  ADMIN_STATS: '/api/admin/stats',
   ADMIN_SYSTEM_HEALTH: '/api/admin/system-health',
   ADMIN_USER_ROLE: '/api/admin/users/:id/role', // Helper for pattern matching
   KV_ADMIN_CONFIGS: '/api/kv-admin/configs',
@@ -74,6 +75,7 @@ const MOCK_PATTERNS = {
   CLEAR_PENDING_EMAIL: new RegExp(`${API_ENDPOINTS.CLEAR_PENDING_EMAIL.replace(/\//g, '\\/')}($|\\?)`),
   API_INFO: new RegExp(`${API_ENDPOINTS.API_INFO.replace(/\//g, '\\/')}($|\\?)`),
   USERS: new RegExp(`${API_ENDPOINTS.USERS.replace(/\//g, '\\/')}(?:\\/.*|\\?.*|)$`),
+  ADMIN_STATS: new RegExp(`${API_ENDPOINTS.ADMIN_STATS.replace(/\//g, '\\/')}($|\\?)`),
   ADMIN_SYSTEM_HEALTH: new RegExp(`${API_ENDPOINTS.ADMIN_SYSTEM_HEALTH.replace(/\//g, '\\/')}($|\\?)`),
   ADMIN_USER_ROLE: new RegExp(`${API_ENDPOINTS.USERS.replace(/\//g, '\\/')}\\/\\d+\\/role($|\\?)`),
 
@@ -120,6 +122,7 @@ export const DATA_PATHS = {
   PROFILE_UPDATE_SUCCESS: '/assets/data/profile/update/succeed/response.json',
   API_INFO: '/assets/data/profile/api.json',
   USERS_LIST: '/assets/data/users/list/succeed/super-admin+users.json',
+  ADMIN_STATS: '/assets/data/system-stats/succeed/response.json',
   ADMIN_SYSTEM_HEALTH: '/assets/data/system-health/succeed/response.json',
   CREATE_USER_SUCCESS: '/assets/data/users/create/succeed/response.json',
   UPDATE_USER_SUCCESS: '/assets/data/users/update/succeed/response.json',
@@ -129,6 +132,7 @@ export const DATA_PATHS = {
   CHANGE_PASSWORD_SUCCESS: '/assets/data/users/change-password/succeed/response.json',
   // Audit data
   AUDIT_LOGS_SUCCESS: '/assets/data/audit/logs/succeed/response.json',
+  AUDIT_STATS_SUCCESS: '/assets/data/audit/stats/succeed/response.json',
   // Security incident data
   SECURITY_INCIDENTS: '/assets/data/security-incident/succeed/response.json',
   // Realtime monitoring data
@@ -205,8 +209,15 @@ apiClient.interceptors.request.use(async (config) => {
           // Update Authorization header with new token
           config.headers['Authorization'] = `Bearer ${newToken}`;
         } else {
-          // If refresh failed, token will be null and user will be logged out
-          console.warn('[API] Token refresh failed, request will proceed without auth');
+          // Refresh failed: block request immediately to avoid repeated invalid-token calls
+          const message = i18n.global.t(
+            'message.auth.relogin_required_reason',
+            'Your session has expired or is invalid. Please login again to continue.'
+          );
+          const blockedError = new Error(message);
+          blockedError.code = 'REAUTH_REQUIRED';
+          blockedError.isAuthBlocked = true;
+          return Promise.reject(blockedError);
         }
       } else if (authStore.token) {
         // Use existing valid token
@@ -399,6 +410,45 @@ export const setupMock = (enable) => {
           alertsHistoryData: payload.alertsHistory || { alerts: [], pagination: { page: 1, limit: 20, total: 0, totalPages: 1 } },
           timelineData: payload.timeline || { points: [] },
           healthData: payload.health || { status: 'healthy' }
+        };
+      };
+
+      const normalizeAuditStatsResponse = (raw) => {
+        const base = raw && typeof raw === 'object' ? raw : {};
+        const data = base && typeof base.data === 'object' ? base.data : {};
+        const basicStatsRaw = data && typeof data.basic_stats === 'object' ? data.basic_stats : {};
+        const recentActivityRaw = data && typeof data.recent_activity === 'object' ? data.recent_activity : {};
+        const actionStatsRaw = Array.isArray(data.action_stats) ? data.action_stats : [];
+
+        const actionStats = actionStatsRaw
+          .map((item) => ({
+            action: String(item?.action || '').trim(),
+            count: Number(item?.count) || 0
+          }))
+          .filter((item) => item.action)
+          .sort((first, second) => second.count - first.count);
+
+        return {
+          ...base,
+          success: typeof base.success === 'boolean' ? base.success : true,
+          data: {
+            ...data,
+            basic_stats: {
+              total_events: Number(basicStatsRaw.total_events) || 0,
+              successful_events: Number(basicStatsRaw.successful_events) || 0,
+              failed_events: Number(basicStatsRaw.failed_events) || 0,
+              error_events: Number(basicStatsRaw.error_events) || 0,
+              security_events: Number(basicStatsRaw.security_events) || 0
+            },
+            action_stats: actionStats,
+            recent_activity: {
+              events_24h: Number(recentActivityRaw.events_24h) || 0,
+              login_events_24h: Number(recentActivityRaw.login_events_24h) || 0,
+              admin_events_24h: Number(recentActivityRaw.admin_events_24h) || 0,
+              kv_events_24h: Number(recentActivityRaw.kv_events_24h) || 0
+            },
+            filtered_for_role: String(data.filtered_for_role || 'admin')
+          }
         };
       };
 
@@ -846,6 +896,18 @@ export const setupMock = (enable) => {
           return [500, { success: false, error: message }];
         }
       });
+
+      // Admin: system stats
+      mock.onGet(MOCK_PATTERNS.ADMIN_STATS).reply(async () => {
+        try {
+          const data = await loadJson(DATA_PATHS.ADMIN_STATS);
+          return [200, data];
+        } catch (error) {
+          console.error('[Mock API] Admin system stats handler error:', error);
+          const message = (error && error.message) || 'Internal server error';
+          return [500, { success: false, error: message }];
+        }
+      });
       
       // Audit: logs
       mock.onGet(MOCK_PATTERNS.AUDIT_LOGS).reply(async (config) => {
@@ -865,6 +927,18 @@ export const setupMock = (enable) => {
           return [200, data];
         } catch (error) {
           console.error('[Mock API] Audit logs handler error:', error);
+          const message = (error && error.message) || 'Internal server error';
+          return [500, { success: false, error: message }];
+        }
+      });
+
+      // Audit: stats
+      mock.onGet(MOCK_PATTERNS.AUDIT_STATS).reply(async () => {
+        try {
+          const data = await loadJson(DATA_PATHS.AUDIT_STATS_SUCCESS);
+          return [200, normalizeAuditStatsResponse(data)];
+        } catch (error) {
+          console.error('[Mock API] Audit stats handler error:', error);
           const message = (error && error.message) || 'Internal server error';
           return [500, { success: false, error: message }];
         }

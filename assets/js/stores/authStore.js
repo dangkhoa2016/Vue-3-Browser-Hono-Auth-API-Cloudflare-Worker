@@ -152,9 +152,9 @@ export const useAuthStore = defineStore('auth', {
       } catch (error) {
         console.error('[AuthStore] Token refresh error:', error);
         
-        // If refresh fails with 401 or 403, the refresh token is invalid
-        if (error.response && (error.response.status === 401 || error.response.status === 403)) {
-          console.log('[AuthStore] Refresh token invalid, logout required');
+        // Any client error from refresh endpoint means refresh token/request is invalid
+        if (error.response && error.response.status >= 400 && error.response.status < 500) {
+          console.log('[AuthStore] Refresh token rejected by server, reauthentication required');
           await this.requireReauthentication();
         }
         
