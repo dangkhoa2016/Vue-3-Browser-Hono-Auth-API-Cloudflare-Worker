@@ -1,0 +1,172 @@
+{
+  "success": true,
+  "data": {
+    "status": "healthy",
+    "timestamp": "2026-02-25T14:46:40.143Z",
+    "responseTime": "127ms",
+    "environment": "test",
+    "database": {
+      "isConnected": true,
+      "info": {
+        "version": "unknown",
+        "tables": [
+          "d1_migrations",
+          "_cf_METADATA",
+          "users",
+          "failed_login_limits",
+          "audit_logs",
+          "audit_logs_archive",
+          "security_incidents",
+          "incident_timeline",
+          "incident_response_actions",
+          "threat_detections",
+          "alert_history",
+          "monitoring_sessions",
+          "system_performance_metrics",
+          "migration_log",
+          "refresh_tokens",
+          "rate_limit_counters",
+          "token_blacklist",
+          "token_audit_logs"
+        ],
+        "tableCount": 18
+      },
+      "metrics": {
+        "performance": {
+          "queryResponseTime": "7ms",
+          "isResponsive": true,
+          "testQuerySuccess": true
+        },
+        "database": {
+          "tables": [
+            {
+              "table_name": "d1_migrations",
+              "index_count": 1
+            },
+            {
+              "table_name": "_cf_METADATA",
+              "index_count": 0
+            },
+            {
+              "table_name": "users",
+              "index_count": 5
+            },
+            {
+              "table_name": "failed_login_limits",
+              "index_count": 1
+            },
+            {
+              "table_name": "audit_logs",
+              "index_count": 18
+            },
+            {
+              "table_name": "audit_logs_archive",
+              "index_count": 13
+            },
+            {
+              "table_name": "security_incidents",
+              "index_count": 9
+            },
+            {
+              "table_name": "incident_timeline",
+              "index_count": 4
+            },
+            {
+              "table_name": "incident_response_actions",
+              "index_count": 5
+            },
+            {
+              "table_name": "threat_detections",
+              "index_count": 9
+            },
+            {
+              "table_name": "alert_history",
+              "index_count": 7
+            },
+            {
+              "table_name": "monitoring_sessions",
+              "index_count": 4
+            },
+            {
+              "table_name": "system_performance_metrics",
+              "index_count": 4
+            },
+            {
+              "table_name": "migration_log",
+              "index_count": 1
+            },
+            {
+              "table_name": "refresh_tokens",
+              "index_count": 4
+            },
+            {
+              "table_name": "rate_limit_counters",
+              "index_count": 3
+            },
+            {
+              "table_name": "token_blacklist",
+              "index_count": 4
+            },
+            {
+              "table_name": "token_audit_logs",
+              "index_count": 2
+            }
+          ],
+          "totalTables": 18,
+          "totalIndexes": 94
+        },
+        "users": {
+          "totalRecords": 31,
+          "activeUsers": 25,
+          "recentUsers24h": 0,
+          "recentActivity1h": 0
+        },
+        "security": {
+          "totalFailedAttempts": 0,
+          "recentFailures": 0,
+          "uniqueIpsWithFailures": 0
+        }
+      }
+    },
+    "system": {
+      "statistics": {
+        "totalUsers": 31,
+        "activeUsers": 25,
+        "inactiveUsers": 4,
+        "suspendedUsers": 2,
+        "usersByRole": {
+          "admin": 4,
+          "super_admin": 4,
+          "user": 23
+        },
+        "recentRegistrations": 16
+      },
+      "performance": {
+        "responseTime": "127ms",
+        "databaseResponseTime": "7ms",
+        "isPerformant": true,
+        "performanceGrade": "excellent"
+      },
+      "security": {
+        "recentFailedLogins": 0,
+        "totalFailedAttempts": 0,
+        "uniqueIpsWithFailures": 0,
+        "riskLevel": "low"
+      }
+    },
+    "healthChecks": {
+      "database": "pass",
+      "performance": "pass",
+      "security": "pass"
+    },
+    "metadata": {
+      "checkedBy": {
+        "userId": 1,
+        "role": "super_admin"
+      },
+      "accessLevel": "full",
+      "canViewSuperAdminData": true
+    }
+  },
+  "message": "System health check complete: HEALTHY - Response time: 127ms, Performance: excellent, Security risk: low (0 failed logins in last hour). Checked by Test Super Admin User (Super Administrator) Checked at 2/25/2026, 2:46:40 PM"
+}
