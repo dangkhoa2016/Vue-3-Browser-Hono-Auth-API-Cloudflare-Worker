@@ -205,6 +205,12 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
+    path: '/admin/system-health',
+    name: 'AdminSystemHealth',
+    component: load('/vue/pages/AdminSystemHealth.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
     path: '/admin/kv',
     name: 'KvAdminConfigs',
     component: load('/vue/pages/KvAdminConfigs.vue'),

@@ -26,6 +26,7 @@ export const API_ENDPOINTS = {
   CLEAR_PENDING_EMAIL: '/api/user/pending-email',
   API_INFO: '/api',
   USERS: '/api/admin/users',
+  ADMIN_SYSTEM_HEALTH: '/api/admin/system-health',
   ADMIN_USER_ROLE: '/api/admin/users/:id/role', // Helper for pattern matching
   KV_ADMIN_CONFIGS: '/api/kv-admin/configs',
   KV_ADMIN_CONFIGS_SPECIFIC: '/api/kv-admin/configs/:key',
@@ -73,6 +74,7 @@ const MOCK_PATTERNS = {
   CLEAR_PENDING_EMAIL: new RegExp(`${API_ENDPOINTS.CLEAR_PENDING_EMAIL.replace(/\//g, '\\/')}($|\\?)`),
   API_INFO: new RegExp(`${API_ENDPOINTS.API_INFO.replace(/\//g, '\\/')}($|\\?)`),
   USERS: new RegExp(`${API_ENDPOINTS.USERS.replace(/\//g, '\\/')}(?:\\/.*|\\?.*|)$`),
+  ADMIN_SYSTEM_HEALTH: new RegExp(`${API_ENDPOINTS.ADMIN_SYSTEM_HEALTH.replace(/\//g, '\\/')}($|\\?)`),
   ADMIN_USER_ROLE: new RegExp(`${API_ENDPOINTS.USERS.replace(/\//g, '\\/')}\\/\\d+\\/role($|\\?)`),
 
   // Audit patterns
@@ -118,6 +120,7 @@ export const DATA_PATHS = {
   PROFILE_UPDATE_SUCCESS: '/assets/data/profile/update/succeed/response.json',
   API_INFO: '/assets/data/profile/api.json',
   USERS_LIST: '/assets/data/users/list/succeed/super-admin+users.json',
+  ADMIN_SYSTEM_HEALTH: '/assets/data/system-health/succeed/response.json',
   CREATE_USER_SUCCESS: '/assets/data/users/create/succeed/response.json',
   UPDATE_USER_SUCCESS: '/assets/data/users/update/succeed/response.json',
   CHANGE_USER_ROLE_SUCCESS: '/assets/data/users/change-role/succeed/response.json',
@@ -827,6 +830,18 @@ export const setupMock = (enable) => {
           return [200, { success: true, message }];
         } catch (error) {
           console.error('[Mock API] Delete user handler error:', error);
+          const message = (error && error.message) || 'Internal server error';
+          return [500, { success: false, error: message }];
+        }
+      });
+
+      // Admin: system health
+      mock.onGet(MOCK_PATTERNS.ADMIN_SYSTEM_HEALTH).reply(async () => {
+        try {
+          const data = await loadJson(DATA_PATHS.ADMIN_SYSTEM_HEALTH);
+          return [200, data];
+        } catch (error) {
+          console.error('[Mock API] Admin system health handler error:', error);
           const message = (error && error.message) || 'Internal server error';
           return [500, { success: false, error: message }];
         }
