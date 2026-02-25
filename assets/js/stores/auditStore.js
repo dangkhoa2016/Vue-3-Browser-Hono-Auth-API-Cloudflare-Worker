@@ -6,6 +6,7 @@ import { i18n } from '../i18n.js';
 export const useAuditStore = defineStore('audit', {
   state: () => ({
     logs: [],
+    stats: null,
     loading: false,
     pagination: { page: 1, limit: 20, total: 0, totalPages: 1 },
     filters: { search: '', action: '', actorId: '', targetType: '', actorRole: '', startDate: '', endDate: '', page: 1, limit: 20 },
@@ -127,21 +128,13 @@ export const useAuditStore = defineStore('audit', {
       }
     },
 
-    async fetchStats(timeRange = '7d') {
+    async fetchStats(timeRange) {
       try {
-        const mainStore = useMainStore();
-        if (mainStore.mockApi) {
-          this.stats = {
-            total: this.pagination.total || this.logs.length || 0,
-            success: this.logs.filter(l => (l.status || '').toUpperCase() === 'SUCCESS').length,
-            failed: this.logs.filter(l => ['FAILED', 'UNAUTHORIZED'].includes((l.status || '').toUpperCase())).length
-          };
-          return this.stats;
-        }
-
-        const res = await apiClient.get(API_ENDPOINTS.AUDIT_STATS, { params: { timeRange } });
+        const safeTimeRange = String(timeRange || '7d').trim() || '7d';
+        const res = await apiClient.get(API_ENDPOINTS.AUDIT_STATS, { params: { timeRange: safeTimeRange } });
         if (res && res.data) {
-          this.stats = res.data.data || res.data;
+          const payload = res.data.data || res.data;
+          this.stats = payload;
           return this.stats;
         }
       } catch (err) {

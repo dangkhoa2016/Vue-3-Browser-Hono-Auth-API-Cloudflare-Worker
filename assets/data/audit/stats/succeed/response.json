@@ -1,0 +1,62 @@
+{
+  "success": true,
+  "data": {
+    "basic_stats": {
+      "total_events": 1395,
+      "successful_events": 947,
+      "failed_events": 224,
+      "error_events": 21,
+      "security_events": 1
+    },
+    "action_stats": [
+      {
+        "action": "view",
+        "count": 709
+      },
+      {
+        "action": "create",
+        "count": 343
+      },
+      {
+        "action": "login",
+        "count": 184
+      },
+      {
+        "action": "update",
+        "count": 65
+      },
+      {
+        "action": "register",
+        "count": 20
+      },
+      {
+        "action": "delete",
+        "count": 14
+      },
+      {
+        "action": "API_KEY_CREATE",
+        "count": 9
+      },
+      {
+        "action": "USER_CREATE",
+        "count": 7
+      },
+      {
+        "action": "API_KEY_REVOKE",
+        "count": 6
+      },
+      {
+        "action": "EXPORT_DATA",
+        "count": 6
+      }
+    ],
+    "recent_activity": {
+      "events_24h": 36,
+      "login_events_24h": 0,
+      "admin_events_24h": 0,
+      "kv_events_24h": 0
+    },
+    "filtered_for_role": "super_admin"
+  },
+  "message": "Audit statistics retrieved successfully"
+}
