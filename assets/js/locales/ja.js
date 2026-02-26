@@ -597,6 +597,26 @@ export default {
       audit_scope_hint_full: 'フル範囲: super_admin の活動を含む、すべての監査イベントを含みます。',
       audit_scope_hint_limited: '制限付き範囲: この統計から super_admin の活動は除外されています。'
     },
+    admin_dashboard_page: {
+      badge: 'コマンドセンター',
+      subtitle: 'ユーザー活動、システムヘルス、セキュリティ、監視を一画面で確認します。',
+      login_required_message: '管理ダッシュボードにアクセスするには管理者アカウントでログインしてください。',
+      access_denied_title: 'アクセス拒否',
+      access_denied_message: 'このダッシュボードは admin と super_admin のみ利用できます。',
+      last_updated: '最終更新',
+      health_status: 'ヘルス状態',
+      active_incidents: '対応中インシデント',
+      monitoring: '監視',
+      monitoring_active: '監視中',
+      monitoring_inactive: '監視停止中',
+      service_status_title: 'サービス状態',
+      response_time: '応答時間',
+      total_audit_logs: '監査ログ合計',
+      active_threats: 'アクティブ脅威',
+      active_alerts: 'アクティブアラート',
+      quick_actions: 'クイックアクション',
+      open_page: 'ページを開く'
+    },
     refresh: '更新',
     prev: '前へ',
     next: '次へ'

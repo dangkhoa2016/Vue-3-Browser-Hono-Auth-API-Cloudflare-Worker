@@ -181,6 +181,12 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
+    path: '/admin/dashboard',
+    name: 'AdminDashboard',
+    component: load('/vue/pages/AdminDashboard.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
     path: '/admin/users',
     name: 'AdminUsers',
     component: load('/vue/pages/AdminUsers.vue'),
