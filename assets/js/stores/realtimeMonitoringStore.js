@@ -25,6 +25,7 @@ export const useRealtimeMonitoringStore = defineStore('realtimeMonitoring', {
     health: null,
     latestAnalysis: null,
     latestSimulation: null,
+    statusRequestedOnce: false,
     loading: false,
     actionLoading: false,
     error: null,
