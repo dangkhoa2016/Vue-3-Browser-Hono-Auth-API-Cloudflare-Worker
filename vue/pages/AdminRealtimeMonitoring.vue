@@ -14,48 +14,6 @@
     </div>
 
     <template v-else>
-      <template v-if="loading">
-        <section class="rounded-[32px] border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-8 animate-pulse">
-          <div class="space-y-4">
-            <div class="h-4 w-44 rounded bg-slate-200 dark:bg-slate-700"></div>
-            <div class="h-10 w-80 max-w-full rounded bg-slate-200 dark:bg-slate-700"></div>
-            <div class="h-4 w-full max-w-2xl rounded bg-slate-200 dark:bg-slate-700"></div>
-            <div class="h-4 w-72 rounded bg-slate-200 dark:bg-slate-700"></div>
-          </div>
-
-          <div class="mt-8 grid grid-cols-2 lg:grid-cols-4 gap-4">
-            <div v-for="item in 4" :key="`skeleton-top-card-${item}`" class="rounded-2xl border border-slate-200/70 dark:border-slate-800 p-5">
-              <div class="h-3 w-20 rounded bg-slate-200 dark:bg-slate-700"></div>
-              <div class="mt-4 h-8 w-16 rounded bg-slate-200 dark:bg-slate-700"></div>
-            </div>
-          </div>
-        </section>
-
-        <section class="grid gap-6 lg:grid-cols-3 animate-pulse">
-          <div class="lg:col-span-2 rounded-[24px] border border-slate-200/70 dark:border-slate-800 bg-white/85 dark:bg-slate-900/80 p-6">
-            <div class="h-5 w-44 rounded bg-slate-200 dark:bg-slate-700 mb-4"></div>
-            <div class="space-y-3">
-              <div v-for="item in 3" :key="`skeleton-actions-${item}`" class="h-14 rounded-xl bg-slate-200 dark:bg-slate-700"></div>
-            </div>
-          </div>
-
-          <div class="rounded-[24px] border border-slate-200/70 dark:border-slate-800 bg-white/85 dark:bg-slate-900/80 p-6 space-y-3">
-            <div class="h-5 w-36 rounded bg-slate-200 dark:bg-slate-700"></div>
-            <div v-for="item in 3" :key="`skeleton-summary-${item}`" class="h-16 rounded-xl bg-slate-200 dark:bg-slate-700"></div>
-          </div>
-        </section>
-
-        <section class="grid gap-6 lg:grid-cols-2 animate-pulse">
-          <div v-for="item in 2" :key="`skeleton-table-${item}`" class="rounded-[24px] border border-slate-200/70 dark:border-slate-800 bg-white/85 dark:bg-slate-900/80 p-6">
-            <div class="h-5 w-40 rounded bg-slate-200 dark:bg-slate-700 mb-4"></div>
-            <div class="space-y-2">
-              <div v-for="row in 5" :key="`skeleton-table-row-${item}-${row}`" class="h-10 rounded bg-slate-200 dark:bg-slate-700"></div>
-            </div>
-          </div>
-        </section>
-      </template>
-
-      <template v-else>
       <section class="relative overflow-hidden rounded-[32px] border border-slate-200/70 dark:border-slate-800 bg-gradient-to-br from-white via-violet-50/40 to-cyan-50/40 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 p-8 shadow-[0_24px_80px_-60px_rgba(15,23,42,0.8)]">
         <div class="absolute -top-24 -right-24 w-72 h-72 bg-violet-500/10 rounded-full blur-3xl"></div>
         <div class="absolute -bottom-24 -left-24 w-72 h-72 bg-cyan-500/10 rounded-full blur-3xl"></div>
@@ -134,37 +92,70 @@
           </div>
 
           <div class="grid grid-cols-2 gap-4">
-            <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm">
-              <p class="text-xs uppercase tracking-[0.3em] text-slate-500">Today</p>
-              <div class="mt-3 flex items-center justify-between">
-                <span class="text-2xl font-black text-cyan-600 dark:text-cyan-400">{{ overviewTotals.today }}</span>
-                <i class="bi bi-activity text-xl text-cyan-500"></i>
+            <template v-if="loading">
+              <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm animate-pulse">
+                <div class="h-3 w-20 rounded bg-slate-200 dark:bg-slate-700"></div>
+                <div class="mt-3 flex items-center justify-between">
+                  <div class="h-8 w-16 rounded bg-slate-200 dark:bg-slate-700"></div>
+                  <div class="h-8 w-8 rounded-full bg-slate-200 dark:bg-slate-700"></div>
+                </div>
               </div>
-            </div>
+              <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm animate-pulse">
+                <div class="h-3 w-20 rounded bg-slate-200 dark:bg-slate-700"></div>
+                <div class="mt-3 flex items-center justify-between">
+                  <div class="h-8 w-16 rounded bg-slate-200 dark:bg-slate-700"></div>
+                  <div class="h-8 w-8 rounded-full bg-slate-200 dark:bg-slate-700"></div>
+                </div>
+              </div>
+              <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm animate-pulse">
+                <div class="h-3 w-20 rounded bg-slate-200 dark:bg-slate-700"></div>
+                <div class="mt-3 flex items-center justify-between">
+                  <div class="h-8 w-16 rounded bg-slate-200 dark:bg-slate-700"></div>
+                  <div class="h-8 w-8 rounded-full bg-slate-200 dark:bg-slate-700"></div>
+                </div>
+              </div>
+              <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm animate-pulse">
+                <div class="h-3 w-20 rounded bg-slate-200 dark:bg-slate-700"></div>
+                <div class="mt-3 flex items-center justify-between">
+                  <div class="h-8 w-16 rounded bg-slate-200 dark:bg-slate-700"></div>
+                  <div class="h-8 w-8 rounded-full bg-slate-200 dark:bg-slate-700"></div>
+                </div>
+              </div>
+            </template>
 
-            <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm">
-              <p class="text-xs uppercase tracking-[0.3em] text-slate-500">All Time</p>
-              <div class="mt-3 flex items-center justify-between">
-                <span class="text-2xl font-black text-violet-600 dark:text-violet-400">{{ overviewTotals.allTime }}</span>
-                <i class="bi bi-database text-xl text-violet-500"></i>
+            <template v-else>
+              <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm">
+                <p class="text-xs uppercase tracking-[0.3em] text-slate-500">Today</p>
+                <div class="mt-3 flex items-center justify-between">
+                  <span class="text-2xl font-black text-cyan-600 dark:text-cyan-400">{{ overviewTotals.today }}</span>
+                  <i class="bi bi-activity text-xl text-cyan-500"></i>
+                </div>
               </div>
-            </div>
 
-            <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm">
-              <p class="text-xs uppercase tracking-[0.3em] text-slate-500">Failed Today</p>
-              <div class="mt-3 flex items-center justify-between">
-                <span class="text-2xl font-black text-rose-600 dark:text-rose-400">{{ overviewTotals.failedActionsToday }}</span>
-                <i class="bi bi-exclamation-triangle text-xl text-rose-500"></i>
+              <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm">
+                <p class="text-xs uppercase tracking-[0.3em] text-slate-500">All Time</p>
+                <div class="mt-3 flex items-center justify-between">
+                  <span class="text-2xl font-black text-violet-600 dark:text-violet-400">{{ overviewTotals.allTime }}</span>
+                  <i class="bi bi-database text-xl text-violet-500"></i>
+                </div>
               </div>
-            </div>
 
-            <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm">
-              <p class="text-xs uppercase tracking-[0.3em] text-slate-500">Risk Score</p>
-              <div class="mt-3 flex items-center justify-between">
-                <span class="text-2xl font-black text-amber-600 dark:text-amber-400">{{ riskScore }}</span>
-                <i class="bi bi-shield-lock text-xl text-amber-500"></i>
+              <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm">
+                <p class="text-xs uppercase tracking-[0.3em] text-slate-500">Failed Today</p>
+                <div class="mt-3 flex items-center justify-between">
+                  <span class="text-2xl font-black text-rose-600 dark:text-rose-400">{{ overviewTotals.failedActionsToday }}</span>
+                  <i class="bi bi-exclamation-triangle text-xl text-rose-500"></i>
+                </div>
               </div>
-            </div>
+
+              <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm">
+                <p class="text-xs uppercase tracking-[0.3em] text-slate-500">Risk Score</p>
+                <div class="mt-3 flex items-center justify-between">
+                  <span class="text-2xl font-black text-amber-600 dark:text-amber-400">{{ riskScore }}</span>
+                  <i class="bi bi-shield-lock text-xl text-amber-500"></i>
+                </div>
+              </div>
+            </template>
           </div>
         </div>
       </section>
@@ -176,6 +167,41 @@
         </div>
       </section>
 
+      <template v-if="loading">
+        <section class="grid gap-6 lg:grid-cols-3 animate-pulse">
+          <div class="lg:col-span-2 rounded-[24px] border border-slate-200/70 dark:border-slate-800 bg-white/85 dark:bg-slate-900/80 p-6">
+            <div class="h-5 w-44 rounded bg-slate-200 dark:bg-slate-700 mb-4"></div>
+            <div class="space-y-3">
+              <div v-for="item in 3" :key="`skeleton-actions-${item}`" class="h-14 rounded-xl bg-slate-200 dark:bg-slate-700"></div>
+            </div>
+          </div>
+
+          <div class="rounded-[24px] border border-slate-200/70 dark:border-slate-800 bg-white/85 dark:bg-slate-900/80 p-6 space-y-3">
+            <div class="h-5 w-36 rounded bg-slate-200 dark:bg-slate-700"></div>
+            <div v-for="item in 3" :key="`skeleton-summary-${item}`" class="h-16 rounded-xl bg-slate-200 dark:bg-slate-700"></div>
+          </div>
+        </section>
+
+        <section class="grid gap-6 lg:grid-cols-2 animate-pulse">
+          <div v-for="item in 2" :key="`skeleton-table-top-${item}`" class="rounded-[24px] border border-slate-200/70 dark:border-slate-800 bg-white/85 dark:bg-slate-900/80 p-6">
+            <div class="h-5 w-40 rounded bg-slate-200 dark:bg-slate-700 mb-4"></div>
+            <div class="space-y-2">
+              <div v-for="row in 5" :key="`skeleton-table-top-row-${item}-${row}`" class="h-10 rounded bg-slate-200 dark:bg-slate-700"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="grid gap-6 lg:grid-cols-2 animate-pulse">
+          <div v-for="item in 2" :key="`skeleton-table-bottom-${item}`" class="rounded-[24px] border border-slate-200/70 dark:border-slate-800 bg-white/85 dark:bg-slate-900/80 p-6">
+            <div class="h-5 w-40 rounded bg-slate-200 dark:bg-slate-700 mb-4"></div>
+            <div class="space-y-2">
+              <div v-for="row in 5" :key="`skeleton-table-bottom-row-${item}-${row}`" class="h-10 rounded bg-slate-200 dark:bg-slate-700"></div>
+            </div>
+          </div>
+        </section>
+      </template>
+
+      <template v-else>
       <section class="grid gap-6 lg:grid-cols-3">
         <div class="lg:col-span-2 rounded-[24px] border border-slate-200/70 dark:border-slate-800 bg-white/85 dark:bg-slate-900/80 p-6 shadow-[0_18px_50px_-40px_rgba(15,23,42,0.7)]">
           <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-4">Top Actions Today</h3>
@@ -430,19 +456,21 @@ export default {
 
     const refresh = async () => {
       if (!isAuthenticated.value) return;
+      await monitoringStore.refreshSnapshot();
+    };
+
+    const ensureMonitoringStatusLoadedOnce = async () => {
+      if (monitoringStore.statusRequestedOnce) return;
+      monitoringStore.statusRequestedOnce = true;
       try {
         await monitoringStore.fetchMonitoringStatus();
       } catch (_error) {
       }
-      await monitoringStore.refreshSnapshot();
     };
 
     const loadInitialMonitoringData = async () => {
       if (!isAuthenticated.value) return;
-      try {
-        await monitoringStore.fetchMonitoringStatus();
-      } catch (_error) {
-      }
+      await ensureMonitoringStatusLoadedOnce();
       await monitoringStore.refreshSnapshot();
     };
 
@@ -494,6 +522,7 @@ export default {
 
       // Re-run initial load when switching from mock -> real fetch
       if (oldValue === true && value === false) {
+        monitoringStore.statusRequestedOnce = false;
         await loadInitialMonitoringData();
         return;
       }

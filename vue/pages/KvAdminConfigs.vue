@@ -48,29 +48,57 @@
             </div>
           </div>
           <div class="grid gap-4">
-            <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm">
-              <p class="text-xs uppercase tracking-[0.3em] text-slate-500">{{ $t('message.kv_admin_page.stats_total') }}</p>
-              <div class="mt-3 flex items-center justify-between">
-                <span class="text-3xl font-black text-slate-900 dark:text-white">{{ stats.total }}</span>
-                <i class="bi bi-hdd-network text-2xl text-amber-500"></i>
-              </div>
-            </div>
-            <div class="grid grid-cols-2 gap-4">
-              <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm">
-                <p class="text-xs uppercase tracking-[0.3em] text-slate-500">{{ $t('message.kv_admin_page.stats_overrides') }}</p>
+            <template v-if="loading">
+              <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm animate-pulse">
+                <div class="h-3 w-24 rounded bg-slate-200 dark:bg-slate-700/50"></div>
                 <div class="mt-3 flex items-center justify-between">
-                  <span class="text-2xl font-black text-slate-900 dark:text-white">{{ stats.overrides }}</span>
-                  <i class="bi bi-toggle-on text-xl text-emerald-500"></i>
+                  <div class="h-8 w-16 rounded bg-slate-200 dark:bg-slate-700/50"></div>
+                  <div class="h-8 w-8 rounded-full bg-slate-200 dark:bg-slate-700/50"></div>
                 </div>
               </div>
-              <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm">
-                <p class="text-xs uppercase tracking-[0.3em] text-slate-500">{{ $t('message.kv_admin_page.stats_allowed') }}</p>
-                <div class="mt-3 flex items-center justify-between">
-                  <span class="text-2xl font-black text-slate-900 dark:text-white">{{ stats.allowed }}</span>
-                  <i class="bi bi-shield-check text-xl text-teal-500"></i>
+              <div class="grid grid-cols-2 gap-4">
+                <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm animate-pulse">
+                  <div class="h-3 w-24 rounded bg-slate-200 dark:bg-slate-700/50"></div>
+                  <div class="mt-3 flex items-center justify-between">
+                    <div class="h-7 w-14 rounded bg-slate-200 dark:bg-slate-700/50"></div>
+                    <div class="h-7 w-7 rounded-full bg-slate-200 dark:bg-slate-700/50"></div>
+                  </div>
+                </div>
+                <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm animate-pulse">
+                  <div class="h-3 w-24 rounded bg-slate-200 dark:bg-slate-700/50"></div>
+                  <div class="mt-3 flex items-center justify-between">
+                    <div class="h-7 w-14 rounded bg-slate-200 dark:bg-slate-700/50"></div>
+                    <div class="h-7 w-7 rounded-full bg-slate-200 dark:bg-slate-700/50"></div>
+                  </div>
                 </div>
               </div>
-            </div>
+            </template>
+
+            <template v-else>
+              <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm">
+                <p class="text-xs uppercase tracking-[0.3em] text-slate-500">{{ $t('message.kv_admin_page.stats_total') }}</p>
+                <div class="mt-3 flex items-center justify-between">
+                  <span class="text-3xl font-black text-slate-900 dark:text-white">{{ stats.total }}</span>
+                  <i class="bi bi-hdd-network text-2xl text-amber-500"></i>
+                </div>
+              </div>
+              <div class="grid grid-cols-2 gap-4">
+                <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm">
+                  <p class="text-xs uppercase tracking-[0.3em] text-slate-500">{{ $t('message.kv_admin_page.stats_overrides') }}</p>
+                  <div class="mt-3 flex items-center justify-between">
+                    <span class="text-2xl font-black text-slate-900 dark:text-white">{{ stats.overrides }}</span>
+                    <i class="bi bi-toggle-on text-xl text-emerald-500"></i>
+                  </div>
+                </div>
+                <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm">
+                  <p class="text-xs uppercase tracking-[0.3em] text-slate-500">{{ $t('message.kv_admin_page.stats_allowed') }}</p>
+                  <div class="mt-3 flex items-center justify-between">
+                    <span class="text-2xl font-black text-slate-900 dark:text-white">{{ stats.allowed }}</span>
+                    <i class="bi bi-shield-check text-xl text-teal-500"></i>
+                  </div>
+                </div>
+              </div>
+            </template>
           </div>
         </div>
       </section>
@@ -289,16 +317,6 @@
               <i class="bi bi-check-lg"></i>
               {{ $t('message.kv_admin_page.save') }}
             </button>
-          </div>
-        </div>
-      </div>
-    </transition>
-
-      <div class="rounded-[28px] border border-slate-200/70 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xl overflow-hidden">
-        <div class="p-6 border-b border-slate-100 dark:border-slate-800 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-          <div>
-            <h2 class="text-xl font-bold text-slate-900 dark:text-white">{{ $t('message.kv_admin_page.table_title') }}</h2>
-            <p class="text-sm text-slate-500 dark:text-slate-400">{{ $t('message.kv_admin_page.table_subtitle') }}</p>
           </div>
         </div>
       </div>
@@ -745,6 +763,13 @@ export default {
         }
         rows.value = [];
         allowedCount.value = 0;
+      }
+    );
+
+    watch(() => mainStore.mockApi, async (value, oldValue) => {
+        if (value === oldValue) return;
+        if (!authStore.isAuthenticated || !isSuperAdmin.value) return;
+        await loadConfigs();
       }
     );
 

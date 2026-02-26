@@ -33,36 +33,71 @@
         </div>
 
         <div class="grid gap-4">
-          <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm">
-            <p class="text-xs uppercase tracking-[0.3em] text-slate-500">{{ $t('message.admin_users.stats_total') }}</p>
-            <div class="mt-3 flex items-center justify-between">
-              <span class="text-3xl font-black text-slate-900 dark:text-white">{{ pagination.total || incidents.length || 0 }}</span>
-              <i class="bi bi-shield-exclamation text-2xl text-rose-500"></i>
-            </div>
-          </div>
-          <div class="grid grid-cols-3 gap-3">
-            <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-4 shadow-sm">
-              <p class="text-[10px] uppercase tracking-[0.25em] text-slate-500">{{ $t('message.security_incidents.stats_open') }}</p>
-              <div class="mt-2 flex items-center justify-between">
-                <span class="text-xl font-black text-slate-900 dark:text-white">{{ detectedCount }}</span>
-                <i class="bi bi-activity text-rose-500"></i>
+          <template v-if="loading">
+            <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm animate-pulse">
+              <div class="h-3 w-28 rounded bg-slate-200 dark:bg-slate-700/50"></div>
+              <div class="mt-3 flex items-center justify-between">
+                <div class="h-8 w-20 rounded bg-slate-200 dark:bg-slate-700/50"></div>
+                <div class="h-8 w-8 rounded-full bg-slate-200 dark:bg-slate-700/50"></div>
               </div>
             </div>
-            <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-4 shadow-sm">
-              <p class="text-[10px] uppercase tracking-[0.25em] text-slate-500">{{ $t('message.security_incidents.stats_resolved') }}</p>
-              <div class="mt-2 flex items-center justify-between">
-                <span class="text-xl font-black text-slate-900 dark:text-white">{{ resolvedCount }}</span>
-                <i class="bi bi-shield-check text-emerald-500"></i>
+            <div class="grid grid-cols-3 gap-3">
+              <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-4 shadow-sm animate-pulse">
+                <div class="h-3 w-16 rounded bg-slate-200 dark:bg-slate-700/50"></div>
+                <div class="mt-2 flex items-center justify-between">
+                  <div class="h-6 w-12 rounded bg-slate-200 dark:bg-slate-700/50"></div>
+                  <div class="h-6 w-6 rounded-full bg-slate-200 dark:bg-slate-700/50"></div>
+                </div>
+              </div>
+              <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-4 shadow-sm animate-pulse">
+                <div class="h-3 w-16 rounded bg-slate-200 dark:bg-slate-700/50"></div>
+                <div class="mt-2 flex items-center justify-between">
+                  <div class="h-6 w-12 rounded bg-slate-200 dark:bg-slate-700/50"></div>
+                  <div class="h-6 w-6 rounded-full bg-slate-200 dark:bg-slate-700/50"></div>
+                </div>
+              </div>
+              <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-4 shadow-sm animate-pulse">
+                <div class="h-3 w-16 rounded bg-slate-200 dark:bg-slate-700/50"></div>
+                <div class="mt-2 flex items-center justify-between">
+                  <div class="h-6 w-12 rounded bg-slate-200 dark:bg-slate-700/50"></div>
+                  <div class="h-6 w-6 rounded-full bg-slate-200 dark:bg-slate-700/50"></div>
+                </div>
               </div>
             </div>
-            <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-4 shadow-sm">
-              <p class="text-[10px] uppercase tracking-[0.25em] text-slate-500">{{ $t('message.security_incidents.stats_high') }}</p>
-              <div class="mt-2 flex items-center justify-between">
-                <span class="text-xl font-black text-slate-900 dark:text-white">{{ highSeverityCount }}</span>
-                <i class="bi bi-exclamation-triangle text-amber-500"></i>
+          </template>
+
+          <template v-else>
+            <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm">
+              <p class="text-xs uppercase tracking-[0.3em] text-slate-500">{{ $t('message.admin_users.stats_total') }}</p>
+              <div class="mt-3 flex items-center justify-between">
+                <span class="text-3xl font-black text-slate-900 dark:text-white">{{ pagination.total || incidents.length || 0 }}</span>
+                <i class="bi bi-shield-exclamation text-2xl text-rose-500"></i>
               </div>
             </div>
-          </div>
+            <div class="grid grid-cols-3 gap-3">
+              <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-4 shadow-sm">
+                <p class="text-[10px] uppercase tracking-[0.25em] text-slate-500">{{ $t('message.security_incidents.stats_open') }}</p>
+                <div class="mt-2 flex items-center justify-between">
+                  <span class="text-xl font-black text-slate-900 dark:text-white">{{ detectedCount }}</span>
+                  <i class="bi bi-activity text-rose-500"></i>
+                </div>
+              </div>
+              <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-4 shadow-sm">
+                <p class="text-[10px] uppercase tracking-[0.25em] text-slate-500">{{ $t('message.security_incidents.stats_resolved') }}</p>
+                <div class="mt-2 flex items-center justify-between">
+                  <span class="text-xl font-black text-slate-900 dark:text-white">{{ resolvedCount }}</span>
+                  <i class="bi bi-shield-check text-emerald-500"></i>
+                </div>
+              </div>
+              <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-4 shadow-sm">
+                <p class="text-[10px] uppercase tracking-[0.25em] text-slate-500">{{ $t('message.security_incidents.stats_high') }}</p>
+                <div class="mt-2 flex items-center justify-between">
+                  <span class="text-xl font-black text-slate-900 dark:text-white">{{ highSeverityCount }}</span>
+                  <i class="bi bi-exclamation-triangle text-amber-500"></i>
+                </div>
+              </div>
+            </div>
+          </template>
         </div>
       </div>
     </section>
@@ -117,7 +152,7 @@
         </div>
       </div>
 
-      <div class="rounded-[28px] border border-slate-200/70 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xl overflow-hidden">
+      <div ref="tableTopRef" class="rounded-[28px] border border-slate-200/70 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xl overflow-hidden">
         <div v-if="loading" class="p-6 space-y-4 animate-pulse">
           <div v-for="row in 6" :key="row" class="h-12 rounded-xl bg-slate-100 dark:bg-slate-800"></div>
         </div>
@@ -318,6 +353,7 @@ export default {
     const { incidents, loading, error, pagination } = storeToRefs(securityStore);
     const showModal = ref(false);
     const selectedIncident = ref(null);
+    const tableTopRef = ref(null);
     const search = ref('');
     const severityFilter = ref('all');
     const statusFilter = ref('all');
@@ -390,18 +426,27 @@ export default {
       selectedIncident.value = null;
     };
 
-    const goToPage = (page) => {
+    const scrollToTableTop = () => {
+      if (tableTopRef.value && typeof tableTopRef.value.scrollIntoView === 'function') {
+        const rect = tableTopRef.value.getBoundingClientRect();
+        const y = Math.max(0, window.scrollY + rect.top - 100);
+        window.scrollTo({ top: y, behavior: 'smooth' });
+      }
+    };
+
+    const goToPage = async (page) => {
       const totalPages = (pagination.value && pagination.value.totalPages) || 1;
       if (page < 1 || page > totalPages) return;
-      loadIncidents(page);
+      await loadIncidents(page);
+      scrollToTableTop();
     };
 
-    const prevPage = () => {
-      goToPage((Number(pagination.value?.page) || 1) - 1);
+    const prevPage = async () => {
+      await goToPage((Number(pagination.value?.page) || 1) - 1);
     };
 
-    const nextPage = () => {
-      goToPage((Number(pagination.value?.page) || 1) + 1);
+    const nextPage = async () => {
+      await goToPage((Number(pagination.value?.page) || 1) + 1);
     };
 
     const visiblePages = computed(() => {
@@ -487,6 +532,7 @@ export default {
       statusBadgeClass,
       showModal,
       selectedIncident,
+      tableTopRef,
       openIncident,
       closeIncident,
       goToPage,
