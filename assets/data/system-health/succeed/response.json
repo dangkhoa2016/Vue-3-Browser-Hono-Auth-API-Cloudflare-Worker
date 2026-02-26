@@ -168,5 +168,5 @@
       "canViewSuperAdminData": true
     }
   },
-  "message": "System health check complete: HEALTHY - Response time: 127ms, Performance: excellent, Security risk: low (0 failed logins in last hour). Checked by Test Super Admin User (Super Administrator) Checked at 2/25/2026, 2:46:40 PM"
+  "message": "System health check complete: HEALTHY - Response time: 127ms, Performance: excellent, Security risk: low (0 failed logins in last hour). Checked by [Test Super Admin User] (Super Administrator) Checked at 2/25/2026, 2:46:40 PM"
 }
