@@ -6,5 +6,5 @@
         "newValue": "test",
         "cacheCleared": true
     },
-    "message": "Configuration \"RATE_LIMIT_DISABLED\" updated by Test Super Admin User from falseaaa to test"
+    "message": "Configuration \"RATE_LIMIT_DISABLED\" updated by [Test Super Admin User] from falseaaa to test"
 }

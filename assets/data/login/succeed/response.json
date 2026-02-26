@@ -1,12 +1,12 @@
 {
   "success": true,
   "data": {
-    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.....L0C0SMsOOPC2rh810rBI_3tiTaRzrcRoweebb2Xh6O0",
-    "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.....29gLeOjAykLJkWfxUkvzy0Qyw1hwX1O2GeOSg3PPE7A",
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9....M02EiNI1MlDmlhBZi-gXcPiULmDeQkT4IrOd2wpYqvk",
+    "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9....rMq2mGwymD-1WdkrpodoqoV6q29hqMwkg9fKUn6b4iU",
     "expires_in": 300,
-    "expires_at": 1770128860,
+    "expires_at": 1772074889,
     "refresh_expires_in": 259200,
-    "refresh_expires_at": 1770387760,
+    "refresh_expires_at": 1772333789,
     "user": {
       "id": 1,
       "full_name": "Test Super Admin User",
@@ -14,5 +14,5 @@
       "role": "super_admin"
     }
   },
-  "message": "Đăng nhập thành công với tư cách Test Super Admin User (super_admin) lúc 02/03/2026, 14:22:40"
+  "message": "Successfully logged in as [Test Super Admin User] (super_admin) at 02/26/2026, 02:56:29"
 }

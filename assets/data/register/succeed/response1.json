@@ -13,5 +13,5 @@
       "reason": "EMAIL_DISABLED"
     }
   },
-  "message": "Account created for New Registered User. Email notifications are currently disabled by administrator. Please contact support for account activation."
+  "message": "Account created for [New Registered User]. Email notifications are currently disabled by administrator. Please contact support for account activation."
 }
