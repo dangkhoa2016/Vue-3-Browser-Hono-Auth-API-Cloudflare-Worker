@@ -9,5 +9,5 @@
     "role": "super_admin",
     "new_email": null
   },
-  "message": "User profile retrieved successfully for Test Super Admin User (super_admin) by [Test Super Admin User]"
+  "message": "User profile retrieved successfully for [Test Super Admin User] (super_admin) by [Test Super Admin User]"
 }
