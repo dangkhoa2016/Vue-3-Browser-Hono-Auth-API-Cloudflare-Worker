@@ -52,34 +52,48 @@
           </div>
 
           <div class="grid grid-cols-2 gap-4">
-            <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm">
-              <p class="text-xs uppercase tracking-[0.3em] text-slate-500">{{ $t('message.system_health.overall_status') }}</p>
-              <div class="mt-3 flex items-center justify-between">
-                <span class="text-xl font-black" :class="statusTextClass">{{ statusText }}</span>
-                <i class="bi bi-heart-pulse text-2xl" :class="statusTextClass"></i>
+            <!-- Skeleton for Stats Cards -->
+            <template v-if="loading">
+              <div v-for="i in 4" :key="i" class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm animate-pulse">
+                <div class="h-3 w-24 bg-slate-200 dark:bg-slate-700/50 rounded mb-4"></div>
+                <div class="flex items-center justify-between">
+                  <div class="h-6 w-20 bg-slate-200 dark:bg-slate-700/50 rounded"></div>
+                  <div class="h-8 w-8 bg-slate-200 dark:bg-slate-700/50 rounded-full"></div>
+                </div>
               </div>
-            </div>
-            <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm">
-              <p class="text-xs uppercase tracking-[0.3em] text-slate-500">{{ $t('message.system_health.response_time') }}</p>
-              <div class="mt-3 flex items-center justify-between">
-                <span class="text-xl font-black text-slate-900 dark:text-white">{{ responseTime }}</span>
-                <i class="bi bi-speedometer2 text-2xl text-cyan-500"></i>
+            </template>
+
+            <!-- Real Stats Cards -->
+            <template v-else>
+              <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm">
+                <p class="text-xs uppercase tracking-[0.3em] text-slate-500">{{ $t('message.system_health.overall_status') }}</p>
+                <div class="mt-3 flex items-center justify-between">
+                  <span class="text-xl font-black" :class="statusTextClass">{{ statusText }}</span>
+                  <i class="bi bi-heart-pulse text-2xl" :class="statusTextClass"></i>
+                </div>
               </div>
-            </div>
-            <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm">
-              <p class="text-xs uppercase tracking-[0.3em] text-slate-500">{{ $t('message.system_health.environment') }}</p>
-              <div class="mt-3 flex items-center justify-between">
-                <span class="text-xl font-black text-slate-900 dark:text-white">{{ environment }}</span>
-                <i class="bi bi-cloud text-2xl text-sky-500"></i>
+              <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm">
+                <p class="text-xs uppercase tracking-[0.3em] text-slate-500">{{ $t('message.system_health.response_time') }}</p>
+                <div class="mt-3 flex items-center justify-between">
+                  <span class="text-xl font-black text-slate-900 dark:text-white">{{ responseTime }}</span>
+                  <i class="bi bi-speedometer2 text-2xl text-cyan-500"></i>
+                </div>
               </div>
-            </div>
-            <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm">
-              <p class="text-xs uppercase tracking-[0.3em] text-slate-500">{{ $t('message.system_health.health_checks') }}</p>
-              <div class="mt-3 flex items-center justify-between">
-                <span class="text-xl font-black text-slate-900 dark:text-white">{{ healthChecks.length }}</span>
-                <i class="bi bi-clipboard2-check text-2xl text-emerald-500"></i>
+              <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm">
+                <p class="text-xs uppercase tracking-[0.3em] text-slate-500">{{ $t('message.system_health.environment') }}</p>
+                <div class="mt-3 flex items-center justify-between">
+                  <span class="text-xl font-black text-slate-900 dark:text-white">{{ environment }}</span>
+                  <i class="bi bi-cloud text-2xl text-sky-500"></i>
+                </div>
               </div>
-            </div>
+              <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm">
+                <p class="text-xs uppercase tracking-[0.3em] text-slate-500">{{ $t('message.system_health.health_checks') }}</p>
+                <div class="mt-3 flex items-center justify-between">
+                  <span class="text-xl font-black text-slate-900 dark:text-white">{{ healthChecks.length }}</span>
+                  <i class="bi bi-clipboard2-check text-2xl text-emerald-500"></i>
+                </div>
+              </div>
+            </template>
           </div>
         </div>
       </section>
@@ -91,8 +105,51 @@
       </section>
 
       <section v-else class="space-y-6">
-        <div v-if="loading" class="rounded-[28px] border border-slate-200/70 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xl p-6 space-y-4 animate-pulse">
-          <div v-for="item in 6" :key="item" class="h-12 rounded-xl bg-slate-100 dark:bg-slate-800"></div>
+        <!-- Optimized Skeleton Loader -->
+        <div v-if="loading" class="grid gap-6 lg:grid-cols-2 animate-pulse">
+            <!-- Left Column Skeleton -->
+            <div class="rounded-[24px] border border-slate-200/70 dark:border-slate-800 bg-white/90 dark:bg-slate-900/80 p-6 shadow-xl">
+                 <div class="h-6 w-40 rounded bg-slate-200 dark:bg-slate-700 mb-6"></div>
+                 <div class="grid grid-cols-2 gap-3 mb-4">
+                     <div class="h-20 rounded-xl bg-slate-100 dark:bg-slate-800"></div>
+                     <div class="h-20 rounded-xl bg-slate-100 dark:bg-slate-800"></div>
+                 </div>
+                 <div class="space-y-2">
+                     <div v-for="i in 4" :key="i" class="h-12 rounded-lg bg-slate-100 dark:bg-slate-800"></div>
+                 </div>
+            </div>
+
+            <!-- Right Column Skeleton (System & Security) -->
+            <div class="rounded-[24px] border border-slate-200/70 dark:border-slate-800 bg-white/90 dark:bg-slate-900/80 p-6 shadow-xl space-y-3">
+                 <div class="h-6 w-32 rounded bg-slate-200 dark:bg-slate-700 mb-6"></div>
+                 <div v-for="i in 3" :key="i" class="rounded-xl border border-slate-200/50 dark:border-slate-800 p-4 bg-slate-50/50 dark:bg-slate-800/30">
+                     <div class="h-4 w-24 rounded bg-slate-200 dark:bg-slate-700 mb-3"></div>
+                     <div class="grid grid-cols-2 gap-2">
+                         <div v-for="j in 4" :key="j" class="h-4 rounded bg-slate-200 dark:bg-slate-700"></div>
+                     </div>
+                 </div>
+            </div>
+
+            <!-- Full Width Skeleton (Tables & Roles) -->
+            <div class="lg:col-span-2 grid gap-6 lg:grid-cols-2">
+                 <div class="rounded-[24px] border border-slate-200/70 dark:border-slate-800 bg-white/90 dark:bg-slate-900/80 p-6 shadow-xl">
+                     <div class="h-6 w-48 rounded bg-slate-200 dark:bg-slate-700 mb-4"></div>
+                     <div class="space-y-3">
+                         <div class="h-8 bg-slate-100 dark:bg-slate-800 rounded"></div>
+                         <div v-for="i in 5" :key="i" class="h-8 border-b border-slate-100 dark:border-slate-800"></div>
+                     </div>
+                 </div>
+                 <div class="rounded-[24px] border border-slate-200/70 dark:border-slate-800 bg-white/90 dark:bg-slate-900/80 p-6 shadow-xl space-y-4">
+                     <div class="h-6 w-40 rounded bg-slate-200 dark:bg-slate-700 mb-4"></div>
+                     <div class="grid grid-cols-3 gap-3">
+                         <div v-for="i in 3" :key="i" class="h-20 rounded-xl bg-slate-100 dark:bg-slate-800"></div>
+                     </div>
+                     <div class="h-6 w-32 rounded bg-slate-200 dark:bg-slate-700 mt-4 mb-2"></div>
+                     <div class="space-y-2">
+                         <div v-for="i in 3" :key="i" class="h-10 rounded-lg bg-slate-100 dark:bg-slate-800"></div>
+                     </div>
+                 </div>
+            </div>
         </div>
 
         <div v-else-if="error" class="rounded-[28px] border border-rose-200 dark:border-rose-800 bg-rose-50 dark:bg-rose-900/20 p-6 text-rose-700 dark:text-rose-300">

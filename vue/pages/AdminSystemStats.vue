@@ -53,7 +53,14 @@
           </div>
 
           <div class="grid grid-cols-2 gap-4">
-            <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm">
+            <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm relative overflow-hidden">
+              <div v-if="loading" class="absolute inset-0 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm z-10 flex flex-col justify-center px-5">
+                <div class="h-3 w-24 rounded bg-slate-200 dark:bg-slate-700 animate-pulse mb-4"></div>
+                <div class="flex justify-between items-center">
+                  <div class="h-6 w-16 rounded bg-slate-200 dark:bg-slate-700 animate-pulse"></div>
+                  <div class="h-8 w-8 rounded bg-slate-200 dark:bg-slate-700 animate-pulse"></div>
+                </div>
+              </div>
               <p class="text-xs uppercase tracking-[0.3em] text-slate-500">{{ $t('message.system_stats_page.total_users') }}</p>
               <div class="mt-3 flex items-center justify-between">
                 <span class="text-xl font-black text-slate-900 dark:text-white">{{ stats.totalUsers }}</span>
@@ -61,7 +68,14 @@
               </div>
             </div>
 
-            <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm">
+            <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm relative overflow-hidden">
+              <div v-if="loading" class="absolute inset-0 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm z-10 flex flex-col justify-center px-5">
+                <div class="h-3 w-24 rounded bg-slate-200 dark:bg-slate-700 animate-pulse mb-4"></div>
+                <div class="flex justify-between items-center">
+                  <div class="h-6 w-16 rounded bg-slate-200 dark:bg-slate-700 animate-pulse"></div>
+                  <div class="h-8 w-8 rounded bg-slate-200 dark:bg-slate-700 animate-pulse"></div>
+                </div>
+              </div>
               <p class="text-xs uppercase tracking-[0.3em] text-slate-500">{{ $t('message.system_stats_page.active_users') }}</p>
               <div class="mt-3 flex items-center justify-between">
                 <span class="text-xl font-black text-emerald-600 dark:text-emerald-400">{{ stats.activeUsers }}</span>
@@ -69,19 +83,25 @@
               </div>
             </div>
 
-            <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm">
-              <p class="text-xs uppercase tracking-[0.3em] text-slate-500">{{ $t('message.system_stats_page.inactive_users') }}</p>
+            <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm relative overflow-hidden group">
+              <div v-if="auditStatsLoading" class="absolute inset-0 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm z-10 flex items-center justify-center">
+                <i class="bi bi-arrow-repeat animate-spin text-2xl text-slate-400"></i>
+              </div>
+              <p class="text-xs uppercase tracking-[0.3em] text-slate-500">{{ $t('message.system_stats_page.audit_total_events') }} (7d)</p>
               <div class="mt-3 flex items-center justify-between">
-                <span class="text-xl font-black text-amber-600 dark:text-amber-400">{{ stats.inactiveUsers }}</span>
-                <i class="bi bi-person-dash text-2xl text-amber-500"></i>
+                <span class="text-xl font-black text-slate-900 dark:text-white">{{ auditBasicStats.total_events }}</span>
+                <i class="bi bi-journal-text text-2xl text-slate-500 group-hover:text-amber-500 transition-colors"></i>
               </div>
             </div>
 
-            <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm">
-              <p class="text-xs uppercase tracking-[0.3em] text-slate-500">{{ $t('message.system_stats_page.suspended_users') }}</p>
+            <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm relative overflow-hidden group">
+              <div v-if="auditStatsLoading" class="absolute inset-0 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm z-10 flex items-center justify-center">
+                <i class="bi bi-arrow-repeat animate-spin text-2xl text-slate-400"></i>
+              </div>
+              <p class="text-xs uppercase tracking-[0.3em] text-slate-500">{{ $t('message.system_stats_page.audit_security_events') }} (7d)</p>
               <div class="mt-3 flex items-center justify-between">
-                <span class="text-xl font-black text-rose-600 dark:text-rose-400">{{ stats.suspendedUsers }}</span>
-                <i class="bi bi-person-x text-2xl text-rose-500"></i>
+                <span class="text-xl font-black text-rose-600 dark:text-rose-400">{{ auditBasicStats.security_events }}</span>
+                <i class="bi bi-shield-exclamation text-2xl text-rose-500 group-hover:scale-110 transition-transform"></i>
               </div>
             </div>
           </div>
@@ -95,8 +115,32 @@
       </section>
 
       <section v-else class="space-y-6">
-        <div v-if="loading" class="rounded-[28px] border border-slate-200/70 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xl p-6 space-y-4 animate-pulse">
-          <div v-for="item in 5" :key="item" class="h-12 rounded-xl bg-slate-100 dark:bg-slate-800"></div>
+        <!-- System Stats Skeleton -->
+        <div v-if="loading" class="grid gap-6 lg:grid-cols-2">
+          <div class="rounded-[24px] border border-slate-200/70 dark:border-slate-800 bg-white/90 dark:bg-slate-900/80 p-6 shadow-xl animate-pulse">
+             <div class="h-7 w-48 rounded bg-slate-200 dark:bg-slate-700 mb-6"></div>
+             <div class="space-y-4">
+                <div v-for="i in 3" :key="i">
+                  <div class="flex justify-between mb-2">
+                    <div class="h-4 w-24 rounded bg-slate-200 dark:bg-slate-700"></div>
+                    <div class="h-4 w-12 rounded bg-slate-200 dark:bg-slate-700"></div>
+                  </div>
+                  <div class="h-2 rounded-full bg-slate-100 dark:bg-slate-800"></div>
+                </div>
+             </div>
+          </div>
+          <div class="rounded-[24px] border border-slate-200/70 dark:border-slate-800 bg-white/90 dark:bg-slate-900/80 p-6 shadow-xl animate-pulse">
+             <div class="h-7 w-32 rounded bg-slate-200 dark:bg-slate-700 mb-6"></div>
+             <div class="space-y-3">
+               <div v-for="i in 3" :key="i" class="h-12 rounded-lg bg-slate-100 dark:bg-slate-800"></div>
+             </div>
+          </div>
+          <div class="lg:col-span-2 rounded-[24px] border border-slate-200/70 dark:border-slate-800 bg-white/90 dark:bg-slate-900/80 p-6 shadow-xl animate-pulse">
+             <div class="h-7 w-40 rounded bg-slate-200 dark:bg-slate-700 mb-6"></div>
+             <div class="grid gap-4 md:grid-cols-3">
+               <div v-for="i in 3" :key="i" class="h-24 rounded-xl bg-slate-100 dark:bg-slate-800"></div>
+             </div>
+          </div>
         </div>
 
         <div v-else-if="error" class="rounded-[28px] border border-rose-200 dark:border-rose-800 bg-rose-50 dark:bg-rose-900/20 p-6 text-rose-700 dark:text-rose-300">
@@ -221,8 +265,22 @@
               </div>
             </div>
 
-            <div v-if="auditStatsLoading" class="space-y-3 animate-pulse">
-              <div v-for="item in 4" :key="item" class="h-10 rounded-xl bg-slate-100 dark:bg-slate-800"></div>
+            <div v-if="auditStatsLoading" class="space-y-6 animate-pulse mt-4">
+              <!-- Basic Stats Cards Skeleton -->
+              <div class="grid gap-3 md:grid-cols-3">
+                 <div v-for="i in 3" :key="i" class="h-20 rounded-xl bg-slate-100 dark:bg-slate-800"></div>
+              </div>
+              
+              <!-- Recent Activity Skeleton -->
+              <div class="grid gap-3 md:grid-cols-4">
+                 <div v-for="i in 4" :key="i" class="h-12 rounded-lg bg-slate-100 dark:bg-slate-800"></div>
+              </div>
+
+              <!-- Top Actions List Skeleton -->
+              <div class="space-y-2">
+                 <div class="h-5 w-32 rounded bg-slate-200 dark:bg-slate-700 mb-3"></div>
+                 <div v-for="i in 3" :key="i" class="h-10 rounded-lg bg-slate-100 dark:bg-slate-800"></div>
+              </div>
             </div>
 
             <div v-else-if="auditStatsError" class="rounded-xl border border-rose-200 dark:border-rose-800 bg-rose-50 dark:bg-rose-900/20 p-4 text-sm text-rose-700 dark:text-rose-300">

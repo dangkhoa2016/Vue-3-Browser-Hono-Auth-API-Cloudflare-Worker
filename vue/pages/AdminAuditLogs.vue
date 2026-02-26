@@ -40,29 +40,59 @@
           </div>
 
           <div class="grid gap-4">
-            <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm">
-              <p class="text-xs uppercase tracking-[0.3em] text-slate-500">{{ $t('message.audit.stats_total') || 'Total Logs' }}</p>
-              <div class="mt-3 flex items-center justify-between">
-                <span class="text-3xl font-black text-slate-900 dark:text-white">{{ totalLogCount }}</span>
-                <i class="bi bi-journal-text text-2xl text-cyan-500"></i>
-              </div>
-            </div>
-            <div class="grid grid-cols-2 gap-4">
-              <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm">
-                <p class="text-xs uppercase tracking-[0.3em] text-slate-500">{{ $t('message.audit.stats_success') || 'Success' }}</p>
-                <div class="mt-3 flex items-center justify-between">
-                  <span class="text-2xl font-black text-slate-900 dark:text-white">{{ successCount }}</span>
-                  <i class="bi bi-check-circle text-xl text-emerald-500"></i>
+            <!-- Stats Skeleton -->
+            <template v-if="auditStore.loading">
+              <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm animate-pulse">
+                <div class="h-3 w-24 bg-slate-200 dark:bg-slate-700/50 rounded mb-4"></div>
+                <div class="flex items-center justify-between">
+                  <div class="h-8 w-16 bg-slate-200 dark:bg-slate-700/50 rounded"></div>
+                  <div class="h-8 w-8 bg-slate-200 dark:bg-slate-700/50 rounded-full"></div>
                 </div>
               </div>
-              <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm">
-                <p class="text-xs uppercase tracking-[0.3em] text-slate-500">{{ $t('message.audit.stats_issues') || 'Issues' }}</p>
-                <div class="mt-3 flex items-center justify-between">
-                  <span class="text-2xl font-black text-slate-900 dark:text-white">{{ issueCount }}</span>
-                  <i class="bi bi-exclamation-triangle text-xl text-amber-500"></i>
+              <div class="grid grid-cols-2 gap-4">
+                <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm animate-pulse">
+                  <div class="h-3 w-20 bg-slate-200 dark:bg-slate-700/50 rounded mb-4"></div>
+                  <div class="flex items-center justify-between">
+                    <div class="h-6 w-12 bg-slate-200 dark:bg-slate-700/50 rounded"></div>
+                    <div class="h-6 w-6 bg-slate-200 dark:bg-slate-700/50 rounded-full"></div>
+                  </div>
+                </div>
+                <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm animate-pulse">
+                  <div class="h-3 w-20 bg-slate-200 dark:bg-slate-700/50 rounded mb-4"></div>
+                  <div class="flex items-center justify-between">
+                    <div class="h-6 w-12 bg-slate-200 dark:bg-slate-700/50 rounded"></div>
+                    <div class="h-6 w-6 bg-slate-200 dark:bg-slate-700/50 rounded-full"></div>
+                  </div>
                 </div>
               </div>
-            </div>
+            </template>
+
+            <!-- Real Stats -->
+            <template v-else>
+              <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm">
+                <p class="text-xs uppercase tracking-[0.3em] text-slate-500">{{ $t('message.audit.stats_total') || 'Total Logs' }}</p>
+                <div class="mt-3 flex items-center justify-between">
+                  <span class="text-3xl font-black text-slate-900 dark:text-white">{{ totalLogCount }}</span>
+                  <i class="bi bi-journal-text text-2xl text-cyan-500"></i>
+                </div>
+              </div>
+              <div class="grid grid-cols-2 gap-4">
+                <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm">
+                  <p class="text-xs uppercase tracking-[0.3em] text-slate-500">{{ $t('message.audit.stats_success') || 'Success' }}</p>
+                  <div class="mt-3 flex items-center justify-between">
+                    <span class="text-2xl font-black text-slate-900 dark:text-white">{{ successCount }}</span>
+                    <i class="bi bi-check-circle text-xl text-emerald-500"></i>
+                  </div>
+                </div>
+                <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm">
+                  <p class="text-xs uppercase tracking-[0.3em] text-slate-500">{{ $t('message.audit.stats_issues') || 'Issues' }}</p>
+                  <div class="mt-3 flex items-center justify-between">
+                    <span class="text-2xl font-black text-slate-900 dark:text-white">{{ issueCount }}</span>
+                    <i class="bi bi-exclamation-triangle text-xl text-amber-500"></i>
+                  </div>
+                </div>
+              </div>
+            </template>
           </div>
         </div>
       </section>
@@ -191,7 +221,7 @@
             </button>
             <button
               @click="clearFilters"
-              class="inline-flex items-center gap-2 px-4 py-2 bg-slate-500 hover:bg-slate-600 dark:bg-slate-400 dark:hover:bg-slate-500 text-white font-semibold rounded-xl shadow-sm hover:shadow-md transition"
+              class="inline-flex items-center gap-2 px-4 py-2 bg-slate-500 hover:bg-slate-600 dark:bg-slate-600 dark:hover:bg-slate-500 text-white font-semibold rounded-xl shadow-sm hover:shadow-md transition"
             >
               <i class="bi bi-x-circle text-sm"></i>
               {{ $t('message.audit.clear_filters') || 'Clear Filters' }}
@@ -219,7 +249,7 @@
         </div>
       </div>
 
-      <div class="rounded-[18px] max-[992px]:border-none border border-slate-100 dark:border-slate-800 overflow-hidden">
+      <div ref="tableTopRef" class="rounded-[18px] max-[992px]:border-none border border-slate-100 dark:border-slate-800 overflow-hidden">
         <div v-if="auditStore.loading" class="p-6 space-y-4 animate-pulse">
           <div v-for="row in 6" :key="row" class="h-12 rounded-xl bg-slate-100 dark:bg-slate-800"></div>
         </div>
@@ -456,6 +486,7 @@ export default {
 
     const showModal = ref(false);
     const selectedLog = ref(null);
+    const tableTopRef = ref(null);
 
     const totalLogCount = computed(() => auditStore.error ? 0 : (Number(auditStore.pagination.total) || auditStore.logs.length || 0));
     const successCount = computed(() => auditStore.error ? 0 : (auditStore.logs || []).filter((log) => (log.status || '').toUpperCase() === 'SUCCESS').length);
@@ -573,10 +604,11 @@ export default {
       return true;
     };
 
-    // React to global mock toggle changes (App.vue controls setupMock)
-    watch(() => mainStore.mockApi, (val, oldVal) => {
+    watch(() => mainStore.mockApi, async (value, oldValue) => {
+      if (value === oldValue) return;
+      if (!authStore.isAuthenticated || showLoginRequired.value) return;
       // Only refetch when value actually changes
-      if (val !== oldVal) auditStore.fetchLogs();
+      auditStore.fetchLogs();
     });
 
 
@@ -624,20 +656,31 @@ export default {
       return pages;
     });
 
-    const goToPage = (page) => {
+    const scrollToTopAfterPagination = () => {
+      if (tableTopRef.value && typeof tableTopRef.value.scrollIntoView === 'function') {
+        const rect = tableTopRef.value.getBoundingClientRect();
+        const y = Math.max(0, window.scrollY + rect.top - 100);
+        window.scrollTo({ top: y, behavior: 'smooth' });
+        return;
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    const goToPage = async (page) => {
       const totalPages = Number(auditStore.pagination.totalPages) || 1;
       const nextPage = Math.min(Math.max(1, Number(page) || 1), totalPages);
       if (nextPage === (Number(auditStore.filters.page) || 1)) return;
       auditStore.filters.page = nextPage;
-      auditStore.fetchLogs();
+      await auditStore.fetchLogs();
+      scrollToTopAfterPagination();
     };
 
-    const prevPage = () => {
-      goToPage((Number(auditStore.pagination.page) || 1) - 1);
+    const prevPage = async () => {
+      await goToPage((Number(auditStore.pagination.page) || 1) - 1);
     };
 
-    const nextPage = () => {
-      goToPage((Number(auditStore.pagination.page) || 1) + 1);
+    const nextPage = async () => {
+      await goToPage((Number(auditStore.pagination.page) || 1) + 1);
     };
 
     const showToast = (message, type = 'info') => {
@@ -698,7 +741,7 @@ export default {
       }
     );
 
-    return { auditStore, formatDate, formatDetails, applyFilters, clearFilters, onExport, visiblePages, goToPage, prevPage, nextPage, showModal, selectedLog, totalLogCount, successCount, issueCount, openLog, closeLog, copySelectedLog, showLoginRequired, openLoginModal, badgeColor, avatarInitial, actorDisplay };
+    return { auditStore, formatDate, formatDetails, applyFilters, clearFilters, onExport, visiblePages, goToPage, prevPage, nextPage, showModal, selectedLog, totalLogCount, successCount, issueCount, openLog, closeLog, copySelectedLog, showLoginRequired, openLoginModal, badgeColor, avatarInitial, actorDisplay, tableTopRef };
   }
 };
 </script>

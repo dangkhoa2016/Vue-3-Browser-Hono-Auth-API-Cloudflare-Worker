@@ -462,6 +462,7 @@ export default {
     };
 
     const reload = async () => {
+      forceSkeletonOnLoading.value = true;
       await loadUsers();
     };
 
@@ -684,9 +685,12 @@ export default {
         }
 
         if (isLoading && (users.value.length === 0 || forceSkeletonOnLoading.value)) {
+          // If explicitly forced (pagination/filters/reload), show immediately or very short delay
+          // This fixes "sometimes shows, sometimes doesn't" perception
+          const delay = forceSkeletonOnLoading.value ? 0 : 180;
           skeletonTimer = setTimeout(() => {
             showDataSkeleton.value = true;
-          }, 180);
+          }, delay);
           return;
         }
 
@@ -704,6 +708,7 @@ export default {
       }
       searchTimer = setTimeout(() => {
         if (useServerFilter.value) {
+          forceSkeletonOnLoading.value = true;
           loadUsers(1);
         }
       }, 400);
@@ -711,19 +716,19 @@ export default {
 
     watch([roleFilter, statusFilter], () => {
       if (useServerFilter.value) {
+        forceSkeletonOnLoading.value = true;
         loadUsers(1);
       }
     });
 
     watch(useServerFilter, () => {
       if (useServerFilter.value) {
+        forceSkeletonOnLoading.value = true;
         loadUsers(1);
       }
     });
 
-    watch(
-      () => mainStore.mockApi,
-      async (value, oldValue) => {
+    watch(() => mainStore.mockApi, async (value, oldValue) => {
         if (value === oldValue) return;
         if (!authStore.isAuthenticated || showLoginRequired.value) return;
         forceSkeletonOnLoading.value = true;

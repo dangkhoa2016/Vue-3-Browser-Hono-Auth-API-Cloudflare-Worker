@@ -111,11 +111,24 @@ export const useSecurityIncidentStore = defineStore('securityIncidents', {
           };
         } else {
           this.incidents = incidents;
-          const total = typeof pagination.total === 'number' ? pagination.total : this.incidents.length;
-          const pageValue = typeof pagination.page === 'number' ? pagination.page : page;
-          const limitValue = typeof pagination.limit === 'number' ? pagination.limit : limit;
-          const totalPages = typeof pagination.totalPages === 'number'
-            ? pagination.totalPages
+          const totalFromApi = Number(pagination.total);
+          const pageFromApi = Number(pagination.page);
+          const limitFromApi = Number(pagination.limit);
+          const totalPagesFromApi = Number(
+            pagination.totalPages ?? pagination.pages ?? pagination.total_pages
+          );
+
+          const total = Number.isFinite(totalFromApi) && totalFromApi >= 0
+            ? totalFromApi
+            : this.incidents.length;
+          const pageValue = Number.isFinite(pageFromApi) && pageFromApi > 0
+            ? pageFromApi
+            : page;
+          const limitValue = Number.isFinite(limitFromApi) && limitFromApi > 0
+            ? limitFromApi
+            : limit;
+          const totalPages = Number.isFinite(totalPagesFromApi) && totalPagesFromApi > 0
+            ? totalPagesFromApi
             : Math.max(1, Math.ceil(total / limitValue));
 
           this.pagination = {
