@@ -337,6 +337,7 @@ export default {
       change_role: 'Change Role',
       change_role_for: 'Change role for {name}',
       invalid_role: 'Invalid role: {role}. Allowed: {allowed}',
+      role_change_requires_dedicated_endpoint: 'Role change requires a dedicated endpoint.',
       role_updated_success: 'Updated role for {name} to {role}',
       role_updated_failed: 'Failed to update role: {reason}',
       create_user: 'Create User',
@@ -452,6 +453,8 @@ export default {
       view_details: 'View details',
       pagination: 'Page {current} of {total}',
       details: 'Incident Details',
+      metadata: 'Metadata',
+      tags: 'Tags',
     },
     realtime_monitoring: {
       badge: 'Live Security Telemetry',

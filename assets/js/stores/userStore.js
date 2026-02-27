@@ -9,7 +9,7 @@ export const useUserStore = defineStore('users', {
     pagination: {
       total: 0,
       page: 1,
-      limit: 10,
+      limit: 20,
       totalPages: 1
     },
     loading: false,
@@ -18,7 +18,7 @@ export const useUserStore = defineStore('users', {
   }),
 
   actions: {
-    async fetchUsers({ page = 1, limit = 10, search = '', role = 'all', status = 'all', useServerFilter = true } = {}) {
+    async fetchUsers({ page = 1, limit = 20, search = '', role = 'all', status = 'all', useServerFilter = true } = {}) {
       this.loading = true;
       this.error = null;
 
@@ -101,7 +101,7 @@ export const useUserStore = defineStore('users', {
             };
           } else {
             const total = users.length;
-            const safeLimit = typeof limit === 'number' && limit > 0 ? limit : 10;
+            const safeLimit = typeof limit === 'number' && limit > 0 ? limit : 20;
             const totalPages = Math.max(1, Math.ceil(total / safeLimit));
             const safePage = Math.min(Math.max(page, 1), totalPages);
             const startIndex = (safePage - 1) * safeLimit;
@@ -140,7 +140,7 @@ export const useUserStore = defineStore('users', {
         this.pagination = {
           total: 0,
           page: 1,
-          limit: 10,
+          limit: 20,
           totalPages: 1
         };
         this.error = (error && error.message) || 'Unknown error';

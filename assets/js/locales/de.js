@@ -337,6 +337,7 @@ export default {
       change_role: 'Rolle ändern',
       change_role_for: 'Rolle für {name} ändern',
       invalid_role: 'Ungültige Rolle: {role}. Erlaubt: {allowed}',
+      role_change_requires_dedicated_endpoint: 'Die Rollenänderung erfordert einen dedizierten Endpunkt.',
       role_updated_success: 'Rolle für {name} wurde auf {role} geändert',
       role_updated_failed: 'Rollenänderung fehlgeschlagen: {reason}',
       create_user: 'Benutzer erstellen',
@@ -452,6 +453,8 @@ export default {
       no_data: 'Keine Sicherheitsvorfälle gefunden.',
       pagination: 'Seite {current} von {total}',
       details: 'Vorfalldetails',
+      metadata: 'Metadaten',
+      tags: 'Tags',
     },
     realtime_monitoring: {
       badge: 'Live-Sicherheitstelemetrie',

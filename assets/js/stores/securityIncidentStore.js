@@ -9,7 +9,7 @@ export const useSecurityIncidentStore = defineStore('securityIncidents', {
     pagination: {
       total: 0,
       page: 1,
-      limit: 50,
+      limit: 20,
       totalPages: 1
     },
     loading: false,
@@ -20,7 +20,7 @@ export const useSecurityIncidentStore = defineStore('securityIncidents', {
   actions: {
     async fetchIncidents({
       page = 1,
-      limit = 50,
+      limit = 20,
       search = '',
       severity = 'all',
       status = 'all',
@@ -96,7 +96,7 @@ export const useSecurityIncidentStore = defineStore('securityIncidents', {
         // Pagination logic for mock
         if (mainStore.mockApi) {
           const total = incidents.length;
-          const safeLimit = typeof limit === 'number' && limit > 0 ? limit : 50;
+          const safeLimit = typeof limit === 'number' && limit > 0 ? limit : 20;
           const totalPages = Math.max(1, Math.ceil(total / safeLimit));
           const safePage = Math.min(Math.max(page, 1), totalPages);
           const startIndex = (safePage - 1) * safeLimit;

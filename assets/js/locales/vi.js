@@ -337,6 +337,7 @@ export default {
       change_role: 'Đổi vai trò',
       change_role_for: 'Đổi vai trò cho {name}',
       invalid_role: 'Vai trò không hợp lệ: {role}. Vai trò cho phép: {allowed}',
+      role_change_requires_dedicated_endpoint: 'Thay đổi vai trò yêu cầu một endpoint chuyên biệt.',
       role_updated_success: 'Đã cập nhật vai trò cho {name} thành {role}',
       role_updated_failed: 'Cập nhật vai trò thất bại: {reason}',
       create_user: 'Tạo người dùng',
@@ -452,6 +453,8 @@ export default {
       no_data: 'Không có sự cố bảo mật nào.',
       pagination: 'Trang {current} / {total}',
       details: 'Chi tiết sự cố',
+      metadata: 'Thông tin bổ sung',
+      tags: 'Thẻ',
     },
     realtime_monitoring: {
       badge: 'Dữ liệu bảo mật thời gian thực',
