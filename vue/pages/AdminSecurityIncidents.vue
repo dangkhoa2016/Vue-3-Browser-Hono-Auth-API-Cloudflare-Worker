@@ -5,7 +5,7 @@
       <div class="absolute inset-0 bg-[linear-gradient(transparent,rgba(15,23,42,0.03))]"></div>
     </div>
 
-    <section class="relative overflow-hidden rounded-[32px] border border-slate-200/70 dark:border-slate-800 bg-gradient-to-br from-white via-amber-50/40 to-teal-50/40 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 p-8 shadow-[0_24px_80px_-60px_rgba(15,23,42,0.8)]">
+    <section :class="heroSectionClass">
       <div class="absolute -top-24 -right-24 w-72 h-72 bg-rose-500/10 rounded-full blur-3xl"></div>
       <div class="absolute -bottom-24 -left-24 w-72 h-72 bg-teal-500/10 rounded-full blur-3xl"></div>
       <div class="relative grid gap-6 lg:grid-cols-[1.25fr_0.75fr] lg:items-center">
@@ -21,14 +21,15 @@
             {{ $t('message.security_incidents.subtitle') || 'Monitor and review detected security incidents.' }}
           </p>
           <div class="mt-6 flex flex-wrap items-center gap-3">
-            <button
-              class="inline-flex items-center gap-2 rounded-full border border-slate-200/80 dark:border-slate-700 bg-white/80 dark:bg-slate-800/80 px-4 py-2 text-sm font-semibold text-slate-700 dark:text-slate-200 shadow-sm hover:shadow-md transition"
+            <ActionTextButton
+              variant="soft"
+              shape="full"
+              icon="bi bi-arrow-clockwise"
               :title="$t('message.common.retry_title')"
               @click="refresh"
             >
-              <i class="bi bi-arrow-clockwise"></i>
               {{ $t('message.refresh') || 'Refresh' }}
-            </button>
+            </ActionTextButton>
           </div>
         </div>
 
@@ -110,7 +111,7 @@
             <input
               v-model="search"
               type="text"
-              class="w-full pl-11 pr-4 py-2.5 rounded-full border border-slate-200/80 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm text-slate-700 dark:text-slate-200 focus:ring-2 focus:ring-rose-500 focus:border-rose-500 outline-none"
+              :class="searchInputClass"
               :placeholder="$t('message.security_incidents.search_placeholder')"
             />
           </div>
@@ -132,7 +133,7 @@
               <option value="detected">{{ $t('message.security_incidents.status_detected') }}</option>
               <option value="resolved">{{ $t('message.security_incidents.status_resolved') }}</option>
             </select>
-            <label class="inline-flex items-center gap-2 rounded-full border border-slate-200/80 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-2 text-xs font-semibold text-slate-600 dark:text-slate-200">
+            <label :class="serverFilterLabelClass">
               <input
                 v-model="useServerFilter"
                 type="checkbox"
@@ -162,13 +163,15 @@
           <h3 class="text-lg font-bold text-slate-900 dark:text-white">
             {{ $t('message.errors.failed_to_load', { item: $t('message.security_incidents.title'), message: error }) }}
           </h3>
-          <button
-            class="mt-4 inline-flex items-center gap-2 rounded-full bg-rose-600 text-white px-4 py-2 text-sm font-semibold"
+          <ActionTextButton
+            class="mt-4"
+            tone="rose"
+            shape="full"
+            icon="bi bi-arrow-clockwise"
             @click="refresh"
           >
-            <i class="bi bi-arrow-clockwise"></i>
             {{ $t('message.common.retry') || 'Retry' }}
-          </button>
+          </ActionTextButton>
         </div>
 
         <div v-else-if="filteredIncidents.length === 0" class="p-10 text-center">
@@ -180,19 +183,30 @@
           <table class="max-[992px]:mt-4 mt-0 min-w-full text-sm max-[992px]:block">
             <thead class="bg-slate-50 dark:bg-slate-800/70 text-slate-500 dark:text-slate-400 uppercase tracking-wider max-[992px]:hidden">
               <tr>
+                <th class="px-6 py-3 text-right">{{ $t('message.security_incidents.actions') || 'Actions' }}</th>
                 <th class="px-6 py-3 text-left">{{ $t('message.security_incidents.incident') || 'Incident' }}</th>
                 <th class="px-6 py-3 text-left">{{ $t('message.security_incidents.severity_status') || 'Severity / Status' }}</th>
                 <th class="px-6 py-3 text-left">{{ $t('message.security_incidents.when_by') || 'When / By' }}</th>
-                <th class="px-6 py-3 text-right">{{ $t('message.security_incidents.actions') || 'Actions' }}</th>
               </tr>
             </thead>
             <tbody class="max-[992px]:block max-[992px]:px-4">
               <tr
                 v-for="incident in filteredIncidents"
                 :key="incident.id"
-                class="border-t border-slate-100 dark:border-slate-800 hover:bg-slate-50/70 dark:hover:bg-slate-800/60 transition max-[992px]:block max-[992px]:border max-[992px]:border-slate-200/70 dark:max-[992px]:border-slate-700 max-[992px]:rounded-2xl max-[992px]:p-1 max-[992px]:mb-4 max-[992px]:bg-white/90 dark:max-[992px]:bg-slate-900/80"
+                :class="tableRowClass"
               >
-                <td class="px-6 py-4 text-slate-800 dark:text-slate-100 max-[992px]:flex max-[992px]:items-start max-[992px]:justify-between max-[992px]:gap-3 max-[992px]:px-4 max-[992px]:py-2.5 max-[992px]:before:content-[attr(data-label)] max-[992px]:before:text-[11px] max-[992px]:before:uppercase max-[992px]:before:tracking-[0.2em] max-[992px]:before:text-slate-500 dark:max-[992px]:before:text-slate-400 max-[992px]:before:pr-3" :data-label="$t('message.security_incidents.incident') || 'Incident'">
+                <td :class="actionsCellClass" :data-label="$t('message.security_incidents.actions') || 'Actions'">
+                  <div class="flex items-center justify-end gap-2">
+                    <ActionIconButton
+                      @click="openIncident(incident)"
+                      icon="bi bi-eye-fill"
+                      tone="indigo"
+                      :title="$t('message.security_incidents.view_details') || 'View'"
+                      :aria-label="$t('message.security_incidents.view_details') || 'View'"
+                    />
+                  </div>
+                </td>
+                <td :class="incidentCellClass" :data-label="$t('message.security_incidents.incident') || 'Incident'">
                   <div class="space-y-2 max-[992px]:text-right">
                     <div class="font-semibold">#{{ incident.id }} · {{ incident.title }}</div>
                     <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold" :class="typeBadgeClass(incident.type)">
@@ -200,7 +214,7 @@
                     </span>
                   </div>
                 </td>
-                <td class="px-6 py-4 max-[992px]:flex max-[992px]:items-start max-[992px]:justify-between max-[992px]:gap-3 max-[992px]:px-4 max-[992px]:py-2.5 max-[992px]:before:content-[attr(data-label)] max-[992px]:before:text-[11px] max-[992px]:before:uppercase max-[992px]:before:tracking-[0.2em] max-[992px]:before:text-slate-500 dark:max-[992px]:before:text-slate-400 max-[992px]:before:pr-3" :data-label="$t('message.security_incidents.severity_status') || 'Severity / Status'">
+                <td :class="severityStatusCellClass" :data-label="$t('message.security_incidents.severity_status') || 'Severity / Status'">
                   <div class="flex flex-wrap gap-2 max-[992px]:justify-end">
                     <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold" :class="severityBadgeClass(incident.severity)">
                       {{ incident.severity }}
@@ -210,20 +224,11 @@
                     </span>
                   </div>
                 </td>
-                <td class="px-6 py-4 text-slate-500 dark:text-slate-300 max-[992px]:flex max-[992px]:items-start max-[992px]:justify-between max-[992px]:gap-3 max-[992px]:px-4 max-[992px]:py-2.5 max-[992px]:before:content-[attr(data-label)] max-[992px]:before:text-[11px] max-[992px]:before:uppercase max-[992px]:before:tracking-[0.2em] max-[992px]:before:text-slate-500 dark:max-[992px]:before:text-slate-400 max-[992px]:before:pr-3" :data-label="$t('message.security_incidents.when_by') || 'When / By'">
+                <td :class="whenByCellClass" :data-label="$t('message.security_incidents.when_by') || 'When / By'">
                   <div class="space-y-1 max-[992px]:text-right">
                     <div>{{ formatDate(incident.detected_at) }}</div>
                     <div class="font-semibold text-slate-700 dark:text-slate-200">{{ incident.created_by }}</div>
                   </div>
-                </td>
-                <td class="px-6 py-4 text-right max-[992px]:flex max-[992px]:items-center max-[992px]:justify-end max-[992px]:px-4 max-[992px]:py-2.5">
-                  <button
-                    class="inline-flex items-center gap-2 rounded-lg p-2 text-slate-400 transition hover:bg-slate-100 hover:text-indigo-600 dark:hover:bg-slate-800 dark:hover:text-indigo-400"
-                    @click="openIncident(incident)"
-                    :title="$t('message.security_incidents.view_details') || 'View'"
-                  >
-                    <i class="bi bi-eye-fill"></i>
-                  </button>
                 </td>
               </tr>
             </tbody>
@@ -236,58 +241,12 @@
           {{ $t('message.admin_users.page') || 'Page' }} {{ pagination.page || 1 }} / {{ pagination.totalPages || 1 }}
         </p>
 
-        <div class="flex items-center gap-2 flex-wrap">
-          <button
-            @click="goToPage(1)"
-            :disabled="(pagination.page || 1) <= 1 || loading"
-            class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-sm text-slate-700 dark:text-slate-200 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            <i class="bi bi-chevron-double-left"></i>
-            First
-          </button>
-
-          <button
-            @click="prevPage"
-            :disabled="(pagination.page || 1) <= 1 || loading"
-            class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-sm text-slate-700 dark:text-slate-200 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            <i class="bi bi-chevron-left"></i>
-            {{ $t('message.prev') || 'Prev' }}
-          </button>
-
-          <button
-            v-for="page in visiblePages"
-            :key="page"
-            @click="goToPage(page)"
-            :disabled="loading"
-            :class="[
-              'inline-flex items-center justify-center min-w-9 px-2.5 py-1.5 rounded-lg text-sm font-semibold border transition disabled:opacity-50 disabled:cursor-not-allowed',
-              page === (pagination.page || 1)
-                ? 'bg-rose-600 border-rose-600 text-white'
-                : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200'
-            ]"
-          >
-            {{ page }}
-          </button>
-
-          <button
-            @click="nextPage"
-            :disabled="(pagination.page || 1) >= (pagination.totalPages || 1) || loading"
-            class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-sm text-slate-700 dark:text-slate-200 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {{ $t('message.next') || 'Next' }}
-            <i class="bi bi-chevron-right"></i>
-          </button>
-
-          <button
-            @click="goToPage(pagination.totalPages || 1)"
-            :disabled="(pagination.page || 1) >= (pagination.totalPages || 1) || loading"
-            class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-sm text-slate-700 dark:text-slate-200 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            Last
-            <i class="bi bi-chevron-double-right"></i>
-          </button>
-        </div>
+        <PaginationControls
+          :current-page="pagination.page || 1"
+          :total-pages="pagination.totalPages || 1"
+          :loading="loading"
+          @change="goToPage"
+        />
       </div>
     </section>
 
@@ -342,10 +301,13 @@ import { useI18n } from 'vue-i18n';
 import { useSecurityIncidentStore } from '/assets/js/stores/securityIncidentStore.js';
 import { useMainStore } from '/assets/js/stores/mainStore.js';
 import ModalWindow from '/vue/components/ModalWindow.vue';
+import PaginationControls from '/vue/components/PaginationControls.vue';
+import ActionIconButton from '/vue/components/ActionIconButton.vue';
+import ActionTextButton from '/vue/components/ActionTextButton.vue';
 
 export default {
   name: 'AdminSecurityIncidents',
-  components: { ModalWindow },
+  components: { ModalWindow, PaginationControls, ActionIconButton, ActionTextButton },
   setup() {
     const { t } = useI18n({ useScope: 'global' });
     const mainStore = useMainStore();
@@ -358,6 +320,24 @@ export default {
     const severityFilter = ref('all');
     const statusFilter = ref('all');
     const useServerFilter = ref(true);
+
+    const heroSectionClass =
+      'relative overflow-hidden rounded-[32px] border border-slate-200/70 dark:border-slate-800 bg-gradient-to-br from-white via-amber-50/40 to-teal-50/40 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 p-8 shadow-[0_24px_80px_-60px_rgba(15,23,42,0.8)]';
+    const searchInputClass =
+      'w-full pl-11 pr-4 py-2.5 rounded-full border border-slate-200/80 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm text-slate-700 dark:text-slate-200 focus:ring-2 focus:ring-rose-500 focus:border-rose-500 outline-none';
+    const serverFilterLabelClass =
+      'inline-flex items-center gap-2 rounded-full border border-slate-200/80 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-2 text-xs font-semibold text-slate-600 dark:text-slate-200';
+
+    const mobileCellBaseClass =
+      'max-[992px]:flex max-[992px]:items-start max-[992px]:justify-between max-[992px]:gap-3 max-[992px]:px-4 max-[992px]:py-2.5 max-[992px]:before:content-[attr(data-label)] max-[992px]:before:text-[11px] max-[992px]:before:uppercase max-[992px]:before:tracking-[0.2em] max-[992px]:before:text-slate-500 dark:max-[992px]:before:text-slate-400 max-[992px]:before:pr-3';
+    const mobileActionsCellBaseClass =
+      'max-[992px]:flex max-[992px]:items-center max-[992px]:justify-between max-[992px]:px-4 max-[992px]:py-2.5 max-[992px]:before:content-[attr(data-label)] max-[992px]:before:text-[11px] max-[992px]:before:uppercase max-[992px]:before:tracking-[0.2em] max-[992px]:before:text-slate-500 dark:max-[992px]:before:text-slate-400 max-[992px]:before:pr-3';
+    const tableRowClass =
+      'border-t border-slate-100 dark:border-slate-800 hover:bg-slate-50/70 dark:hover:bg-slate-800/60 transition max-[992px]:block max-[992px]:border max-[992px]:border-slate-200/70 dark:max-[992px]:border-slate-700 max-[992px]:rounded-2xl max-[992px]:p-1 max-[992px]:mb-4 max-[992px]:bg-white/90 dark:max-[992px]:bg-slate-900/80';
+    const actionsCellClass = `whitespace-nowrap px-6 py-4 text-right ${mobileActionsCellBaseClass}`;
+    const incidentCellClass = `px-6 py-4 text-slate-800 dark:text-slate-100 ${mobileCellBaseClass}`;
+    const severityStatusCellClass = `px-6 py-4 ${mobileCellBaseClass}`;
+    const whenByCellClass = `px-6 py-4 text-slate-500 dark:text-slate-300 ${mobileCellBaseClass}`;
 
     const normalizedIncidents = computed(() => incidents.value || []);
 
@@ -441,31 +421,6 @@ export default {
       scrollToTableTop();
     };
 
-    const prevPage = async () => {
-      await goToPage((Number(pagination.value?.page) || 1) - 1);
-    };
-
-    const nextPage = async () => {
-      await goToPage((Number(pagination.value?.page) || 1) + 1);
-    };
-
-    const visiblePages = computed(() => {
-      const totalPages = Number(pagination.value?.totalPages) || 1;
-      const currentPage = Number(pagination.value?.page) || 1;
-      const maxButtons = 5;
-
-      let start = Math.max(1, currentPage - Math.floor(maxButtons / 2));
-      let end = Math.min(totalPages, start + maxButtons - 1);
-
-      if (end - start + 1 < maxButtons) {
-        start = Math.max(1, end - maxButtons + 1);
-      }
-
-      const pages = [];
-      for (let page = start; page <= end; page += 1) pages.push(page);
-      return pages;
-    });
-
     const loadIncidents = async (page = pagination.value?.page || 1) => {
       await securityStore.fetchIncidents({
         page,
@@ -522,6 +477,14 @@ export default {
       severityFilter,
       statusFilter,
       useServerFilter,
+      heroSectionClass,
+      searchInputClass,
+      serverFilterLabelClass,
+      tableRowClass,
+      actionsCellClass,
+      incidentCellClass,
+      severityStatusCellClass,
+      whenByCellClass,
       detectedCount,
       resolvedCount,
       highSeverityCount,
@@ -536,9 +499,6 @@ export default {
       openIncident,
       closeIncident,
       goToPage,
-      prevPage,
-      nextPage,
-      visiblePages,
       refresh
     };
   }

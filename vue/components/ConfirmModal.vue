@@ -13,7 +13,7 @@
     <div class="flex gap-3 mt-6">
       <button
         @click="$emit('cancel')"
-        class="flex-1 px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors"
+        :class="cancelButtonClass"
       >
         {{ cancelText }}
       </button>
@@ -55,6 +55,10 @@ export default {
     cancelText: {
       type: String,
       default: 'Cancel'
+    },
+    cancelButtonClass: {
+      type: String,
+      default: 'flex-1 px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors'
     },
     icon: {
       type: String,

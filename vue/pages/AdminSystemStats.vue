@@ -10,18 +10,21 @@
         <i class="bi bi-lock-fill text-5xl text-indigo-600 dark:text-indigo-400 mb-4"></i>
         <h3 class="text-xl font-bold text-indigo-900 dark:text-indigo-100 mb-2">{{ $t('message.auth.login_required') }}</h3>
         <p class="text-indigo-700 dark:text-indigo-300 mb-4">{{ $t('message.system_stats_page.login_required_message') }}</p>
-        <button
+        <ActionTextButton
+          tone="indigo"
+          shape="xl"
+          size="sm"
+          icon="bi bi-box-arrow-in-right text-lg"
+          class="shadow-lg hover:shadow-xl"
           @click="openLoginModal"
-          class="inline-flex items-center gap-2 px-3 py-1 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition"
         >
-          <i class="bi bi-box-arrow-in-right text-lg"></i>
           {{ $t('message.auth.login') }}
-        </button>
+        </ActionTextButton>
       </section>
     </template>
 
     <template v-else>
-      <section class="relative overflow-hidden rounded-[32px] border border-slate-200/70 dark:border-slate-800 bg-gradient-to-br from-white via-indigo-50/40 to-cyan-50/40 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 p-8 shadow-[0_24px_80px_-60px_rgba(15,23,42,0.8)]">
+      <section :class="heroSectionClass">
         <div class="absolute -top-20 -right-16 w-72 h-72 bg-indigo-400/10 rounded-full blur-3xl"></div>
         <div class="absolute -bottom-24 -left-24 w-72 h-72 bg-cyan-500/10 rounded-full blur-3xl"></div>
 
@@ -38,14 +41,15 @@
               {{ $t('message.system_stats_page.subtitle') }}
             </p>
             <div class="mt-6 flex flex-wrap items-center gap-3">
-              <button
-                class="inline-flex items-center gap-2 rounded-full border border-slate-200/80 dark:border-slate-700 bg-white/80 dark:bg-slate-800/80 px-4 py-2 text-sm font-semibold text-slate-700 dark:text-slate-200 shadow-sm hover:shadow-md transition"
+              <ActionTextButton
+                variant="soft"
+                shape="full"
+                :icon="loading ? 'bi bi-arrow-clockwise animate-spin' : 'bi bi-arrow-clockwise'"
                 :disabled="loading"
                 @click="refresh"
               >
-                <i class="bi bi-arrow-clockwise"></i>
                 {{ $t('message.refresh') }}
-              </button>
+              </ActionTextButton>
               <span class="text-xs uppercase tracking-[0.2em] text-slate-400">
                 {{ $t('message.system_stats_page.last_updated') }}: {{ formatDate(lastUpdatedLabel) }}
               </span>
@@ -254,7 +258,7 @@
 
                 <span
                   v-if="hasAuditStats"
-                  class="inline-flex items-center rounded-full border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-600 dark:text-slate-300"
+                  :class="auditScopeBadgeClass"
                 >
                   {{ $t('message.system_stats_page.audit_scope_label') }}: {{ auditScopeText }}
                   <i
@@ -370,9 +374,11 @@ import { useAuditStore } from '/assets/js/stores/auditStore.js';
 import { useAuthStore } from '/assets/js/stores/authStore.js';
 import { useModalStore } from '/assets/js/stores/modalStore.js';
 import { useMainStore } from '/assets/js/stores/mainStore.js';
+import ActionTextButton from '/vue/components/ActionTextButton.vue';
 
 export default {
   name: 'AdminSystemStats',
+  components: { ActionTextButton },
   setup() {
     const { t } = useI18n({ useScope: 'global' });
     const systemStatsStore = useSystemStatsStore();
@@ -380,6 +386,8 @@ export default {
     const authStore = useAuthStore();
     const modalStore = useModalStore();
     const mainStore = useMainStore();
+    const heroSectionClass = 'relative overflow-hidden rounded-[32px] border border-slate-200/70 dark:border-slate-800 bg-gradient-to-br from-white via-indigo-50/40 to-cyan-50/40 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 p-8 shadow-[0_24px_80px_-60px_rgba(15,23,42,0.8)]';
+    const auditScopeBadgeClass = 'inline-flex items-center rounded-full border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-600 dark:text-slate-300';
 
     const auditStatsData = ref(null);
     const auditStatsLoading = ref(false);
@@ -534,6 +542,8 @@ export default {
     return {
       loading,
       error,
+      heroSectionClass,
+      auditScopeBadgeClass,
       isAdmin,
       showLoginRequired,
       stats,

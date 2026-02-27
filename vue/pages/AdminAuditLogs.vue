@@ -5,17 +5,19 @@
       <i class="bi bi-lock-fill text-5xl text-blue-600 dark:text-blue-400 mb-4"></i>
       <h3 class="text-xl font-bold text-blue-900 dark:text-blue-100 mb-2">{{ $t('message.audit.login_required') || $t('message.auth.login_required') || 'Login required' }}</h3>
       <p class="text-blue-700 dark:text-blue-300 mb-4">{{ $t('message.audit.login_required_message') || $t('message.auth.login_required_message') || 'Please login to view audit logs.' }}</p>
-      <button
+      <ActionTextButton
+        icon="bi bi-box-arrow-in-right"
+        tone="blue"
+        size="sm"
+        shape="xl"
         @click="openLoginModal"
-        class="inline-flex items-center gap-2 px-3 py-1 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition"
       >
-        <i class="bi bi-box-arrow-in-right text-lg"></i>
         {{ $t('message.auth.login') || 'Login' }}
-      </button>
+      </ActionTextButton>
     </div>
 
     <template v-else>
-      <section class="relative overflow-hidden rounded-[32px] border border-slate-200/70 dark:border-slate-800 bg-gradient-to-br from-white via-cyan-50/40 to-teal-50/40 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 p-8 shadow-[0_24px_80px_-60px_rgba(15,23,42,0.8)]">
+      <section :class="heroSectionClass">
         <div class="absolute -top-24 -right-24 w-72 h-72 bg-cyan-500/10 rounded-full blur-3xl"></div>
         <div class="absolute -bottom-24 -left-24 w-72 h-72 bg-teal-500/10 rounded-full blur-3xl"></div>
         <div class="relative grid gap-6 lg:grid-cols-[1.25fr_0.75fr] lg:items-center">
@@ -29,13 +31,14 @@
               {{ $t('message.audit.search_placeholder') || 'Search logs, actors, targets...' }}
             </p>
             <div class="mt-6 flex flex-wrap items-center gap-3">
-              <button
+              <ActionTextButton
+                variant="soft"
+                shape="full"
+                icon="bi bi-arrow-clockwise"
                 @click="auditStore.reload()"
-                class="inline-flex items-center gap-2 rounded-full border border-slate-200/80 dark:border-slate-700 bg-white/80 dark:bg-slate-800/80 px-4 py-2 text-sm font-semibold text-slate-700 dark:text-slate-200 shadow-sm hover:shadow-md transition"
               >
-                <i class="bi bi-arrow-clockwise"></i>
                 {{ $t('message.admin_users.reload') || 'Reload' }}
-              </button>
+              </ActionTextButton>
             </div>
           </div>
 
@@ -99,7 +102,7 @@
 
       <section class="rounded-[28px] border border-slate-200/70 dark:border-slate-800 bg-white/85 dark:bg-slate-900 p-6 shadow-[0_18px_50px_-40px_rgba(15,23,42,0.7)]">
       <!-- Enhanced Filters Section -->
-      <div class="bg-gradient-to-r from-slate-50/80 to-slate-100/80 dark:from-slate-800/80 dark:to-slate-700/80 rounded-2xl p-6 mb-6 border border-slate-200/60 dark:border-slate-700/60 shadow-sm space-y-5">
+      <div :class="filtersPanelClass">
         <div class="flex items-center justify-between gap-3">
           <div class="flex items-center gap-3">
             <i class="bi bi-funnel-fill text-slate-600 dark:text-slate-400 text-lg"></i>
@@ -119,7 +122,7 @@
               <input
                 v-model="auditStore.filters.search"
                 @keyup.enter="applyFilters"
-                class="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-200/80 dark:border-slate-600 bg-white dark:bg-slate-800 text-sm text-slate-700 dark:text-slate-200 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition"
+                :class="filterInputClass"
                 :placeholder="$t('message.audit.search_placeholder') || 'Search logs, actors, targets...'"
               />
             </div>
@@ -130,7 +133,7 @@
             <select
               v-model="auditStore.filters.action"
               @change="applyFilters"
-              class="w-full px-3 py-2.5 rounded-xl border border-slate-200/80 dark:border-slate-600 bg-white dark:bg-slate-800 text-sm text-slate-700 dark:text-slate-200 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition"
+              :class="filterSelectClass"
             >
               <option value="">{{ $t('message.audit.all_actions') || 'All Actions' }}</option>
               <option value="login">Login</option>
@@ -149,7 +152,7 @@
             <select
               v-model="auditStore.filters.targetType"
               @change="applyFilters"
-              class="w-full px-3 py-2.5 rounded-xl border border-slate-200/80 dark:border-slate-600 bg-white dark:bg-slate-800 text-sm text-slate-700 dark:text-slate-200 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition"
+              :class="filterSelectClass"
             >
               <option value="">{{ $t('message.audit.all_targets') || 'All Targets' }}</option>
               <option value="authentication">Authentication</option>
@@ -169,7 +172,7 @@
             <select
               v-model="auditStore.filters.actorRole"
               @change="applyFilters"
-              class="w-full px-3 py-2.5 rounded-xl border border-slate-200/80 dark:border-slate-600 bg-white dark:bg-slate-800 text-sm text-slate-700 dark:text-slate-200 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition"
+              :class="filterSelectClass"
             >
               <option value="">{{ $t('message.audit.all_roles') || 'All Roles' }}</option>
               <option value="super_admin">Super Admin</option>
@@ -187,7 +190,7 @@
                 v-model="auditStore.filters.startDate"
                 @change="applyFilters"
                 type="date"
-                class="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-200/80 dark:border-slate-600 bg-white dark:bg-slate-800 text-sm text-slate-700 dark:text-slate-200 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition"
+                :class="filterInputClass"
               />
             </div>
           </div>
@@ -200,7 +203,7 @@
                 v-model="auditStore.filters.endDate"
                 @change="applyFilters"
                 type="date"
-                class="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-200/80 dark:border-slate-600 bg-white dark:bg-slate-800 text-sm text-slate-700 dark:text-slate-200 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition"
+                :class="filterInputClass"
               />
             </div>
           </div>
@@ -212,20 +215,22 @@
             {{ $t('message.audit.search_placeholder') || 'Search logs, actors, targets...' }}
           </p>
           <div class="flex items-center gap-3">
-            <button
+            <ActionTextButton
+              tone="teal"
+              shape="xl"
+              icon="bi bi-check-circle text-sm"
               @click="applyFilters"
-              class="inline-flex items-center gap-2 px-4 py-2 bg-teal-600 hover:bg-teal-700 dark:bg-teal-500 dark:hover:bg-teal-600 text-white font-semibold rounded-xl shadow-sm hover:shadow-md transition"
             >
-              <i class="bi bi-check-circle text-sm"></i>
               {{ $t('message.audit.apply_filters') || 'Apply Filters' }}
-            </button>
-            <button
+            </ActionTextButton>
+            <ActionTextButton
+              tone="slate"
+              shape="xl"
+              icon="bi bi-x-circle text-sm"
               @click="clearFilters"
-              class="inline-flex items-center gap-2 px-4 py-2 bg-slate-500 hover:bg-slate-600 dark:bg-slate-600 dark:hover:bg-slate-500 text-white font-semibold rounded-xl shadow-sm hover:shadow-md transition"
             >
-              <i class="bi bi-x-circle text-sm"></i>
               {{ $t('message.audit.clear_filters') || 'Clear Filters' }}
-            </button>
+            </ActionTextButton>
           </div>
         </div>
       </div>
@@ -239,13 +244,14 @@
         </div>
 
         <div class="flex items-center gap-3">
-          <button
+          <ActionTextButton
+            tone="emerald"
+            shape="xl"
+            icon="bi bi-download text-sm"
             @click="onExport('csv')"
-            class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-600 text-white font-semibold rounded-xl shadow-sm hover:shadow-md transition"
           >
-            <i class="bi bi-download text-sm"></i>
             {{ $t('message.audit.export_csv') || 'Export CSV' }}
-          </button>
+          </ActionTextButton>
         </div>
       </div>
 
@@ -257,13 +263,15 @@
         <div v-else-if="auditStore.error" class="p-8 text-center">
           <i class="bi bi-exclamation-triangle-fill text-4xl text-rose-500 mb-3"></i>
           <h3 class="text-lg font-bold text-slate-900 dark:text-white">{{ $t('message.errors.failed_to_load', { item: $t('message.navbar.audit_logs'), message: auditStore.error }) || 'Failed to load audit logs' }}</h3>
-          <button
-            class="mt-4 inline-flex items-center gap-2 rounded-full bg-rose-600 text-white px-4 py-2 text-sm font-semibold"
+          <ActionTextButton
+            class="mt-4"
+            tone="rose"
+            shape="full"
+            icon="bi bi-arrow-clockwise"
             @click="auditStore.reload()"
           >
-            <i class="bi bi-arrow-clockwise"></i>
             {{ $t('message.common.retry') || 'Retry' }}
-          </button>
+          </ActionTextButton>
         </div>
 
         <div v-else class="bg-white/80 dark:bg-slate-900">
@@ -271,12 +279,12 @@
             <table class="audit-table">
               <thead class="audit-thead">
                 <tr>
+                  <th class="px-6 py-3 text-right">{{ $t('message.common.actions', 'Actions') }}</th>
                   <th class="px-6 py-3 text-left">{{ $t('message.audit.actor') || 'Actor' }}</th>
                   <th class="px-6 py-3 text-left">{{ $t('message.audit.when') || 'When' }}</th>
                   <th class="px-6 py-3 text-left">{{ $t('message.audit.action') || 'Action' }}</th>
                   <th class="px-6 py-3 text-left">{{ $t('message.audit.target') || 'Target' }}</th>
                   <th class="px-6 py-3 text-left">{{ $t('message.audit.details') || 'Details' }}</th>
-                  <th class="px-6 py-3 text-left"> </th>
                 </tr>
               </thead>
               <tbody class="audit-tbody">
@@ -284,9 +292,20 @@
                   <td colspan="6" class="p-8 text-center text-slate-500 dark:text-slate-400">No audit logs found.</td>
                 </tr>
                 <tr v-for="log in auditStore.logs" :key="log.id" class="audit-row">
+                  <td class="audit-cell-view" :data-label="$t('message.common.actions', 'Actions')">
+                    <div class="flex items-center justify-end gap-2">
+                      <ActionIconButton
+                        @click="openLog(log)"
+                        icon="bi bi-eye-fill"
+                        tone="indigo"
+                        :title="$t('message.common.view') || 'View'"
+                        :aria-label="$t('message.common.view') || 'View'"
+                      />
+                    </div>
+                  </td>
                   <td class="audit-cell-actor cursor-pointer" @click.stop="openLog(log)" :data-label="$t('message.audit.actor') || 'Actor'">
                     <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-700 flex items-center justify-center text-sm font-semibold text-slate-800 dark:text-slate-100">
+                        <div :class="actorAvatarClass">
                         {{ avatarInitial(log) }}
                       </div>
                       <div class="min-w-0">
@@ -294,12 +313,7 @@
                           <div class="font-semibold text-slate-800 dark:text-slate-100 truncate">{{ actorDisplay(log) }}</div>
                           <span
                             v-if="log.actor_role"
-                            :class="[
-                              (log.actor_role || '').toString().toLowerCase() === 'super_admin' ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300' :
-                              (log.actor_role || '').toString().toLowerCase() === 'admin' ? 'bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-300' :
-                              'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-200'
-                            ]"
-                            class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold whitespace-nowrap"
+                            :class="actorRoleBadgeClass(log.actor_role)"
                           >{{ (log.actor_role || '').toString().replace('_', ' ').toUpperCase() }}</span>
                         </div>
                         <div v-if="log.actor_email || log.user_email" class="text-xs text-slate-500 dark:text-slate-400 hidden md:flex items-center gap-1 truncate">
@@ -317,12 +331,6 @@
                   </td>
                   <td class="audit-cell-target cursor-pointer" @click.stop="openLog(log)" :data-label="$t('message.audit.target') || 'Target'">{{ log.target_type || log.resource || log.target || '-' }}</td>
                   <td class="audit-cell-details" :data-label="$t('message.audit.details') || 'Details'"><div class="text-xs line-clamp-2 w-full text-left">{{ formatDetails(log.details || log.meta || log.payload) }}</div></td>
-                  <td class="audit-cell-view" :data-label="' '">
-                    <button @click.stop="openLog(log)" class="inline-flex items-center gap-2 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-600 text-white rounded-lg text-sm">
-                      <i class="bi bi-eye"></i>
-                      {{ $t('message.common.view') || 'View' }}
-                    </button>
-                  </td>
                 </tr>
               </tbody>
             </table>
@@ -335,58 +343,12 @@
           Page {{ auditStore.pagination.page || 1 }} / {{ auditStore.pagination.totalPages || 1 }}
         </p>
 
-        <div class="flex items-center gap-2 flex-wrap">
-          <button
-            @click="goToPage(1)"
-            :disabled="(auditStore.pagination.page || 1) <= 1 || auditStore.loading"
-            class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-sm text-slate-700 dark:text-slate-200 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            <i class="bi bi-chevron-double-left"></i>
-            First
-          </button>
-
-          <button
-            @click="prevPage"
-            :disabled="(auditStore.pagination.page || 1) <= 1 || auditStore.loading"
-            class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-sm text-slate-700 dark:text-slate-200 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            <i class="bi bi-chevron-left"></i>
-            Prev
-          </button>
-
-          <button
-            v-for="page in visiblePages"
-            :key="page"
-            @click="goToPage(page)"
-            :disabled="auditStore.loading"
-            :class="[
-              'inline-flex items-center justify-center min-w-9 px-2.5 py-1.5 rounded-lg text-sm font-semibold border transition disabled:opacity-50 disabled:cursor-not-allowed',
-              page === (auditStore.pagination.page || 1)
-                ? 'bg-teal-600 border-teal-600 text-white'
-                : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200'
-            ]"
-          >
-            {{ page }}
-          </button>
-
-          <button
-            @click="nextPage"
-            :disabled="(auditStore.pagination.page || 1) >= (auditStore.pagination.totalPages || 1) || auditStore.loading"
-            class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-sm text-slate-700 dark:text-slate-200 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            Next
-            <i class="bi bi-chevron-right"></i>
-          </button>
-
-          <button
-            @click="goToPage(auditStore.pagination.totalPages || 1)"
-            :disabled="(auditStore.pagination.page || 1) >= (auditStore.pagination.totalPages || 1) || auditStore.loading"
-            class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-sm text-slate-700 dark:text-slate-200 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            Last
-            <i class="bi bi-chevron-double-right"></i>
-          </button>
-        </div>
+        <PaginationControls
+          :current-page="auditStore.pagination.page || 1"
+          :total-pages="auditStore.pagination.totalPages || 1"
+          :loading="auditStore.loading"
+          @change="goToPage"
+        />
       </div>
       </section>
     </template>
@@ -402,14 +364,26 @@
             <div class="text-xs text-slate-500 dark:text-slate-400 mt-1">{{ formatDate(selectedLog?.timestamp || selectedLog?.created_at) }} • #{{ selectedLog?.id }}</div>
           </div>
           <div class="flex items-center gap-2 mt-2 sm:mt-0">
-            <button @click="copySelectedLog" class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-xs">
-              <i class="bi bi-clipboard"></i>
+            <ActionTextButton
+              variant="soft"
+              shape="xl"
+              size="sm"
+              icon="bi bi-clipboard"
+              class="text-xs"
+              @click="copySelectedLog"
+            >
               {{ $t('message.audit.copy_json') || 'Copy JSON' }}
-            </button>
-            <button @click="closeLog" class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-transparent border border-slate-200 dark:border-slate-700 text-xs">
-              <i class="bi bi-x-lg"></i>
+            </ActionTextButton>
+            <ActionTextButton
+              variant="soft"
+              shape="xl"
+              size="sm"
+              icon="bi bi-x-lg"
+              class="text-xs"
+              @click="closeLog"
+            >
               {{ $t('message.common.close') || 'Close' }}
-            </button>
+            </ActionTextButton>
           </div>
         </div>
 
@@ -474,11 +448,17 @@ import { useAuthStore } from '/assets/js/stores/authStore.js';
 import { useModalStore } from '/assets/js/stores/modalStore.js';
 import { useToastStore } from '/assets/js/stores/toastStore.js';
 import ModalWindow from '/vue/components/ModalWindow.vue';
+import PaginationControls from '/vue/components/PaginationControls.vue';
+import ActionIconButton from '/vue/components/ActionIconButton.vue';
+import ActionTextButton from '/vue/components/ActionTextButton.vue';
 
 export default {
   name: 'AdminAuditLogs',
   components: {
-    ModalWindow
+    ModalWindow,
+    PaginationControls,
+    ActionIconButton,
+    ActionTextButton
   },
   setup() {
     const auditStore = useAuditStore();
@@ -487,6 +467,18 @@ export default {
     const showModal = ref(false);
     const selectedLog = ref(null);
     const tableTopRef = ref(null);
+
+    const heroSectionClass =
+      'relative overflow-hidden rounded-[32px] border border-slate-200/70 dark:border-slate-800 bg-gradient-to-br from-white via-cyan-50/40 to-teal-50/40 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 p-8 shadow-[0_24px_80px_-60px_rgba(15,23,42,0.8)]';
+    const filtersPanelClass =
+      'bg-gradient-to-r from-slate-50/80 to-slate-100/80 dark:from-slate-800/80 dark:to-slate-700/80 rounded-2xl p-6 mb-6 border border-slate-200/60 dark:border-slate-700/60 shadow-sm space-y-5';
+    const filterInputClass =
+      'w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-200/80 dark:border-slate-600 bg-white dark:bg-slate-800 text-sm text-slate-700 dark:text-slate-200 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition';
+    const filterSelectClass =
+      'w-full px-3 py-2.5 rounded-xl border border-slate-200/80 dark:border-slate-600 bg-white dark:bg-slate-800 text-sm text-slate-700 dark:text-slate-200 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition';
+    const actorAvatarClass =
+      'w-10 h-10 rounded-full bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-700 flex items-center justify-center text-sm font-semibold text-slate-800 dark:text-slate-100';
+    const actorRoleBadgeBaseClass = 'inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold whitespace-nowrap';
 
     const totalLogCount = computed(() => auditStore.error ? 0 : (Number(auditStore.pagination.total) || auditStore.logs.length || 0));
     const successCount = computed(() => auditStore.error ? 0 : (auditStore.logs || []).filter((log) => (log.status || '').toUpperCase() === 'SUCCESS').length);
@@ -567,6 +559,17 @@ export default {
       return '-';
     };
 
+    const actorRoleBadgeClass = (role) => {
+      const normalized = (role || '').toString().toLowerCase();
+      if (normalized === 'super_admin') {
+        return `${actorRoleBadgeBaseClass} bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300`;
+      }
+      if (normalized === 'admin') {
+        return `${actorRoleBadgeBaseClass} bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-300`;
+      }
+      return `${actorRoleBadgeBaseClass} bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-200`;
+    };
+
     const mainStore = useMainStore();
     const { t } = useI18n({ useScope: 'global' });
     const authStore = useAuthStore();
@@ -639,23 +642,6 @@ export default {
       auditStore.fetchLogs();
     };
 
-    const visiblePages = computed(() => {
-      const totalPages = Number(auditStore.pagination.totalPages) || 1;
-      const currentPage = Number(auditStore.pagination.page) || 1;
-      const maxButtons = 5;
-
-      let start = Math.max(1, currentPage - Math.floor(maxButtons / 2));
-      let end = Math.min(totalPages, start + maxButtons - 1);
-
-      if (end - start + 1 < maxButtons) {
-        start = Math.max(1, end - maxButtons + 1);
-      }
-
-      const pages = [];
-      for (let page = start; page <= end; page += 1) pages.push(page);
-      return pages;
-    });
-
     const scrollToTopAfterPagination = () => {
       if (tableTopRef.value && typeof tableTopRef.value.scrollIntoView === 'function') {
         const rect = tableTopRef.value.getBoundingClientRect();
@@ -673,14 +659,6 @@ export default {
       auditStore.filters.page = nextPage;
       await auditStore.fetchLogs();
       scrollToTopAfterPagination();
-    };
-
-    const prevPage = async () => {
-      await goToPage((Number(auditStore.pagination.page) || 1) - 1);
-    };
-
-    const nextPage = async () => {
-      await goToPage((Number(auditStore.pagination.page) || 1) + 1);
     };
 
     const showToast = (message, type = 'info') => {
@@ -741,7 +719,35 @@ export default {
       }
     );
 
-    return { auditStore, formatDate, formatDetails, applyFilters, clearFilters, onExport, visiblePages, goToPage, prevPage, nextPage, showModal, selectedLog, totalLogCount, successCount, issueCount, openLog, closeLog, copySelectedLog, showLoginRequired, openLoginModal, badgeColor, avatarInitial, actorDisplay, tableTopRef };
+    return {
+      auditStore,
+      formatDate,
+      formatDetails,
+      applyFilters,
+      clearFilters,
+      onExport,
+      goToPage,
+      showModal,
+      selectedLog,
+      totalLogCount,
+      successCount,
+      issueCount,
+      openLog,
+      closeLog,
+      copySelectedLog,
+      showLoginRequired,
+      openLoginModal,
+      badgeColor,
+      avatarInitial,
+      actorDisplay,
+      actorRoleBadgeClass,
+      heroSectionClass,
+      filtersPanelClass,
+      filterInputClass,
+      filterSelectClass,
+      actorAvatarClass,
+      tableTopRef
+    };
   }
 };
 </script>
@@ -903,28 +909,19 @@ export default {
   }
 
   /* Borders between rows on mobile */
+  .audit-cell-view,
   .audit-cell-actor,
   .audit-cell-when,
   .audit-cell-target {
     border-bottom: 1px solid #e2e8f0; /* border-b */
   }
+  .dark .audit-cell-view,
   .dark .audit-cell-actor,
   .dark .audit-cell-when,
   .dark .audit-cell-target {
     border-color: #334155; /* dark:border-slate-700 */
   }
 
-  .audit-cell-view {
-    justify-content: flex-end;
-    border-top: 1px solid #e2e8f0; /* border-t */
-  }
-  .dark .audit-cell-view {
-    border-color: #334155; /* dark:border-slate-700 */
-  }
-  .audit-cell-view::before {
-    display: none; /* hidden */
-  }
-  
   /* Details specific mobile */
   .audit-cell-details {
     display: block;

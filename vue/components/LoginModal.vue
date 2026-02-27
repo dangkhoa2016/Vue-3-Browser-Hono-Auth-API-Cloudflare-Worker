@@ -38,8 +38,7 @@
           type="email"
           required
           :disabled="isLoading"
-          class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          :class="{ 'border-red-300 dark:border-red-600': hasFieldError('email') }"
+          :class="[loginInputClass, { 'border-red-300 dark:border-red-600': hasFieldError('email') }]"
           :placeholder="$t('message.auth.email_placeholder')"
         />
       </div>
@@ -55,8 +54,7 @@
           type="password"
           required
           :disabled="isLoading"
-          class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          :class="{ 'border-red-300 dark:border-red-600': hasFieldError('password') }"
+          :class="[loginInputClass, { 'border-red-300 dark:border-red-600': hasFieldError('password') }]"
           :placeholder="$t('message.auth.password_placeholder')"
         />
       </div>
@@ -72,16 +70,22 @@
           />
           <span class="ml-2 text-gray-600 dark:text-gray-400">{{ $t('message.auth.remember_me') }}</span>
         </label>
-        <a href="javascript:void(0)" @click.prevent class="text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 cursor-pointer">
+        <button
+          type="button"
+          :title="$t('message.auth.forgot_password')"
+          :aria-label="$t('message.auth.forgot_password')"
+          @click.prevent
+          class="text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 cursor-pointer"
+        >
           {{ $t('message.auth.forgot_password') }}
-        </a>
+        </button>
       </div>
 
       <!-- Submit Button -->
       <button
         type="submit"
         :disabled="isLoading"
-        class="w-full flex justify-center items-center py-2.5 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-blue-600"
+        :class="submitButtonClass"
       >
         <svg v-if="isLoading" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
           <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -98,6 +102,8 @@
         <span class="text-gray-600 dark:text-gray-400">{{ $t('message.auth.no_account') }}</span>
         <button 
           @click="$emit('switch-to-register')"
+          :title="$t('message.auth.register_now')"
+          :aria-label="$t('message.auth.register_now')"
           class="ml-1 text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 font-medium"
         >
           {{ $t('message.auth.register_now') }}
@@ -124,6 +130,11 @@ export default {
   },
   emits: ['close', 'switch-to-register', 'login-success'],
   setup(props, { emit }) {
+    const loginInputClass =
+      'w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed';
+    const submitButtonClass =
+      'w-full flex justify-center items-center py-2.5 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-blue-600';
+
     const formData = reactive({
       email: '',
       password: '',
@@ -200,6 +211,8 @@ export default {
       isLoading,
       error,
       fieldErrors,
+      loginInputClass,
+      submitButtonClass,
       handleLogin,
       handleClose,
       hasFieldError

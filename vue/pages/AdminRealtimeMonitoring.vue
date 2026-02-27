@@ -4,17 +4,19 @@
       <i class="bi bi-lock-fill text-5xl text-blue-600 dark:text-blue-400 mb-4"></i>
       <h3 class="text-xl font-bold text-blue-900 dark:text-blue-100 mb-2">{{ $t('message.audit.login_required') || $t('message.auth.login_required') }}</h3>
       <p class="text-blue-700 dark:text-blue-300 mb-4">{{ $t('message.audit.login_required_message') || $t('message.auth.login_required_message') }}</p>
-      <button
+      <ActionTextButton
+        icon="bi bi-box-arrow-in-right"
+        tone="blue"
+        size="sm"
+        shape="xl"
         @click="openLoginModal"
-        class="inline-flex items-center gap-2 px-3 py-1 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition"
       >
-        <i class="bi bi-box-arrow-in-right text-lg"></i>
         {{ $t('message.auth.login') || 'Login' }}
-      </button>
+      </ActionTextButton>
     </div>
 
     <template v-else>
-      <section class="relative overflow-hidden rounded-[32px] border border-slate-200/70 dark:border-slate-800 bg-gradient-to-br from-white via-violet-50/40 to-cyan-50/40 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 p-8 shadow-[0_24px_80px_-60px_rgba(15,23,42,0.8)]">
+      <section :class="heroSectionClass">
         <div class="absolute -top-24 -right-24 w-72 h-72 bg-violet-500/10 rounded-full blur-3xl"></div>
         <div class="absolute -bottom-24 -left-24 w-72 h-72 bg-cyan-500/10 rounded-full blur-3xl"></div>
 
@@ -33,61 +35,67 @@
             <p class="mt-2 text-xs uppercase tracking-[0.2em] text-slate-400">{{ formatDate(dataTimestamp) }}</p>
 
             <div class="mt-6 flex flex-wrap gap-3">
-              <button
-                @click="refresh"
+              <ActionTextButton
+                variant="soft"
+                icon="bi bi-arrow-clockwise"
+                shape="full"
                 :disabled="loading"
-                class="inline-flex items-center gap-2 rounded-full border border-slate-200/80 dark:border-slate-700 bg-white/80 dark:bg-slate-800/80 px-4 py-2 text-sm font-semibold text-slate-700 dark:text-slate-200 shadow-sm hover:shadow-md transition disabled:opacity-60"
+                @click="refresh"
               >
-                <i class="bi bi-arrow-clockwise"></i>
                 {{ $t('message.refresh') || 'Refresh' }}
-              </button>
+              </ActionTextButton>
 
-              <button
+              <ActionTextButton
+                variant="soft"
+                icon="bi bi-download"
+                shape="full"
+                :disabled="actionLoading"
                 @click="exportDashboard"
-                :disabled="actionLoading"
-                class="inline-flex items-center gap-2 rounded-full border border-violet-200 dark:border-violet-700 bg-violet-50/80 dark:bg-violet-900/20 px-4 py-2 text-sm font-semibold text-violet-700 dark:text-violet-200 shadow-sm hover:shadow-md transition disabled:opacity-60"
               >
-                <i class="bi bi-download"></i>
                 {{ $t('message.realtime_monitoring.export') || 'Export' }}
-              </button>
+              </ActionTextButton>
 
-              <button
+              <ActionTextButton
                 v-if="!isMonitoringActive"
+                icon="bi bi-play-fill"
+                tone="emerald"
+                shape="full"
+                :disabled="actionLoading"
                 @click="startMonitoring"
-                :disabled="actionLoading"
-                class="inline-flex items-center gap-2 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 text-sm font-semibold shadow-sm disabled:opacity-60"
               >
-                <i class="bi bi-play-fill"></i>
                 {{ $t('message.realtime_monitoring.start') || 'Start' }}
-              </button>
+              </ActionTextButton>
 
-              <button
+              <ActionTextButton
                 v-else
+                icon="bi bi-stop-fill"
+                tone="rose"
+                shape="full"
+                :disabled="actionLoading"
                 @click="stopMonitoring"
-                :disabled="actionLoading"
-                class="inline-flex items-center gap-2 rounded-full bg-rose-600 hover:bg-rose-700 text-white px-4 py-2 text-sm font-semibold shadow-sm disabled:opacity-60"
               >
-                <i class="bi bi-stop-fill"></i>
                 {{ $t('message.realtime_monitoring.stop') || 'Stop' }}
-              </button>
+              </ActionTextButton>
 
-              <button
+              <ActionTextButton
+                icon="bi bi-bar-chart"
+                tone="indigo"
+                shape="full"
+                :disabled="actionLoading"
                 @click="analyzeThreats"
-                :disabled="actionLoading"
-                class="inline-flex items-center gap-2 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 text-sm font-semibold shadow-sm disabled:opacity-60"
               >
-                <i class="bi bi-bar-chart"></i>
                 {{ $t('message.realtime_monitoring.analyze') || 'Analyze Last 1h' }}
-              </button>
+              </ActionTextButton>
 
-              <button
-                @click="simulateEvent"
+              <ActionTextButton
+                icon="bi bi-lightning-charge"
+                tone="indigo"
+                shape="full"
                 :disabled="actionLoading"
-                class="inline-flex items-center gap-2 rounded-full bg-violet-600 hover:bg-violet-700 text-white px-4 py-2 text-sm font-semibold shadow-sm disabled:opacity-60"
+                @click="simulateEvent"
               >
-                <i class="bi bi-lightning-charge"></i>
                 {{ $t('message.realtime_monitoring.simulate') || 'Simulate Event' }}
-              </button>
+              </ActionTextButton>
             </div>
           </div>
 
@@ -366,14 +374,19 @@ import { useRealtimeMonitoringStore } from '/assets/js/stores/realtimeMonitoring
 import { useAuthStore } from '/assets/js/stores/authStore.js';
 import { useModalStore } from '/assets/js/stores/modalStore.js';
 import { useMainStore } from '/assets/js/stores/mainStore.js';
+import ActionTextButton from '/vue/components/ActionTextButton.vue';
 
 export default {
   name: 'AdminRealtimeMonitoring',
+  components: {
+    ActionTextButton
+  },
   setup() {
     const monitoringStore = useRealtimeMonitoringStore();
     const authStore = useAuthStore();
     const modalStore = useModalStore();
     const mainStore = useMainStore();
+    const heroSectionClass = 'relative overflow-hidden rounded-[32px] border border-slate-200/70 dark:border-slate-800 bg-gradient-to-br from-white via-violet-50/40 to-cyan-50/40 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 p-8 shadow-[0_24px_80px_-60px_rgba(15,23,42,0.8)]';
 
     const {
       loading,
@@ -551,6 +564,7 @@ export default {
       error,
       latestAnalysis,
       latestSimulation,
+      heroSectionClass,
       dataTimestamp,
       showLoginRequired,
       isMonitoringActive,

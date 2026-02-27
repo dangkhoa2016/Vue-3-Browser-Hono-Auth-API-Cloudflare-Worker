@@ -17,11 +17,7 @@
               v-for="(stage, index) in stages" 
               :key="stage.id"
               class="stack-layer"
-              :class="{ 
-                'active': progress[stage.id] > 0, 
-                'completed': progress[stage.id] === 100,
-                'current': progress[stage.id] > 0 && progress[stage.id] < 100
-              }"
+              :class="getStageLayerClass(stage.id)"
               :style="{ 
                 '--layer-index': index, 
                 'z-index': stages.length - index 

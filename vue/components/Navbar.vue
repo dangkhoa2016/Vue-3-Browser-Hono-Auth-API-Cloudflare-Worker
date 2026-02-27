@@ -12,12 +12,7 @@
           </router-link>
           <div class="hidden lg:ml-4 lg:flex lg:space-x-1">
             <router-link v-for="item in menuItems" :key="item.path" :to="item.path"
-              class="inline-flex items-center px-2 lg:px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200 whitespace-nowrap"
-              :class="[
-                $route.path === item.path
-                  ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/40 dark:text-blue-300'
-                  : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-blue-600 dark:hover:text-blue-300'
-              ]">
+              :class="getTopMenuClass($route.path === item.path)">
               {{ item.name }}
             </router-link>
 
@@ -26,10 +21,7 @@
               @mouseenter="openAdminDropdown"
               @mouseleave="closeAdminDropdown">
               <button @click="toggleAdminDropdown"
-                class="inline-flex items-center px-2 lg:px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200 whitespace-nowrap"
-                :class="(showAdminDropdown || isAdminRouteActive)
-                  ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/40 dark:text-blue-300'
-                  : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-blue-600 dark:hover:text-blue-300'"
+                :class="getTopMenuClass(showAdminDropdown || isAdminRouteActive)"
               >
                 <i class="bi bi-shield-lock text-[14px] mr-1.5"></i>
                 <span class="truncate max-w-[110px] xl:max-w-none">{{ t('message.navbar.admin') }}</span>
@@ -39,12 +31,7 @@
                 <div v-if="showAdminDropdown"
                   class="absolute left-0 mt-2 w-max min-w-[230px] bg-white dark:bg-gray-700 rounded-lg shadow-lg border border-gray-200 dark:border-gray-600 py-1 z-40 whitespace-nowrap">
                   <router-link v-for="item in adminMenuItems" :key="item.path" :to="item.path" @click="showAdminDropdown = false"
-                    class="flex items-center px-4 py-2 text-sm whitespace-nowrap"
-                    :class="[
-                      $route.path === item.path
-                        ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/40 dark:text-blue-300'
-                        : 'text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600'
-                    ]">
+                    :class="getDropdownItemClass($route.path === item.path, true)">
                     <i :class="item.icon" class="text-base mr-2"></i>
                     {{ item.name }}
                   </router-link>
@@ -57,10 +44,7 @@
               @mouseenter="openAboutDropdown"
               @mouseleave="closeAboutDropdown">
               <button @click="toggleAboutDropdown"
-                class="inline-flex items-center px-2 lg:px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200 whitespace-nowrap"
-                :class="(showAboutDropdown || isAboutRouteActive)
-                  ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/40 dark:text-blue-300'
-                  : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-blue-600 dark:hover:text-blue-300'"
+                :class="getTopMenuClass(showAboutDropdown || isAboutRouteActive)"
               >
                 <span class="truncate max-w-[110px] xl:max-w-none">{{ t('message.navbar.this_project') }}</span>
                 <i class="bi bi-chevron-down text-[11px] ml-1.5 transition-transform duration-200" :class="{ 'rotate-180': showAboutDropdown }"></i>
@@ -69,21 +53,11 @@
                 <div v-if="showAboutDropdown"
                   class="absolute left-0 mt-2 w-max min-w-[230px] bg-white dark:bg-gray-700 rounded-lg shadow-lg border border-gray-200 dark:border-gray-600 py-1 z-40 whitespace-nowrap">
                   <router-link to="/about" @click="showAboutDropdown = false"
-                    class="block px-4 py-2 text-sm whitespace-nowrap"
-                    :class="[
-                      $route.path === '/about'
-                        ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/40 dark:text-blue-300'
-                        : 'text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600'
-                    ]">
+                    :class="getDropdownItemClass($route.path === '/about')">
                     {{ t('message.navbar.about') }}
                   </router-link>
                   <router-link to="/api-info" @click="showAboutDropdown = false"
-                    class="block px-4 py-2 text-sm whitespace-nowrap"
-                    :class="[
-                      $route.path === '/api-info'
-                        ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/40 dark:text-blue-300'
-                        : 'text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600'
-                    ]">
+                    :class="getDropdownItemClass($route.path === '/api-info')">
                     {{ t('message.navbar.api_explorer') }}
                     <span class="text-[11px] text-gray-500 ml-1">({{ t('message.auth.login_required') }})</span>
                   </router-link>
@@ -98,12 +72,12 @@
           <template v-if="isAuthenticated">
             <div class="hidden lg:flex items-center ml-1 border-l border-gray-200 dark:border-gray-700 pl-2 space-x-1">
               <router-link to="/profile" 
-                class="flex items-center px-2 py-2 rounded-lg text-sm font-medium transition-colors duration-200 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-blue-600 group">
+                :class="desktopProfileLinkClass">
                 <i class="bi bi-person-circle text-lg mr-2 text-gray-400 group-hover:text-blue-500 transition-colors"></i>
                 <span class="hidden xl:block max-w-[150px] truncate">{{ user?.full_name || user?.email }}</span>
               </router-link>
               <button @click="handleLogout"
-                class="flex items-center justify-center w-9 h-9 rounded-lg text-gray-500 hover:bg-red-50 hover:text-red-600 dark:text-gray-400 dark:hover:bg-red-900/20 dark:hover:text-red-400 transition-colors"
+                :class="desktopLogoutButtonClass"
                 :title="$t('message.auth.logout')">
                 <i class="bi bi-box-arrow-right text-lg"></i>
               </button>
@@ -114,14 +88,14 @@
           <template v-else>
             <!-- Login Button -->
             <button @click="openLoginModal"
-              class="hidden lg:flex items-center px-2.5 py-1.5 rounded-full text-xs font-medium transition-all duration-200 shadow-sm border border-blue-200 dark:border-blue-800 bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30"
+              :class="desktopLoginButtonClass"
               :title="$t('message.auth.login')">
               <i class="bi bi-box-arrow-in-right text-sm mr-1.5"></i> {{ $t('message.auth.login') }}
             </button>
 
             <!-- Register Button -->
             <button @click="openRegisterModal"
-              class="hidden lg:flex items-center px-2.5 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 shadow-sm border border-transparent bg-blue-600 dark:bg-blue-500 text-white hover:bg-blue-700 dark:hover:bg-blue-600"
+              :class="desktopRegisterButtonClass"
               :title="$t('message.auth.register')">
               <i class="bi bi-person-plus text-sm mr-1.5"></i> {{ $t('message.auth.register') }}
             </button>
@@ -130,7 +104,7 @@
           <!-- Language Selector -->
           <div class="relative" ref="languageDropdownRef">
             <button @click="toggleLanguageDropdown"
-              class="flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+              :class="languageToggleButtonClass"
               :title="t('message.navbar.change_language')">
               <i class="bi bi-translate text-lg"></i>
               <span class="uppercase ml-2 text-xs font-semibold">{{ currentLanguage }}</span>
@@ -142,11 +116,7 @@
               <div v-if="showLanguageDropdown"
                 class="absolute right-0 mt-2 w-44 bg-white dark:bg-gray-700 rounded-lg shadow-lg border border-gray-200 dark:border-gray-600 py-1 z-50">
                 <button v-for="lang in languages" :key="lang.code" @click="changeLanguage(lang.code)"
-                  class="w-full text-left px-4 py-2 text-sm transition-colors duration-150" :class="[
-                    currentLanguage === lang.code
-                      ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 font-medium'
-                      : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600'
-                  ]">
+                  :class="getLanguageOptionClass(lang.code)">
                   <i class="bi bi-check2 text-base mr-2"
                     :class="currentLanguage === lang.code ? 'visible' : 'invisible'"></i>
                   {{ lang.label }}
@@ -157,10 +127,7 @@
 
           <!-- Mock API Toggle -->
           <button @click="store.setMockApi(!store.mockApi)"
-            class="hidden md:flex items-center px-3 py-2 rounded-lg text-xs font-medium transition-colors duration-200"
-            :class="store.mockApi
-              ? 'text-green-700 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/20'
-              : 'text-amber-700 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-900/20'"
+            :class="getDesktopApiToggleClass()"
             :title="t('message.navbar.toggle_api_mode')">
             <span class="w-2 h-2 rounded-full mr-2 shadow-sm"
               :class="store.mockApi ? 'bg-green-500' : 'bg-amber-500'"></span>
@@ -169,14 +136,14 @@
 
           <!-- Dark Mode Toggle -->
           <button @click="store.toggleDarkMode"
-            class="h-9 w-9 flex items-center justify-center rounded-full text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 focus:outline-none transition-transform duration-200 hover:scale-110 active:scale-95"
+            :class="iconCircleButtonClass"
             :title="store.darkMode ? t('message.navbar.switch_to_light') : t('message.navbar.switch_to_dark')">
             <i class="bi text-base" :class="store.darkMode ? 'bi-sun-fill' : 'bi-moon-fill'"></i>
           </button>
 
           <!-- Mobile Menu Button -->
           <button @click="toggleMobileMenu"
-            class="lg:hidden h-9 w-9 flex items-center justify-center rounded-full text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 focus:outline-none transition-transform duration-200 hover:scale-110 active:scale-95"
+            :class="mobileMenuButtonClass"
             :title="t('message.navbar.menu')">
             <i class="bi text-base" :class="showMobileMenu ? 'bi-x-lg' : 'bi-list'"></i>
           </button>
@@ -188,23 +155,14 @@
         <div v-if="showMobileMenu" class="lg:hidden pb-3 pt-2 border-t border-gray-200 dark:border-gray-700">
           <div class="space-y-1">
             <router-link v-for="item in menuItems" :key="item.path" :to="item.path" @click="showMobileMenu = false"
-              class="block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200" :class="[
-                $route.path === item.path
-                  ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
-                  : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
-              ]">
+              :class="getMobilePrimaryClass($route.path === item.path)">
               {{ item.name }}
             </router-link>
 
             <!-- Mobile Admin Group -->
             <div v-if="isAuthenticated && isAdmin">
               <button @click="toggleMobileAdminMenu"
-                class="w-full flex items-center justify-between px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
-                :class="[
-                  (isAdminRouteActive || showMobileAdminMenu)
-                    ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
-                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
-                ]">
+                :class="getMobileGroupClass(isAdminRouteActive || showMobileAdminMenu)">
                 <span class="flex items-center">
                   <i class="bi bi-shield-lock text-base mr-2"></i>
                   {{ t('message.navbar.admin') }}
@@ -215,12 +173,7 @@
 
               <div v-show="showMobileAdminMenu || isAdminRouteActive" class="space-y-1">
                 <router-link v-for="item in adminMenuItems" :key="item.path" :to="item.path" @click="showMobileMenu = false"
-                  class="flex items-center pl-6 pr-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
-                  :class="[
-                    $route.path === item.path
-                      ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
-                      : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700'
-                  ]">
+                  :class="getMobileSubLinkClass($route.path === item.path, true)">
                   <i :class="item.icon" class="text-base mr-2"></i>
                   {{ item.name }}
                 </router-link>
@@ -230,12 +183,7 @@
             <!-- Mobile "This Project" Group -->
             <div>
               <button @click="toggleMobileAboutMenu"
-                class="w-full flex items-center justify-between px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
-                :class="[
-                  (isAboutRouteActive || showMobileAboutMenu)
-                    ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
-                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
-                ]">
+                :class="getMobileGroupClass(isAboutRouteActive || showMobileAboutMenu)">
                 <span>{{ t('message.navbar.this_project') }}</span>
                 <i class="bi bi-chevron-down text-xs transition-transform duration-200"
                    :class="{ 'rotate-180': showMobileAboutMenu }"></i>
@@ -243,21 +191,11 @@
 
               <div v-show="showMobileAboutMenu || isAboutRouteActive" class="space-y-1">
                 <router-link to="/about" @click="showMobileMenu = false"
-                  class="block pl-6 pr-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
-                  :class="[
-                    $route.path === '/about'
-                      ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
-                      : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700'
-                  ]">
+                  :class="getMobileSubLinkClass($route.path === '/about')">
                   {{ t('message.navbar.about') }}
                 </router-link>
                 <router-link to="/api-info" @click="showMobileMenu = false"
-                  class="block pl-6 pr-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
-                  :class="[
-                    $route.path === '/api-info'
-                      ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
-                      : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700'
-                  ]">
+                  :class="getMobileSubLinkClass($route.path === '/api-info')">
                   {{ t('message.navbar.api_explorer') }}
                   <span class="text-[11px] text-gray-500 ml-1">({{ t('message.auth.login_required') }})</span>
                 </router-link>
@@ -269,24 +207,24 @@
           <div class="mt-3 space-y-2">
             <template v-if="isAuthenticated">
               <router-link to="/profile" @click="showMobileMenu = false"
-                class="w-full flex items-center justify-center px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 shadow-sm border border-purple-200 dark:border-purple-800 bg-white dark:bg-gray-700 text-purple-600 dark:text-purple-400">
+                :class="mobileProfileButtonClass">
                 <i class="bi bi-person-circle text-base mr-2"></i>
                 {{ user?.full_name || user?.email }}
               </router-link>
               <button @click="() => { handleLogout(); showMobileMenu = false; }"
-                class="w-full flex items-center justify-center px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 shadow-sm border border-red-200 dark:border-red-800 bg-white dark:bg-gray-700 text-red-600 dark:text-red-400">
+                :class="mobileLogoutButtonClass">
                 <i class="bi bi-box-arrow-right text-base mr-2"></i>
                 {{ $t('message.auth.logout') }}
               </button>
             </template>
             <template v-else>
               <button @click="openLoginModal"
-                class="w-full flex items-center justify-center px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 shadow-sm border border-blue-200 dark:border-blue-800 bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400">
+                :class="mobileLoginButtonClass">
                 <i class="bi bi-box-arrow-in-right text-base mr-2"></i>
                 {{ $t('message.auth.login') }}
               </button>
               <button @click="openRegisterModal"
-                class="w-full flex items-center justify-center px-3 py-2 rounded-lg text-sm font-bold transition-all duration-200 shadow-sm border border-transparent bg-blue-600 dark:bg-blue-500 text-white">
+                :class="mobileRegisterButtonClass">
                 <i class="bi bi-person-plus text-base mr-2"></i>
                 {{ $t('message.auth.register') }}
               </button>
@@ -296,10 +234,7 @@
           <!-- Mobile API Toggle -->
           <div class="mt-3">
             <button @click="store.setMockApi(!store.mockApi)"
-              class="w-full flex items-center justify-center px-3 py-2 rounded-full text-xs font-bold transition-all duration-200 shadow-sm border"
-              :class="store.mockApi
-                ? 'bg-green-50 border-green-200 text-green-700 dark:bg-green-900/30 dark:border-green-800 dark:text-green-300'
-                : 'bg-yellow-50 border-yellow-200 text-yellow-700 dark:bg-yellow-900/30 dark:border-yellow-800 dark:text-yellow-300'">
+              :class="getMobileApiToggleClass()">
               <span class="w-1.5 h-1.5 rounded-full mr-2 animate-pulse"
                 :class="store.mockApi ? 'bg-green-500' : 'bg-yellow-500'"></span>
               {{ store.mockApi ? t('message.navbar.mock_label') : t('message.navbar.real_label') }}
@@ -424,6 +359,95 @@ export default {
       { name: t('message.navbar.realtime_monitoring'), path: '/admin/monitoring', icon: 'bi-activity' },
       ...(isSuperAdmin.value ? [{ name: t('message.navbar.kv_admin'), path: '/admin/kv', icon: 'bi-database' }] : [])
     ]);
+
+    const topMenuBaseClass =
+      'inline-flex items-center px-2 lg:px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200 whitespace-nowrap';
+    const topMenuActiveClass = 'bg-blue-50 text-blue-600 dark:bg-blue-900/40 dark:text-blue-300';
+    const topMenuInactiveClass =
+      'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-blue-600 dark:hover:text-blue-300';
+
+    const dropdownItemBaseClass = 'px-4 py-2 text-sm whitespace-nowrap';
+    const dropdownItemActiveClass = 'bg-blue-50 text-blue-600 dark:bg-blue-900/40 dark:text-blue-300';
+    const dropdownItemInactiveClass = 'text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600';
+
+    const mobilePrimaryBaseClass = 'block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200';
+    const mobileGroupBaseClass =
+      'w-full flex items-center justify-between px-3 py-2 rounded-md text-base font-medium transition-colors duration-200';
+    const mobileSubBaseClass = 'pl-6 pr-3 py-2 rounded-md text-base font-medium transition-colors duration-200';
+    const mobileActiveClass = 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400';
+    const mobileInactiveClass = 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700';
+    const mobileSubInactiveClass = 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700';
+
+    const desktopProfileLinkClass =
+      'flex items-center px-2 py-2 rounded-lg text-sm font-medium transition-colors duration-200 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-blue-600 group';
+    const desktopLogoutButtonClass =
+      'flex items-center justify-center w-9 h-9 rounded-lg text-gray-500 hover:bg-red-50 hover:text-red-600 dark:text-gray-400 dark:hover:bg-red-900/20 dark:hover:text-red-400 transition-colors';
+    const desktopLoginButtonClass =
+      'hidden lg:flex items-center px-2.5 py-1.5 rounded-full text-xs font-medium transition-all duration-200 shadow-sm border border-blue-200 dark:border-blue-800 bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30';
+    const desktopRegisterButtonClass =
+      'hidden lg:flex items-center px-2.5 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 shadow-sm border border-transparent bg-blue-600 dark:bg-blue-500 text-white hover:bg-blue-700 dark:hover:bg-blue-600';
+    const languageToggleButtonClass =
+      'flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800';
+
+    const iconCircleButtonClass =
+      'h-9 w-9 flex items-center justify-center rounded-full text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 focus:outline-none transition-transform duration-200 hover:scale-110 active:scale-95';
+    const mobileMenuButtonClass = `lg:hidden ${iconCircleButtonClass}`;
+
+    const mobileAuthButtonBaseClass =
+      'w-full flex items-center justify-center px-3 py-2 rounded-lg text-sm transition-all duration-200 shadow-sm border';
+    const mobileProfileButtonClass =
+      `${mobileAuthButtonBaseClass} font-medium border-purple-200 dark:border-purple-800 bg-white dark:bg-gray-700 text-purple-600 dark:text-purple-400`;
+    const mobileLogoutButtonClass =
+      `${mobileAuthButtonBaseClass} font-medium border-red-200 dark:border-red-800 bg-white dark:bg-gray-700 text-red-600 dark:text-red-400`;
+    const mobileLoginButtonClass =
+      `${mobileAuthButtonBaseClass} font-medium border-blue-200 dark:border-blue-800 bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400`;
+    const mobileRegisterButtonClass =
+      `${mobileAuthButtonBaseClass} font-bold border-transparent bg-blue-600 dark:bg-blue-500 text-white`;
+    const mobileApiToggleBaseClass =
+      'w-full flex items-center justify-center px-3 py-2 rounded-full text-xs font-bold transition-all duration-200 shadow-sm border';
+
+    const languageOptionBaseClass = 'w-full text-left px-4 py-2 text-sm transition-colors duration-150';
+    const languageOptionActiveClass = 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 font-medium';
+    const languageOptionInactiveClass = 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600';
+
+    const desktopApiToggleBaseClass =
+      'hidden md:flex items-center px-3 py-2 rounded-lg text-xs font-medium transition-colors duration-200';
+    const desktopApiToggleMockClass = 'text-green-700 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/20';
+    const desktopApiToggleRealClass = 'text-amber-700 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-900/20';
+
+    const mobileApiToggleMockClass =
+      'bg-green-50 border-green-200 text-green-700 dark:bg-green-900/30 dark:border-green-800 dark:text-green-300';
+    const mobileApiToggleRealClass =
+      'bg-yellow-50 border-yellow-200 text-yellow-700 dark:bg-yellow-900/30 dark:border-yellow-800 dark:text-yellow-300';
+
+    const getTopMenuClass = (isActive) => [topMenuBaseClass, isActive ? topMenuActiveClass : topMenuInactiveClass];
+
+    const getDropdownItemClass = (isActive, withIcon = false) => [
+      withIcon ? `flex items-center ${dropdownItemBaseClass}` : `block ${dropdownItemBaseClass}`,
+      isActive ? dropdownItemActiveClass : dropdownItemInactiveClass
+    ];
+
+    const getMobilePrimaryClass = (isActive) => [mobilePrimaryBaseClass, isActive ? mobileActiveClass : mobileInactiveClass];
+    const getMobileGroupClass = (isActive) => [mobileGroupBaseClass, isActive ? mobileActiveClass : mobileInactiveClass];
+    const getMobileSubLinkClass = (isActive, withIcon = false) => [
+      withIcon ? `flex items-center ${mobileSubBaseClass}` : `block ${mobileSubBaseClass}`,
+      isActive ? mobileActiveClass : mobileSubInactiveClass
+    ];
+
+    const getLanguageOptionClass = (langCode) => [
+      languageOptionBaseClass,
+      currentLanguage.value === langCode ? languageOptionActiveClass : languageOptionInactiveClass
+    ];
+
+    const getDesktopApiToggleClass = () => [
+      desktopApiToggleBaseClass,
+      store.mockApi ? desktopApiToggleMockClass : desktopApiToggleRealClass
+    ];
+
+    const getMobileApiToggleClass = () => [
+      mobileApiToggleBaseClass,
+      store.mockApi ? mobileApiToggleMockClass : mobileApiToggleRealClass
+    ];
 
     const toggleLanguageDropdown = () => {
       showLanguageDropdown.value = !showLanguageDropdown.value;
@@ -602,6 +626,26 @@ export default {
       isAboutRouteActive,
       user,
       adminMenuItems,
+      getTopMenuClass,
+      getDropdownItemClass,
+      getMobilePrimaryClass,
+      getMobileGroupClass,
+      getMobileSubLinkClass,
+      desktopProfileLinkClass,
+      desktopLogoutButtonClass,
+      desktopLoginButtonClass,
+      desktopRegisterButtonClass,
+      languageToggleButtonClass,
+      iconCircleButtonClass,
+      mobileMenuButtonClass,
+      mobileProfileButtonClass,
+      mobileLogoutButtonClass,
+      mobileLoginButtonClass,
+      mobileRegisterButtonClass,
+      mobileApiToggleBaseClass,
+      getLanguageOptionClass,
+      getDesktopApiToggleClass,
+      getMobileApiToggleClass,
       toggleLanguageDropdown,
       toggleMobileMenu,
       toggleMobileAboutMenu,

@@ -10,18 +10,21 @@
         <i class="bi bi-lock-fill text-5xl text-amber-600 dark:text-amber-400 mb-4"></i>
         <h3 class="text-xl font-bold text-amber-900 dark:text-amber-100 mb-2">{{ $t('message.auth.login_required') }}</h3>
         <p class="text-amber-700 dark:text-amber-300 mb-4">{{ $t('message.kv_admin_page.login_required_message') }}</p>
-        <button
+        <ActionTextButton
+          tone="amber"
+          shape="xl"
+          size="sm"
+          icon="bi bi-box-arrow-in-right text-lg"
+          class="shadow-lg hover:shadow-xl"
           @click="openLoginModal"
-          class="inline-flex items-center gap-2 px-3 py-1 bg-amber-600 hover:bg-amber-700 dark:bg-amber-500 dark:hover:bg-amber-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition"
         >
-          <i class="bi bi-box-arrow-in-right text-lg"></i>
           {{ $t('message.auth.login') }}
-        </button>
+        </ActionTextButton>
       </section>
     </template>
 
     <template v-else>
-      <section class="relative overflow-hidden rounded-[32px] border border-slate-200/70 dark:border-slate-800 bg-gradient-to-br from-white via-amber-50/40 to-teal-50/40 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 p-8 shadow-[0_24px_80px_-60px_rgba(15,23,42,0.8)]">
+      <section :class="heroSectionClass">
         <div class="absolute -top-20 -right-16 w-72 h-72 bg-amber-400/10 rounded-full blur-3xl"></div>
         <div class="absolute -bottom-24 -left-24 w-72 h-72 bg-teal-500/10 rounded-full blur-3xl"></div>
         <div class="relative grid gap-6 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
@@ -37,14 +40,15 @@
               {{ $t('message.kv_admin_page.subtitle') }}
             </p>
             <div class="mt-6 flex flex-wrap items-center gap-3">
-              <button
-                class="inline-flex items-center gap-2 rounded-full border border-slate-200/80 dark:border-slate-700 bg-white/80 dark:bg-slate-800/80 px-4 py-2 text-sm font-semibold text-slate-700 dark:text-slate-200 shadow-sm hover:shadow-md transition"
+              <ActionTextButton
+                variant="soft"
+                shape="full"
+                icon="bi bi-arrow-clockwise"
                 :title="$t('message.common.retry_title')"
                 @click="reload"
               >
-                <i class="bi bi-arrow-clockwise"></i>
                 {{ $t('message.kv_admin_page.reload') }}
-              </button>
+              </ActionTextButton>
             </div>
           </div>
           <div class="grid gap-4">
@@ -118,21 +122,21 @@
                 v-model="search"
                 ref="searchInput"
                 type="text"
-                class="w-full pl-11 pr-4 py-2.5 rounded-full border border-slate-200/80 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm text-slate-700 dark:text-slate-200 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none"
+                :class="searchInputClass"
                 :placeholder="$t('message.kv_admin_page.search_placeholder')"
               />
-              <button
+              <ActionIconButton
                 v-if="search"
-                type="button"
-                @click="search = ''; $refs.searchInput && $refs.searchInput.focus()"
-                class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition p-1 rounded-full"
+                icon="bi bi-x-lg"
+                tone="indigo"
+                class="absolute right-2 top-1/2 -translate-y-1/2"
                 :title="$t('message.common.clear') || 'Clear'"
-              >
-                <i class="bi bi-x-lg"></i>
-              </button>
+                :aria-label="$t('message.common.clear') || 'Clear'"
+                @click="search = ''; $refs.searchInput && $refs.searchInput.focus()"
+              />
             </div>
             <div class="flex flex-wrap items-center gap-3">
-              <label class="inline-flex items-center gap-2 rounded-full border border-slate-200/80 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-2 text-xs font-semibold text-slate-600 dark:text-slate-200">
+              <label :class="overrideFilterLabelClass">
                 <input
                   v-model="showOverridesOnly"
                   type="checkbox"
@@ -143,13 +147,15 @@
               <div class="text-xs text-slate-500 dark:text-slate-400">
                 {{ $t('message.kv_admin_page.last_updated') }}: {{ lastUpdatedLabel }}
               </div>
-              <button
-                class="inline-flex items-center gap-2 rounded-full bg-amber-600 hover:bg-amber-700 dark:bg-amber-500 dark:hover:bg-amber-600 text-white px-4 py-2 text-xs font-semibold shadow-sm"
+              <ActionTextButton
+                tone="amber"
+                shape="full"
+                icon="bi bi-plus-circle"
+                class="text-xs"
                 @click="openAddModal"
               >
-                <i class="bi bi-plus-circle"></i>
                 {{ $t('message.kv_admin_page.add_key') }}
-              </button>
+              </ActionTextButton>
             </div>
           </div>
         </div>
@@ -173,13 +179,15 @@
             <i class="bi bi-exclamation-triangle-fill text-4xl text-rose-500 mb-3"></i>
             <h3 class="text-lg font-bold text-slate-900 dark:text-white">{{ $t('message.kv_admin_page.error_loading') }}</h3>
             <p class="text-slate-500 dark:text-slate-400 mt-2">{{ error }}</p>
-            <button
-              class="mt-4 inline-flex items-center gap-2 rounded-full bg-rose-600 text-white px-4 py-2 text-sm font-semibold"
+            <ActionTextButton
+              class="mt-4"
+              tone="rose"
+              shape="full"
+              icon="bi bi-arrow-clockwise"
               @click="reload"
             >
-              <i class="bi bi-arrow-clockwise"></i>
               {{ $t('message.common.retry') }}
-            </button>
+            </ActionTextButton>
           </div>
 
           <div v-else-if="filteredRows.length === 0" class="p-10 text-center">
@@ -192,7 +200,7 @@
             <article
               v-for="row in filteredRows"
               :key="row.key"
-              class="group rounded-3xl border border-slate-200/70 dark:border-slate-800 bg-white/90 dark:bg-slate-900/80 p-5 shadow-[0_18px_45px_-40px_rgba(15,23,42,0.6)] transition hover:-translate-y-0.5"
+              :class="configCardClass"
             >
               <div class="flex flex-wrap items-center justify-between gap-4">
                 <div class="space-y-2">
@@ -205,38 +213,50 @@
                 </div>
                 <div class="flex flex-wrap items-center gap-2">
                   <span :class="sourceBadgeClass(row.source)">{{ sourceLabel(row.source) }}</span>
-                  <button
-                    class="inline-flex items-center gap-1 rounded-full border border-slate-200 dark:border-slate-700 px-3 py-1 text-xs font-semibold text-slate-600 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 transition"
+                  <ActionTextButton
+                    variant="soft"
+                    shape="full"
+                    size="sm"
+                    icon="bi bi-clipboard"
+                    class="text-xs"
                     :title="$t('message.kv_admin_page.copy_key')"
                     @click="copyText('key', row.key, row.key)"
                   >
-                    <i class="bi bi-clipboard"></i>
                     {{ copiedKey === row.key ? $t('message.kv_admin_page.copied') : $t('message.kv_admin_page.copy_key') }}
-                  </button>
-                  <button
-                    class="inline-flex items-center gap-1 rounded-full border border-slate-200 dark:border-slate-700 px-3 py-1 text-xs font-semibold text-slate-600 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 transition"
+                  </ActionTextButton>
+                  <ActionTextButton
+                    variant="soft"
+                    shape="full"
+                    size="sm"
+                    icon="bi bi-clipboard-check"
+                    class="text-xs"
                     :title="$t('message.kv_admin_page.copy_value')"
                     @click="copyText('value', row.key, row.valueLabel)"
                   >
-                    <i class="bi bi-clipboard-check"></i>
                     {{ copiedValue === row.key ? $t('message.kv_admin_page.copied') : $t('message.kv_admin_page.copy_value') }}
-                  </button>
-                  <button
-                    class="inline-flex items-center gap-1 rounded-full border border-slate-200 dark:border-slate-700 px-3 py-1 text-xs font-semibold text-slate-600 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 transition"
+                  </ActionTextButton>
+                  <ActionTextButton
+                    variant="soft"
+                    shape="full"
+                    size="sm"
+                    icon="bi bi-pencil"
+                    class="text-xs"
                     :title="$t('message.kv_admin_page.edit_action')"
                     @click="openEditModal(row)"
                   >
-                    <i class="bi bi-pencil"></i>
                     {{ $t('message.kv_admin_page.edit_action') }}
-                  </button>
-                  <button
-                    class="inline-flex items-center gap-1 rounded-full border border-rose-200 dark:border-rose-700 px-3 py-1 text-xs font-semibold text-rose-700 dark:text-rose-200 hover:bg-rose-50 dark:hover:bg-rose-900/30 transition"
+                  </ActionTextButton>
+                  <ActionTextButton
+                    tone="rose"
+                    shape="full"
+                    size="sm"
+                    icon="bi bi-trash"
+                    class="text-xs"
                     :title="$t('message.kv_admin_page.delete_action')"
                     @click="openDeleteModal(row)"
                   >
-                    <i class="bi bi-trash"></i>
                     {{ $t('message.kv_admin_page.delete_action') }}
-                  </button>
+                  </ActionTextButton>
                 </div>
               </div>
 
@@ -275,9 +295,13 @@
             <h3 class="text-xl font-bold text-slate-900 dark:text-white">
               {{ editorMode === 'add' ? $t('message.kv_admin_page.add_title') : $t('message.kv_admin_page.edit_title') }}
             </h3>
-            <button class="text-slate-400 hover:text-slate-600" @click="closeEditor">
-              <i class="bi bi-x-lg"></i>
-            </button>
+            <ActionIconButton
+              icon="bi bi-x-lg"
+              tone="indigo"
+              :title="$t('message.common.close') || 'Close'"
+              :aria-label="$t('message.common.close') || 'Close'"
+              @click="closeEditor"
+            />
           </div>
 
           <div class="mt-6 space-y-4">
@@ -286,7 +310,7 @@
               <input
                 v-model="editorKey"
                 :disabled="editorMode === 'edit'"
-                class="mt-2 w-full rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-3 text-sm text-slate-700 dark:text-slate-100 focus:ring-2 focus:ring-amber-500 outline-none disabled:opacity-60"
+                :class="editorKeyInputClass"
                 placeholder="SECURITY_CSP"
               />
             </div>
@@ -295,7 +319,7 @@
               <textarea
                 v-model="editorValue"
                 rows="6"
-                class="mt-2 w-full rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-3 text-sm text-slate-700 dark:text-slate-100 focus:ring-2 focus:ring-amber-500 outline-none font-mono"
+                :class="editorValueTextareaClass"
                 placeholder="Enter value"
               ></textarea>
             </div>
@@ -303,20 +327,22 @@
           </div>
 
           <div class="mt-6 flex flex-wrap justify-end gap-3">
-            <button
-              class="inline-flex items-center gap-2 rounded-full border border-slate-200 dark:border-slate-700 px-4 py-2 text-sm font-semibold text-slate-600 dark:text-slate-200"
+            <ActionTextButton
+              variant="soft"
+              shape="full"
               @click="closeEditor"
             >
               {{ $t('message.kv_admin_page.cancel') }}
-            </button>
-            <button
-              class="inline-flex items-center gap-2 rounded-full bg-amber-600 hover:bg-amber-700 dark:bg-amber-500 dark:hover:bg-amber-600 text-white px-4 py-2 text-sm font-semibold"
+            </ActionTextButton>
+            <ActionTextButton
+              tone="amber"
+              shape="full"
+              icon="bi bi-check-lg"
               :disabled="isSaving"
               @click="saveConfig"
             >
-              <i class="bi bi-check-lg"></i>
               {{ $t('message.kv_admin_page.save') }}
-            </button>
+            </ActionTextButton>
           </div>
         </div>
       </div>
@@ -333,9 +359,12 @@ import { useAuthStore } from '/assets/js/stores/authStore.js';
 import { useModalStore } from '/assets/js/stores/modalStore.js';
 import { useMainStore } from '/assets/js/stores/mainStore.js';
 import { useToastStore } from '/assets/js/stores/toastStore.js';
+import ActionTextButton from '/vue/components/ActionTextButton.vue';
+import ActionIconButton from '/vue/components/ActionIconButton.vue';
 
 export default {
   name: 'KvAdminConfigs',
+  components: { ActionTextButton, ActionIconButton },
   setup() {
     const { t } = useI18n({ useScope: 'global' });
     const authStore = useAuthStore();
@@ -363,6 +392,19 @@ export default {
     const deleteError = ref('');
     const isDeleting = ref(false);
     const toastStore = useToastStore();
+
+    const heroSectionClass =
+      'relative overflow-hidden rounded-[32px] border border-slate-200/70 dark:border-slate-800 bg-gradient-to-br from-white via-amber-50/40 to-teal-50/40 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 p-8 shadow-[0_24px_80px_-60px_rgba(15,23,42,0.8)]';
+    const searchInputClass =
+      'w-full pl-11 pr-4 py-2.5 rounded-full border border-slate-200/80 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm text-slate-700 dark:text-slate-200 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none';
+    const overrideFilterLabelClass =
+      'inline-flex items-center gap-2 rounded-full border border-slate-200/80 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-2 text-xs font-semibold text-slate-600 dark:text-slate-200';
+    const configCardClass =
+      'group rounded-3xl border border-slate-200/70 dark:border-slate-800 bg-white/90 dark:bg-slate-900/80 p-5 shadow-[0_18px_45px_-40px_rgba(15,23,42,0.6)] transition hover:-translate-y-0.5';
+    const editorKeyInputClass =
+      'mt-2 w-full rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-3 text-sm text-slate-700 dark:text-slate-100 focus:ring-2 focus:ring-amber-500 outline-none disabled:opacity-60';
+    const editorValueTextareaClass =
+      'mt-2 w-full rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-3 text-sm text-slate-700 dark:text-slate-100 focus:ring-2 focus:ring-amber-500 outline-none font-mono';
 
     authStore.init();
 
@@ -782,6 +824,12 @@ export default {
       error,
       search,
       showOverridesOnly,
+      heroSectionClass,
+      searchInputClass,
+      overrideFilterLabelClass,
+      configCardClass,
+      editorKeyInputClass,
+      editorValueTextareaClass,
       rows,
       filteredRows,
       stats,
