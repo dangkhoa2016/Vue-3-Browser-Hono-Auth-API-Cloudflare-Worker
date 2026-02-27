@@ -4,13 +4,7 @@
       <div
         v-for="toast in toasts"
         :key="toast.id"
-        :class="[
-          'flex items-center gap-3 px-4 py-3 rounded-xl shadow-lg border backdrop-blur-sm transition-all min-w-[300px] max-w-sm',
-          toast.type === 'success' ? 'bg-emerald-50/90 dark:bg-emerald-900/80 border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-100' :
-          toast.type === 'error' ? 'bg-rose-50/90 dark:bg-rose-900/80 border-rose-200 dark:border-rose-800 text-rose-800 dark:text-rose-100' :
-          toast.type === 'warning' ? 'bg-amber-50/90 dark:bg-amber-900/80 border-amber-200 dark:border-amber-800 text-amber-800 dark:text-amber-100' :
-          'bg-slate-50/90 dark:bg-slate-800/80 border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100'
-        ]"
+        :class="getToastClass(toast.type)"
       >
         <div class="flex-shrink-0">
           <i v-if="toast.type === 'success'" class="bi bi-check-circle-fill text-xl text-emerald-500"></i>
@@ -37,6 +31,14 @@
 import { computed } from 'vue';
 import { useToastStore } from '/assets/js/stores/toastStore.js';
 
+const TOAST_BASE_CLASS = 'flex items-center gap-3 px-4 py-3 rounded-xl shadow-lg border backdrop-blur-sm transition-all min-w-[300px] max-w-sm';
+const TOAST_VARIANT_CLASS = {
+  success: 'bg-emerald-50/90 dark:bg-emerald-900/80 border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-100',
+  error: 'bg-rose-50/90 dark:bg-rose-900/80 border-rose-200 dark:border-rose-800 text-rose-800 dark:text-rose-100',
+  warning: 'bg-amber-50/90 dark:bg-amber-900/80 border-amber-200 dark:border-amber-800 text-amber-800 dark:text-amber-100',
+  info: 'bg-slate-50/90 dark:bg-slate-800/80 border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100'
+};
+
 export default {
   name: 'ToastNotification',
   setup() {
@@ -47,9 +49,15 @@ export default {
       toastStore.remove(id);
     };
 
+    const getToastClass = (type) => {
+      const variantClass = TOAST_VARIANT_CLASS[type] || TOAST_VARIANT_CLASS.info;
+      return [TOAST_BASE_CLASS, variantClass];
+    };
+
     return {
       toasts,
-      remove
+      remove,
+      getToastClass
     };
   }
 };

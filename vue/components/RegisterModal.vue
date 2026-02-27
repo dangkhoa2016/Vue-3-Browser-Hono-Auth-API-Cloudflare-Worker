@@ -58,8 +58,7 @@
           type="text"
           required
           :disabled="isLoading"
-          class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          :class="{ 'border-red-300 dark:border-red-600': hasFieldError('full_name') }"
+          :class="[registerInputClass, { 'border-red-300 dark:border-red-600': hasFieldError('full_name') }]"
           :placeholder="$t('message.auth.full_name_placeholder')"
         />
       </div>
@@ -75,8 +74,7 @@
           type="email"
           required
           :disabled="isLoading"
-          class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          :class="{ 'border-red-300 dark:border-red-600': hasFieldError('email') }"
+          :class="[registerInputClass, { 'border-red-300 dark:border-red-600': hasFieldError('email') }]"
           :placeholder="$t('message.auth.email_placeholder')"
         />
       </div>
@@ -92,8 +90,7 @@
           type="password"
           required
           :disabled="isLoading"
-          class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          :class="{ 'border-red-300 dark:border-red-600': hasFieldError('password') }"
+          :class="[registerInputClass, { 'border-red-300 dark:border-red-600': hasFieldError('password') }]"
           :placeholder="$t('message.auth.password_placeholder')"
         />
       </div>
@@ -109,7 +106,7 @@
           type="password"
           required
           :disabled="isLoading"
-          class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          :class="registerInputClass"
           :placeholder="$t('message.auth.confirm_password_placeholder')"
         />
       </div>
@@ -125,13 +122,25 @@
         />
         <label class="ml-2 text-sm text-gray-600 dark:text-gray-400">
           {{ $t('message.auth.accept_terms_prefix') }}
-          <a href="javascript:void(0)" @click.prevent class="text-green-600 dark:text-green-400 hover:text-green-500 dark:hover:text-green-300 cursor-pointer">
+          <button
+            type="button"
+            :title="$t('message.auth.terms_of_service')"
+            :aria-label="$t('message.auth.terms_of_service')"
+            @click.prevent
+            class="text-green-600 dark:text-green-400 hover:text-green-500 dark:hover:text-green-300 cursor-pointer"
+          >
             {{ $t('message.auth.terms_of_service') }}
-          </a>
+          </button>
           {{ $t('message.auth.and') }}
-          <a href="javascript:void(0)" @click.prevent class="text-green-600 dark:text-green-400 hover:text-green-500 dark:hover:text-green-300 cursor-pointer">
+          <button
+            type="button"
+            :title="$t('message.auth.privacy_policy')"
+            :aria-label="$t('message.auth.privacy_policy')"
+            @click.prevent
+            class="text-green-600 dark:text-green-400 hover:text-green-500 dark:hover:text-green-300 cursor-pointer"
+          >
             {{ $t('message.auth.privacy_policy') }}
-          </a>
+          </button>
         </label>
       </div>
 
@@ -140,7 +149,7 @@
         v-if="!successMessage"
         type="submit"
         :disabled="isLoading"
-        class="w-full flex justify-center items-center py-2.5 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-green-600"
+        :class="registerSubmitButtonClass"
       >
         <svg v-if="isLoading" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
           <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -155,7 +164,7 @@
         v-if="successMessage && registrationStatus === 'active'"
         type="button"
         @click="handleGoToLogin"
-        class="w-full flex justify-center items-center py-2.5 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
+        :class="goToLoginButtonClass"
       >
         {{ $t('message.auth.go_to_login') }}
       </button>
@@ -165,7 +174,7 @@
         v-if="successMessage && registrationStatus === 'inactive'"
         type="button"
         @click="handleClose"
-        class="w-full flex justify-center items-center py-2.5 px-4 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors"
+        :class="inactiveCloseButtonClass"
       >
         {{ $t('message.auth.close') }}
       </button>
@@ -177,6 +186,8 @@
         <span class="text-gray-600 dark:text-gray-400">{{ $t('message.auth.already_have_account') }}</span>
         <button 
           @click="$emit('switch-to-login')"
+          :title="$t('message.auth.login_now')"
+          :aria-label="$t('message.auth.login_now')"
           class="ml-1 text-green-600 dark:text-green-400 hover:text-green-500 dark:hover:text-green-300 font-medium"
         >
           {{ $t('message.auth.login_now') }}
@@ -219,6 +230,15 @@ export default {
     const fieldErrors = ref([]);
     const successMessage = ref('');
     const registrationStatus = ref(''); // 'active' or 'inactive'
+
+    const registerInputClass =
+      'w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed';
+    const registerSubmitButtonClass =
+      'w-full flex justify-center items-center py-2.5 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-green-600';
+    const goToLoginButtonClass =
+      'w-full flex justify-center items-center py-2.5 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors';
+    const inactiveCloseButtonClass =
+      'w-full flex justify-center items-center py-2.5 px-4 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors';
 
     const clearErrors = () => {
       error.value = '';
@@ -337,6 +357,10 @@ export default {
       fieldErrors,
       successMessage,
       registrationStatus,
+      registerInputClass,
+      registerSubmitButtonClass,
+      goToLoginButtonClass,
+      inactiveCloseButtonClass,
       handleRegister,
       handleGoToLogin,
       handleClose,

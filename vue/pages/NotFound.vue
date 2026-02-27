@@ -12,13 +12,16 @@
       <p class="text-xl text-gray-500 dark:text-gray-400 mb-8">{{ $t('message.not_found.message') }}</p>
       
       <div class="flex justify-center gap-4">
-        <button 
-          @click="goBack" 
-          class="px-6 py-2 rounded-full border border-gray-300 text-gray-700 dark:text-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex items-center"
+        <ActionTextButton
+          icon="bi bi-arrow-left"
+          variant="soft"
+          shape="full"
           :title="$t('message.not_found.back_title')"
+          class="px-6"
+          @click="goBack"
         >
-          <i class="bi bi-arrow-left mr-2"></i> {{ $t('message.not_found.back') }}
-        </button>
+          {{ $t('message.not_found.back') }}
+        </ActionTextButton>
         <router-link 
           to="/" 
           class="px-6 py-2 rounded-full bg-blue-600 text-white hover:bg-blue-700 shadow-lg hover:shadow-xl transition-all flex items-center"
@@ -33,9 +36,13 @@
 
 <script>
 import { useRouter } from 'vue-router';
+import ActionTextButton from '/vue/components/ActionTextButton.vue';
 
 export default {
   name: 'NotFound',
+  components: {
+    ActionTextButton
+  },
   setup() {
     const router = useRouter();
 
@@ -62,14 +69,5 @@ export default {
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
-}
-
-.hover-lift {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.hover-lift:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
 }
 </style>

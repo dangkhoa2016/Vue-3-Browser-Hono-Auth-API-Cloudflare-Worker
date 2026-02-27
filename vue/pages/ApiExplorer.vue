@@ -15,13 +15,14 @@
       <i class="bi bi-lock-fill text-5xl text-blue-600 dark:text-blue-400 mb-4"></i>
       <h3 class="text-xl font-bold text-blue-900 dark:text-blue-100 mb-2">{{ $t('message.api_explorer.login_required_title') }}</h3>
       <p class="text-blue-700 dark:text-blue-300 mb-4">{{ $t('message.api_explorer.login_required_message') }}</p>
-      <button
+      <ActionTextButton
+        icon="bi bi-box-arrow-in-right"
+        tone="blue"
+        shape="xl"
         @click="openLoginModal"
-        class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white font-semibold rounded-lg shadow-lg transition"
       >
-        <i class="bi bi-box-arrow-in-right text-lg"></i>
         {{ $t('message.auth.login') }}
-      </button>
+      </ActionTextButton>
     </div>
 
     <!-- Error State -->
@@ -29,13 +30,14 @@
       <i class="bi bi-exclamation-triangle-fill text-5xl text-red-600 dark:text-red-400 mb-4"></i>
       <h3 class="text-xl font-bold text-red-900 dark:text-red-100 mb-2">{{ $t('message.api_explorer.error_loading') }}</h3>
       <p class="text-red-700 dark:text-red-300 mb-4">{{ error }}</p>
-      <button
+      <ActionTextButton
+        icon="bi bi-arrow-clockwise"
+        tone="rose"
+        shape="xl"
         @click="loadApiInfo"
-        class="inline-flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600 text-white font-semibold rounded-lg shadow-lg transition"
       >
-        <i class="bi bi-arrow-clockwise text-lg"></i>
         {{ $t('message.common.retry') }}
-      </button>
+      </ActionTextButton>
     </div>
 
     <!-- Content -->
@@ -124,10 +126,13 @@
                   <div class="text-xs text-gray-500 dark:text-gray-400">{{ cat.countLabel }}</div>
                 </div>
               </div>
-              <button @click.stop="toggleCategory(cat.name)" :aria-expanded="!collapsed[cat.name]"
-                class="p-2 rounded-lg text-gray-500 hover:text-gray-800 dark:text-gray-300 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-700 transition">
-                <i class="bi" :class="collapsed[cat.name] ? 'bi-chevron-down' : 'bi-chevron-up'"></i>
-              </button>
+              <ActionIconButton
+                :icon="collapsed[cat.name] ? 'bi bi-chevron-down' : 'bi bi-chevron-up'"
+                :title="collapsed[cat.name] ? 'Expand' : 'Collapse'"
+                :aria-label="collapsed[cat.name] ? 'Expand' : 'Collapse'"
+                tone="indigo"
+                @click="toggleCategory(cat.name)"
+              />
             </div>
             <transition name="collapse">
               <div class="divide-y divide-gray-100 dark:divide-slate-800" v-show="!collapsed[cat.name]">
@@ -158,9 +163,15 @@ import { apiClient, API_ENDPOINTS } from '/assets/js/api.js';
 import { useMainStore } from '/assets/js/stores/mainStore.js';
 import { useAuthStore } from '/assets/js/stores/authStore.js';
 import { useModalStore } from '/assets/js/stores/modalStore.js';
+import ActionTextButton from '/vue/components/ActionTextButton.vue';
+import ActionIconButton from '/vue/components/ActionIconButton.vue';
 
 export default {
   name: 'ApiExplorer',
+  components: {
+    ActionTextButton,
+    ActionIconButton
+  },
   setup() {
     const apiInfo = ref(null);
     const loading = ref(true);

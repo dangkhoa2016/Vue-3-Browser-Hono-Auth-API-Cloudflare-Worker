@@ -10,18 +10,20 @@
         <i class="bi bi-lock-fill text-5xl text-indigo-600 dark:text-indigo-400 mb-4"></i>
         <h3 class="text-xl font-bold text-indigo-900 dark:text-indigo-100 mb-2">{{ $t('message.auth.login_required') }}</h3>
         <p class="text-indigo-700 dark:text-indigo-300 mb-4">{{ $t('message.admin_dashboard_page.login_required_message') }}</p>
-        <button
+        <ActionTextButton
+          icon="bi bi-box-arrow-in-right"
+          tone="indigo"
+          size="sm"
+          shape="xl"
           @click="openLoginModal"
-          class="inline-flex items-center gap-2 px-3 py-1 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition"
         >
-          <i class="bi bi-box-arrow-in-right text-lg"></i>
           {{ $t('message.auth.login') }}
-        </button>
+        </ActionTextButton>
       </section>
     </template>
 
     <template v-else>
-      <section class="relative overflow-hidden rounded-[32px] border border-slate-200/70 dark:border-slate-800 bg-gradient-to-br from-white via-indigo-50/40 to-emerald-50/40 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 p-8 shadow-[0_24px_80px_-60px_rgba(15,23,42,0.8)]">
+      <section :class="heroSectionClass">
         <div class="absolute -top-20 -right-16 w-72 h-72 bg-indigo-400/10 rounded-full blur-3xl"></div>
         <div class="absolute -bottom-24 -left-24 w-72 h-72 bg-emerald-500/10 rounded-full blur-3xl"></div>
 
@@ -38,14 +40,15 @@
               {{ $t('message.admin_dashboard_page.subtitle') }}
             </p>
             <div class="mt-6 flex flex-wrap items-center gap-3">
-              <button
-                class="inline-flex items-center gap-2 rounded-full border border-slate-200/80 dark:border-slate-700 bg-white/80 dark:bg-slate-800/80 px-4 py-2 text-sm font-semibold text-slate-700 dark:text-slate-200 shadow-sm hover:shadow-md transition"
+              <ActionTextButton
+                variant="soft"
+                icon="bi bi-arrow-clockwise"
+                shape="full"
                 :disabled="loading"
                 @click="refresh"
               >
-                <i class="bi bi-arrow-clockwise"></i>
                 {{ $t('message.refresh') }}
-              </button>
+              </ActionTextButton>
               <span v-if="showProgressPanel && currentStepLabel" class="inline-flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-indigo-500 dark:text-indigo-300">
                 <i class="bi bi-arrow-repeat animate-spin"></i>
                 {{ currentStepIndex }}/{{ totalSteps }} · {{ currentStepLabel }}
@@ -177,7 +180,7 @@
                 v-for="item in quickActions"
                 :key="item.path"
                 :to="item.path"
-                class="group rounded-2xl border border-slate-200/70 dark:border-slate-700 p-4 bg-slate-50/70 dark:bg-slate-800/50 hover:border-indigo-300 dark:hover:border-indigo-600 hover:shadow-md transition"
+                :class="quickActionCardClass"
               >
                 <div class="flex items-start justify-between gap-3">
                   <div>
@@ -211,9 +214,13 @@ import { useRealtimeMonitoringStore } from '/assets/js/stores/realtimeMonitoring
 import { useAuthStore } from '/assets/js/stores/authStore.js';
 import { useModalStore } from '/assets/js/stores/modalStore.js';
 import { useMainStore } from '/assets/js/stores/mainStore.js';
+import ActionTextButton from '/vue/components/ActionTextButton.vue';
 
 export default {
   name: 'AdminDashboard',
+  components: {
+    ActionTextButton
+  },
   setup() {
     const { t } = useI18n({ useScope: 'global' });
     const systemStatsStore = useSystemStatsStore();
@@ -227,6 +234,8 @@ export default {
 
     const loading = ref(false);
     const error = ref(null);
+    const heroSectionClass = 'relative overflow-hidden rounded-[32px] border border-slate-200/70 dark:border-slate-800 bg-gradient-to-br from-white via-indigo-50/40 to-emerald-50/40 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 p-8 shadow-[0_24px_80px_-60px_rgba(15,23,42,0.8)]';
+    const quickActionCardClass = 'group rounded-2xl border border-slate-200/70 dark:border-slate-700 p-4 bg-slate-50/70 dark:bg-slate-800/50 hover:border-indigo-300 dark:hover:border-indigo-600 hover:shadow-md transition';
     const currentStep = ref('');
     const currentStepIndex = ref(0);
     const totalSteps = ref(0);
@@ -532,6 +541,8 @@ export default {
     return {
       loading,
       error,
+      heroSectionClass,
+      quickActionCardClass,
       isAdmin,
       showLoginRequired,
       totalUsers,

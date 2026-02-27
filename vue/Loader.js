@@ -334,6 +334,12 @@ export default {
       window.location.reload();
     };
 
+    const getStageLayerClass = (stageId) => ({
+      active: progress[stageId] > 0,
+      completed: progress[stageId] === 100,
+      current: progress[stageId] > 0 && progress[stageId] < 100
+    });
+
     return {
       progress,
       stages,
@@ -345,7 +351,8 @@ export default {
       progressClass,
       startLoading,
       hasError,
-      retryLoading
+      retryLoading,
+      getStageLayerClass
     };
   },
   mounted() {

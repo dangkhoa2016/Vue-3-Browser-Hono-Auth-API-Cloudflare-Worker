@@ -10,17 +10,19 @@
       <i class="bi bi-lock-fill text-5xl text-teal-600 dark:text-teal-400 mb-4"></i>
       <h3 class="text-xl font-bold text-teal-900 dark:text-teal-100 mb-2">{{ $t('message.auth.login_required') }}</h3>
       <p class="text-teal-700 dark:text-teal-300 mb-4">{{ $t('message.admin_users.login_required_message') }}</p>
-      <button
+      <ActionTextButton
+        icon="bi bi-box-arrow-in-right"
+        tone="teal"
+        size="sm"
+        shape="xl"
         @click="openLoginModal"
-        class="inline-flex items-center gap-2 px-3 py-1 bg-teal-600 hover:bg-teal-700 dark:bg-teal-500 dark:hover:bg-teal-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition"
       >
-        <i class="bi bi-box-arrow-in-right text-lg"></i>
         {{ $t('message.auth.login') }}
-      </button>
+      </ActionTextButton>
     </section>
 
     <template v-else>
-      <section class="relative overflow-hidden rounded-[32px] border border-slate-200/70 dark:border-slate-800 bg-gradient-to-br from-white via-amber-50/40 to-teal-50/40 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 p-8 shadow-[0_24px_80px_-60px_rgba(15,23,42,0.8)]">
+      <section :class="heroSectionClass">
         <div class="absolute -top-24 -right-24 w-72 h-72 bg-teal-500/10 rounded-full blur-3xl"></div>
         <div class="absolute -bottom-24 -left-24 w-72 h-72 bg-amber-400/10 rounded-full blur-3xl"></div>
         <div class="relative grid gap-6 lg:grid-cols-[1.3fr_0.7fr] lg:items-center">
@@ -36,15 +38,16 @@
               {{ $t('message.admin_users.subtitle') }}
             </p>
             <div class="mt-6 flex flex-wrap items-center gap-3">
-              <button
-                class="inline-flex items-center gap-2 rounded-full border border-slate-200/80 dark:border-slate-700 bg-white/80 dark:bg-slate-800/80 px-4 py-2 text-sm font-semibold text-slate-700 dark:text-slate-200 shadow-sm hover:shadow-md transition"
+              <ActionTextButton
+                variant="soft"
+                shape="full"
+                :icon="loading ? 'bi bi-arrow-clockwise animate-spin' : 'bi bi-arrow-clockwise'"
                 :title="$t('message.common.retry_title')"
                 :disabled="loading"
                 @click="reload"
               >
-                <i class="bi bi-arrow-clockwise" :class="{ 'animate-spin': loading }"></i>
                 {{ $t('message.admin_users.reload') }}
-              </button>
+              </ActionTextButton>
             </div>
           </div>
           <div class="grid gap-4">
@@ -94,18 +97,18 @@
                 v-model="search"
                 ref="searchInput"
                 type="text"
-                class="w-full pl-11 pr-12 py-2.5 rounded-full border border-slate-200/80 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm text-slate-700 dark:text-slate-200 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none"
+                :class="searchInputClass"
                 :placeholder="$t('message.admin_users.search_placeholder')"
               />
-              <button
+              <ActionIconButton
                 v-if="search"
-                type="button"
-                @click="search = ''; $refs.searchInput && $refs.searchInput.focus()"
-                class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition p-1 rounded-full"
+                icon="bi bi-x-lg"
+                tone="indigo"
+                class="absolute right-2 top-1/2 -translate-y-1/2"
                 :title="$t('message.common.clear') || 'Clear'"
-              >
-                <i class="bi bi-x-lg"></i>
-              </button>
+                :aria-label="$t('message.common.clear') || 'Clear'"
+                @click="search = ''; $refs.searchInput && $refs.searchInput.focus()"
+              />
             </div>
             <div class="flex flex-wrap items-center gap-3">
               <select
@@ -123,7 +126,7 @@
                 <option value="active">{{ $t('message.admin_users.status_active') }}</option>
                 <option value="inactive">{{ $t('message.admin_users.status_inactive') }}</option>
               </select>
-              <label class="inline-flex items-center gap-2 rounded-full border border-slate-200/80 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-2 text-xs font-semibold text-slate-600 dark:text-slate-200">
+              <label :class="serverFilterLabelClass">
                 <input
                   v-model="useServerFilter"
                   type="checkbox"
@@ -137,22 +140,12 @@
             <p class="text-sm text-slate-500 dark:text-slate-400">
               {{ $t('message.admin_users.page') }} {{ pagination.page }} {{ $t('message.admin_users.of') }} {{ pagination.totalPages }}
             </p>
-            <div class="flex items-center gap-2">
-              <button
-                class="px-3 py-1.5 rounded-full border border-slate-200 dark:border-slate-700 text-sm font-semibold text-slate-600 dark:text-slate-200 disabled:opacity-50"
-                :disabled="pagination.page <= 1"
-                @click="prevPage"
-              >
-                <i class="bi bi-chevron-left"></i>
-              </button>
-              <button
-                class="px-3 py-1.5 rounded-full border border-slate-200 dark:border-slate-700 text-sm font-semibold text-slate-600 dark:text-slate-200 disabled:opacity-50"
-                :disabled="pagination.page >= pagination.totalPages"
-                @click="nextPage"
-              >
-                <i class="bi bi-chevron-right"></i>
-              </button>
-            </div>
+            <PaginationControls
+              :current-page="pagination.page || 1"
+              :total-pages="pagination.totalPages || 1"
+              :loading="loading"
+              @change="goToPage"
+            />
           </div>
         </div>
 
@@ -162,13 +155,14 @@
               <h2 class="text-xl font-bold text-slate-900 dark:text-white">{{ $t('message.admin_users.table_title') }}</h2>
               <p class="text-sm text-slate-500 dark:text-slate-400">{{ $t('message.admin_users.table_subtitle') }}</p>
             </div>
-            <button
+            <ActionTextButton
+              icon="bi bi-person-plus-fill"
+              tone="teal"
+              shape="xl"
               @click="openCreateModal"
-              class="inline-flex items-center gap-2 rounded-xl bg-teal-600 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-teal-500/30 transition hover:bg-teal-700 hover:shadow-teal-500/40 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900"
             >
-              <i class="bi bi-person-plus-fill"></i>
               {{ $t('message.admin_users.create_user', 'Create User') }}
-            </button>
+            </ActionTextButton>
           </div>
 
           <div v-if="showDataSkeleton" class="p-6 space-y-4 animate-pulse">
@@ -178,13 +172,15 @@
           <div v-else-if="error" class="p-8 text-center">
             <i class="bi bi-exclamation-triangle-fill text-4xl text-rose-500 mb-3"></i>
             <h3 class="text-lg font-bold text-slate-900 dark:text-white">{{ $t('message.errors.failed_to_load', { item: $t('message.admin_users.list_title'), message: error }) }}</h3>
-            <button
-              class="mt-4 inline-flex items-center gap-2 rounded-full bg-rose-600 text-white px-4 py-2 text-sm font-semibold"
+            <ActionTextButton
+              class="mt-4"
+              tone="rose"
+              shape="full"
+              icon="bi bi-arrow-clockwise"
               @click="reload"
             >
-              <i class="bi bi-arrow-clockwise"></i>
               {{ $t('message.common.retry') }}
-            </button>
+            </ActionTextButton>
           </div>
 
           <div v-else-if="filteredUsers.length === 0" class="p-10 text-center">
@@ -211,47 +207,47 @@
                 <tr
                   v-for="userItem in filteredUsers"
                   :key="userItem.id"
-                  class="border-t border-slate-100 dark:border-slate-800 hover:bg-slate-50/70 dark:hover:bg-slate-800/60 transition max-[992px]:block max-[992px]:border max-[992px]:border-slate-200/70 dark:max-[992px]:border-slate-700 max-[992px]:rounded-2xl max-[992px]:p-1 max-[992px]:mb-4 max-[992px]:bg-white/90 dark:max-[992px]:bg-slate-900/80"
+                  :class="tableRowClass"
                 >
-                  <td class="whitespace-nowrap px-6 py-4 text-right max-[992px]:flex max-[992px]:items-center max-[992px]:justify-between max-[992px]:px-4 max-[992px]:py-2.5 max-[992px]:before:content-[attr(data-label)] max-[992px]:before:text-[11px] max-[992px]:before:uppercase max-[992px]:before:tracking-[0.2em] max-[992px]:before:text-slate-500 dark:max-[992px]:before:text-slate-400 max-[992px]:before:pr-3" :data-label="$t('message.common.actions', 'Actions')">
+                  <td :class="actionsCellClass" :data-label="$t('message.common.actions', 'Actions')">
                     <div class="flex items-center justify-end gap-2">
-                      <button
+                      <ActionIconButton
                         v-if="isAdmin && !isCurrentUser(userItem)"
                         @click="openRoleModal(userItem)"
-                        class="rounded-lg p-2 text-slate-400 transition hover:bg-slate-100 hover:text-amber-600 dark:hover:bg-slate-800 dark:hover:text-amber-400"
+                        icon="bi bi-shield-shaded"
+                        tone="amber"
                         :title="$t('message.admin_users.change_role', 'Change Role')"
-                      >
-                        <i class="bi bi-shield-shaded"></i>
-                      </button>
-                      <button
+                        :aria-label="$t('message.admin_users.change_role', 'Change Role')"
+                      />
+                      <ActionIconButton
                         @click="openEditModal(userItem)"
-                        class="rounded-lg p-2 text-slate-400 transition hover:bg-slate-100 hover:text-indigo-600 dark:hover:bg-slate-800 dark:hover:text-indigo-400"
+                        icon="bi bi-pencil-fill"
+                        tone="indigo"
                         :title="$t('message.common.edit') || 'Edit'"
-                      >
-                        <i class="bi bi-pencil-fill"></i>
-                      </button>
-                      <button
+                        :aria-label="$t('message.common.edit') || 'Edit'"
+                      />
+                      <ActionIconButton
                         @click="confirmDelete(userItem)"
-                        class="rounded-lg p-2 text-slate-400 transition hover:bg-slate-100 hover:text-rose-600 dark:hover:bg-slate-800 dark:hover:text-rose-400"
+                        icon="bi bi-trash-fill"
+                        tone="rose"
                         :title="$t('message.common.delete') || 'Delete'"
-                      >
-                        <i class="bi bi-trash-fill"></i>
-                      </button>
+                        :aria-label="$t('message.common.delete') || 'Delete'"
+                      />
                     </div>
                   </td>
-                  <td class="px-6 py-4 font-semibold text-slate-700 dark:text-slate-200 max-[992px]:flex max-[992px]:items-center max-[992px]:justify-between max-[992px]:px-4 max-[992px]:py-2.5 max-[992px]:before:content-[attr(data-label)] max-[992px]:before:text-[11px] max-[992px]:before:uppercase max-[992px]:before:tracking-[0.2em] max-[992px]:before:text-slate-500 dark:max-[992px]:before:text-slate-400 max-[992px]:before:pr-3" :data-label="$t('message.admin_users.column_id')">#{{ userItem.id }}</td>
-                  <td class="whitespace-nowrap px-6 py-4 text-slate-800 dark:text-slate-100 max-[992px]:flex max-[992px]:items-center max-[992px]:justify-between max-[992px]:px-4 max-[992px]:py-2.5 max-[992px]:before:content-[attr(data-label)] max-[992px]:before:text-[11px] max-[992px]:before:uppercase max-[992px]:before:tracking-[0.2em] max-[992px]:before:text-slate-500 dark:max-[992px]:before:text-slate-400 max-[992px]:before:pr-3" :data-label="$t('message.admin_users.column_full_name')">
+                  <td :class="idCellClass" :data-label="$t('message.admin_users.column_id')">#{{ userItem.id }}</td>
+                  <td :class="nameCellClass" :data-label="$t('message.admin_users.column_full_name')">
                     <div class="font-semibold">{{ userItem.full_name }}</div>
                   </td>
-                  <td class="px-6 py-4 text-slate-500 dark:text-slate-300 max-[992px]:flex max-[992px]:items-center max-[992px]:justify-between max-[992px]:px-4 max-[992px]:py-2.5 max-[992px]:before:content-[attr(data-label)] max-[992px]:before:text-[11px] max-[992px]:before:uppercase max-[992px]:before:tracking-[0.2em] max-[992px]:before:text-slate-500 dark:max-[992px]:before:text-slate-400 max-[992px]:before:pr-3" :data-label="$t('message.admin_users.column_email')">{{ userItem.email }}</td>
-                  <td class="px-6 py-4 max-[992px]:flex max-[992px]:items-center max-[992px]:justify-between max-[992px]:px-4 max-[992px]:py-2.5 max-[992px]:before:content-[attr(data-label)] max-[992px]:before:text-[11px] max-[992px]:before:uppercase max-[992px]:before:tracking-[0.2em] max-[992px]:before:text-slate-500 dark:max-[992px]:before:text-slate-400 max-[992px]:before:pr-3" :data-label="$t('message.admin_users.column_role')">
+                  <td :class="emailCellClass" :data-label="$t('message.admin_users.column_email')">{{ userItem.email }}</td>
+                  <td :class="roleCellClass" :data-label="$t('message.admin_users.column_role')">
                     <span :class="roleBadgeClass(userItem.role)">{{ formatRole(userItem.role) }}</span>
                   </td>
-                  <td class="whitespace-nowrap px-6 py-4 max-[992px]:flex max-[992px]:items-center max-[992px]:justify-between max-[992px]:px-4 max-[992px]:py-2.5 max-[992px]:before:content-[attr(data-label)] max-[992px]:before:text-[11px] max-[992px]:before:uppercase max-[992px]:before:tracking-[0.2em] max-[992px]:before:text-slate-500 dark:max-[992px]:before:text-slate-400 max-[992px]:before:pr-3" :data-label="$t('message.admin_users.column_status')">
+                  <td :class="statusCellClass" :data-label="$t('message.admin_users.column_status')">
                     <span :class="statusBadgeClass(userItem.status)">{{ formatStatus(userItem.status) }}</span>
                   </td>
-                  <td class="whitespace-nowrap px-6 py-4 text-slate-500 dark:text-slate-300 max-[992px]:flex max-[992px]:items-center max-[992px]:justify-between max-[992px]:px-4 max-[992px]:py-2.5 max-[992px]:before:content-[attr(data-label)] max-[992px]:before:text-[11px] max-[992px]:before:uppercase max-[992px]:before:tracking-[0.2em] max-[992px]:before:text-slate-500 dark:max-[992px]:before:text-slate-400 max-[992px]:before:pr-3" :data-label="$t('message.admin_users.column_created_at')">{{ formatDate(userItem.created_at) }}</td>
-                  <td class="whitespace-nowrap px-6 py-4 text-slate-500 dark:text-slate-300 max-[992px]:flex max-[992px]:items-center max-[992px]:justify-between max-[992px]:px-4 max-[992px]:py-2.5 max-[992px]:before:content-[attr(data-label)] max-[992px]:before:text-[11px] max-[992px]:before:uppercase max-[992px]:before:tracking-[0.2em] max-[992px]:before:text-slate-500 dark:max-[992px]:before:text-slate-400 max-[992px]:before:pr-3" :data-label="$t('message.admin_users.column_updated_at')">{{ formatDate(userItem.updated_at) }}</td>
+                  <td :class="createdAtCellClass" :data-label="$t('message.admin_users.column_created_at')">{{ formatDate(userItem.created_at) }}</td>
+                  <td :class="updatedAtCellClass" :data-label="$t('message.admin_users.column_updated_at')">{{ formatDate(userItem.updated_at) }}</td>
                 </tr>
               </tbody>
             </table>
@@ -305,13 +301,19 @@ import { useToastStore } from '/assets/js/stores/toastStore.js';
 import UserModal from '../components/UserModal.vue';
 import ConfirmDeleteModal from '../components/ConfirmDeleteModal.vue';
 import RoleChangeModal from '../components/RoleChangeModal.vue';
+import PaginationControls from '../components/PaginationControls.vue';
+import ActionIconButton from '../components/ActionIconButton.vue';
+import ActionTextButton from '../components/ActionTextButton.vue';
 
 export default {
   name: 'AdminUsers',
   components: {
     UserModal,
     ConfirmDeleteModal,
-    RoleChangeModal
+    RoleChangeModal,
+    PaginationControls,
+    ActionIconButton,
+    ActionTextButton
   },
   setup() {
     const { t } = useI18n({ useScope: 'global' });
@@ -328,6 +330,26 @@ export default {
     const roleFilter = ref('all');
     const statusFilter = ref('all');
     const useServerFilter = ref(true);
+
+    const heroSectionClass =
+      'relative overflow-hidden rounded-[32px] border border-slate-200/70 dark:border-slate-800 bg-gradient-to-br from-white via-amber-50/40 to-teal-50/40 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 p-8 shadow-[0_24px_80px_-60px_rgba(15,23,42,0.8)]';
+    const searchInputClass =
+      'w-full pl-11 pr-12 py-2.5 rounded-full border border-slate-200/80 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm text-slate-700 dark:text-slate-200 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none';
+    const serverFilterLabelClass =
+      'inline-flex items-center gap-2 rounded-full border border-slate-200/80 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-2 text-xs font-semibold text-slate-600 dark:text-slate-200';
+
+    const mobileDataLabelBaseClass =
+      'max-[992px]:flex max-[992px]:items-center max-[992px]:justify-between max-[992px]:px-4 max-[992px]:py-2.5 max-[992px]:before:content-[attr(data-label)] max-[992px]:before:text-[11px] max-[992px]:before:uppercase max-[992px]:before:tracking-[0.2em] max-[992px]:before:text-slate-500 dark:max-[992px]:before:text-slate-400 max-[992px]:before:pr-3';
+    const tableRowClass =
+      'border-t border-slate-100 dark:border-slate-800 hover:bg-slate-50/70 dark:hover:bg-slate-800/60 transition max-[992px]:block max-[992px]:border max-[992px]:border-slate-200/70 dark:max-[992px]:border-slate-700 max-[992px]:rounded-2xl max-[992px]:p-1 max-[992px]:mb-4 max-[992px]:bg-white/90 dark:max-[992px]:bg-slate-900/80';
+    const actionsCellClass = `whitespace-nowrap px-6 py-4 text-right ${mobileDataLabelBaseClass}`;
+    const idCellClass = `px-6 py-4 font-semibold text-slate-700 dark:text-slate-200 ${mobileDataLabelBaseClass}`;
+    const nameCellClass = `whitespace-nowrap px-6 py-4 text-slate-800 dark:text-slate-100 ${mobileDataLabelBaseClass}`;
+    const emailCellClass = `px-6 py-4 text-slate-500 dark:text-slate-300 ${mobileDataLabelBaseClass}`;
+    const roleCellClass = `px-6 py-4 ${mobileDataLabelBaseClass}`;
+    const statusCellClass = `whitespace-nowrap px-6 py-4 ${mobileDataLabelBaseClass}`;
+    const createdAtCellClass = `whitespace-nowrap px-6 py-4 text-slate-500 dark:text-slate-300 ${mobileDataLabelBaseClass}`;
+    const updatedAtCellClass = `whitespace-nowrap px-6 py-4 text-slate-500 dark:text-slate-300 ${mobileDataLabelBaseClass}`;
 
     // Modal state
     const showModal = ref(false);
@@ -466,18 +488,12 @@ export default {
       await loadUsers();
     };
 
-    const nextPage = async () => {
-      if (pagination.value.page < pagination.value.totalPages) {
-        forceSkeletonOnLoading.value = true;
-        await loadUsers(pagination.value.page + 1);
-      }
-    };
-
-    const prevPage = async () => {
-      if (pagination.value.page > 1) {
-        forceSkeletonOnLoading.value = true;
-        await loadUsers(pagination.value.page - 1);
-      }
+    const goToPage = async (page) => {
+      const totalPages = Number(pagination.value?.totalPages) || 1;
+      const nextPage = Math.min(Math.max(1, Number(page) || 1), totalPages);
+      if (nextPage === (Number(pagination.value?.page) || 1)) return;
+      forceSkeletonOnLoading.value = true;
+      await loadUsers(nextPage);
     };
 
     const formatDate = (value) => {
@@ -776,6 +792,18 @@ export default {
       roleFilter,
       statusFilter,
       useServerFilter,
+      heroSectionClass,
+      searchInputClass,
+      serverFilterLabelClass,
+      tableRowClass,
+      actionsCellClass,
+      idCellClass,
+      nameCellClass,
+      emailCellClass,
+      roleCellClass,
+      statusCellClass,
+      createdAtCellClass,
+      updatedAtCellClass,
       roleOptions,
       users,
       pagination,
@@ -785,8 +813,7 @@ export default {
       inactiveCount,
       openLoginModal,
       reload,
-      nextPage,
-      prevPage,
+      goToPage,
       formatDate,
       formatRole,
       formatStatus,
