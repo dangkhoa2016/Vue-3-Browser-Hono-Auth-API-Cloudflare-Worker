@@ -9,7 +9,7 @@
 
     <div class="container mx-auto px-4 relative z-10 text-center space-y-12">
       <!-- Badge -->
-      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 backdrop-blur-md text-sm font-medium text-blue-600 dark:text-blue-300 shadow-lg hover:scale-105 transition-transform cursor-default">
+      <div :class="homeBadgeClass">
         <span class="relative flex h-2 w-2">
           <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
           <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
@@ -30,20 +30,24 @@
 
       <!-- CTA Buttons -->
       <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-        <button 
-          class="w-full sm:w-auto px-8 py-4 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-lg shadow-xl shadow-blue-500/30 transition-all hover:-translate-y-1 active:scale-95 flex items-center justify-center gap-2 group"
+        <ActionTextButton
+          icon="bi bi-rocket-takeoff"
+          tone="blue"
+          shape="full"
           :title="$t('message.home.cta.get_started_title')"
+          class="w-full sm:w-auto px-8 py-4 text-lg font-bold shadow-xl shadow-blue-500/30 hover:-translate-y-1 active:scale-95 justify-center"
         >
-          <i class="bi bi-rocket-takeoff group-hover:rotate-12 transition-transform"></i>
           {{ $t('message.home.cta.get_started') }}
-        </button>
-        <button 
-          class="w-full sm:w-auto px-8 py-4 rounded-full bg-white dark:bg-gray-800 text-gray-900 dark:text-white font-bold text-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all hover:-translate-y-1 active:scale-95 flex items-center justify-center gap-2"
+        </ActionTextButton>
+        <ActionTextButton
+          icon="bi bi-github"
+          variant="soft"
+          shape="full"
           :title="$t('message.home.cta.documentation_title')"
+          class="w-full sm:w-auto px-8 py-4 text-lg font-bold hover:-translate-y-1 active:scale-95 justify-center"
         >
-          <i class="bi bi-github"></i>
           {{ $t('message.home.cta.documentation') }}
-        </button>
+        </ActionTextButton>
       </div>
 
       <!-- Tech Stack -->
@@ -51,28 +55,28 @@
          <p class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-8">{{ $t('message.home.tech.heading') }}</p>
          <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
             <div 
-              class="flex flex-col items-center gap-3 p-4 rounded-xl bg-white/50 dark:bg-gray-800/50 hover:bg-white dark:hover:bg-gray-800 transition-colors backdrop-blur-sm border border-transparent hover:border-gray-200 dark:hover:border-gray-700 group"
+              :class="techCardClass"
               :title="$t('message.home.tech.hono_title')"
             >
               <i class="bi bi-lightning-charge-fill text-3xl text-yellow-500 group-hover:scale-110 transition-transform"></i>
               <span class="font-bold text-gray-700 dark:text-gray-200">Hono.js</span>
             </div>
             <div 
-              class="flex flex-col items-center gap-3 p-4 rounded-xl bg-white/50 dark:bg-gray-800/50 hover:bg-white dark:hover:bg-gray-800 transition-colors backdrop-blur-sm border border-transparent hover:border-gray-200 dark:hover:border-gray-700 group"
+              :class="techCardClass"
               :title="$t('message.home.tech.d1_title')"
             >
               <i class="bi bi-database-fill text-3xl text-blue-500 group-hover:scale-110 transition-transform"></i>
               <span class="font-bold text-gray-700 dark:text-gray-200">Cloudflare D1</span>
             </div>
             <div 
-              class="flex flex-col items-center gap-3 p-4 rounded-xl bg-white/50 dark:bg-gray-800/50 hover:bg-white dark:hover:bg-gray-800 transition-colors backdrop-blur-sm border border-transparent hover:border-gray-200 dark:hover:border-gray-700 group"
+              :class="techCardClass"
               :title="$t('message.home.tech.jwt_title')"
             >
               <i class="bi bi-shield-lock-fill text-3xl text-green-500 group-hover:scale-110 transition-transform"></i>
               <span class="font-bold text-gray-700 dark:text-gray-200">JWT Auth</span>
             </div>
             <div 
-              class="flex flex-col items-center gap-3 p-4 rounded-xl bg-white/50 dark:bg-gray-800/50 hover:bg-white dark:hover:bg-gray-800 transition-colors backdrop-blur-sm border border-transparent hover:border-gray-200 dark:hover:border-gray-700 group"
+              :class="techCardClass"
               :title="$t('message.home.tech.edge_title')"
             >
               <i class="bi bi-globe-americas text-3xl text-purple-500 group-hover:scale-110 transition-transform"></i>
@@ -84,16 +88,26 @@
   </div>
 </template>
 
+<script>
+import ActionTextButton from '/vue/components/ActionTextButton.vue';
+
+export default {
+  name: 'Home',
+  components: {
+    ActionTextButton
+  },
+  data() {
+    return {
+      homeBadgeClass:
+        'inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 backdrop-blur-md text-sm font-medium text-blue-600 dark:text-blue-300 shadow-lg hover:scale-105 transition-transform cursor-default',
+      techCardClass:
+        'flex flex-col items-center gap-3 p-4 rounded-xl bg-white/50 dark:bg-gray-800/50 hover:bg-white dark:hover:bg-gray-800 transition-colors backdrop-blur-sm border border-transparent hover:border-gray-200 dark:hover:border-gray-700 group'
+    };
+  }
+};
+</script>
+
 <style scoped>
-.animate-blob {
-  animation: blob 7s infinite;
-}
-.animation-delay-2000 {
-  animation-delay: 2s;
-}
-.animation-delay-4000 {
-  animation-delay: 4s;
-}
 .orb {
   position: absolute;
   border-radius: 9999px;

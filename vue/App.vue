@@ -15,8 +15,7 @@
 
     <button 
       @click="scrollToTop"
-      class="fixed bottom-8 right-8 p-3 rounded-full shadow-lg bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-300 z-50 transform translate-y-20 opacity-0"
-      :class="{ '!translate-y-0 !opacity-100': showBackToTop }"
+      :class="[backToTopButtonClass, { '!translate-y-0 !opacity-100': showBackToTop }]"
       :aria-label="$t('message.app.back_to_top')"
     >
       <i class="bi bi-arrow-up text-xl"></i>
@@ -51,6 +50,7 @@ export default {
     });
 
     const showBackToTop = ref(false);
+    const backToTopButtonClass = 'fixed bottom-8 right-8 p-3 rounded-full shadow-lg bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-300 z-50 transform translate-y-20 opacity-0';
 
     const handleScroll = () => {
       showBackToTop.value = window.scrollY > 300;
@@ -70,6 +70,7 @@ export default {
 
     return {
       showBackToTop,
+      backToTopButtonClass,
       scrollToTop,
     };
   }

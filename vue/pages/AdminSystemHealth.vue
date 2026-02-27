@@ -10,18 +10,21 @@
         <i class="bi bi-lock-fill text-5xl text-emerald-600 dark:text-emerald-400 mb-4"></i>
         <h3 class="text-xl font-bold text-emerald-900 dark:text-emerald-100 mb-2">{{ $t('message.auth.login_required') }}</h3>
         <p class="text-emerald-700 dark:text-emerald-300 mb-4">{{ $t('message.system_health.login_required_message') }}</p>
-        <button
+        <ActionTextButton
+          tone="emerald"
+          shape="xl"
+          size="sm"
+          icon="bi bi-box-arrow-in-right text-lg"
+          class="shadow-lg hover:shadow-xl"
           @click="openLoginModal"
-          class="inline-flex items-center gap-2 px-3 py-1 bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition"
         >
-          <i class="bi bi-box-arrow-in-right text-lg"></i>
           {{ $t('message.auth.login') }}
-        </button>
+        </ActionTextButton>
       </section>
     </template>
 
     <template v-else>
-      <section class="relative overflow-hidden rounded-[32px] border border-slate-200/70 dark:border-slate-800 bg-gradient-to-br from-white via-emerald-50/40 to-cyan-50/40 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 p-8 shadow-[0_24px_80px_-60px_rgba(15,23,42,0.8)]">
+      <section :class="heroSectionClass">
         <div class="absolute -top-20 -right-16 w-72 h-72 bg-emerald-400/10 rounded-full blur-3xl"></div>
         <div class="absolute -bottom-24 -left-24 w-72 h-72 bg-cyan-500/10 rounded-full blur-3xl"></div>
         <div class="relative grid gap-6 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
@@ -37,14 +40,15 @@
               {{ $t('message.system_health.subtitle') }}
             </p>
             <div class="mt-6 flex flex-wrap items-center gap-3">
-              <button
-                class="inline-flex items-center gap-2 rounded-full border border-slate-200/80 dark:border-slate-700 bg-white/80 dark:bg-slate-800/80 px-4 py-2 text-sm font-semibold text-slate-700 dark:text-slate-200 shadow-sm hover:shadow-md transition"
+              <ActionTextButton
+                variant="soft"
+                shape="full"
+                :icon="loading ? 'bi bi-arrow-clockwise animate-spin' : 'bi bi-arrow-clockwise'"
                 :disabled="loading"
                 @click="refresh"
               >
-                <i class="bi bi-arrow-clockwise"></i>
                 {{ $t('message.refresh') }}
-              </button>
+              </ActionTextButton>
               <span class="text-xs uppercase tracking-[0.2em] text-slate-400">
                 {{ $t('message.system_health.last_updated') }}: {{ formatDate(lastUpdatedLabel) }}
               </span>
@@ -375,14 +379,17 @@ import { useSystemHealthStore } from '/assets/js/stores/systemHealthStore.js';
 import { useAuthStore } from '/assets/js/stores/authStore.js';
 import { useModalStore } from '/assets/js/stores/modalStore.js';
 import { useMainStore } from '/assets/js/stores/mainStore.js';
+import ActionTextButton from '/vue/components/ActionTextButton.vue';
 
 export default {
   name: 'AdminSystemHealth',
+  components: { ActionTextButton },
   setup() {
     const systemHealthStore = useSystemHealthStore();
     const authStore = useAuthStore();
     const modalStore = useModalStore();
     const mainStore = useMainStore();
+    const heroSectionClass = 'relative overflow-hidden rounded-[32px] border border-slate-200/70 dark:border-slate-800 bg-gradient-to-br from-white via-emerald-50/40 to-cyan-50/40 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 p-8 shadow-[0_24px_80px_-60px_rgba(15,23,42,0.8)]';
 
     const { healthData, loading, error, lastUpdated } = storeToRefs(systemHealthStore);
 
@@ -581,6 +588,7 @@ export default {
     return {
       loading,
       error,
+      heroSectionClass,
       isAdmin,
       showLoginRequired,
       statusDotClass,

@@ -58,13 +58,15 @@
       <i class="bi bi-lock-fill text-5xl text-blue-600 dark:text-blue-400 mb-4"></i>
       <h3 class="text-xl font-bold text-blue-900 dark:text-blue-100 mb-2">{{ $t('message.auth.login_required') }}</h3>
       <p class="text-blue-700 dark:text-blue-300 mb-4">{{ $t('message.auth.login_required_message') }}</p>
-      <button
+      <ActionTextButton
+        icon="bi bi-box-arrow-in-right"
+        tone="blue"
+        size="sm"
+        shape="xl"
         @click="openLoginModal"
-        class="inline-flex items-center gap-2 px-3 py-1 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition"
       >
-        <i class="bi bi-box-arrow-in-right text-lg"></i>
         {{ $t('message.auth.login') }}
-      </button>
+      </ActionTextButton>
     </div>
 
     <!-- Error State -->
@@ -73,19 +75,20 @@
       <h3 class="text-xl font-bold text-red-900 dark:text-red-100 mb-2">{{ $t('message.errors.failed_to_load', { item: 'Profile' }) }}</h3>
       <p class="text-red-700 dark:text-red-300 mb-4">{{ error }}</p>
 
-      <button
+      <ActionTextButton
+        icon="bi bi-arrow-clockwise"
+        tone="rose"
+        shape="xl"
         @click="loadProfile"
-        class="inline-flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition"
       >
-        <i class="bi bi-arrow-clockwise text-lg"></i>
         {{ $t('message.common.retry') }}
-      </button>
+      </ActionTextButton>
     </div>
 
     <!-- Profile Content -->
     <template v-else-if="profile">
       <!-- Header Card with Gradient -->
-      <div class="relative overflow-hidden bg-gradient-to-br from-blue-500 via-blue-600 to-purple-600 dark:from-blue-700 dark:via-blue-800 dark:to-purple-800 rounded-2xl shadow-xl p-8 transition-all duration-300">
+      <div :class="profileHeaderCardClass">
         <!-- Decorative circles -->
         <div class="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-2xl"></div>
         <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-purple-300/10 rounded-full blur-2xl"></div>
@@ -93,7 +96,7 @@
         <div class="relative flex items-center space-x-6">
           <div class="relative group">
             <div class="absolute inset-0 bg-white/20 rounded-full blur-xl group-hover:bg-white/30 transition-all"></div>
-            <div class="relative h-24 w-24 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white text-4xl font-bold ring-4 ring-white/30 group-hover:ring-white/50 transition-all group-hover:scale-105">
+            <div :class="profileHeaderAvatarClass">
               <i :class="getRoleIcon(profile.role)"></i>
             </div>
           </div>
@@ -116,32 +119,38 @@
               {{ $t('message.profile.account_info') }}
             </h2>
             <div class="w-full sm:w-auto flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
-              <button
+              <ActionTextButton
                 v-if="!isEditing"
+                icon="bi bi-pencil-square"
+                tone="blue"
+                shape="xl"
+                class="w-full sm:w-auto justify-center"
                 @click="startEditingProfile"
-                class="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-3 sm:px-4 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white text-sm sm:text-base font-semibold rounded-lg transition"
               >
-                <i class="bi bi-pencil-square"></i>
                 {{ $t('message.common.edit') }}
-              </button>
+              </ActionTextButton>
               <template v-else>
                 <div class="flex max-[420px]:flex-col max-[450px]:justify-between gap-2">
-                  <button
-                    @click="cancelEditingProfile"
+                  <ActionTextButton
+                    icon="bi bi-x-lg"
+                    tone="slate"
+                    shape="xl"
+                    class="w-full sm:w-auto justify-center"
                     :disabled="isSavingProfile"
-                    class="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-3 sm:px-4 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-gray-800 dark:text-slate-100 text-sm sm:text-base font-semibold rounded-lg transition disabled:opacity-60 disabled:cursor-not-allowed"
+                    @click="cancelEditingProfile"
                   >
-                    <i class="bi bi-x-lg"></i>
                     {{ $t('message.common.cancel') }}
-                  </button>
-                  <button
-                    @click="saveProfile"
+                  </ActionTextButton>
+                  <ActionTextButton
+                    :icon="isSavingProfile ? 'bi bi-hourglass-split' : 'bi bi-check-lg'"
+                    tone="emerald"
+                    shape="xl"
+                    class="w-full sm:w-auto justify-center"
                     :disabled="!canSubmitProfile"
-                    class="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-3 sm:px-4 py-2 bg-green-600 hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600 text-white text-sm sm:text-base font-semibold rounded-lg transition disabled:opacity-60 disabled:cursor-not-allowed"
+                    @click="saveProfile"
                   >
-                    <i class="bi" :class="isSavingProfile ? 'bi-hourglass-split' : 'bi-check-lg'"></i>
                     {{ isSavingProfile ? $t('message.common.loading') : $t('message.common.save') }}
-                  </button>
+                  </ActionTextButton>
                 </div>
               </template>
             </div>
@@ -162,7 +171,7 @@
                   v-model="editForm.full_name"
                   type="text"
                   autocomplete="name"
-                  class="w-full sm:w-auto sm:min-w-[16rem] sm:max-w-xs px-3 py-2 rounded-lg border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-gray-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  :class="profileEditInputClass"
                 />
               </div>
             </div>
@@ -181,7 +190,7 @@
                   v-model="editForm.email"
                   type="email"
                   autocomplete="email"
-                  class="w-full sm:w-auto sm:min-w-[16rem] sm:max-w-xs px-3 py-2 rounded-lg border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-gray-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  :class="profileEditInputClass"
                 />
               </div>
             </div>
@@ -200,17 +209,20 @@
                     <p class="font-semibold text-amber-800 dark:text-amber-200 break-all sm:break-normal sm:truncate">{{ profile.new_email }}</p>
                   </div>
                 </div>
-                <button
-                  @click="clearPendingEmail"
+                <ActionTextButton
+                  :icon="isClearingPendingEmail ? 'bi bi-hourglass-split' : 'bi bi-trash3'"
+                  tone="amber"
+                  shape="xl"
+                  size="sm"
+                  class="w-full sm:w-auto justify-center whitespace-nowrap"
                   :disabled="isClearingPendingEmail || isSavingProfile"
-                  class="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-3 py-2 rounded-lg bg-amber-600 hover:bg-amber-700 text-white text-sm font-semibold whitespace-nowrap transition disabled:opacity-60 disabled:cursor-not-allowed"
+                  @click="clearPendingEmail"
                 >
-                  <i class="bi" :class="isClearingPendingEmail ? 'bi-hourglass-split' : 'bi-trash3'" />
                   <span v-if="isClearingPendingEmail">{{ $t('message.common.loading') }}</span>
                   <template v-else>
                     {{ $t('message.profile.clear_pending_email') }}
                   </template>
-                </button>
+                </ActionTextButton>
               </div>
             </div>
             
@@ -264,15 +276,17 @@
                 </div>
                 {{ $t('message.profile.change_password') }}
               </h3>
-              <button
+              <ActionTextButton
                 v-if="!isChangingPassword"
-                @click="startChangingPassword"
+                icon="bi bi-shield-lock"
+                tone="amber"
+                shape="xl"
+                class="w-full sm:w-auto justify-center"
                 :disabled="isEditing || isSavingProfile"
-                class="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-3 sm:px-4 py-2 bg-amber-600 hover:bg-amber-700 dark:bg-amber-500 dark:hover:bg-amber-600 text-white text-sm sm:text-base font-semibold rounded-lg transition disabled:opacity-60 disabled:cursor-not-allowed"
+                @click="startChangingPassword"
               >
-                <i class="bi bi-shield-lock"></i>
                 {{ $t('message.profile.change_password_action') }}
-              </button>
+              </ActionTextButton>
             </div>
 
             <div v-if="isChangingPassword" class="space-y-4">
@@ -282,7 +296,7 @@
                   v-model="passwordForm.currentPassword"
                   type="password"
                   autocomplete="current-password"
-                  class="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-gray-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                  :class="profilePasswordInputClass"
                 />
               </div>
 
@@ -292,7 +306,7 @@
                   v-model="passwordForm.newPassword"
                   type="password"
                   autocomplete="new-password"
-                  class="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-gray-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                  :class="profilePasswordInputClass"
                 />
               </div>
 
@@ -302,34 +316,38 @@
                   v-model="passwordForm.confirmPassword"
                   type="password"
                   autocomplete="new-password"
-                  class="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-gray-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                  :class="profilePasswordInputClass"
                 />
               </div>
 
               <div class="flex flex-col sm:flex-row gap-2">
-                <button
-                  @click="cancelChangingPassword"
+                <ActionTextButton
+                  icon="bi bi-x-lg"
+                  tone="slate"
+                  shape="xl"
+                  class="w-full sm:w-auto justify-center"
                   :disabled="isSavingPassword"
-                  class="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-3 sm:px-4 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-gray-800 dark:text-slate-100 text-sm sm:text-base font-semibold rounded-lg transition disabled:opacity-60 disabled:cursor-not-allowed"
+                  @click="cancelChangingPassword"
                 >
-                  <i class="bi bi-x-lg"></i>
                   {{ $t('message.common.cancel') }}
-                </button>
-                <button
-                  @click="changePassword"
+                </ActionTextButton>
+                <ActionTextButton
+                  :icon="isSavingPassword ? 'bi bi-hourglass-split' : 'bi bi-check-lg'"
+                  tone="amber"
+                  shape="xl"
+                  class="w-full sm:w-auto justify-center"
                   :disabled="!canSubmitPassword"
-                  class="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-3 sm:px-4 py-2 bg-amber-600 hover:bg-amber-700 dark:bg-amber-500 dark:hover:bg-amber-600 text-white text-sm sm:text-base font-semibold rounded-lg transition disabled:opacity-60 disabled:cursor-not-allowed"
+                  @click="changePassword"
                 >
-                  <i class="bi" :class="isSavingPassword ? 'bi-hourglass-split' : 'bi-check-lg'"></i>
                   {{ isSavingPassword ? $t('message.common.loading') : $t('message.profile.change_password_submit') }}
-                </button>
+                </ActionTextButton>
               </div>
             </div>
           </div>
         </div>
 
         <!-- Stats Card -->
-        <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-lg hover:shadow-xl p-8 transition-all duration-300 border border-gray-100 dark:border-slate-800 hover:border-purple-200 dark:hover:border-purple-900">
+        <div :class="statsCardClass">
           <div class="flex items-center justify-between mb-6">
             <h2 class="text-2xl font-bold text-gray-900 dark:text-slate-100 flex items-center gap-3">
               <div class="w-10 h-10 rounded-lg bg-purple-100 dark:bg-purple-900/50 flex items-center justify-center">
@@ -340,7 +358,7 @@
           </div>
           
           <div class="space-y-4">
-            <div class="group relative overflow-hidden bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 p-6 rounded-2xl hover:shadow-lg transition-all cursor-pointer border-2 border-transparent hover:border-blue-300 dark:hover:border-blue-700">
+            <div :class="statsUserIdCardClass">
               <div class="absolute top-0 right-0 w-20 h-20 bg-blue-200/30 dark:bg-blue-700/20 rounded-full blur-2xl group-hover:scale-150 transition-transform"></div>
               <div class="relative">
                 <div class="flex items-center justify-between mb-2">
@@ -351,7 +369,7 @@
               </div>
             </div>
             
-            <div class="group relative overflow-hidden bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 p-6 rounded-2xl hover:shadow-lg transition-all cursor-pointer border-2 border-transparent hover:border-purple-300 dark:hover:border-purple-700">
+            <div :class="statsAccessLevelCardClass">
               <div class="absolute top-0 right-0 w-20 h-20 bg-purple-200/30 dark:bg-purple-700/20 rounded-full blur-2xl group-hover:scale-150 transition-transform"></div>
               <div class="relative">
                 <div class="flex items-center justify-between mb-2">
@@ -375,9 +393,13 @@ import { useAuthStore } from '/assets/js/stores/authStore.js';
 import { useModalStore } from '/assets/js/stores/modalStore.js';
 import { useToastStore } from '/assets/js/stores/toastStore.js';
 import { apiClient, API_ENDPOINTS } from '/assets/js/api.js';
+import ActionTextButton from '/vue/components/ActionTextButton.vue';
 
 export default {
   name: 'Profile',
+  components: {
+    ActionTextButton
+  },
   setup() {
     const profile = ref(null);
     const loadingProfile = ref(true);
@@ -398,6 +420,21 @@ export default {
       newPassword: '',
       confirmPassword: ''
     });
+
+    const profileHeaderCardClass =
+      'relative overflow-hidden bg-gradient-to-br from-blue-500 via-blue-600 to-purple-600 dark:from-blue-700 dark:via-blue-800 dark:to-purple-800 rounded-2xl shadow-xl p-8 transition-all duration-300';
+    const profileHeaderAvatarClass =
+      'relative h-24 w-24 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white text-4xl font-bold ring-4 ring-white/30 group-hover:ring-white/50 transition-all group-hover:scale-105';
+    const profileEditInputClass =
+      'w-full sm:w-auto sm:min-w-[16rem] sm:max-w-xs px-3 py-2 rounded-lg border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-gray-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500';
+    const profilePasswordInputClass =
+      'w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-gray-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500';
+    const statsCardClass =
+      'bg-white dark:bg-slate-900 rounded-2xl shadow-lg hover:shadow-xl p-8 transition-all duration-300 border border-gray-100 dark:border-slate-800 hover:border-purple-200 dark:hover:border-purple-900';
+    const statsUserIdCardClass =
+      'group relative overflow-hidden bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 p-6 rounded-2xl hover:shadow-lg transition-all cursor-pointer border-2 border-transparent hover:border-blue-300 dark:hover:border-blue-700';
+    const statsAccessLevelCardClass =
+      'group relative overflow-hidden bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 p-6 rounded-2xl hover:shadow-lg transition-all cursor-pointer border-2 border-transparent hover:border-purple-300 dark:hover:border-purple-700';
     
     // Use Pinia stores
     const authStore = useAuthStore();
@@ -847,6 +884,13 @@ export default {
       isClearingPendingEmail,
       isChangingPassword,
       isSavingPassword,
+      profileHeaderCardClass,
+      profileHeaderAvatarClass,
+      profileEditInputClass,
+      profilePasswordInputClass,
+      statsCardClass,
+      statsUserIdCardClass,
+      statsAccessLevelCardClass,
       editForm,
       passwordForm,
       canSubmitProfile,

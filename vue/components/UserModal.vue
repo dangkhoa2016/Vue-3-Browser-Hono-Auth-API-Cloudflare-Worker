@@ -23,7 +23,7 @@
               type="text"
               required
               :disabled="loading"
-              class="w-full pl-11 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 focus:bg-white dark:focus:bg-slate-800 transition-all outline-none"
+              :class="textInputClass"
               :placeholder="$t('message.admin_users.column_full_name')"
             />
           </div>
@@ -41,7 +41,7 @@
               type="email"
               required
               :disabled="loading"
-              class="w-full pl-11 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 focus:bg-white dark:focus:bg-slate-800 transition-all outline-none"
+              :class="textInputClass"
               placeholder="name@example.com"
             />
           </div>
@@ -60,7 +60,7 @@
               required
               minlength="8"
               :disabled="loading"
-              class="w-full pl-11 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 focus:bg-white dark:focus:bg-slate-800 transition-all outline-none"
+              :class="textInputClass"
               placeholder="••••••••"
             />
           </div>
@@ -80,7 +80,7 @@
               <select
                 v-model="formData.role"
                 :disabled="loading || mode === 'edit'"
-                class="w-full pl-11 pr-10 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 focus:bg-white dark:focus:bg-slate-800 transition-all outline-none appearance-none"
+                :class="selectInputClass"
               >
                 <option value="user">User</option>
                 <option value="admin">Admin</option>
@@ -103,7 +103,7 @@
               <select
                 v-model="formData.status"
                 :disabled="loading"
-                class="w-full pl-11 pr-10 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 focus:bg-white dark:focus:bg-slate-800 transition-all outline-none appearance-none"
+                :class="selectInputClass"
               >
                 <option value="active">{{ $t('message.admin_users.status_active') }}</option>
                 <option value="inactive">{{ $t('message.admin_users.status_inactive') }}</option>
@@ -114,7 +114,7 @@
         </div>
 
         <!-- Improved Error Message -->
-        <div v-if="error" class="group p-4 bg-rose-50 dark:bg-rose-900/10 border border-rose-100 dark:border-rose-900/30 text-rose-600 dark:text-rose-400 text-sm rounded-xl flex items-start gap-3 transition-all hover:bg-rose-100 dark:hover:bg-rose-900/20">
+        <div v-if="error" :class="errorAlertClass">
             <div class="mt-0.5 w-5 h-5 flex items-center justify-center rounded-full bg-rose-100 dark:bg-rose-900/40 text-rose-600 dark:text-rose-400 shrink-0">
                <i class="bi bi-exclamation-circle-fill text-sm"></i>
             </div>
@@ -129,14 +129,14 @@
             type="button"
             :disabled="loading"
             @click="$emit('close')"
-            class="px-5 py-2.5 text-sm font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors focus:outline-none focus:ring-2 focus:ring-slate-200 dark:focus:ring-slate-700"
+            :class="cancelButtonClass"
           >
             {{ $t('message.common.cancel', 'Cancel') }}
           </button>
           <button
             type="submit"
             :disabled="loading"
-            class="px-5 py-2.5 text-sm font-bold text-white bg-teal-600 hover:bg-teal-700 rounded-xl shadow-lg shadow-teal-500/20 hover:shadow-teal-500/30 transition-all disabled:opacity-70 disabled:cursor-not-allowed flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900"
+            :class="submitButtonClass"
           >
             <span v-if="loading" class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
             {{ mode === 'create' ? $t('message.common.create', 'Create') : $t('message.common.save', 'Save') }}
@@ -189,6 +189,17 @@ export default {
       status: 'active'
     });
 
+    const textInputClass =
+      'w-full pl-11 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 focus:bg-white dark:focus:bg-slate-800 transition-all outline-none';
+    const selectInputClass =
+      'w-full pl-11 pr-10 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 focus:bg-white dark:focus:bg-slate-800 transition-all outline-none appearance-none';
+    const errorAlertClass =
+      'group p-4 bg-rose-50 dark:bg-rose-900/10 border border-rose-100 dark:border-rose-900/30 text-rose-600 dark:text-rose-400 text-sm rounded-xl flex items-start gap-3 transition-all hover:bg-rose-100 dark:hover:bg-rose-900/20';
+    const cancelButtonClass =
+      'px-5 py-2.5 text-sm font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors focus:outline-none focus:ring-2 focus:ring-slate-200 dark:focus:ring-slate-700';
+    const submitButtonClass =
+      'px-5 py-2.5 text-sm font-bold text-white bg-teal-600 hover:bg-teal-700 rounded-xl shadow-lg shadow-teal-500/20 hover:shadow-teal-500/30 transition-all disabled:opacity-70 disabled:cursor-not-allowed flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900';
+
     const formData = ref(getInitialState());
 
     watch(show, (newVal) => {
@@ -212,6 +223,11 @@ export default {
     return {
       t,
       formData,
+      textInputClass,
+      selectInputClass,
+      errorAlertClass,
+      cancelButtonClass,
+      submitButtonClass,
       handleSubmit
     };
   }
