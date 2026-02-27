@@ -27,7 +27,7 @@
               @mouseleave="closeAdminDropdown">
               <button @click="toggleAdminDropdown"
                 class="inline-flex items-center px-2 lg:px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200 whitespace-nowrap"
-                :class="showAdminDropdown
+                :class="(showAdminDropdown || isAdminRouteActive)
                   ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/40 dark:text-blue-300'
                   : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-blue-600 dark:hover:text-blue-300'"
               >
@@ -39,7 +39,12 @@
                 <div v-if="showAdminDropdown"
                   class="absolute left-0 mt-2 w-max min-w-[230px] bg-white dark:bg-gray-700 rounded-lg shadow-lg border border-gray-200 dark:border-gray-600 py-1 z-40 whitespace-nowrap">
                   <router-link v-for="item in adminMenuItems" :key="item.path" :to="item.path" @click="showAdminDropdown = false"
-                    class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 whitespace-nowrap">
+                    class="flex items-center px-4 py-2 text-sm whitespace-nowrap"
+                    :class="[
+                      $route.path === item.path
+                        ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/40 dark:text-blue-300'
+                        : 'text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600'
+                    ]">
                     <i :class="item.icon" class="text-base mr-2"></i>
                     {{ item.name }}
                   </router-link>
@@ -53,7 +58,7 @@
               @mouseleave="closeAboutDropdown">
               <button @click="toggleAboutDropdown"
                 class="inline-flex items-center px-2 lg:px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200 whitespace-nowrap"
-                :class="showAboutDropdown
+                :class="(showAboutDropdown || isAboutRouteActive)
                   ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/40 dark:text-blue-300'
                   : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-blue-600 dark:hover:text-blue-300'"
               >
@@ -64,11 +69,21 @@
                 <div v-if="showAboutDropdown"
                   class="absolute left-0 mt-2 w-max min-w-[230px] bg-white dark:bg-gray-700 rounded-lg shadow-lg border border-gray-200 dark:border-gray-600 py-1 z-40 whitespace-nowrap">
                   <router-link to="/about" @click="showAboutDropdown = false"
-                    class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 whitespace-nowrap">
+                    class="block px-4 py-2 text-sm whitespace-nowrap"
+                    :class="[
+                      $route.path === '/about'
+                        ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/40 dark:text-blue-300'
+                        : 'text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600'
+                    ]">
                     {{ t('message.navbar.about') }}
                   </router-link>
                   <router-link to="/api-info" @click="showAboutDropdown = false"
-                    class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 whitespace-nowrap">
+                    class="block px-4 py-2 text-sm whitespace-nowrap"
+                    :class="[
+                      $route.path === '/api-info'
+                        ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/40 dark:text-blue-300'
+                        : 'text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600'
+                    ]">
                     {{ t('message.navbar.api_explorer') }}
                     <span class="text-[11px] text-gray-500 ml-1">({{ t('message.auth.login_required') }})</span>
                   </router-link>
@@ -184,7 +199,12 @@
             <!-- Mobile Admin Group -->
             <div v-if="isAuthenticated && isAdmin">
               <button @click="toggleMobileAdminMenu"
-                class="w-full flex items-center justify-between px-3 py-2 rounded-md text-base font-medium transition-colors duration-200 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700">
+                class="w-full flex items-center justify-between px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
+                :class="[
+                  (isAdminRouteActive || showMobileAdminMenu)
+                    ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
+                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
+                ]">
                 <span class="flex items-center">
                   <i class="bi bi-shield-lock text-base mr-2"></i>
                   {{ t('message.navbar.admin') }}
@@ -193,7 +213,7 @@
                    :class="{ 'rotate-180': showMobileAdminMenu }"></i>
               </button>
 
-              <div v-show="showMobileAdminMenu" class="space-y-1">
+              <div v-show="showMobileAdminMenu || isAdminRouteActive" class="space-y-1">
                 <router-link v-for="item in adminMenuItems" :key="item.path" :to="item.path" @click="showMobileMenu = false"
                   class="flex items-center pl-6 pr-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
                   :class="[
@@ -210,13 +230,18 @@
             <!-- Mobile "This Project" Group -->
             <div>
               <button @click="toggleMobileAboutMenu"
-                class="w-full flex items-center justify-between px-3 py-2 rounded-md text-base font-medium transition-colors duration-200 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700">
+                class="w-full flex items-center justify-between px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
+                :class="[
+                  (isAboutRouteActive || showMobileAboutMenu)
+                    ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
+                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
+                ]">
                 <span>{{ t('message.navbar.this_project') }}</span>
                 <i class="bi bi-chevron-down text-xs transition-transform duration-200"
                    :class="{ 'rotate-180': showMobileAboutMenu }"></i>
               </button>
 
-              <div v-show="showMobileAboutMenu" class="space-y-1">
+              <div v-show="showMobileAboutMenu || isAboutRouteActive" class="space-y-1">
                 <router-link to="/about" @click="showMobileMenu = false"
                   class="block pl-6 pr-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
                   :class="[
@@ -316,6 +341,7 @@
 
 <script>
 import { computed, ref, onMounted, onUnmounted } from 'vue';
+import { useRoute } from 'vue-router';
 import { useMainStore } from '/assets/js/stores/mainStore.js';
 import { useAuthStore } from '/assets/js/stores/authStore.js';
 import { useModalStore } from '/assets/js/stores/modalStore.js';
@@ -333,6 +359,7 @@ export default {
   },
   setup() {
     const store = useMainStore();
+    const route = useRoute();
     const { t, locale } = useI18n({ useScope: 'global' });
 
     const showLanguageDropdown = ref(false);
@@ -382,6 +409,9 @@ export default {
       const userRole = user.value?.role?.toLowerCase();
       return userRole === 'super_admin';
     });
+
+    const isAdminRouteActive = computed(() => route.path.startsWith('/admin'));
+    const isAboutRouteActive = computed(() => ['/about', '/api-info'].includes(route.path));
 
     // Admin menu items
     const adminMenuItems = computed(() => [
@@ -568,6 +598,8 @@ export default {
       isAuthenticated,
       isAdmin,
       isSuperAdmin,
+      isAdminRouteActive,
+      isAboutRouteActive,
       user,
       adminMenuItems,
       toggleLanguageDropdown,
