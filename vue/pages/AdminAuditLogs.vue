@@ -279,7 +279,7 @@
             <table class="audit-table">
               <thead class="audit-thead">
                 <tr>
-                  <th class="px-6 py-3 text-right">{{ $t('message.common.actions', 'Actions') }}</th>
+                  <th class="px-6 py-3 text-center">{{ $t('message.common.actions', 'Actions') }}</th>
                   <th class="px-6 py-3 text-left">{{ $t('message.audit.actor') || 'Actor' }}</th>
                   <th class="px-6 py-3 text-left">{{ $t('message.audit.when') || 'When' }}</th>
                   <th class="px-6 py-3 text-left">{{ $t('message.audit.action') || 'Action' }}</th>
@@ -293,7 +293,7 @@
                 </tr>
                 <tr v-for="log in auditStore.logs" :key="log.id" class="audit-row">
                   <td class="audit-cell-view" :data-label="$t('message.common.actions', 'Actions')">
-                    <div class="flex items-center justify-end gap-2">
+                    <div class="flex items-center justify-center gap-2">
                       <ActionIconButton
                         @click="openLog(log)"
                         icon="bi bi-eye-fill"
@@ -340,7 +340,7 @@
 
       <div class="mt-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3" v-if="!auditStore.error && (auditStore.pagination.totalPages || 1) > 1">
         <p class="text-xs text-slate-500 dark:text-slate-400">
-          Page {{ auditStore.pagination.page || 1 }} / {{ auditStore.pagination.totalPages || 1 }}
+          {{ $t('message.admin_users.page') || 'Page' }} {{ auditStore.pagination.page || 1 }} {{ $t('message.admin_users.of') || 'of' }} {{ auditStore.pagination.totalPages || 1 }}
         </p>
 
         <PaginationControls
@@ -642,14 +642,12 @@ export default {
       auditStore.fetchLogs();
     };
 
-    const scrollToTopAfterPagination = () => {
+    const scrollToTableTop = () => {
       if (tableTopRef.value && typeof tableTopRef.value.scrollIntoView === 'function') {
         const rect = tableTopRef.value.getBoundingClientRect();
         const y = Math.max(0, window.scrollY + rect.top - 100);
         window.scrollTo({ top: y, behavior: 'smooth' });
-        return;
       }
-      window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     const goToPage = async (page) => {
@@ -658,7 +656,7 @@ export default {
       if (nextPage === (Number(auditStore.filters.page) || 1)) return;
       auditStore.filters.page = nextPage;
       await auditStore.fetchLogs();
-      scrollToTopAfterPagination();
+      scrollToTableTop();
     };
 
     const showToast = (message, type = 'info') => {
@@ -864,7 +862,7 @@ export default {
 }
 
 .audit-cell-view {
-  text-align: right;
+  text-align: center;
 }
 
 /* Responsive Cell Styles (max-width: 992px) */

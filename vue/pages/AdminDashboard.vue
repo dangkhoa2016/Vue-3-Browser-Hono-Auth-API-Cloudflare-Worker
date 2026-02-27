@@ -451,7 +451,7 @@ export default {
         { key: 'stats', run: () => systemStatsStore.fetchSystemStats() },
         { key: 'health', run: () => systemHealthStore.fetchSystemHealth() },
         { key: 'audit', run: () => auditStore.fetchLogs() },
-        { key: 'incidents', run: () => securityIncidentStore.fetchIncidents({ page: 1, limit: 50 }) },
+        { key: 'incidents', run: () => securityIncidentStore.fetchIncidents({ page: 1, limit: 20 }) },
         { key: 'realtime', run: () => realtimeStore.fetchDashboardData() }
       ];
       const minStepDurationMs = 280;

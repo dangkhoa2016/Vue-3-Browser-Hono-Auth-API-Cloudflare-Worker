@@ -337,6 +337,7 @@ export default {
       change_role: 'ロール変更',
       change_role_for: '{name} のロールを変更',
       invalid_role: '無効なロールです: {role}。許可: {allowed}',
+      role_change_requires_dedicated_endpoint: 'ロール変更には専用エンドポイントが必要です。',
       role_updated_success: '{name} のロールを {role} に更新しました',
       role_updated_failed: 'ロールの更新に失敗しました: {reason}',
       create_user: 'ユーザー作成',
@@ -367,7 +368,7 @@ export default {
       empty_message: 'フィルターや検索条件を調整してください。',
       reload: '再読み込み',
       page: 'ページ',
-      of: '/',
+      of: 'の',
       access_denied_title: 'アクセス拒否',
       access_denied_message: 'このページを表示する権限がありません。',
       login_required_message: 'ユーザー管理にアクセスするにはログインしてください。'
@@ -452,6 +453,8 @@ export default {
       no_data: 'セキュリティインシデントはありません。',
       pagination: 'ページ {current} / {total}',
       details: 'インシデント詳細',
+      metadata: 'メタデータ',
+      tags: 'タグ',
     },
     realtime_monitoring: {
       badge: 'ライブセキュリティテレメトリ',

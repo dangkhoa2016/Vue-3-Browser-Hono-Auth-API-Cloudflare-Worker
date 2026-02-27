@@ -136,20 +136,9 @@
               </label>
             </div>
           </div>
-          <div class="mt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            <p class="text-sm text-slate-500 dark:text-slate-400">
-              {{ $t('message.admin_users.page') }} {{ pagination.page }} {{ $t('message.admin_users.of') }} {{ pagination.totalPages }}
-            </p>
-            <PaginationControls
-              :current-page="pagination.page || 1"
-              :total-pages="pagination.totalPages || 1"
-              :loading="loading"
-              @change="goToPage"
-            />
-          </div>
         </div>
 
-        <div class="rounded-[28px] border border-slate-200/70 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xl overflow-hidden">
+        <div ref="tableTopRef" class="rounded-[28px] border border-slate-200/70 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xl overflow-hidden">
           <div class="p-6 border-b border-slate-100 dark:border-slate-800 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div>
               <h2 class="text-xl font-bold text-slate-900 dark:text-white">{{ $t('message.admin_users.table_title') }}</h2>
@@ -193,7 +182,7 @@
             <table class="max-[992px]:mt-4 mt-0 min-w-full text-sm max-[992px]:block">
               <thead class="bg-slate-50 dark:bg-slate-800/70 text-slate-500 dark:text-slate-400 uppercase tracking-wider max-[992px]:hidden">
                 <tr>
-                  <th class="px-6 py-3 text-right">{{ $t('message.common.actions', 'Actions') }}</th>
+                  <th class="px-6 py-3 text-center">{{ $t('message.common.actions', 'Actions') }}</th>
                   <th class="px-6 py-3 text-left">{{ $t('message.admin_users.column_id') }}</th>
                   <th class="px-6 py-3 text-left">{{ $t('message.admin_users.column_full_name') }}</th>
                   <th class="px-6 py-3 text-left">{{ $t('message.admin_users.column_email') }}</th>
@@ -210,7 +199,7 @@
                   :class="tableRowClass"
                 >
                   <td :class="actionsCellClass" :data-label="$t('message.common.actions', 'Actions')">
-                    <div class="flex items-center justify-end gap-2">
+                    <div class="flex items-center justify-center gap-2">
                       <ActionIconButton
                         v-if="isAdmin && !isCurrentUser(userItem)"
                         @click="openRoleModal(userItem)"
@@ -252,6 +241,19 @@
               </tbody>
             </table>
           </div>
+        </div>
+
+        <div class="mt-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3" v-if="(pagination.totalPages || 1) > 1">
+          <p class="text-xs text-slate-500 dark:text-slate-400">
+            {{ $t('message.admin_users.page') }} {{ pagination.page || 1 }} {{ $t('message.admin_users.of') }} {{ pagination.totalPages || 1 }}
+          </p>
+
+          <PaginationControls
+            :current-page="pagination.page || 1"
+            :total-pages="pagination.totalPages || 1"
+            :loading="loading"
+            @change="goToPage"
+          />
         </div>
       </section>
     </template>
@@ -342,7 +344,7 @@ export default {
       'max-[992px]:flex max-[992px]:items-center max-[992px]:justify-between max-[992px]:px-4 max-[992px]:py-2.5 max-[992px]:before:content-[attr(data-label)] max-[992px]:before:text-[11px] max-[992px]:before:uppercase max-[992px]:before:tracking-[0.2em] max-[992px]:before:text-slate-500 dark:max-[992px]:before:text-slate-400 max-[992px]:before:pr-3';
     const tableRowClass =
       'border-t border-slate-100 dark:border-slate-800 hover:bg-slate-50/70 dark:hover:bg-slate-800/60 transition max-[992px]:block max-[992px]:border max-[992px]:border-slate-200/70 dark:max-[992px]:border-slate-700 max-[992px]:rounded-2xl max-[992px]:p-1 max-[992px]:mb-4 max-[992px]:bg-white/90 dark:max-[992px]:bg-slate-900/80';
-    const actionsCellClass = `whitespace-nowrap px-6 py-4 text-right ${mobileDataLabelBaseClass}`;
+    const actionsCellClass = `whitespace-nowrap px-6 py-4 text-center ${mobileDataLabelBaseClass}`;
     const idCellClass = `px-6 py-4 font-semibold text-slate-700 dark:text-slate-200 ${mobileDataLabelBaseClass}`;
     const nameCellClass = `whitespace-nowrap px-6 py-4 text-slate-800 dark:text-slate-100 ${mobileDataLabelBaseClass}`;
     const emailCellClass = `px-6 py-4 text-slate-500 dark:text-slate-300 ${mobileDataLabelBaseClass}`;
@@ -370,6 +372,7 @@ export default {
     const selectedRoleUser = ref(null);
     const selectedRoleValue = ref('user');
     const isChangingRole = ref(false);
+    const tableTopRef = ref(null);
 
     const isAdmin = computed(() => {
       const role = authStore.user?.role?.toLowerCase();
@@ -451,7 +454,7 @@ export default {
       if (!authStore.isAuthenticated) {
         // Reset state
         userStore.users = []; 
-        userStore.pagination = { total: 0, page: 1, limit: 10, totalPages: 1 };
+        userStore.pagination = { total: 0, page: 1, limit: 20, totalPages: 1 };
         showLoginRequired.value = true;
         
         if (authRequired) {
@@ -494,6 +497,15 @@ export default {
       if (nextPage === (Number(pagination.value?.page) || 1)) return;
       forceSkeletonOnLoading.value = true;
       await loadUsers(nextPage);
+      scrollToTableTop();
+    };
+
+    const scrollToTableTop = () => {
+      if (tableTopRef.value && typeof tableTopRef.value.scrollIntoView === 'function') {
+        const rect = tableTopRef.value.getBoundingClientRect();
+        const y = Math.max(0, window.scrollY + rect.top - 100);
+        window.scrollTo({ top: y, behavior: 'smooth' });
+      }
     };
 
     const formatDate = (value) => {
@@ -758,7 +770,7 @@ export default {
         if (isAuthenticated === false) {
           // User logged out
           userStore.users = []; // Clear data
-          userStore.pagination = { total: 0, page: 1, limit: 10, totalPages: 1 };
+          userStore.pagination = { total: 0, page: 1, limit: 20, totalPages: 1 };
           showLoginRequired.value = true;
         } else if (isAuthenticated === true && showLoginRequired.value) {
           // User logged in
@@ -835,6 +847,7 @@ export default {
       selectedRoleValue,
       roleChangeOptions,
       isChangingRole,
+      tableTopRef,
       openRoleModal,
       closeRoleModal,
       submitRoleChange,

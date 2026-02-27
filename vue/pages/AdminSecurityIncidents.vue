@@ -143,10 +143,7 @@
             </label>
           </div>
         </div>
-        <div class="mt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-          <p class="text-sm text-slate-500 dark:text-slate-400">
-            {{ $t('message.admin_users.page') }} {{ pagination.page || 1 }} {{ $t('message.admin_users.of') }} {{ pagination.totalPages || 1 }}
-          </p>
+        <div class="mt-4 flex justify-end">
           <div class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
             {{ filteredIncidents.length }} / {{ incidents.length || 0 }} {{ $t('message.security_incidents.items') }}
           </div>
@@ -183,7 +180,7 @@
           <table class="max-[992px]:mt-4 mt-0 min-w-full text-sm max-[992px]:block">
             <thead class="bg-slate-50 dark:bg-slate-800/70 text-slate-500 dark:text-slate-400 uppercase tracking-wider max-[992px]:hidden">
               <tr>
-                <th class="px-6 py-3 text-right">{{ $t('message.security_incidents.actions') || 'Actions' }}</th>
+                <th class="px-6 py-3 text-center">{{ $t('message.security_incidents.actions') || 'Actions' }}</th>
                 <th class="px-6 py-3 text-left">{{ $t('message.security_incidents.incident') || 'Incident' }}</th>
                 <th class="px-6 py-3 text-left">{{ $t('message.security_incidents.severity_status') || 'Severity / Status' }}</th>
                 <th class="px-6 py-3 text-left">{{ $t('message.security_incidents.when_by') || 'When / By' }}</th>
@@ -196,7 +193,7 @@
                 :class="tableRowClass"
               >
                 <td :class="actionsCellClass" :data-label="$t('message.security_incidents.actions') || 'Actions'">
-                  <div class="flex items-center justify-end gap-2">
+                  <div class="flex items-center justify-center gap-2">
                     <ActionIconButton
                       @click="openIncident(incident)"
                       icon="bi bi-eye-fill"
@@ -238,7 +235,7 @@
 
       <div class="mt-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3" v-if="(pagination.totalPages || 1) > 1">
         <p class="text-xs text-slate-500 dark:text-slate-400">
-          {{ $t('message.admin_users.page') || 'Page' }} {{ pagination.page || 1 }} / {{ pagination.totalPages || 1 }}
+          {{ $t('message.admin_users.page') || 'Page' }} {{ pagination.page || 1 }} {{ $t('message.admin_users.of') || 'of' }} {{ pagination.totalPages || 1 }}
         </p>
 
         <PaginationControls
@@ -334,7 +331,7 @@ export default {
       'max-[992px]:flex max-[992px]:items-center max-[992px]:justify-between max-[992px]:px-4 max-[992px]:py-2.5 max-[992px]:before:content-[attr(data-label)] max-[992px]:before:text-[11px] max-[992px]:before:uppercase max-[992px]:before:tracking-[0.2em] max-[992px]:before:text-slate-500 dark:max-[992px]:before:text-slate-400 max-[992px]:before:pr-3';
     const tableRowClass =
       'border-t border-slate-100 dark:border-slate-800 hover:bg-slate-50/70 dark:hover:bg-slate-800/60 transition max-[992px]:block max-[992px]:border max-[992px]:border-slate-200/70 dark:max-[992px]:border-slate-700 max-[992px]:rounded-2xl max-[992px]:p-1 max-[992px]:mb-4 max-[992px]:bg-white/90 dark:max-[992px]:bg-slate-900/80';
-    const actionsCellClass = `whitespace-nowrap px-6 py-4 text-right ${mobileActionsCellBaseClass}`;
+    const actionsCellClass = `whitespace-nowrap px-6 py-4 text-center ${mobileActionsCellBaseClass}`;
     const incidentCellClass = `px-6 py-4 text-slate-800 dark:text-slate-100 ${mobileCellBaseClass}`;
     const severityStatusCellClass = `px-6 py-4 ${mobileCellBaseClass}`;
     const whenByCellClass = `px-6 py-4 text-slate-500 dark:text-slate-300 ${mobileCellBaseClass}`;
@@ -424,7 +421,7 @@ export default {
     const loadIncidents = async (page = pagination.value?.page || 1) => {
       await securityStore.fetchIncidents({
         page,
-        limit: pagination.value?.limit || 50,
+        limit: pagination.value?.limit || 20,
         search: useServerFilter.value ? search.value : '',
         severity: useServerFilter.value ? severityFilter.value : 'all',
         status: useServerFilter.value ? statusFilter.value : 'all',

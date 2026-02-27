@@ -337,6 +337,7 @@ export default {
       change_role: '역할 변경',
       change_role_for: '{name}의 역할 변경',
       invalid_role: '잘못된 역할입니다: {role}. 허용: {allowed}',
+      role_change_requires_dedicated_endpoint: '역할 변경에는 전용 엔드포인트가 필요합니다.',
       role_updated_success: '{name}의 역할을 {role}(으)로 변경했습니다',
       role_updated_failed: '역할 변경에 실패했습니다: {reason}',
       create_user: '사용자 생성',
@@ -367,7 +368,7 @@ export default {
       empty_message: '필터나 검색어를 조정해 주세요.',
       reload: '새로고침',
       page: '페이지',
-      of: '/',
+      of: '중',
       access_denied_title: '접근 거부',
       access_denied_message: '이 페이지를 볼 권한이 없습니다.',
       login_required_message: '사용자 관리에 접근하려면 로그인하세요.'
@@ -452,6 +453,8 @@ export default {
       no_data: '보안 사고가 없습니다.',
       pagination: '{current} / {total} 페이지',
       details: '사고 상세',
+      metadata: '메타데이터',
+      tags: '태그',
     },
     realtime_monitoring: {
       badge: '실시간 보안 텔레메트리',
