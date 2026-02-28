@@ -258,7 +258,10 @@ export default {
       audit_logs: 'Nhật ký kiểm tra',
       security_incidents: 'Sự cố bảo mật',
       realtime_monitoring: 'Giám sát thời gian thực',
-      kv_admin: 'Quản trị KV'
+      kv_admin: 'Quản trị KV',
+      api_health: 'Tình trạng API',
+      api_version: 'Phiên bản API',
+      api_language: 'Ngôn ngữ API'
     },
     api_explorer: {
       title: 'API Explorer theo vai trò',
@@ -276,6 +279,52 @@ export default {
       error_loading: 'Tải thông tin API thất bại',
       login_required_title: 'Yêu cầu đăng nhập',
       login_required_message: 'Vui lòng đăng nhập để xem các endpoint theo vai trò.'
+    },
+    public_endpoints: {
+      common: {
+        status: 'Trạng thái',
+        environment: 'Môi trường',
+        language: 'Ngôn ngữ',
+        version: 'Phiên bản',
+        unknown: 'không xác định',
+        response_summary: 'Tóm tắt phản hồi',
+        success: 'Thành công',
+        message: 'Thông điệp',
+        endpoint: 'Điểm cuối',
+        raw_json: 'JSON thô',
+        view_json: 'Xem JSON'
+      },
+      health: {
+        badge: 'API sức khỏe',
+        title: 'Trạng thái điểm cuối sức khỏe',
+        subtitle: 'Ảnh chụp hoạt động và siêu dữ liệu thời gian chạy gồm môi trường, ngôn ngữ và thời gian hoạt động.',
+        uptime: 'Thời gian hoạt động',
+        timestamp: 'Thời gian',
+        summary_title: 'Tóm tắt phản hồi sức khỏe',
+        summary_subtitle: 'Chuẩn hóa thông tin trạng thái, thông điệp và siêu dữ liệu chẩn đoán.',
+        load_error: 'Tải dữ liệu sức khỏe thất bại'
+      },
+      version: {
+        badge: 'API phiên bản',
+        title: 'Siêu dữ liệu điểm cuối phiên bản',
+        subtitle: 'Dữ liệu bản dựng và phiên bản công khai kèm thuộc tính định danh dịch vụ.',
+        service_name: 'Tên dịch vụ',
+        unknown_service: 'Dịch vụ không xác định',
+        summary_title: 'Tóm tắt phản hồi phiên bản',
+        summary_subtitle: 'Đầu ra có cấu trúc cho phiên bản phát hành và mô tả dịch vụ.',
+        load_error: 'Tải dữ liệu phiên bản thất bại'
+      },
+      language: {
+        badge: 'API ngôn ngữ',
+        title: 'Cấu hình điểm cuối ngôn ngữ',
+        subtitle: 'Ngôn ngữ hiện tại và các mã ngôn ngữ được API công bố.',
+        current_language: 'Ngôn ngữ hiện tại',
+        supported: 'Được hỗ trợ',
+        supported_languages: 'Danh sách ngôn ngữ hỗ trợ',
+        summary_title: 'Tóm tắt phản hồi ngôn ngữ',
+        summary_subtitle: 'Danh sách chuẩn của ngôn ngữ đang hoạt động và tập ngôn ngữ hỗ trợ.',
+        load_error: 'Tải dữ liệu ngôn ngữ thất bại'
+      }
     },
     not_found: {
       back: 'Quay lại',

@@ -181,6 +181,21 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
+    path: '/health',
+    name: 'PublicHealth',
+    component: load('/vue/pages/PublicHealth.vue')
+  },
+  {
+    path: '/version',
+    name: 'PublicVersion',
+    component: load('/vue/pages/PublicVersion.vue')
+  },
+  {
+    path: '/language',
+    name: 'PublicLanguage',
+    component: load('/vue/pages/PublicLanguage.vue')
+  },
+  {
     path: '/admin/dashboard',
     name: 'AdminDashboard',
     component: load('/vue/pages/AdminDashboard.vue'),

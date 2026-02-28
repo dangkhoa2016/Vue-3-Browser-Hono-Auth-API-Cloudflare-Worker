@@ -1,0 +1,11 @@
+{
+  "success": true,
+  "data": {
+    "status": "ok",
+    "language": "en",
+    "timestamp": "2026-02-28T04:14:58.691Z",
+    "environment": "test",
+    "uptime": "unknown"
+  },
+  "message": "API is running smoothly"
+}
