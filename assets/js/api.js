@@ -47,6 +47,8 @@ export const API_ENDPOINTS = {
   KV_ADMIN_RATE_LIMITS_SEED: '/api/kv-admin/rate-limits/seed',
   KV_ADMIN_RATE_LIMITS_PRUNE_TIME: '/api/kv-admin/rate-limits/prune-time',
   KV_ADMIN_RATE_LIMITS_BATCH_DELETE: '/api/kv-admin/rate-limits/batch-delete',
+  // Validation regex cho thay đổi trạng thái Configs Toggle Mock API
+  KV_ADMIN_FEATURES_TOGGLE_SUCCESS: '/assets/data/kv-admin/features/toggle/succeed/response.json',
   // Audit endpoints
   AUDIT_LOGS: '/api/audit/logs',
   AUDIT_STATS: '/api/audit/stats',
@@ -99,8 +101,9 @@ const MOCK_PATTERNS = {
   ADMIN_USER_ROLE: new RegExp(`${API_ENDPOINTS.USERS.replace(/\//g, '\\/')}\\/\\d+\\/role($|\\?)`),
 
   // KV Admin patterns
-  KV_ADMIN_CONFIGS: new RegExp(`${API_ENDPOINTS.KV_ADMIN_CONFIGS.replace(/\//g, '\\/')}($|\\?)`),
+  KV_ADMIN_ENV_COMPARISON: new RegExp(`${API_ENDPOINTS.KV_ADMIN_CONFIGS.replace(/\//g, '\\/')}\\/env-comparison($|\\?)`),
   KV_ADMIN_CONFIGS_SPECIFIC: new RegExp(`${API_ENDPOINTS.KV_ADMIN_CONFIGS.replace(/\//g, '\\/')}\\/[^/]+($|\\?)`),
+  KV_ADMIN_CONFIGS: new RegExp(`${API_ENDPOINTS.KV_ADMIN_CONFIGS.replace(/\//g, '\\/')}($|\\?)`),
   
   KV_ADMIN_AUDIT_CONFIGS: new RegExp(`${API_ENDPOINTS.KV_ADMIN_AUDIT_CONFIGS.replace(/\//g, '\\/')}($|\\?)`),
   KV_ADMIN_AUDIT_CONFIGS_RETENTION: new RegExp(`${API_ENDPOINTS.KV_ADMIN_AUDIT_CONFIGS_RETENTION.replace(/\//g, '\\/')}($|\\?)`),
@@ -169,6 +172,14 @@ export const DATA_PATHS = {
   CHANGE_PASSWORD_FAIL: '/assets/data/users/change-password/fail/validate-1.json',
   CHANGE_PASSWORD_INVALID_CURRENT: '/assets/data/users/change-password/fail/invalid-current-password.json',
   CHANGE_PASSWORD_SUCCESS: '/assets/data/users/change-password/succeed/response.json',
+  // KV Admin Toggle data
+  KV_ADMIN_FEATURES_TOGGLE_SUCCESS: '/assets/data/kv-admin/features/toggle/succeed/response.json',
+  KV_ADMIN_FEATURES: '/assets/data/kv-admin/features/response.json',
+  KV_ADMIN_ENV_COMPARISON: '/assets/data/kv-admin/env-comparison/response.json',
+  KV_ADMIN_RETENTION: '/assets/data/kv-admin/retention/response.json',
+  KV_ADMIN_PERFORMANCE: '/assets/data/kv-admin/performance/response.json',
+  KV_ADMIN_ALERTS: '/assets/data/kv-admin/alerts/response.json',
+  KV_ADMIN_COMPLIANCE: '/assets/data/kv-admin/compliance/response.json',
   // Audit data
   AUDIT_LOGS_SUCCESS: '/assets/data/audit/logs/succeed/response.json',
   AUDIT_STATS_SUCCESS: '/assets/data/audit/stats/succeed/response.json',
@@ -211,8 +222,7 @@ apiClient.interceptors.request.use(async (config) => {
   // Dynamically import auth store once for request auth guards
   let authStore = null;
   try {
-    const { useAuthStore } = await import('./stores/authStore.js');
-    authStore = useAuthStore();
+    authStore = window.authStore;
   } catch (error) {
     console.warn('[API] Error loading auth store in request interceptor:', error);
   }
@@ -231,11 +241,7 @@ apiClient.interceptors.request.use(async (config) => {
 
   // Block all non-auth requests until user logs in again after session expiry/refresh failure
   if (authStore?.requiresReauth && !isAuthRequest && !isPublicRequest) {
-    const message = i18n.global.t(
-      'message.auth.relogin_required_reason',
-      'Your session has expired or is invalid. Please login again to continue.'
-    );
-    const blockedError = new Error(message);
+    const blockedError = new Error('Auth requires re-login');
     blockedError.code = 'REAUTH_REQUIRED';
     blockedError.isAuthBlocked = true;
     return Promise.reject(blockedError);
@@ -255,11 +261,7 @@ apiClient.interceptors.request.use(async (config) => {
           config.headers['Authorization'] = `Bearer ${newToken}`;
         } else {
           // Refresh failed: block request immediately to avoid repeated invalid-token calls
-          const message = i18n.global.t(
-            'message.auth.relogin_required_reason',
-            'Your session has expired or is invalid. Please login again to continue.'
-          );
-          const blockedError = new Error(message);
+          const blockedError = new Error('Auth refresh failed');
           blockedError.code = 'REAUTH_REQUIRED';
           blockedError.isAuthBlocked = true;
           return Promise.reject(blockedError);
@@ -292,12 +294,11 @@ apiClient.interceptors.response.use(undefined, async (err) => {
         console.log('[API] Got 401, attempting to refresh token...');
         
         try {
-          // Dynamically import authStore to avoid circular dependency
-          const { useAuthStore } = await import('./stores/authStore.js');
-          const authStore = useAuthStore();
+          // Access authStore from window globally to avoid circular dependency
+          const authStore = window.authStore;
 
           // Check if we have a refresh token
-          if (authStore.refreshToken && !authStore.isRefreshTokenExpired) {
+          if (authStore && authStore.refreshToken && !authStore.isRefreshTokenExpired) {
             // Try to refresh the token
             const newToken = await authStore.refreshAccessToken();
             
@@ -1303,17 +1304,24 @@ export const initializeKVAdminMock = (mockAdapter) => {
   if (!mockAdapter) return;
   mockAdapter.onGet(MOCK_PATTERNS.KV_ADMIN_AUDIT_CONFIGS_FEATURES).reply(async () => {
     try {
-      const response = await fetch('/assets/data/kv-admin/features/response.json');
-      const data = await response.json();
+      const data = await loadJson(DATA_PATHS.KV_ADMIN_FEATURES);
       return [200, data];
     } catch {
       return [200, { success: true, data: { enableAuditLogging: true, enableRealTimeMonitoring: true, enableAdvancedAnalytics: true, enableExport: true, enableArchival: true, enableComplianceReporting: true, enablePerformanceMonitoring: true, enableAdvancedSearch: true } }];
     }
   });
+  mockAdapter.onGet(MOCK_PATTERNS.KV_ADMIN_ENV_COMPARISON).reply(async () => {
+    try {
+      const data = await loadJson(DATA_PATHS.KV_ADMIN_ENV_COMPARISON);
+      return [200, data];
+    } catch {
+      return [200, { success: true, data: { comparison: {}, summary: {} } }];
+    }
+  });
+  
   mockAdapter.onGet(MOCK_PATTERNS.KV_ADMIN_AUDIT_CONFIGS_RETENTION).reply(async () => {
     try {
-      const response = await fetch('/assets/data/kv-admin/retention/response.json');
-      const data = await response.json();
+      const data = await loadJson(DATA_PATHS.KV_ADMIN_RETENTION);
       return [200, data];
     } catch {
       return [200, { success: true, data: { defaultRetentionDays: 90, sensitiveRetentionDays: 365, complianceRetentionDays: 2555, autoArchiveEnabled: true, autoArchiveThresholdDays: 30 } }];
@@ -1321,8 +1329,7 @@ export const initializeKVAdminMock = (mockAdapter) => {
   });
   mockAdapter.onGet(MOCK_PATTERNS.KV_ADMIN_AUDIT_CONFIGS_PERFORMANCE).reply(async () => {
     try {
-      const response = await fetch('/assets/data/kv-admin/performance/response.json');
-      const data = await response.json();
+      const data = await loadJson(DATA_PATHS.KV_ADMIN_PERFORMANCE);
       return [200, data];
     } catch {
       return [200, { success: true, data: { maxQueryResults: 1000, defaultPageSize: 50, maxPageSize: 500, queryTimeoutMs: 30000, batchSize: 100 } }];
@@ -1330,8 +1337,7 @@ export const initializeKVAdminMock = (mockAdapter) => {
   });
   mockAdapter.onGet(MOCK_PATTERNS.KV_ADMIN_AUDIT_CONFIGS_ALERTS).reply(async () => {
     try {
-      const response = await fetch('/assets/data/kv-admin/alerts/response.json');
-      const data = await response.json();
+      const data = await loadJson(DATA_PATHS.KV_ADMIN_ALERTS);
       return [200, data];
     } catch {
       return [200, { success: true, data: { failedLoginThreshold: 5, suspiciousActivityThreshold: 10, highRiskActionThreshold: 3, performanceAlertThresholdMs: 5000 } }];
@@ -1339,15 +1345,14 @@ export const initializeKVAdminMock = (mockAdapter) => {
   });
   mockAdapter.onGet(MOCK_PATTERNS.KV_ADMIN_AUDIT_CONFIGS_COMPLIANCE).reply(async () => {
     try {
-      const response = await fetch('/assets/data/kv-admin/compliance/response.json');
-      const data = await response.json();
+      const data = await loadJson(DATA_PATHS.KV_ADMIN_COMPLIANCE);
       return [200, data];
     } catch {
       return [200, { success: true, data: { gdprEnabled: true, hipaaEnabled: false, pciDssEnabled: false, soc2Enabled: true, dataAnonymization: true, consentTracking: true } }];
     }
   });
-  mockAdapter.onPost(MOCK_PATTERNS.KV_ADMIN_AUDIT_CONFIGS_TOGGLE).reply(200, {
-    success: true, data: { message: "Toggled successfully" }
+  mockAdapter.onPost(MOCK_PATTERNS.KV_ADMIN_AUDIT_CONFIGS_TOGGLE).reply(async () => {
+    return [200, await loadJson(DATA_PATHS.KV_ADMIN_FEATURES_TOGGLE_SUCCESS)];
   });
   mockAdapter.onPost(MOCK_PATTERNS.KV_ADMIN_RATE_LIMITS_CLEAN).reply(200, {
     success: true, data: { dryRun: true, deletedCount: 5, prefix: "test:" }

@@ -1,0 +1,9 @@
+{
+  "success": true,
+  "data": {
+    "feature": "enableRealTimeMonitoring",
+    "previousValue": false,
+    "newValue": true,
+    "message": "Feature \"enableRealTimeMonitoring\" enabled successfully"
+  }
+}

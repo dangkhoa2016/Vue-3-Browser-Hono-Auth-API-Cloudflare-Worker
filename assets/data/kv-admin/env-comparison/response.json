@@ -1,0 +1,578 @@
+{
+  "success": true,
+  "data": {
+    "comparison": {
+      "APP_NAME": {
+        "env": null,
+        "kv": "Hono Auth API",
+        "default": "Hono Auth API",
+        "source": "kv"
+      },
+      "APP_VERSION": {
+        "env": null,
+        "kv": "1.0.0",
+        "default": "1.0.0",
+        "source": "kv"
+      },
+      "APP_URL": {
+        "env": null,
+        "kv": "https://your-app.com",
+        "default": "https://your-app.com",
+        "source": "kv"
+      },
+      "DEBUG": {
+        "env": "hono-auth-api:*",
+        "kv": "",
+        "default": "hono-auth-api:*",
+        "source": "kv"
+      },
+      "ENABLE_DETAILED_ERRORS": {
+        "env": null,
+        "kv": true,
+        "default": true,
+        "source": "kv"
+      },
+      "LOG_SQL_QUERIES": {
+        "env": null,
+        "kv": false,
+        "default": null,
+        "source": "kv"
+      },
+      "ENABLE_RESPONSE_BODY_CAPTURE": {
+        "env": null,
+        "kv": false,
+        "default": null,
+        "source": "kv"
+      },
+      "RATE_LIMIT_MAX_ATTEMPTS": {
+        "env": null,
+        "kv": 5,
+        "default": 5,
+        "source": "kv"
+      },
+      "RATE_LIMIT_LOCKOUT_DURATION": {
+        "env": null,
+        "kv": 120,
+        "default": 120,
+        "source": "kv"
+      },
+      "RATE_LIMIT_DISABLED": {
+        "env": "false",
+        "kv": false,
+        "default": null,
+        "source": "kv"
+      },
+      "DEFAULT_PAGE_SIZE": {
+        "env": null,
+        "kv": 10,
+        "default": 10,
+        "source": "kv"
+      },
+      "MAX_PAGE_SIZE": {
+        "env": null,
+        "kv": 100,
+        "default": 100,
+        "source": "kv"
+      },
+      "SECURITY_HIGH_RISK_THRESHOLD": {
+        "env": null,
+        "kv": 10,
+        "default": 10,
+        "source": "kv"
+      },
+      "SECURITY_X_CONTENT_TYPE_OPTIONS": {
+        "env": null,
+        "kv": "nosniff",
+        "default": "nosniff",
+        "source": "kv"
+      },
+      "SECURITY_X_FRAME_OPTIONS": {
+        "env": null,
+        "kv": "DENY",
+        "default": "DENY",
+        "source": "kv"
+      },
+      "SECURITY_X_XSS_PROTECTION": {
+        "env": null,
+        "kv": "1; mode=block",
+        "default": "1; mode=block",
+        "source": "kv"
+      },
+      "SECURITY_CSP": {
+        "env": null,
+        "kv": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self'; media-src 'self'; object-src 'none'; frame-src 'none'; worker-src 'self'; manifest-src 'self'; base-uri 'self'; form-action 'self'",
+        "default": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self'; media-src 'self'; object-src 'none'; frame-src 'none'; worker-src 'self'; manifest-src 'self'; base-uri 'self'; form-action 'self'",
+        "source": "kv"
+      },
+      "SECURITY_REFERRER_POLICY": {
+        "env": null,
+        "kv": "strict-origin-when-cross-origin",
+        "default": "strict-origin-when-cross-origin",
+        "source": "kv"
+      },
+      "SECURITY_PERMISSIONS_POLICY": {
+        "env": null,
+        "kv": "camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=()",
+        "default": "camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=()",
+        "source": "kv"
+      },
+      "SECURITY_COOP": {
+        "env": null,
+        "kv": "same-origin",
+        "default": "same-origin",
+        "source": "kv"
+      },
+      "SECURITY_COEP": {
+        "env": null,
+        "kv": "require-corp",
+        "default": "require-corp",
+        "source": "kv"
+      },
+      "SECURITY_CORP": {
+        "env": null,
+        "kv": "same-origin",
+        "default": "same-origin",
+        "source": "kv"
+      },
+      "SECURITY_X_DOWNLOAD_OPTIONS": {
+        "env": null,
+        "kv": "noopen",
+        "default": "noopen",
+        "source": "kv"
+      },
+      "SECURITY_X_PERMITTED_CDP": {
+        "env": null,
+        "kv": "none",
+        "default": "none",
+        "source": "kv"
+      },
+      "SECURITY_HSTS": {
+        "env": null,
+        "kv": "max-age=31536000; includeSubDomains; preload",
+        "default": "max-age=31536000; includeSubDomains; preload",
+        "source": "kv"
+      },
+      "MAX_REFRESH_TOKENS_PER_USER": {
+        "env": null,
+        "kv": 5,
+        "default": 5,
+        "source": "kv"
+      },
+      "REFRESH_TOKEN_REUSE_GRACE_SECONDS": {
+        "env": null,
+        "kv": 30,
+        "default": 30,
+        "source": "kv"
+      },
+      "JWT_ISSUER": {
+        "env": null,
+        "kv": "hono-auth-worker",
+        "default": "hono-auth-worker",
+        "source": "kv"
+      },
+      "JWT_AUDIENCE": {
+        "env": null,
+        "kv": "hono-auth-client",
+        "default": "hono-auth-client",
+        "source": "kv"
+      },
+      "JWT_ENFORCE_ISSUER": {
+        "env": null,
+        "kv": true,
+        "default": true,
+        "source": "kv"
+      },
+      "JWT_ENFORCE_AUDIENCE": {
+        "env": null,
+        "kv": true,
+        "default": true,
+        "source": "kv"
+      },
+      "JWT_ALLOWED_CLOCK_SKEW": {
+        "env": null,
+        "kv": 10,
+        "default": 10,
+        "source": "kv"
+      },
+      "JWT_MAX_ACCESS_TOKEN_LIFETIME": {
+        "env": null,
+        "kv": 7200,
+        "default": 7200,
+        "source": "kv"
+      },
+      "JWT_ACCESS_TOKEN_EXPIRES": {
+        "env": null,
+        "kv": 100,
+        "default": 3600,
+        "source": "kv"
+      },
+      "JWT_REFRESH_TOKEN_EXPIRES": {
+        "env": null,
+        "kv": null,
+        "default": 604800,
+        "source": "default"
+      },
+      "JWT_DEFAULT_SCOPE": {
+        "env": null,
+        "kv": "user:basic",
+        "default": "user:basic",
+        "source": "kv"
+      },
+      "JWT_SCOPE_SEPARATOR": {
+        "env": null,
+        "kv": "",
+        "default": " ",
+        "source": "kv"
+      },
+      "JWT_SUBJECT_PREFIX": {
+        "env": null,
+        "kv": "user",
+        "default": "user",
+        "source": "kv"
+      },
+      "ENFORCE_ACCESS_TOKEN_IP_BINDING": {
+        "env": null,
+        "kv": false,
+        "default": null,
+        "source": "kv"
+      },
+      "ENFORCE_ACCESS_TOKEN_UA_BINDING": {
+        "env": null,
+        "kv": false,
+        "default": null,
+        "source": "kv"
+      },
+      "PERFORMANCE_GOOD_THRESHOLD": {
+        "env": null,
+        "kv": 1000,
+        "default": 1000,
+        "source": "kv"
+      },
+      "AUTO_ACTIVATE_USER_ON_REGISTER": {
+        "env": "false",
+        "kv": false,
+        "default": null,
+        "source": "kv"
+      },
+      "EMAIL_ENABLED": {
+        "env": null,
+        "kv": false,
+        "default": null,
+        "source": "kv"
+      },
+      "EMAIL_CONFIRMATION_ENABLED": {
+        "env": null,
+        "kv": false,
+        "default": null,
+        "source": "kv"
+      },
+      "EMAIL_FROM_ADDRESS": {
+        "env": null,
+        "kv": "no-reply@hono-auth.local",
+        "default": "no-reply@hono-auth.local",
+        "source": "kv"
+      },
+      "EMAIL_FROM_NAME": {
+        "env": null,
+        "kv": "Hono Auth API",
+        "default": "Hono Auth API",
+        "source": "kv"
+      },
+      "EMAIL_REPLY_TO": {
+        "env": null,
+        "kv": "",
+        "default": null,
+        "source": "kv"
+      },
+      "EMAIL_PROVIDER": {
+        "env": null,
+        "kv": "brevo",
+        "default": "brevo",
+        "source": "kv"
+      },
+      "EMAIL_PROVIDER_ENDPOINT": {
+        "env": null,
+        "kv": "https://api.brevo.com/v3/smtp/email",
+        "default": "https://api.brevo.com/v3/smtp/email",
+        "source": "kv"
+      },
+      "EMAIL_PROVIDER_API_KEY": {
+        "env": null,
+        "kv": "",
+        "default": null,
+        "source": "kv"
+      },
+      "EMAIL_PROVIDER_AUTH_HEADER": {
+        "env": null,
+        "kv": "api-key",
+        "default": "api-key",
+        "source": "kv"
+      },
+      "CORS_ORIGIN": {
+        "env": null,
+        "kv": "*",
+        "default": "*",
+        "source": "kv"
+      },
+      "AUDIT_DEFAULT_RETENTION_DAYS": {
+        "env": null,
+        "kv": 90,
+        "default": 90,
+        "source": "kv"
+      },
+      "AUDIT_SENSITIVE_RETENTION_DAYS": {
+        "env": null,
+        "kv": 365,
+        "default": 365,
+        "source": "kv"
+      },
+      "AUDIT_COMPLIANCE_RETENTION_DAYS": {
+        "env": null,
+        "kv": 2555,
+        "default": 2555,
+        "source": "kv"
+      },
+      "AUDIT_AUTO_ARCHIVE_ENABLED": {
+        "env": null,
+        "kv": true,
+        "default": true,
+        "source": "kv"
+      },
+      "AUDIT_AUTO_ARCHIVE_THRESHOLD_DAYS": {
+        "env": null,
+        "kv": 30,
+        "default": 30,
+        "source": "kv"
+      },
+      "AUDIT_MAX_QUERY_RESULTS": {
+        "env": null,
+        "kv": 1000,
+        "default": 1000,
+        "source": "kv"
+      },
+      "AUDIT_DEFAULT_PAGE_SIZE": {
+        "env": null,
+        "kv": 50,
+        "default": 50,
+        "source": "kv"
+      },
+      "AUDIT_MAX_PAGE_SIZE": {
+        "env": null,
+        "kv": 500,
+        "default": 500,
+        "source": "kv"
+      },
+      "AUDIT_QUERY_TIMEOUT_MS": {
+        "env": null,
+        "kv": 30000,
+        "default": 30000,
+        "source": "kv"
+      },
+      "AUDIT_BATCH_SIZE": {
+        "env": null,
+        "kv": 100,
+        "default": 100,
+        "source": "kv"
+      },
+      "AUDIT_FAILED_LOGIN_THRESHOLD": {
+        "env": null,
+        "kv": 5,
+        "default": 5,
+        "source": "kv"
+      },
+      "AUDIT_SUSPICIOUS_ACTIVITY_THRESHOLD": {
+        "env": null,
+        "kv": 10,
+        "default": 10,
+        "source": "kv"
+      },
+      "AUDIT_HIGH_RISK_ACTION_THRESHOLD": {
+        "env": null,
+        "kv": 3,
+        "default": 3,
+        "source": "kv"
+      },
+      "AUDIT_PERFORMANCE_ALERT_THRESHOLD_MS": {
+        "env": null,
+        "kv": 5000,
+        "default": 5000,
+        "source": "kv"
+      },
+      "AUDIT_ENABLE_AUDIT_LOGGING": {
+        "env": null,
+        "kv": null,
+        "default": true,
+        "source": "default"
+      },
+      "AUDIT_ENABLE_REAL_TIME_MONITORING": {
+        "env": null,
+        "kv": true,
+        "default": true,
+        "source": "kv"
+      },
+      "AUDIT_ENABLE_ADVANCED_ANALYTICS": {
+        "env": null,
+        "kv": true,
+        "default": true,
+        "source": "kv"
+      },
+      "AUDIT_ENABLE_EXPORT": {
+        "env": null,
+        "kv": true,
+        "default": true,
+        "source": "kv"
+      },
+      "AUDIT_ENABLE_ARCHIVAL": {
+        "env": null,
+        "kv": true,
+        "default": true,
+        "source": "kv"
+      },
+      "AUDIT_ENABLE_COMPLIANCE_REPORTING": {
+        "env": null,
+        "kv": true,
+        "default": true,
+        "source": "kv"
+      },
+      "AUDIT_ENABLE_PERFORMANCE_MONITORING": {
+        "env": null,
+        "kv": true,
+        "default": true,
+        "source": "kv"
+      },
+      "AUDIT_ENABLE_ADVANCED_SEARCH": {
+        "env": null,
+        "kv": true,
+        "default": true,
+        "source": "kv"
+      },
+      "AUDIT_REALTIME_BUFFER_SIZE": {
+        "env": null,
+        "kv": 1000,
+        "default": 1000,
+        "source": "kv"
+      },
+      "AUDIT_REALTIME_FLUSH_INTERVAL_MS": {
+        "env": null,
+        "kv": 5000,
+        "default": 5000,
+        "source": "kv"
+      },
+      "AUDIT_REALTIME_MAX_CONNECTIONS": {
+        "env": null,
+        "kv": 100,
+        "default": 100,
+        "source": "kv"
+      },
+      "AUDIT_THREAT_DETECTION_ENABLED": {
+        "env": null,
+        "kv": true,
+        "default": true,
+        "source": "kv"
+      },
+      "AUDIT_EXPORT_MAX_RECORDS": {
+        "env": null,
+        "kv": 10000,
+        "default": 10000,
+        "source": "kv"
+      },
+      "AUDIT_EXPORT_ALLOWED_FORMATS": {
+        "env": null,
+        "kv": "csv,json,excel",
+        "default": "csv,json,excel",
+        "source": "kv"
+      },
+      "AUDIT_EXPORT_TIMEOUT_MS": {
+        "env": null,
+        "kv": 120000,
+        "default": 120000,
+        "source": "kv"
+      },
+      "AUDIT_EXPORT_COMPRESSION_ENABLED": {
+        "env": null,
+        "kv": true,
+        "default": true,
+        "source": "kv"
+      },
+      "AUDIT_ANALYTICS_CACHE_TTL_MS": {
+        "env": null,
+        "kv": 300000,
+        "default": 300000,
+        "source": "kv"
+      },
+      "AUDIT_ANALYTICS_MAX_TIME_RANGE_DAYS": {
+        "env": null,
+        "kv": 365,
+        "default": 365,
+        "source": "kv"
+      },
+      "AUDIT_ANALYTICS_ENABLE_BEHAVIORAL": {
+        "env": null,
+        "kv": true,
+        "default": true,
+        "source": "kv"
+      },
+      "AUDIT_ANALYTICS_ENABLE_SECURITY": {
+        "env": null,
+        "kv": true,
+        "default": true,
+        "source": "kv"
+      },
+      "AUDIT_INCIDENT_AUTO_DETECTION_ENABLED": {
+        "env": null,
+        "kv": true,
+        "default": true,
+        "source": "kv"
+      },
+      "AUDIT_INCIDENT_RESPONSE_TIMEOUT_MS": {
+        "env": null,
+        "kv": 60000,
+        "default": 60000,
+        "source": "kv"
+      },
+      "AUDIT_INCIDENT_MAX_SEVERITY_LEVEL": {
+        "env": null,
+        "kv": 5,
+        "default": 5,
+        "source": "kv"
+      },
+      "AUDIT_INCIDENT_EMAIL_NOTIFICATIONS_ENABLED": {
+        "env": null,
+        "kv": false,
+        "default": null,
+        "source": "kv"
+      },
+      "AUDIT_COMPLIANCE_GDPR_ENABLED": {
+        "env": null,
+        "kv": true,
+        "default": true,
+        "source": "kv"
+      },
+      "AUDIT_COMPLIANCE_SOX_ENABLED": {
+        "env": null,
+        "kv": false,
+        "default": null,
+        "source": "kv"
+      },
+      "AUDIT_COMPLIANCE_HIPAA_ENABLED": {
+        "env": null,
+        "kv": false,
+        "default": null,
+        "source": "kv"
+      },
+      "AUDIT_COMPLIANCE_AUTO_REPORT_ENABLED": {
+        "env": null,
+        "kv": false,
+        "default": null,
+        "source": "kv"
+      }
+    },
+    "summary": {
+      "total": 94,
+      "fromKV": 92,
+      "fromEnv": 0,
+      "fromDefault": 2
+    }
+  },
+  "message": "Environment comparison retrieved by Test Super Admin User - KV: 92, ENV: 0, Default: 2"
+}
