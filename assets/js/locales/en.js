@@ -258,7 +258,10 @@ export default {
       audit_logs: 'Audit Logs',
       security_incidents: 'Security Incidents',
       realtime_monitoring: 'Realtime Monitoring',
-      kv_admin: 'KV Admin'
+      kv_admin: 'KV Admin',
+      api_health: 'API Health',
+      api_version: 'API Version',
+      api_language: 'API Language'
     },
     api_explorer: {
       title: 'Role-based API Explorer',
@@ -276,6 +279,52 @@ export default {
       error_loading: 'Failed to load API info',
       login_required_title: 'Login required',
       login_required_message: 'Please login to view role-based endpoints.'
+    },
+    public_endpoints: {
+      common: {
+        status: 'Status',
+        environment: 'Environment',
+        language: 'Language',
+        version: 'Version',
+        unknown: 'unknown',
+        response_summary: 'Response Summary',
+        success: 'Success',
+        message: 'Message',
+        endpoint: 'Endpoint',
+        raw_json: 'Raw JSON',
+        view_json: 'View JSON'
+      },
+      health: {
+        badge: 'Health API',
+        title: 'Health Endpoint Status',
+        subtitle: 'Runtime liveness and metadata snapshot including environment, language, and uptime.',
+        uptime: 'Uptime',
+        timestamp: 'Timestamp',
+        summary_title: 'Health Response Summary',
+        summary_subtitle: 'Normalized view of status, message, and diagnostic metadata.',
+        load_error: 'Failed to load health data'
+      },
+      version: {
+        badge: 'Version API',
+        title: 'Version Endpoint Metadata',
+        subtitle: 'Public build and version payload with service identity attributes.',
+        service_name: 'Service Name',
+        unknown_service: 'Unknown Service',
+        summary_title: 'Version Response Summary',
+        summary_subtitle: 'Structured output for release version and service descriptors.',
+        load_error: 'Failed to load version data'
+      },
+      language: {
+        badge: 'Language API',
+        title: 'Language Endpoint Configuration',
+        subtitle: 'Current language plus supported language codes exposed by the API.',
+        current_language: 'Current Language',
+        supported: 'Supported',
+        supported_languages: 'Supported Languages',
+        summary_title: 'Language Response Summary',
+        summary_subtitle: 'Canonical list of active language and supported language set.',
+        load_error: 'Failed to load language data'
+      }
     },
     not_found: {
       back: 'Back',

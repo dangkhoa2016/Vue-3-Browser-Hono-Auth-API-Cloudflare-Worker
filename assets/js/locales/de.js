@@ -258,7 +258,10 @@ export default {
       audit_logs: 'Audit-Protokolle',
       security_incidents: 'Sicherheitsvorfälle',
       realtime_monitoring: 'Echtzeitüberwachung',
-      kv_admin: 'KV-Verwaltung'
+      kv_admin: 'KV-Verwaltung',
+      api_health: 'API-Status',
+      api_version: 'API-Version',
+      api_language: 'API-Sprache'
     },
     api_explorer: {
       title: 'Rollenbasierter API-Explorer',
@@ -276,6 +279,52 @@ export default {
       error_loading: 'API-Informationen konnten nicht geladen werden',
       login_required_title: 'Anmeldung erforderlich',
       login_required_message: 'Bitte melden Sie sich an, um rollenbasierte Endpunkte zu sehen.'
+    },
+    public_endpoints: {
+      common: {
+        status: 'Status',
+        environment: 'Umgebung',
+        language: 'Sprache',
+        version: 'Version',
+        unknown: 'unbekannt',
+        response_summary: 'Antwortübersicht',
+        success: 'Erfolg',
+        message: 'Meldung',
+        endpoint: 'Endpunkt',
+        raw_json: 'Rohes JSON',
+        view_json: 'JSON anzeigen'
+      },
+      health: {
+        badge: 'Gesundheits-API',
+        title: 'Status des Gesundheitsendpunkts',
+        subtitle: 'Snapshot von Laufzeitstatus und Metadaten inklusive Umgebung, Sprache und Betriebszeit.',
+        uptime: 'Betriebszeit',
+        timestamp: 'Zeitstempel',
+        summary_title: 'Zusammenfassung der Gesundheitsantwort',
+        summary_subtitle: 'Normalisierte Sicht auf Status, Meldung und Diagnosemetadaten.',
+        load_error: 'Gesundheitsdaten konnten nicht geladen werden'
+      },
+      version: {
+        badge: 'Versions-API',
+        title: 'Metadaten des Versionsendpunkts',
+        subtitle: 'Öffentliche Build- und Versionsdaten mit Attributen zur Dienstidentität.',
+        service_name: 'Dienstname',
+        unknown_service: 'Unbekannter Dienst',
+        summary_title: 'Zusammenfassung der Versionsantwort',
+        summary_subtitle: 'Strukturierte Ausgabe für Release-Version und Dienstbeschreibungen.',
+        load_error: 'Versionsdaten konnten nicht geladen werden'
+      },
+      language: {
+        badge: 'Sprach-API',
+        title: 'Konfiguration des Sprachendpunkts',
+        subtitle: 'Aktuelle Sprache und unterstützte Sprachcodes, die von der API bereitgestellt werden.',
+        current_language: 'Aktuelle Sprache',
+        supported: 'Unterstützt',
+        supported_languages: 'Unterstützte Sprachen',
+        summary_title: 'Zusammenfassung der Sprachantwort',
+        summary_subtitle: 'Kanonische Liste der aktiven Sprache und des unterstützten Sprachsatzes.',
+        load_error: 'Sprachdaten konnten nicht geladen werden'
+      }
     },
     not_found: {
       back: 'Zurück',

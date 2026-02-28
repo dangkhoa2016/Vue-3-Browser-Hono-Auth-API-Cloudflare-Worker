@@ -1,0 +1,16 @@
+{
+  "success": true,
+  "data": {
+    "current_language": "en",
+    "supported_languages": [
+      "en",
+      "vi",
+      "fr",
+      "es",
+      "de",
+      "ja",
+      "th"
+    ],
+    "message": "Operation completed successfully"
+  }
+}
