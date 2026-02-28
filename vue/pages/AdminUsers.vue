@@ -244,15 +244,15 @@
         </div>
 
         <div class="mt-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3" v-if="(pagination.totalPages || 1) > 1">
-          <p class="text-xs text-slate-500 dark:text-slate-400">
-            {{ $t('message.admin_users.page') }} {{ pagination.page || 1 }} {{ $t('message.admin_users.of') }} {{ pagination.totalPages || 1 }}
-          </p>
-
           <PaginationControls
             :current-page="pagination.page || 1"
             :total-pages="pagination.totalPages || 1"
+            :page-size="pagination.limit || 20"
+            :page-size-options="[10, 20, 50]"
+            :show-page-size="true"
             :loading="loading"
             @change="goToPage"
+            @change-size="handlePageSizeChange"
           />
         </div>
       </section>
@@ -467,7 +467,7 @@ export default {
       await loadUsers(1);
     };
 
-    const loadUsers = async (page = pagination.value.page) => {
+    const loadUsers = async (page = pagination.value.page, limit = pagination.value.limit) => {
       if (!authStore.isAuthenticated) {
         return;
       }
@@ -478,7 +478,7 @@ export default {
 
       await userStore.fetchUsers({
         page,
-        limit: pagination.value.limit,
+        limit,
         search: searchValue,
         role: roleValue,
         status: statusValue,
@@ -496,7 +496,17 @@ export default {
       const nextPage = Math.min(Math.max(1, Number(page) || 1), totalPages);
       if (nextPage === (Number(pagination.value?.page) || 1)) return;
       forceSkeletonOnLoading.value = true;
-      await loadUsers(nextPage);
+      await loadUsers(nextPage, pagination.value?.limit || 20);
+      scrollToTableTop();
+    };
+
+    const handlePageSizeChange = async (limit) => {
+      const nextLimit = Math.max(1, Number.parseInt(limit, 10) || 20);
+      const currentLimit = Math.max(1, Number.parseInt(pagination.value?.limit, 10) || 20);
+      if (nextLimit === currentLimit) return;
+
+      forceSkeletonOnLoading.value = true;
+      await loadUsers(1, nextLimit);
       scrollToTableTop();
     };
 
@@ -826,6 +836,7 @@ export default {
       openLoginModal,
       reload,
       goToPage,
+      handlePageSizeChange,
       formatDate,
       formatRole,
       formatStatus,

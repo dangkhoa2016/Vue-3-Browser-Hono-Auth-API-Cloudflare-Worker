@@ -75,6 +75,7 @@ export default {
       edit: 'Sửa',
       delete: 'Xóa',
       close: 'Đóng',
+      page_of: 'Trang {current} trên {total}',
       loading: 'Đang tải...',
       retry: 'Thử lại',
       view: 'Xem',

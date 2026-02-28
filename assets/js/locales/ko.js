@@ -75,6 +75,7 @@ export default {
       delete: '삭제',
       clear: '지우기',
       close: '닫기',
+      page_of: '페이지 {current} / {total}',
       loading: '로딩 중...',
       retry: '다시 시도',
       view: '보기',
@@ -161,7 +162,7 @@ export default {
       confirm: '확인',
       can_login_now: '이제 계정으로 로그인할 수 있습니다',
       go_to_login: '로그인하기',
-      close: '닫기'
+        close: '닫기'
     },
     audit: {
       login_required: '로그인 필요',

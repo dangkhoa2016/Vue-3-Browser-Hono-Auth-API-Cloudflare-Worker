@@ -234,15 +234,15 @@
       </div>
 
       <div class="mt-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3" v-if="(pagination.totalPages || 1) > 1">
-        <p class="text-xs text-slate-500 dark:text-slate-400">
-          {{ $t('message.admin_users.page') || 'Page' }} {{ pagination.page || 1 }} {{ $t('message.admin_users.of') || 'of' }} {{ pagination.totalPages || 1 }}
-        </p>
-
         <PaginationControls
           :current-page="pagination.page || 1"
           :total-pages="pagination.totalPages || 1"
+          :page-size="pagination.limit || 20"
+          :page-size-options="[10, 20, 50]"
+          :show-page-size="true"
           :loading="loading"
           @change="goToPage"
+          @change-size="handlePageSizeChange"
         />
       </div>
     </section>
@@ -418,15 +418,24 @@ export default {
       scrollToTableTop();
     };
 
-    const loadIncidents = async (page = pagination.value?.page || 1) => {
+    const loadIncidents = async (page = pagination.value?.page || 1, limit = pagination.value?.limit || 20) => {
       await securityStore.fetchIncidents({
         page,
-        limit: pagination.value?.limit || 20,
+        limit,
         search: useServerFilter.value ? search.value : '',
         severity: useServerFilter.value ? severityFilter.value : 'all',
         status: useServerFilter.value ? statusFilter.value : 'all',
         useServerFilter: useServerFilter.value
       });
+    };
+
+    const handlePageSizeChange = async (limit) => {
+      const nextLimit = Math.max(1, Number.parseInt(limit, 10) || 20);
+      const currentLimit = Math.max(1, Number.parseInt(pagination.value?.limit, 10) || 20);
+      if (nextLimit === currentLimit) return;
+
+      await loadIncidents(1, nextLimit);
+      scrollToTableTop();
     };
 
     const refresh = () => loadIncidents(pagination.value?.page || 1);
@@ -496,6 +505,7 @@ export default {
       openIncident,
       closeIncident,
       goToPage,
+      handlePageSizeChange,
       refresh
     };
   }
