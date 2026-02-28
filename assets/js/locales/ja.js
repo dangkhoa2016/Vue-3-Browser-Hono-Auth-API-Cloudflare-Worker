@@ -258,7 +258,10 @@ export default {
       audit_logs: '監査ログ',
       security_incidents: 'セキュリティインシデント',
       realtime_monitoring: 'リアルタイム監視',
-      kv_admin: 'KV管理'
+      kv_admin: 'KV管理',
+      api_health: 'API ヘルス',
+      api_version: 'API バージョン',
+      api_language: 'API 言語'
     },
     api_explorer: {
       title: 'ロールベース API エクスプローラー',
@@ -276,6 +279,52 @@ export default {
       error_loading: 'API 情報の読み込みに失敗しました',
       login_required_title: 'ログインが必要です',
       login_required_message: 'ロールベースのエンドポイントを表示するにはログインしてください。'
+    },
+    public_endpoints: {
+      common: {
+        status: 'ステータス',
+        environment: '環境',
+        language: '言語',
+        version: 'バージョン',
+        unknown: '不明',
+        response_summary: 'レスポンス概要',
+        success: '成功',
+        message: 'メッセージ',
+        endpoint: 'エンドポイント',
+        raw_json: '生JSON',
+        view_json: 'JSONを表示'
+      },
+      health: {
+        badge: 'ヘルスAPI',
+        title: 'ヘルスエンドポイント状態',
+        subtitle: '環境・言語・稼働時間を含むランタイムの稼働状態とメタデータのスナップショット。',
+        uptime: '稼働時間',
+        timestamp: 'タイムスタンプ',
+        summary_title: 'ヘルス応答サマリー',
+        summary_subtitle: '状態、メッセージ、診断メタデータを正規化して表示します。',
+        load_error: 'ヘルスデータの読み込みに失敗しました'
+      },
+      version: {
+        badge: 'バージョンAPI',
+        title: 'バージョンエンドポイントのメタデータ',
+        subtitle: 'サービス識別属性を含む公開ビルド／バージョン情報です。',
+        service_name: 'サービス名',
+        unknown_service: '不明なサービス',
+        summary_title: 'バージョン応答サマリー',
+        summary_subtitle: 'リリース版とサービス記述情報を構造化して表示します。',
+        load_error: 'バージョンデータの読み込みに失敗しました'
+      },
+      language: {
+        badge: '言語API',
+        title: '言語エンドポイント設定',
+        subtitle: 'APIが公開する現在言語と対応言語コードです。',
+        current_language: '現在の言語',
+        supported: '対応数',
+        supported_languages: '対応言語',
+        summary_title: '言語応答サマリー',
+        summary_subtitle: '有効な言語設定と対応言語セットを正規化して表示します。',
+        load_error: '言語データの読み込みに失敗しました'
+      }
     },
     not_found: {
       back: '戻る',

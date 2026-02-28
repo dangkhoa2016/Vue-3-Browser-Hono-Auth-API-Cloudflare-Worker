@@ -18,6 +18,9 @@ const HTTP_STATUS = {
 
 // API Endpoints
 export const API_ENDPOINTS = {
+  PUBLIC_HEALTH: '/health',
+  PUBLIC_VERSION: '/version',
+  PUBLIC_LANGUAGE: '/language',
   LOGIN: '/api/auth/login',
   REFRESH_TOKEN: '/api/auth/refresh_token',
   REGISTER: '/api/user/register',
@@ -67,6 +70,9 @@ const MOCK_CONFIG = {
 
 // Mock API Patterns - Generated from API_ENDPOINTS
 const MOCK_PATTERNS = {
+  PUBLIC_HEALTH: new RegExp(`${API_ENDPOINTS.PUBLIC_HEALTH.replace(/\//g, '\\/')}($|\\?)`),
+  PUBLIC_VERSION: new RegExp(`${API_ENDPOINTS.PUBLIC_VERSION.replace(/\//g, '\\/')}($|\\?)`),
+  PUBLIC_LANGUAGE: new RegExp(`${API_ENDPOINTS.PUBLIC_LANGUAGE.replace(/\//g, '\\/')}($|\\?)`),
   LOGIN: new RegExp(`${API_ENDPOINTS.LOGIN.replace(/\//g, '\\/')}($|\\?)`),
   REFRESH_TOKEN: new RegExp(`${API_ENDPOINTS.REFRESH_TOKEN.replace(/\//g, '\\/')}($|\\?)`),
   REGISTER: new RegExp(`${API_ENDPOINTS.REGISTER.replace(/\//g, '\\/')}($|\\?)`),
@@ -121,6 +127,9 @@ export const DATA_PATHS = {
   PROFILE: '/assets/data/profile/succeed.json',
   PROFILE_UPDATE_SUCCESS: '/assets/data/profile/update/succeed/response.json',
   API_INFO: '/assets/data/profile/api.json',
+  PUBLIC_HEALTH: '/assets/data/health/response.json',
+  PUBLIC_VERSION: '/assets/data/version/response.json',
+  PUBLIC_LANGUAGE: '/assets/data/language/response.json',
   USERS_LIST: '/assets/data/users/list/succeed/super-admin+users.json',
   ADMIN_STATS: '/assets/data/system-stats/succeed/response.json',
   ADMIN_SYSTEM_HEALTH: '/assets/data/system-health/succeed/response.json',
@@ -184,8 +193,14 @@ apiClient.interceptors.request.use(async (config) => {
     config.url.includes(API_ENDPOINTS.REFRESH_TOKEN)
   );
 
+  const isPublicRequest = Boolean(config.url) && (
+    config.url.includes(API_ENDPOINTS.PUBLIC_HEALTH) ||
+    config.url.includes(API_ENDPOINTS.PUBLIC_VERSION) ||
+    config.url.includes(API_ENDPOINTS.PUBLIC_LANGUAGE)
+  );
+
   // Block all non-auth requests until user logs in again after session expiry/refresh failure
-  if (authStore?.requiresReauth && !isAuthRequest) {
+  if (authStore?.requiresReauth && !isAuthRequest && !isPublicRequest) {
     const message = i18n.global.t(
       'message.auth.relogin_required_reason',
       'Your session has expired or is invalid. Please login again to continue.'
@@ -198,7 +213,7 @@ apiClient.interceptors.request.use(async (config) => {
 
   // Token refresh logic
   // Skip token refresh for the refresh endpoint itself
-  if (authStore && !config.url.includes(API_ENDPOINTS.REFRESH_TOKEN)) {
+  if (authStore && !config.url.includes(API_ENDPOINTS.REFRESH_TOKEN) && !isPublicRequest) {
     try {
       // Check if we need to refresh the token
       if (authStore.shouldRefreshToken) {
@@ -774,6 +789,49 @@ export const setupMock = (enable) => {
           return [200, data];
         } catch (error) {
           console.error('[Mock API] API info handler error:', error);
+          const message = (error && error.message) || 'Internal server error';
+          return [500, { success: false, error: message }];
+        }
+      });
+
+      mock.onGet(MOCK_PATTERNS.PUBLIC_HEALTH).reply(async () => {
+        try {
+          const data = await loadJson(DATA_PATHS.PUBLIC_HEALTH);
+          return [200, data];
+        } catch (error) {
+          console.error('[Mock API] Public health handler error:', error);
+          const message = (error && error.message) || 'Internal server error';
+          return [500, { success: false, error: message }];
+        }
+      });
+
+      mock.onGet(MOCK_PATTERNS.PUBLIC_VERSION).reply(async () => {
+        try {
+          const data = await loadJson(DATA_PATHS.PUBLIC_VERSION);
+          return [200, data];
+        } catch (error) {
+          console.error('[Mock API] Public version handler error:', error);
+          const message = (error && error.message) || 'Internal server error';
+          return [500, { success: false, error: message }];
+        }
+      });
+
+      mock.onGet(MOCK_PATTERNS.PUBLIC_LANGUAGE).reply(async (config) => {
+        try {
+          const data = await loadJson(DATA_PATHS.PUBLIC_LANGUAGE);
+          const requestLanguage = config?.headers?.['Accept-Language'] || config?.headers?.['accept-language'];
+          if (requestLanguage && data?.data) {
+            return [200, {
+              ...data,
+              data: {
+                ...data.data,
+                current_language: String(requestLanguage).split(',')[0].trim().toLowerCase()
+              }
+            }];
+          }
+          return [200, data];
+        } catch (error) {
+          console.error('[Mock API] Public language handler error:', error);
           const message = (error && error.message) || 'Internal server error';
           return [500, { success: false, error: message }];
         }

@@ -3,12 +3,12 @@
     <div class="container mx-auto px-4">
       <div class="flex justify-between h-16">
         <div class="flex items-center">
-          <router-link to="/" class="flex-shrink-0 flex items-center group" :title="t('message.navbar.brand_title')">
+          <router-link to="/" class="flex-shrink-0 flex items-center group" :title="$t('message.navbar.brand_title')">
             <img src="/assets/img/favicon.png" alt="Logo"
               class="w-7 h-7 sm:w-8 sm:h-8 mr-2 group-hover:rotate-12 transition-transform" />
             <span
-              class="text-lg sm:text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 hidden xs:inline">{{
-                t('message.navbar.brand') }}</span>
+              class="text-lg sm:text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 hidden xs:inline">
+              {{ $t('message.navbar.brand') }}</span>
           </router-link>
           <div class="hidden lg:ml-4 lg:flex lg:space-x-1">
             <router-link v-for="item in menuItems" :key="item.path" :to="item.path"
@@ -24,7 +24,7 @@
                 :class="getTopMenuClass(showAdminDropdown || isAdminRouteActive)"
               >
                 <i class="bi bi-shield-lock text-[14px] mr-1.5"></i>
-                <span class="truncate max-w-[110px] xl:max-w-none">{{ t('message.navbar.admin') }}</span>
+                <span class="truncate max-w-[110px] xl:max-w-none">{{ $t('message.navbar.admin') }}</span>
                 <i class="bi bi-chevron-down text-[11px] ml-1.5 transition-transform duration-200" :class="{ 'rotate-180': showAdminDropdown }"></i>
               </button>
               <transition name="dropdown">
@@ -46,21 +46,19 @@
               <button @click="toggleAboutDropdown"
                 :class="getTopMenuClass(showAboutDropdown || isAboutRouteActive)"
               >
-                <span class="truncate max-w-[110px] xl:max-w-none">{{ t('message.navbar.this_project') }}</span>
+                <span class="truncate max-w-[110px] xl:max-w-none">{{ $t('message.navbar.this_project') }}</span>
                 <i class="bi bi-chevron-down text-[11px] ml-1.5 transition-transform duration-200" :class="{ 'rotate-180': showAboutDropdown }"></i>
               </button>
               <transition name="dropdown">
                 <div v-if="showAboutDropdown"
                   class="absolute left-0 mt-2 w-max min-w-[230px] bg-white dark:bg-gray-700 rounded-lg shadow-lg border border-gray-200 dark:border-gray-600 py-1 z-40 whitespace-nowrap">
-                  <router-link to="/about" @click="showAboutDropdown = false"
-                    :class="getDropdownItemClass($route.path === '/about')">
-                    {{ t('message.navbar.about') }}
-                  </router-link>
-                  <router-link to="/api-info" @click="showAboutDropdown = false"
-                    :class="getDropdownItemClass($route.path === '/api-info')">
-                    {{ t('message.navbar.api_explorer') }}
-                    <span class="text-[11px] text-gray-500 ml-1">({{ t('message.auth.login_required') }})</span>
-                  </router-link>
+                  <template v-for="item in aboutMenuItems" :key="item.key">
+                    <router-link :to="item.path" @click="showAboutDropdown = false"
+                      :class="getDropdownItemClass($route.path === item.path)">
+                      {{ item.name }}
+                      <span v-if="item.loginRequired" class="text-[11px] text-gray-500 ml-1">({{ $t('message.auth.login_required') }})</span>
+                    </router-link>
+                  </template>
                 </div>
               </transition>
             </div>
@@ -105,7 +103,7 @@
           <div class="relative" ref="languageDropdownRef">
             <button @click="toggleLanguageDropdown"
               :class="languageToggleButtonClass"
-              :title="t('message.navbar.change_language')">
+              :title="$t('message.navbar.change_language')">
               <i class="bi bi-translate text-lg"></i>
               <span class="uppercase ml-2 text-xs font-semibold">{{ currentLanguage }}</span>
               <i class="bi bi-chevron-down text-[10px] ml-1 transition-transform"
@@ -128,23 +126,23 @@
           <!-- Mock API Toggle -->
           <button @click="store.setMockApi(!store.mockApi)"
             :class="getDesktopApiToggleClass()"
-            :title="t('message.navbar.toggle_api_mode')">
+            :title="$t('message.navbar.toggle_api_mode')">
             <span class="w-2 h-2 rounded-full mr-2 shadow-sm"
               :class="store.mockApi ? 'bg-green-500' : 'bg-amber-500'"></span>
-            <span class="hidden lg:inline font-medium uppercase tracking-wider text-[11px]">{{ store.mockApi ? t('message.navbar.mock_label') : t('message.navbar.real_label') }}</span>
+            <span class="hidden lg:inline font-medium uppercase tracking-wider text-[11px] whitespace-nowrap">{{ store.mockApi ? $t('message.navbar.mock_label') : $t('message.navbar.real_label') }}</span>
           </button>
 
           <!-- Dark Mode Toggle -->
           <button @click="store.toggleDarkMode"
             :class="iconCircleButtonClass"
-            :title="store.darkMode ? t('message.navbar.switch_to_light') : t('message.navbar.switch_to_dark')">
+            :title="store.darkMode ? $t('message.navbar.switch_to_light') : $t('message.navbar.switch_to_dark')">
             <i class="bi text-base" :class="store.darkMode ? 'bi-sun-fill' : 'bi-moon-fill'"></i>
           </button>
 
           <!-- Mobile Menu Button -->
           <button @click="toggleMobileMenu"
             :class="mobileMenuButtonClass"
-            :title="t('message.navbar.menu')">
+            :title="$t('message.navbar.menu')">
             <i class="bi text-base" :class="showMobileMenu ? 'bi-x-lg' : 'bi-list'"></i>
           </button>
         </div>
@@ -165,7 +163,7 @@
                 :class="getMobileGroupClass(isAdminRouteActive || showMobileAdminMenu)">
                 <span class="flex items-center">
                   <i class="bi bi-shield-lock text-base mr-2"></i>
-                  {{ t('message.navbar.admin') }}
+                  {{ $t('message.navbar.admin') }}
                 </span>
                 <i class="bi bi-chevron-down text-xs transition-transform duration-200"
                    :class="{ 'rotate-180': showMobileAdminMenu }"></i>
@@ -184,21 +182,19 @@
             <div>
               <button @click="toggleMobileAboutMenu"
                 :class="getMobileGroupClass(isAboutRouteActive || showMobileAboutMenu)">
-                <span>{{ t('message.navbar.this_project') }}</span>
+                <span>{{ $t('message.navbar.this_project') }}</span>
                 <i class="bi bi-chevron-down text-xs transition-transform duration-200"
                    :class="{ 'rotate-180': showMobileAboutMenu }"></i>
               </button>
 
               <div v-show="showMobileAboutMenu || isAboutRouteActive" class="space-y-1">
-                <router-link to="/about" @click="showMobileMenu = false"
-                  :class="getMobileSubLinkClass($route.path === '/about')">
-                  {{ t('message.navbar.about') }}
-                </router-link>
-                <router-link to="/api-info" @click="showMobileMenu = false"
-                  :class="getMobileSubLinkClass($route.path === '/api-info')">
-                  {{ t('message.navbar.api_explorer') }}
-                  <span class="text-[11px] text-gray-500 ml-1">({{ t('message.auth.login_required') }})</span>
-                </router-link>
+                <template v-for="item in aboutMenuItems" :key="`mobile-${item.key}`">
+                  <router-link :to="item.path" @click="showMobileMenu = false"
+                    :class="getMobileSubLinkClass($route.path === item.path)">
+                    {{ item.name }}
+                    <span v-if="item.loginRequired" class="text-[11px] text-gray-500 ml-1">({{ $t('message.auth.login_required') }})</span>
+                  </router-link>
+                </template>
               </div>
             </div>
           </div>
@@ -237,7 +233,7 @@
               :class="getMobileApiToggleClass()">
               <span class="w-1.5 h-1.5 rounded-full mr-2 animate-pulse"
                 :class="store.mockApi ? 'bg-green-500' : 'bg-yellow-500'"></span>
-              {{ store.mockApi ? t('message.navbar.mock_label') : t('message.navbar.real_label') }}
+              {{ store.mockApi ? $t('message.navbar.mock_label') : $t('message.navbar.real_label') }}
             </button>
           </div>
         </div>
@@ -346,7 +342,15 @@ export default {
     });
 
     const isAdminRouteActive = computed(() => route.path.startsWith('/admin'));
-    const isAboutRouteActive = computed(() => ['/about', '/api-info'].includes(route.path));
+    const isAboutRouteActive = computed(() => ['/about', '/api-info', '/health', '/version', '/language'].includes(route.path));
+
+    const aboutMenuItems = computed(() => [
+      { key: 'about', name: t('message.navbar.about'), path: '/about' },
+      { key: 'api-explorer', name: t('message.navbar.api_explorer'), path: '/api-info', loginRequired: true },
+      { key: 'api-health', name: t('message.navbar.api_health'), path: '/health' },
+      { key: 'api-version', name: t('message.navbar.api_version'), path: '/version' },
+      { key: 'api-language', name: t('message.navbar.api_language'), path: '/language' }
+    ]);
 
     // Admin menu items
     const adminMenuItems = computed(() => [
@@ -604,7 +608,6 @@ export default {
     return {
       store,
       menuItems,
-      t,
       showLanguageDropdown,
       showMobileMenu,
       showLogoutConfirm,
@@ -624,6 +627,7 @@ export default {
       isSuperAdmin,
       isAdminRouteActive,
       isAboutRouteActive,
+      aboutMenuItems,
       user,
       adminMenuItems,
       getTopMenuClass,

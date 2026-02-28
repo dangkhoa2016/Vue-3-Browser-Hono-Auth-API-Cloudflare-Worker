@@ -258,7 +258,10 @@ export default {
       audit_logs: '감사 로그',
       security_incidents: '보안 사고',
       realtime_monitoring: '실시간 모니터링',
-      kv_admin: 'KV 관리'
+      kv_admin: 'KV 관리',
+      api_health: 'API 상태',
+      api_version: 'API 버전',
+      api_language: 'API 언어'
     },
     api_explorer: {
       title: '역할 기반 API 탐색기',
@@ -276,6 +279,52 @@ export default {
       error_loading: 'API 정보를 불러오지 못했습니다',
       login_required_title: '로그인 필요',
       login_required_message: '역할 기반 엔드포인트를 보려면 로그인하세요.'
+    },
+    public_endpoints: {
+      common: {
+        status: '상태',
+        environment: '환경',
+        language: '언어',
+        version: '버전',
+        unknown: '알 수 없음',
+        response_summary: '응답 요약',
+        success: '성공',
+        message: '메시지',
+        endpoint: '엔드포인트',
+        raw_json: '원본 JSON',
+        view_json: 'JSON 보기'
+      },
+      health: {
+        badge: '헬스 API',
+        title: '헬스 엔드포인트 상태',
+        subtitle: '환경, 언어, 업타임을 포함한 런타임 동작 상태 및 메타데이터 스냅샷입니다.',
+        uptime: '업타임',
+        timestamp: '타임스탬프',
+        summary_title: '헬스 응답 요약',
+        summary_subtitle: '상태, 메시지, 진단 메타데이터를 정규화해 보여줍니다.',
+        load_error: '헬스 데이터를 불러오지 못했습니다'
+      },
+      version: {
+        badge: '버전 API',
+        title: '버전 엔드포인트 메타데이터',
+        subtitle: '서비스 식별 속성을 포함한 공개 빌드 및 버전 데이터입니다.',
+        service_name: '서비스 이름',
+        unknown_service: '알 수 없는 서비스',
+        summary_title: '버전 응답 요약',
+        summary_subtitle: '릴리스 버전과 서비스 설명 정보를 구조화해 제공합니다.',
+        load_error: '버전 데이터를 불러오지 못했습니다'
+      },
+      language: {
+        badge: '언어 API',
+        title: '언어 엔드포인트 구성',
+        subtitle: 'API가 제공하는 현재 언어와 지원 언어 코드를 확인합니다.',
+        current_language: '현재 언어',
+        supported: '지원 수',
+        supported_languages: '지원 언어 목록',
+        summary_title: '언어 응답 요약',
+        summary_subtitle: '활성 언어 설정과 지원 언어 집합의 정규화 목록입니다.',
+        load_error: '언어 데이터를 불러오지 못했습니다'
+      }
     },
     not_found: {
       back: '뒤로',
