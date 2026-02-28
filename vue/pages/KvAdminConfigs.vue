@@ -148,6 +148,15 @@
                 {{ $t('message.kv_admin_page.last_updated') }}: {{ lastUpdatedLabel }}
               </div>
               <ActionTextButton
+                variant="soft"
+                shape="full"
+                icon="bi bi-ui-checks-grid"
+                class="text-xs"
+                @click="openBulkModal"
+              >
+                {{ $t('message.kv_admin_page.bulk_update') }}
+              </ActionTextButton>
+              <ActionTextButton
                 tone="amber"
                 shape="full"
                 icon="bi bi-plus-circle"
@@ -348,11 +357,109 @@
       </div>
     </transition>
 
+    <transition name="fade" mode="out-in">
+      <div v-if="bulkOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 px-4 py-8">
+        <div class="w-full max-w-4xl rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800 shadow-2xl p-6">
+          <div class="flex items-center justify-between gap-3">
+            <h3 class="text-xl font-bold text-slate-900 dark:text-white">{{ $t('message.kv_admin_page.bulk_modal_title') }}</h3>
+            <ActionIconButton
+              icon="bi bi-x-lg"
+              tone="indigo"
+              :title="$t('message.common.close') || 'Close'"
+              :aria-label="$t('message.common.close') || 'Close'"
+              @click="closeBulkModal"
+            />
+          </div>
+
+          <div class="mt-6 space-y-3 max-h-[55vh] overflow-auto pr-1">
+            <article
+              v-for="(item, index) in bulkItems"
+              :key="item.id"
+              class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30 p-4"
+            >
+              <div class="grid gap-3 lg:grid-cols-[1fr_1fr_auto] lg:items-end">
+                <div>
+                  <label class="text-xs uppercase tracking-[0.2em] text-slate-500">{{ $t('message.kv_admin_page.key_label') }}</label>
+                  <input
+                    :id="`bulk-key-${item.id}`"
+                    v-model="item.key"
+                    :list="bulkListRowId === item.id ? 'kv-bulk-key-options' : undefined"
+                    :class="editorKeyInputClass"
+                    :placeholder="$t('message.kv_admin_page.bulk_key_placeholder')"
+                    @focus="openBulkKeySuggestions(item.id)"
+                    @click="openBulkKeySuggestions(item.id)"
+                    @input="onBulkKeyInput($event, item.id)"
+                    @change="onBulkKeyInput($event, item.id)"
+                    @blur="onBulkKeyBlur(item.id)"
+                  />
+                </div>
+                <div>
+                  <label class="text-xs uppercase tracking-[0.2em] text-slate-500">{{ $t('message.kv_admin_page.value_label') }}</label>
+                  <input
+                    :id="`bulk-value-${item.id}`"
+                    v-model="item.value"
+                    :class="editorKeyInputClass"
+                    :placeholder="$t('message.kv_admin_page.bulk_value_placeholder')"
+                    @keydown.enter.prevent="onBulkValueEnter(item.id)"
+                  />
+                </div>
+                <div class="flex justify-end">
+                  <ActionIconButton
+                    icon="bi bi-trash"
+                    tone="rose"
+                    :disabled="bulkItems.length === 1"
+                    :title="$t('message.kv_admin_page.delete_action')"
+                    :aria-label="$t('message.kv_admin_page.delete_action')"
+                    @click="removeBulkRow(index)"
+                  />
+                </div>
+              </div>
+            </article>
+            <datalist id="kv-bulk-key-options">
+              <option v-for="keyOption in bulkKeyOptions" :key="keyOption" :value="keyOption"></option>
+            </datalist>
+          </div>
+
+          <p v-if="bulkError" class="kv-error-message mt-4">{{ bulkError }}</p>
+
+          <div class="mt-6 flex flex-wrap justify-between gap-3">
+            <ActionTextButton
+              variant="soft"
+              shape="full"
+              icon="bi bi-plus-circle"
+              @click="addBulkRow"
+            >
+              {{ $t('message.kv_admin_page.bulk_add_row') }}
+            </ActionTextButton>
+
+            <div class="flex flex-wrap justify-end gap-3">
+              <ActionTextButton
+                variant="soft"
+                shape="full"
+                @click="closeBulkModal"
+              >
+                {{ $t('message.kv_admin_page.cancel') }}
+              </ActionTextButton>
+              <ActionTextButton
+                tone="amber"
+                shape="full"
+                icon="bi bi-check2-all"
+                :disabled="isBulkSaving"
+                @click="submitBulkUpdate"
+              >
+                {{ $t('message.kv_admin_page.bulk_save') }}
+              </ActionTextButton>
+            </div>
+          </div>
+        </div>
+      </div>
+    </transition>
+
   </div>
 </template>
 
 <script>
-import { computed, onMounted, ref, watch } from 'vue';
+import { computed, nextTick, onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { apiClient, API_ENDPOINTS } from '/assets/js/api.js';
 import { useAuthStore } from '/assets/js/stores/authStore.js';
@@ -377,6 +484,7 @@ export default {
     const search = ref('');
     const showOverridesOnly = ref(false);
     const rows = ref([]);
+    const allowedKeys = ref([]);
     const allowedCount = ref(0);
     const lastUpdated = ref(null);
     const copiedKey = ref(null);
@@ -391,6 +499,12 @@ export default {
     const deleteKey = ref('');
     const deleteError = ref('');
     const isDeleting = ref(false);
+    const bulkOpen = ref(false);
+    const bulkItems = ref([]);
+    const bulkError = ref('');
+    const isBulkSaving = ref(false);
+    const bulkSeed = ref(0);
+    const bulkListRowId = ref(null);
     const toastStore = useToastStore();
 
     const heroSectionClass =
@@ -428,6 +542,11 @@ export default {
           row.valueLabel.toLowerCase().includes(term) ||
           row.defaultLabel.toLowerCase().includes(term);
       });
+    });
+
+    const bulkKeyOptions = computed(() => {
+      const keySet = new Set([...(allowedKeys.value || []), ...rows.value.map((row) => row.key)]);
+      return Array.from(keySet).sort((first, second) => first.localeCompare(second));
     });
 
     const lastUpdatedLabel = computed(() => {
@@ -468,13 +587,14 @@ export default {
       await loadConfigs();
     };
 
-    const buildRows = ({ configs = {}, defaults = {}, allowedKeys = [] } = {}) => {
+    const buildRows = ({ configs = {}, defaults = {}, allowedKeys: allowedKeyList = [] } = {}) => {
       const configKeys = Object.keys(configs || {});
       const defaultKeys = Object.keys(defaults || {});
-      const baseKeys = allowedKeys && allowedKeys.length
-        ? allowedKeys
+      const baseKeys = allowedKeyList && allowedKeyList.length
+        ? allowedKeyList
         : Array.from(new Set([...configKeys, ...defaultKeys])).sort();
 
+      allowedKeys.value = [...baseKeys];
       allowedCount.value = baseKeys.length;
 
       rows.value = baseKeys.map((key) => {
@@ -612,6 +732,129 @@ export default {
       editorError.value = '';
     };
 
+    const createBulkItem = () => {
+      const id = `bulk-${Date.now()}-${bulkSeed.value}`;
+      bulkSeed.value += 1;
+      return { id, key: '', value: '' };
+    };
+
+    const hydrateAllowedKeys = (data) => {
+      if (!data || typeof data !== 'object') return;
+      const nextAllowed = Array.isArray(data.allowedKeys) ? data.allowedKeys : [];
+      const configKeys = Object.keys(data.configs || {});
+      const defaultKeys = Object.keys(data.defaults || {});
+      const merged = Array.from(new Set([...allowedKeys.value, ...nextAllowed, ...configKeys, ...defaultKeys]));
+      if (merged.length > 0) {
+        allowedKeys.value = merged.sort((first, second) => first.localeCompare(second));
+      }
+    };
+
+    const ensureBulkKeyOptionsLoaded = async () => {
+      if (bulkKeyOptions.value.length > 0) return;
+      try {
+        if (mainStore.mockApi) {
+          const res = await fetch('/assets/data/kv-admin/configs.json', { cache: 'no-store' });
+          if (!res.ok) return;
+          const payload = await res.json();
+          const data = payload?.data || payload || {};
+          hydrateAllowedKeys(data);
+          return;
+        }
+
+        const defaultsEndpoint = `${API_ENDPOINTS.KV_ADMIN_CONFIGS}/defaults`;
+        const defaultsRes = await apiClient.get(defaultsEndpoint, {
+          headers: { Authorization: `Bearer ${authStore.token}` }
+        });
+        const defaultsPayload = defaultsRes?.data || {};
+        const defaultsData = defaultsPayload?.data || defaultsPayload || {};
+        hydrateAllowedKeys(defaultsData);
+      } catch (_error) {
+      }
+    };
+
+    const openBulkModal = async () => {
+      bulkItems.value = [createBulkItem()];
+      bulkError.value = '';
+      bulkOpen.value = true;
+      await ensureBulkKeyOptionsLoaded();
+    };
+
+    const closeBulkModal = () => {
+      bulkOpen.value = false;
+      bulkError.value = '';
+      isBulkSaving.value = false;
+      bulkListRowId.value = null;
+    };
+
+    const addBulkRow = () => {
+      bulkItems.value = [...bulkItems.value, createBulkItem()];
+    };
+
+    const removeBulkRow = (index) => {
+      if (bulkItems.value.length <= 1) return;
+      bulkItems.value = bulkItems.value.filter((_, itemIndex) => itemIndex !== index);
+    };
+
+    const openBulkKeySuggestions = async (itemId) => {
+      await ensureBulkKeyOptionsLoaded();
+      bulkListRowId.value = itemId;
+    };
+
+    const onBulkKeyBlur = (itemId) => {
+      if (bulkListRowId.value === itemId) {
+        bulkListRowId.value = null;
+      }
+    };
+
+    const focusBulkValueInput = (itemId) => {
+      const valueInput = document.getElementById(`bulk-value-${itemId}`);
+      if (!valueInput) return;
+      requestAnimationFrame(() => {
+        valueInput.focus();
+      });
+    };
+
+    const onBulkKeyInput = (event, itemId) => {
+      const keyInput = event?.target;
+      if (!keyInput) return;
+      bulkListRowId.value = itemId;
+
+      requestAnimationFrame(() => {
+        const value = String(keyInput.value || '').trim();
+        if (!value) return;
+        if (!bulkKeyOptions.value.includes(value)) return;
+
+        bulkListRowId.value = null;
+        keyInput.blur();
+        focusBulkValueInput(itemId);
+      });
+    };
+
+    const onBulkValueEnter = async (itemId) => {
+      const currentIndex = bulkItems.value.findIndex((item) => item.id === itemId);
+      if (currentIndex < 0) return;
+
+      const isLastRow = currentIndex === bulkItems.value.length - 1;
+      if (isLastRow) {
+        const nextItem = createBulkItem();
+        bulkItems.value = [...bulkItems.value, nextItem];
+        await nextTick();
+        const nextKeyInput = document.getElementById(`bulk-key-${nextItem.id}`);
+        if (nextKeyInput) {
+          nextKeyInput.focus();
+        }
+        return;
+      }
+
+      const nextRow = bulkItems.value[currentIndex + 1];
+      if (!nextRow) return;
+      await nextTick();
+      const nextKeyInput = document.getElementById(`bulk-key-${nextRow.id}`);
+      if (nextKeyInput) {
+        nextKeyInput.focus();
+      }
+    };
+
     const openDeleteModal = (row) => {
       deleteKey.value = row.key;
       deleteError.value = '';
@@ -643,6 +886,15 @@ export default {
     const showToast = (message, type = 'info', title = null) => {
       if (!toastStore) return;
       toastStore.add(message, type, 7500, title);
+    };
+
+    const isAuthTokenError = (error) => {
+      const status = error?.response?.status;
+      if (status === 401 || status === 403) return true;
+      const code = String(error?.code || '').toUpperCase();
+      if (code === 'REAUTH_REQUIRED') return true;
+      const message = String(error?.message || '').toLowerCase();
+      return message.includes('token') || message.includes('re-login') || message.includes('reauth');
     };
 
     const applyLocalUpsert = (key, value) => {
@@ -720,6 +972,10 @@ export default {
         // show full error in modal
         editorError.value = fullError;
 
+        if (isAuthTokenError(error)) {
+          closeEditor();
+        }
+
         showToast(t(`message.kv_admin_page.save_error_default`, { key }), 'error');
       } finally {
         isSaving.value = false;
@@ -765,6 +1021,118 @@ export default {
         showToast(errorMsg, 'error');
       } finally {
         isDeleting.value = false;
+      }
+    };
+
+    const submitBulkUpdate = async () => {
+      bulkError.value = '';
+
+      const normalizedItems = bulkItems.value
+        .map((item) => ({
+          key: String(item.key || '').trim(),
+          rawValue: item.value
+        }))
+        .filter((item) => item.key || String(item.rawValue || '').trim() !== '');
+
+      if (!normalizedItems.length) {
+        bulkError.value = t('message.kv_admin_page.bulk_validation_min_items');
+        showToast(bulkError.value, 'error');
+        return;
+      }
+
+      const missingKey = normalizedItems.some((item) => !item.key);
+      if (missingKey) {
+        bulkError.value = t('message.kv_admin_page.bulk_validation_missing_key');
+        showToast(bulkError.value, 'error');
+        return;
+      }
+
+      const duplicateKeys = new Set();
+      const seenKeys = new Set();
+      normalizedItems.forEach((item) => {
+        if (seenKeys.has(item.key)) {
+          duplicateKeys.add(item.key);
+        }
+        seenKeys.add(item.key);
+      });
+
+      if (duplicateKeys.size > 0) {
+        bulkError.value = t('message.kv_admin_page.bulk_validation_duplicate_keys', {
+          keys: Array.from(duplicateKeys).join(', ')
+        });
+        showToast(bulkError.value, 'error');
+        return;
+      }
+
+      const availableKeys = new Set(bulkKeyOptions.value);
+      const invalidKeys = normalizedItems
+        .map((item) => item.key)
+        .filter((key) => availableKeys.size > 0 && !availableKeys.has(key));
+
+      if (invalidKeys.length > 0) {
+        bulkError.value = t('message.kv_admin_page.bulk_validation_invalid_keys', {
+          keys: invalidKeys.join(', ')
+        });
+        showToast(bulkError.value, 'error');
+        return;
+      }
+
+      const requestConfigs = normalizedItems.map((item) => ({
+        key: item.key,
+        value: parseInputValue(item.rawValue)
+      }));
+
+      isBulkSaving.value = true;
+
+      try {
+        const endpoint = `${API_ENDPOINTS.KV_ADMIN_CONFIGS}/batch`;
+        const apiResponse = await apiClient.post(endpoint, {
+          configs: requestConfigs
+        }, {
+          headers: { Authorization: `Bearer ${authStore.token}` }
+        });
+
+        const payload = apiResponse.data || {};
+        const resultData = payload.data || {};
+        const responseErrors = resultData.errors || {};
+        const failedKeys = new Set(Object.keys(responseErrors));
+        const updatedCount = Number(resultData.summary?.updated) || (requestConfigs.length - failedKeys.size);
+
+        requestConfigs.forEach((configItem) => {
+          if (!failedKeys.has(configItem.key)) {
+            applyLocalUpsert(configItem.key, configItem.value);
+          }
+        });
+
+        if (failedKeys.size > 0) {
+          bulkError.value = Object.entries(responseErrors)
+            .map(([key, message]) => `${key}: ${message}`)
+            .join('\n');
+          showToast(t('message.kv_admin_page.bulk_partial_error', {
+            updated: updatedCount,
+            failed: failedKeys.size
+          }), 'error');
+        } else {
+          showToast(payload.message || t('message.kv_admin_page.edit_success'), 'success');
+          bulkOpen.value = false;
+        }
+      } catch (error) {
+        let errorMsg = t('message.errors.unknown_error');
+        if (error.response?.data) {
+          const data = error.response.data;
+          errorMsg = data.error || data.message || errorMsg;
+        } else if (error.message) {
+          errorMsg = error.message;
+        }
+        bulkError.value = errorMsg;
+
+        if (isAuthTokenError(error)) {
+          closeBulkModal();
+        }
+
+        showToast(errorMsg, 'error');
+      } finally {
+        isBulkSaving.value = false;
       }
     };
 
@@ -831,6 +1199,11 @@ export default {
       editorKeyInputClass,
       editorValueTextareaClass,
       rows,
+      bulkOpen,
+      bulkItems,
+      bulkError,
+      isBulkSaving,
+      bulkKeyOptions,
       filteredRows,
       stats,
       lastUpdatedLabel,
@@ -852,6 +1225,16 @@ export default {
       deleteError,
       isDeleting,
       openAddModal,
+      openBulkModal,
+      closeBulkModal,
+      addBulkRow,
+      removeBulkRow,
+      openBulkKeySuggestions,
+      onBulkKeyBlur,
+      bulkListRowId,
+      onBulkKeyInput,
+      onBulkValueEnter,
+      submitBulkUpdate,
       openEditModal,
       closeEditor,
       saveConfig,

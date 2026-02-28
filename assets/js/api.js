@@ -34,6 +34,7 @@ export const API_ENDPOINTS = {
   ADMIN_USER_ROLE: '/api/admin/users/:id/role', // Helper for pattern matching
   KV_ADMIN_CONFIGS: '/api/kv-admin/configs',
   KV_ADMIN_CONFIGS_SPECIFIC: '/api/kv-admin/configs/:key',
+  KV_ADMIN_CONFIGS_BATCH: '/api/kv-admin/configs/batch',
   // KV Admin - Audit
   KV_ADMIN_AUDIT_CONFIGS: '/api/kv-admin/audit/configs',
   KV_ADMIN_AUDIT_CONFIGS_RETENTION: '/api/kv-admin/audit/configs/retention',
@@ -102,6 +103,7 @@ const MOCK_PATTERNS = {
 
   // KV Admin patterns
   KV_ADMIN_ENV_COMPARISON: new RegExp(`${API_ENDPOINTS.KV_ADMIN_CONFIGS.replace(/\//g, '\\/')}\\/env-comparison($|\\?)`),
+  KV_ADMIN_CONFIGS_BATCH: new RegExp(`${API_ENDPOINTS.KV_ADMIN_CONFIGS.replace(/\//g, '\\/')}\\/batch($|\\?)`),
   KV_ADMIN_CONFIGS_SPECIFIC: new RegExp(`${API_ENDPOINTS.KV_ADMIN_CONFIGS.replace(/\//g, '\\/')}\\/[^/]+($|\\?)`),
   KV_ADMIN_CONFIGS: new RegExp(`${API_ENDPOINTS.KV_ADMIN_CONFIGS.replace(/\//g, '\\/')}($|\\?)`),
   
@@ -175,6 +177,7 @@ export const DATA_PATHS = {
   // KV Admin Toggle data
   KV_ADMIN_FEATURES_TOGGLE_SUCCESS: '/assets/data/kv-admin/features/toggle/succeed/response.json',
   KV_ADMIN_FEATURES: '/assets/data/kv-admin/features/response.json',
+  KV_ADMIN_BATCH_SUCCESS: '/assets/data/kv-admin/batch/succeed/response.json',
   KV_ADMIN_ENV_COMPARISON: '/assets/data/kv-admin/env-comparison/response.json',
   KV_ADMIN_RETENTION: '/assets/data/kv-admin/retention/response.json',
   KV_ADMIN_PERFORMANCE: '/assets/data/kv-admin/performance/response.json',
@@ -1316,6 +1319,23 @@ export const initializeKVAdminMock = (mockAdapter) => {
       return [200, data];
     } catch {
       return [200, { success: true, data: { comparison: {}, summary: {} } }];
+    }
+  });
+  mockAdapter.onPost(MOCK_PATTERNS.KV_ADMIN_CONFIGS_BATCH).reply(async () => {
+    try {
+      const data = await loadJson(DATA_PATHS.KV_ADMIN_BATCH_SUCCESS);
+      return [200, data];
+    } catch {
+      return [200, {
+        success: true,
+        data: {
+          updated: {},
+          errors: {},
+          summary: { total: 0, updated: 0, failed: 0 },
+          cacheCleared: true
+        },
+        message: 'Batch configuration update successful'
+      }];
     }
   });
   
