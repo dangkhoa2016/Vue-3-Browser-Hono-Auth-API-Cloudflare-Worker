@@ -204,7 +204,7 @@
 
 <script>
 import { computed, nextTick, onActivated, onMounted, ref, watch } from 'vue';
-import { storeToRefs } from 'pinia';
+const { storeToRefs } = Pinia;
 import { useI18n } from 'vue-i18n';
 import { useSystemStatsStore } from '/assets/js/stores/systemStatsStore.js';
 import { useSystemHealthStore } from '/assets/js/stores/systemHealthStore.js';

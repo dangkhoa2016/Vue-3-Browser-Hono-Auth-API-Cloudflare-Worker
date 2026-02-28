@@ -369,7 +369,7 @@
 
 <script>
 import { computed, onActivated, onMounted, watch } from 'vue';
-import { storeToRefs } from 'pinia';
+const { storeToRefs } = Pinia;
 import { useRealtimeMonitoringStore } from '/assets/js/stores/realtimeMonitoringStore.js';
 import { useAuthStore } from '/assets/js/stores/authStore.js';
 import { useModalStore } from '/assets/js/stores/modalStore.js';

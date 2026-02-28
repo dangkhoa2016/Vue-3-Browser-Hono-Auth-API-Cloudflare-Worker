@@ -252,6 +252,7 @@ export default {
       toggle_api_mode: 'Toggle API Mode',
       admin: 'Admin',
       admin_dashboard: 'Dashboard',
+      kv_admin_env: 'KV Env Compare',
       user_management: 'User Management',
       system_stats: 'System Stats',
       system_health: 'System Health',
@@ -472,7 +473,28 @@ export default {
       save_error_default: 'Could not save "{key}".',
       save_error_key_invalid: 'Key "{key}" is not allowed.',
       save_error_missing: 'Missing required data for "{key}".',
-      save_error_unauthorized: 'Not authorized to save "{key}".'
+      save_error_unauthorized: 'Not authorized to save "{key}".',
+      env_comparison: {
+        title: 'Environment Comparison',
+        subtitle: 'Compare configuration values currently active from Cloudflare Environment Variables versus values stored in KV.',
+        badge: 'KV vs ENV',
+        stats_from_kv: 'From KV',
+        stats_from_env: 'From ENV',
+        stats_from_default: 'From Default',
+        column_key: 'Configuration Key',
+        column_source: 'Source',
+        column_kv_value: 'KV Value',
+        column_env_value: 'ENV Value',
+        value_none: '- none -',
+        value_empty_string: '"" (Empty string)',
+        loading: 'Loading comparison data...',
+        search_empty: 'No configurations matched your search',
+        error_load_failed: 'Failed to load environment comparison',
+        active_filters: 'Active filters:',
+        clear_all_filters: 'Clear all',
+        source: 'Source',
+        default: 'Default'
+      }
     },
     title: 'Vue 3 Browser - Hono Auth API - Cloudflare Worker',
     security_incidents: {

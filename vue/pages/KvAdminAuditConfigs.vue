@@ -217,27 +217,47 @@ export default {
       error.value = null;
       try {
         // Fetch sequentially to avoid rate limits
-        const featuresReq = await apiClient.get(API_ENDPOINTS.KV_ADMIN_AUDIT_CONFIGS_FEATURES, { headers: { Authorization: `Bearer ${authStore.token}` } }).catch(() => ({ data: { data: {} } }));
+        const featuresReq = await apiClient.get(API_ENDPOINTS.KV_ADMIN_AUDIT_CONFIGS_FEATURES, { headers: { Authorization: `Bearer ${authStore.token}` } }).catch((err) => {
+          if (err?.response?.status === 401 || err?.response?.status === 403 || err?.code === 'REAUTH_REQUIRED') throw err;
+          return { data: { data: {} } };
+        });
         auditData.value.features = featuresReq.data?.data || {};
         loadingState.value.features = false;
 
-        const retentionReq = await apiClient.get(API_ENDPOINTS.KV_ADMIN_AUDIT_CONFIGS_RETENTION, { headers: { Authorization: `Bearer ${authStore.token}` } }).catch(() => ({ data: { data: {} } }));
+        const retentionReq = await apiClient.get(API_ENDPOINTS.KV_ADMIN_AUDIT_CONFIGS_RETENTION, { headers: { Authorization: `Bearer ${authStore.token}` } }).catch((err) => {
+          if (err?.response?.status === 401 || err?.response?.status === 403 || err?.code === 'REAUTH_REQUIRED') throw err;
+          return { data: { data: {} } };
+        });
         auditData.value.retention = retentionReq.data?.data || {};
         loadingState.value.retention = false;
 
-        const perfReq = await apiClient.get(API_ENDPOINTS.KV_ADMIN_AUDIT_CONFIGS_PERFORMANCE, { headers: { Authorization: `Bearer ${authStore.token}` } }).catch(() => ({ data: { data: {} } }));
+        const perfReq = await apiClient.get(API_ENDPOINTS.KV_ADMIN_AUDIT_CONFIGS_PERFORMANCE, { headers: { Authorization: `Bearer ${authStore.token}` } }).catch((err) => {
+          if (err?.response?.status === 401 || err?.response?.status === 403 || err?.code === 'REAUTH_REQUIRED') throw err;
+          return { data: { data: {} } };
+        });
         auditData.value.performance = perfReq.data?.data || {};
         loadingState.value.performance = false;
 
-        const alertsReq = await apiClient.get(API_ENDPOINTS.KV_ADMIN_AUDIT_CONFIGS_ALERTS, { headers: { Authorization: `Bearer ${authStore.token}` } }).catch(() => ({ data: { data: {} } }));
+        const alertsReq = await apiClient.get(API_ENDPOINTS.KV_ADMIN_AUDIT_CONFIGS_ALERTS, { headers: { Authorization: `Bearer ${authStore.token}` } }).catch((err) => {
+          if (err?.response?.status === 401 || err?.response?.status === 403 || err?.code === 'REAUTH_REQUIRED') throw err;
+          return { data: { data: {} } };
+        });
         auditData.value.alerts = alertsReq.data?.data || {};
         loadingState.value.alerts = false;
 
-        const complianceReq = await apiClient.get(API_ENDPOINTS.KV_ADMIN_AUDIT_CONFIGS_COMPLIANCE, { headers: { Authorization: `Bearer ${authStore.token}` } }).catch(() => ({ data: { data: {} } }));
+        const complianceReq = await apiClient.get(API_ENDPOINTS.KV_ADMIN_AUDIT_CONFIGS_COMPLIANCE, { headers: { Authorization: `Bearer ${authStore.token}` } }).catch((err) => {
+          if (err?.response?.status === 401 || err?.response?.status === 403 || err?.code === 'REAUTH_REQUIRED') throw err;
+          return { data: { data: {} } };
+        });
         auditData.value.compliance = complianceReq.data?.data || {};
         loadingState.value.compliance = false;
       } catch (err) {
-        error.value = err.message || 'Failed to load configs';
+        if (err?.code === 'REAUTH_REQUIRED' || err?.response?.status === 401 || err?.response?.status === 403) {
+          authStore.logout();
+          openLoginModal();
+        } else {
+          error.value = err.message || 'Failed to load configs';
+        }
       } finally {
         loadingState.value = { features: false, retention: false, performance: false, alerts: false, compliance: false };
       }
@@ -247,11 +267,13 @@ export default {
       isToggling.value[feature] = true;
       try {
         const url = API_ENDPOINTS.KV_ADMIN_AUDIT_CONFIGS_TOGGLE.replace(':feature', feature);
-        await apiClient.post(url, { enabled }, {
+        const response = await apiClient.post(url, { enabled }, {
           headers: { Authorization: `Bearer ${authStore.token}` }
         });
         auditData.value.features[feature] = enabled;
-        toastStore.add(`Feature ${feature} set to ${enabled}`, 'success');
+        
+        const successMessage = response.data?.data?.message || `Feature ${feature} set to ${enabled}`;
+        toastStore.add(successMessage, 'success');
       } catch (err) {
         toastStore.add(`Failed to toggle ${feature}`, 'error');
       } finally {

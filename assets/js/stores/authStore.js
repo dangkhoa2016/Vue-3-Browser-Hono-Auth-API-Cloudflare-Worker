@@ -73,14 +73,17 @@ export const useAuthStore = defineStore('auth', {
       this.reauthNoticeShown = true;
 
       try {
-        const { useToastStore } = await import('./toastStore.js');
-        const toastStore = useToastStore();
-        const message = i18n.global.t(
-          'message.auth.relogin_required_reason',
-          'Your session has expired or is invalid. Please login again to continue.'
-        );
-        const title = i18n.global.t('message.auth.login_required', 'Login Required');
-        toastStore.warning(message, 7000, title);
+        const toastStore = window.toastStore;
+        if(toastStore) {
+          const message = i18n.global.t(
+            'message.auth.relogin_required_reason',
+            'Your session has expired or is invalid. Please login again to continue.'
+          );
+          const title = i18n.global.t('message.auth.login_required', 'Login Required');
+          toastStore.warning(message, 7000, title);
+        } else {
+            console.warn("window.toastStore is undefined");
+        }
       } catch (error) {
         console.warn('[AuthStore] Could not show re-login toast:', error);
       }
@@ -93,9 +96,12 @@ export const useAuthStore = defineStore('auth', {
       await this.notifySessionExpired();
 
       try {
-        const { useModalStore } = await import('./modalStore.js');
-        const modalStore = useModalStore();
-        modalStore.openLogin();
+        const modalStore = window.modalStore;
+        if (modalStore) {
+          modalStore.openLogin();
+        } else {
+           console.warn("window.modalStore is undefined");
+        }
       } catch (error) {
         console.warn('[AuthStore] Could not open login modal:', error);
       }

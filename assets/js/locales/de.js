@@ -252,6 +252,7 @@ export default {
       toggle_api_mode: 'API-Modus umschalten',
       admin: 'Admin',
       admin_dashboard: 'Dashboard',
+      kv_admin_env: 'KV-Umgebung vergleichen',
       user_management: 'Benutzerverwaltung',
       system_stats: 'Systemstatistiken',
       system_health: 'Systemzustand',
@@ -472,7 +473,28 @@ export default {
       save_error_default: 'Konnte "{key}" nicht speichern.',
       save_error_key_invalid: 'Schlüssel "{key}" ist nicht zulässig.',
       save_error_missing: 'Fehlende erforderliche Daten für "{key}".',
-      save_error_unauthorized: 'Keine Berechtigung, "{key}" zu speichern.'
+      save_error_unauthorized: 'Keine Berechtigung, "{key}" zu speichern.',
+      env_comparison: {
+        title: 'Umgebungsvergleich',
+        subtitle: 'Vergleichen Sie Konfigurationswerte, die derzeit aus Cloudflare-Umgebungsvariablen aktiv sind, mit in KV gespeicherten Werten.',
+        badge: 'KV vs ENV',
+        stats_from_kv: 'Von KV',
+        stats_from_env: 'Von ENV',
+        stats_from_default: 'Von Standard',
+        column_key: 'Konfigurationsschlüssel',
+        column_source: 'Quelle',
+        column_kv_value: 'KV-Wert',
+        column_env_value: 'ENV-Wert',
+        value_none: '- leer -',
+        value_empty_string: '"" (Leerer String)',
+        loading: 'Vergleichsdaten werden geladen...',
+        search_empty: 'Keine Konfigurationen entsprachen Ihrer Suche',
+        error_load_failed: 'Fehler beim Laden des Umgebungsvergleichs',
+        active_filters: 'Aktive Filter:',
+        clear_all_filters: 'Alle Filter löschen',
+        source: 'Quelle',
+        default: 'Standard'
+      }
     },
     title: 'Vue 3 Browser - Hono Auth API - Cloudflare Worker',
     security_incidents: {

@@ -373,7 +373,7 @@
 
 <script>
 import { computed, onActivated, onMounted, watch } from 'vue';
-import { storeToRefs } from 'pinia';
+const { storeToRefs } = Pinia;
 import { i18n } from '/assets/js/i18n.js';
 import { useSystemHealthStore } from '/assets/js/stores/systemHealthStore.js';
 import { useAuthStore } from '/assets/js/stores/authStore.js';
