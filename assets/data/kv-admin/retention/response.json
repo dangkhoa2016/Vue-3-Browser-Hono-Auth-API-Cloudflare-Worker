@@ -1,0 +1,11 @@
+{
+  "success": true,
+  "data": {
+    "defaultRetentionDays": 90,
+    "sensitiveRetentionDays": 365,
+    "complianceRetentionDays": 2555,
+    "autoArchiveEnabled": true,
+    "autoArchiveThresholdDays": 30
+  },
+  "message": "Audit retention policies retrieved by Test Super Admin User (5 policies)"
+}

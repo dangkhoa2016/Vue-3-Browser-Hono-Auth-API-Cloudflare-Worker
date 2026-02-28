@@ -1,0 +1,9 @@
+{
+  "success": true,
+  "data": {
+    "gdprEnabled": true,
+    "soxEnabled": false,
+    "hipaaEnabled": false,
+    "autoReportEnabled": false
+  }
+}

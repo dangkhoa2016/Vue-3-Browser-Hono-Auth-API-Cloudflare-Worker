@@ -34,6 +34,19 @@ export const API_ENDPOINTS = {
   ADMIN_USER_ROLE: '/api/admin/users/:id/role', // Helper for pattern matching
   KV_ADMIN_CONFIGS: '/api/kv-admin/configs',
   KV_ADMIN_CONFIGS_SPECIFIC: '/api/kv-admin/configs/:key',
+  // KV Admin - Audit
+  KV_ADMIN_AUDIT_CONFIGS: '/api/kv-admin/audit/configs',
+  KV_ADMIN_AUDIT_CONFIGS_RETENTION: '/api/kv-admin/audit/configs/retention',
+  KV_ADMIN_AUDIT_CONFIGS_PERFORMANCE: '/api/kv-admin/audit/configs/performance',
+  KV_ADMIN_AUDIT_CONFIGS_FEATURES: '/api/kv-admin/audit/configs/features',
+  KV_ADMIN_AUDIT_CONFIGS_ALERTS: '/api/kv-admin/audit/configs/alerts',
+  KV_ADMIN_AUDIT_CONFIGS_COMPLIANCE: '/api/kv-admin/audit/configs/compliance',
+  KV_ADMIN_AUDIT_CONFIGS_TOGGLE: '/api/kv-admin/audit/configs/feature/:feature/toggle',
+  // KV Admin - Rate Limits
+  KV_ADMIN_RATE_LIMITS_CLEAN: '/api/kv-admin/rate-limits/clean',
+  KV_ADMIN_RATE_LIMITS_SEED: '/api/kv-admin/rate-limits/seed',
+  KV_ADMIN_RATE_LIMITS_PRUNE_TIME: '/api/kv-admin/rate-limits/prune-time',
+  KV_ADMIN_RATE_LIMITS_BATCH_DELETE: '/api/kv-admin/rate-limits/batch-delete',
   // Audit endpoints
   AUDIT_LOGS: '/api/audit/logs',
   AUDIT_STATS: '/api/audit/stats',
@@ -84,6 +97,23 @@ const MOCK_PATTERNS = {
   ADMIN_STATS: new RegExp(`${API_ENDPOINTS.ADMIN_STATS.replace(/\//g, '\\/')}($|\\?)`),
   ADMIN_SYSTEM_HEALTH: new RegExp(`${API_ENDPOINTS.ADMIN_SYSTEM_HEALTH.replace(/\//g, '\\/')}($|\\?)`),
   ADMIN_USER_ROLE: new RegExp(`${API_ENDPOINTS.USERS.replace(/\//g, '\\/')}\\/\\d+\\/role($|\\?)`),
+
+  // KV Admin patterns
+  KV_ADMIN_CONFIGS: new RegExp(`${API_ENDPOINTS.KV_ADMIN_CONFIGS.replace(/\//g, '\\/')}($|\\?)`),
+  KV_ADMIN_CONFIGS_SPECIFIC: new RegExp(`${API_ENDPOINTS.KV_ADMIN_CONFIGS.replace(/\//g, '\\/')}\\/[^/]+($|\\?)`),
+  
+  KV_ADMIN_AUDIT_CONFIGS: new RegExp(`${API_ENDPOINTS.KV_ADMIN_AUDIT_CONFIGS.replace(/\//g, '\\/')}($|\\?)`),
+  KV_ADMIN_AUDIT_CONFIGS_RETENTION: new RegExp(`${API_ENDPOINTS.KV_ADMIN_AUDIT_CONFIGS_RETENTION.replace(/\//g, '\\/')}($|\\?)`),
+  KV_ADMIN_AUDIT_CONFIGS_PERFORMANCE: new RegExp(`${API_ENDPOINTS.KV_ADMIN_AUDIT_CONFIGS_PERFORMANCE.replace(/\//g, '\\/')}($|\\?)`),
+  KV_ADMIN_AUDIT_CONFIGS_FEATURES: new RegExp(`${API_ENDPOINTS.KV_ADMIN_AUDIT_CONFIGS_FEATURES.replace(/\//g, '\\/')}($|\\?)`),
+  KV_ADMIN_AUDIT_CONFIGS_ALERTS: new RegExp(`${API_ENDPOINTS.KV_ADMIN_AUDIT_CONFIGS_ALERTS.replace(/\//g, '\\/')}($|\\?)`),
+  KV_ADMIN_AUDIT_CONFIGS_COMPLIANCE: new RegExp(`${API_ENDPOINTS.KV_ADMIN_AUDIT_CONFIGS_COMPLIANCE.replace(/\//g, '\\/')}($|\\?)`),
+  KV_ADMIN_AUDIT_CONFIGS_TOGGLE: new RegExp(`${API_ENDPOINTS.KV_ADMIN_AUDIT_CONFIGS.replace(/\//g, '\\/')}\\/feature\\/[^/]+\\/toggle($|\\?)`),
+  
+  KV_ADMIN_RATE_LIMITS_CLEAN: new RegExp(`${API_ENDPOINTS.KV_ADMIN_RATE_LIMITS_CLEAN.replace(/\//g, '\\/')}($|\\?)`),
+  KV_ADMIN_RATE_LIMITS_SEED: new RegExp(`${API_ENDPOINTS.KV_ADMIN_RATE_LIMITS_SEED.replace(/\//g, '\\/')}($|\\?)`),
+  KV_ADMIN_RATE_LIMITS_PRUNE_TIME: new RegExp(`${API_ENDPOINTS.KV_ADMIN_RATE_LIMITS_PRUNE_TIME.replace(/\//g, '\\/')}($|\\?)`),
+  KV_ADMIN_RATE_LIMITS_BATCH_DELETE: new RegExp(`${API_ENDPOINTS.KV_ADMIN_RATE_LIMITS_BATCH_DELETE.replace(/\//g, '\\/')}($|\\?)`),
 
   // Audit patterns
   AUDIT_LOGS: new RegExp(`${API_ENDPOINTS.AUDIT_LOGS.replace(/\//g, '\\/')}($|\\?)`),
@@ -1256,6 +1286,9 @@ export const setupMock = (enable) => {
           return [500, { success: false, error: message }];
         }
       });
+
+      // Initialize KV Admin Mocks
+      initializeKVAdminMock(mock);
     }
   } else {
     if (mock) {
@@ -1264,4 +1297,62 @@ export const setupMock = (enable) => {
       mock = null;
     }
   }
+};
+
+export const initializeKVAdminMock = (mockAdapter) => {
+  if (!mockAdapter) return;
+  mockAdapter.onGet(MOCK_PATTERNS.KV_ADMIN_AUDIT_CONFIGS_FEATURES).reply(async () => {
+    try {
+      const response = await fetch('/assets/data/kv-admin/features/response.json');
+      const data = await response.json();
+      return [200, data];
+    } catch {
+      return [200, { success: true, data: { enableAuditLogging: true, enableRealTimeMonitoring: true, enableAdvancedAnalytics: true, enableExport: true, enableArchival: true, enableComplianceReporting: true, enablePerformanceMonitoring: true, enableAdvancedSearch: true } }];
+    }
+  });
+  mockAdapter.onGet(MOCK_PATTERNS.KV_ADMIN_AUDIT_CONFIGS_RETENTION).reply(async () => {
+    try {
+      const response = await fetch('/assets/data/kv-admin/retention/response.json');
+      const data = await response.json();
+      return [200, data];
+    } catch {
+      return [200, { success: true, data: { defaultRetentionDays: 90, sensitiveRetentionDays: 365, complianceRetentionDays: 2555, autoArchiveEnabled: true, autoArchiveThresholdDays: 30 } }];
+    }
+  });
+  mockAdapter.onGet(MOCK_PATTERNS.KV_ADMIN_AUDIT_CONFIGS_PERFORMANCE).reply(async () => {
+    try {
+      const response = await fetch('/assets/data/kv-admin/performance/response.json');
+      const data = await response.json();
+      return [200, data];
+    } catch {
+      return [200, { success: true, data: { maxQueryResults: 1000, defaultPageSize: 50, maxPageSize: 500, queryTimeoutMs: 30000, batchSize: 100 } }];
+    }
+  });
+  mockAdapter.onGet(MOCK_PATTERNS.KV_ADMIN_AUDIT_CONFIGS_ALERTS).reply(async () => {
+    try {
+      const response = await fetch('/assets/data/kv-admin/alerts/response.json');
+      const data = await response.json();
+      return [200, data];
+    } catch {
+      return [200, { success: true, data: { failedLoginThreshold: 5, suspiciousActivityThreshold: 10, highRiskActionThreshold: 3, performanceAlertThresholdMs: 5000 } }];
+    }
+  });
+  mockAdapter.onGet(MOCK_PATTERNS.KV_ADMIN_AUDIT_CONFIGS_COMPLIANCE).reply(async () => {
+    try {
+      const response = await fetch('/assets/data/kv-admin/compliance/response.json');
+      const data = await response.json();
+      return [200, data];
+    } catch {
+      return [200, { success: true, data: { gdprEnabled: true, hipaaEnabled: false, pciDssEnabled: false, soc2Enabled: true, dataAnonymization: true, consentTracking: true } }];
+    }
+  });
+  mockAdapter.onPost(MOCK_PATTERNS.KV_ADMIN_AUDIT_CONFIGS_TOGGLE).reply(200, {
+    success: true, data: { message: "Toggled successfully" }
+  });
+  mockAdapter.onPost(MOCK_PATTERNS.KV_ADMIN_RATE_LIMITS_CLEAN).reply(200, {
+    success: true, data: { dryRun: true, deletedCount: 5, prefix: "test:" }
+  });
+  mockAdapter.onPost(MOCK_PATTERNS.KV_ADMIN_RATE_LIMITS_PRUNE_TIME).reply(200, {
+    success: true, data: { dryRun: true, deletedCount: 12 }
+  });
 };

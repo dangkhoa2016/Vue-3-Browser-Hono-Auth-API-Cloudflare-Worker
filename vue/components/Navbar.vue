@@ -361,7 +361,11 @@ export default {
       { name: t('message.navbar.audit_logs'), path: '/admin/audit-logs', icon: 'bi-journal-text' },
       { name: t('message.navbar.security_incidents'), path: '/admin/security-incidents', icon: 'bi-shield-exclamation' },
       { name: t('message.navbar.realtime_monitoring'), path: '/admin/monitoring', icon: 'bi-activity' },
-      ...(isSuperAdmin.value ? [{ name: t('message.navbar.kv_admin'), path: '/admin/kv', icon: 'bi-database' }] : [])
+      ...(isSuperAdmin.value ? [
+        { name: t('message.navbar.kv_admin'), path: '/admin/kv', icon: 'bi-database' },
+        { name: t('message.navbar.kv_admin_audit') || 'KV Audit Configs', path: '/admin/kv/audit', icon: 'bi-shield-check' },
+        { name: t('message.navbar.kv_admin_rate_limits') || 'KV Rate Limits', path: '/admin/kv/rate-limits', icon: 'bi-speedometer' }
+      ] : [])
     ]);
 
     const topMenuBaseClass =

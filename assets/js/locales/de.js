@@ -259,6 +259,8 @@ export default {
       security_incidents: 'Sicherheitsvorfälle',
       realtime_monitoring: 'Echtzeitüberwachung',
       kv_admin: 'KV-Verwaltung',
+      kv_admin_audit: 'KV-Audit-Konfigurationen',
+      kv_admin_rate_limits: 'KV-Ratenbegrenzungen',
       api_health: 'API-Status',
       api_version: 'API-Version',
       api_language: 'API-Sprache'

@@ -1,0 +1,9 @@
+{
+	"success": true,
+	"data": {
+		"failedLoginThreshold": 5,
+		"suspiciousActivityThreshold": 10,
+		"highRiskActionThreshold": 3,
+		"performanceAlertThresholdMs": 5000
+	}
+}
