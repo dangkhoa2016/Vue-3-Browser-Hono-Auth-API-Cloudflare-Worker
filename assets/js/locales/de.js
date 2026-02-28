@@ -75,6 +75,7 @@ export default {
       edit: 'Bearbeiten',
       delete: 'Löschen',
       close: 'Schließen',
+      page_of: 'Seite {current} von {total}',
       loading: 'Laden...',
       retry: 'Wiederholen',
       view: 'Anzeigen',
@@ -161,7 +162,7 @@ export default {
       confirm: 'Bestätigen',
       can_login_now: 'Sie können sich jetzt mit Ihrem Konto anmelden',
       go_to_login: 'Zur Anmeldung',
-      close: 'Schließen'
+        close: 'Schließen'
     },
     audit: {
       login_required: 'Anmeldung erforderlich',

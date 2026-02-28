@@ -339,15 +339,15 @@
       </div>
 
       <div class="mt-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3" v-if="!auditStore.error && (auditStore.pagination.totalPages || 1) > 1">
-        <p class="text-xs text-slate-500 dark:text-slate-400">
-          {{ $t('message.admin_users.page') || 'Page' }} {{ auditStore.pagination.page || 1 }} {{ $t('message.admin_users.of') || 'of' }} {{ auditStore.pagination.totalPages || 1 }}
-        </p>
-
         <PaginationControls
           :current-page="auditStore.pagination.page || 1"
           :total-pages="auditStore.pagination.totalPages || 1"
+          :page-size="auditStore.pagination.limit || 20"
+          :page-size-options="[10, 20, 50]"
+          :show-page-size="true"
           :loading="auditStore.loading"
           @change="goToPage"
+          @change-size="handlePageSizeChange"
         />
       </div>
       </section>
@@ -659,6 +659,17 @@ export default {
       scrollToTableTop();
     };
 
+    const handlePageSizeChange = async (limit) => {
+      const nextLimit = Math.max(1, Number.parseInt(limit, 10) || 20);
+      const currentLimit = Math.max(1, Number.parseInt(auditStore.filters.limit, 10) || 20);
+      if (nextLimit === currentLimit) return;
+
+      auditStore.filters.limit = nextLimit;
+      auditStore.filters.page = 1;
+      await auditStore.fetchLogs();
+      scrollToTableTop();
+    };
+
     const showToast = (message, type = 'info') => {
       toastStore.add(message, type);
     };
@@ -725,6 +736,7 @@ export default {
       clearFilters,
       onExport,
       goToPage,
+      handlePageSizeChange,
       showModal,
       selectedLog,
       totalLogCount,

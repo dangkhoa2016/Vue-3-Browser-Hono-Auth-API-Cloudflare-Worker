@@ -75,6 +75,7 @@ export default {
       edit: 'Edit',
       delete: 'Delete',
       close: 'Close',
+      page_of: 'Page {current} of {total}',
       loading: 'Loading...',
       retry: 'Retry',
       view: 'View',

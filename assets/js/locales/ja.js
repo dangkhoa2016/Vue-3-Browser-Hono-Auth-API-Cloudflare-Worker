@@ -75,6 +75,7 @@ export default {
       edit: '編集',
       delete: '削除',
       close: '閉じる',
+      page_of: 'ページ {current} / {total}',
       loading: '読み込み中...',
       retry: '再試行',
       view: '表示',
@@ -161,7 +162,7 @@ export default {
       confirm: '確認',
       can_login_now: 'アカウントでログインできるようになりました',
       go_to_login: 'ログインへ',
-      close: '閉じる'
+       close: '閉じる'
     },
     audit: {
       login_required: 'ログインが必要です',
