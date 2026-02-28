@@ -367,7 +367,7 @@
 
 <script>
 import { computed, onActivated, onMounted, ref, watch } from 'vue';
-import { storeToRefs } from 'pinia';
+const { storeToRefs } = Pinia;
 import { useI18n } from 'vue-i18n';
 import { useSystemStatsStore } from '/assets/js/stores/systemStatsStore.js';
 import { useAuditStore } from '/assets/js/stores/auditStore.js';

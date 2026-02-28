@@ -65,6 +65,16 @@ async function initMainApp() {
     app.use(router);
     app.use(window.i18nInstance);
 
+    // Make core stores globally available for direct script access (e.g. from axios interceptors)
+    const { useAuthStore } = authStoreModule;
+    const { useModalStore } = modalStoreModule;
+    const toastStoreModule = await import('/assets/js/stores/toastStore.js');
+    options.moduleCache['/assets/js/stores/toastStore.js'] = toastStoreModule;
+    
+    window.authStore = useAuthStore(pinia);
+    window.modalStore = useModalStore(pinia);
+    window.toastStore = toastStoreModule.useToastStore(pinia);
+
     // Default to mock API
     setupMock(true);
 

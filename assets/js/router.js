@@ -250,6 +250,12 @@ const routes = [
     meta: { requiresAuth: true, superAdminOnly: true }
   },
   {
+    path: '/admin/kv/env-comparison',
+    name: 'KvAdminEnvComparison',
+    component: load('/vue/pages/KvAdminEnvComparison.vue'),
+    meta: { requiresAuth: true, superAdminOnly: true }
+  },
+  {
     path: '/admin/kv/rate-limits',
     name: 'KvAdminRateLimits',
     component: load('/vue/pages/KvAdminRateLimits.vue'),

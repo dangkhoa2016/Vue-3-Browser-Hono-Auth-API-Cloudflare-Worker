@@ -252,6 +252,7 @@ export default {
       toggle_api_mode: 'API 모드 전환',
       admin: '관리자',
       admin_dashboard: '대시보드',
+      kv_admin_env: 'KV 환경 비교',
       user_management: '사용자 관리',
       system_stats: '시스템 통계',
       system_health: '시스템 상태',
@@ -472,7 +473,28 @@ export default {
         save_error_default: '"{key}"을(를) 저장할 수 없습니다.',
         save_error_key_invalid: '"{key}" 키는 허용되지 않습니다.',
         save_error_missing: '"{key}"에 필요한 데이터가 없습니다.',
-        save_error_unauthorized: '"{key}"을(를) 저장할 권한이 없습니다.'
+        save_error_unauthorized: '"{key}"을(를) 저장할 권한이 없습니다.',
+        env_comparison: {
+          title: '환경 비교',
+          subtitle: '현재 Cloudflare 환경 변수에서 활성화된 구성 값과 KV에 저장된 값을 비교합니다.',
+          badge: 'KV vs ENV',
+          stats_from_kv: 'KV에서',
+          stats_from_env: 'ENV에서',
+          stats_from_default: '기본값에서',
+          column_key: '구성 키',
+          column_source: '출처',
+          column_kv_value: 'KV 값',
+          column_env_value: 'ENV 값',
+          value_none: '- 없음 -',
+          value_empty_string: '"" (빈 문자열)',
+          loading: '비교 데이터를 불러오는 중...',
+          search_empty: '검색과 일치하는 구성이 없습니다',
+          error_load_failed: '환경 비교를 로드하지 못했습니다',
+          active_filters: '활성 필터:',
+          clear_all_filters: '모두 지우기',
+          source: '소스',
+          default: '기본값'
+        }
     },
     title: 'Vue 3 Browser - Hono Auth API - Cloudflare Worker',
     security_incidents: {

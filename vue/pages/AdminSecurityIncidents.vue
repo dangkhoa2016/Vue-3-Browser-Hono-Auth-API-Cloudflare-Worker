@@ -293,7 +293,7 @@
 
 <script>
 import { computed, ref, onMounted, watch } from 'vue';
-import { storeToRefs } from 'pinia';
+const { storeToRefs } = Pinia;
 import { useI18n } from 'vue-i18n';
 import { useSecurityIncidentStore } from '/assets/js/stores/securityIncidentStore.js';
 import { useMainStore } from '/assets/js/stores/mainStore.js';
