@@ -258,7 +258,9 @@ export default {
       audit_logs: 'Audit Logs',
       security_incidents: 'Security Incidents',
       realtime_monitoring: 'Realtime Monitoring',
-      kv_admin: 'KV Admin',
+      kv_admin: 'KV Admin Configs',
+      kv_admin_audit: 'KV Audit Configs',
+      kv_admin_rate_limits: 'KV Rate Limits',
       api_health: 'API Health',
       api_version: 'API Version',
       api_language: 'API Language'

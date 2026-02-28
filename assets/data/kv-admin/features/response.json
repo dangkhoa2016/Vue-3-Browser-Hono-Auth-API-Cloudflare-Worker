@@ -1,0 +1,13 @@
+{
+  "success": true,
+  "data": {
+    "enableAuditLogging": true,
+    "enableRealTimeMonitoring": true,
+    "enableAdvancedAnalytics": true,
+    "enableExport": true,
+    "enableArchival": true,
+    "enableComplianceReporting": true,
+    "enablePerformanceMonitoring": true,
+    "enableAdvancedSearch": true
+  }
+}

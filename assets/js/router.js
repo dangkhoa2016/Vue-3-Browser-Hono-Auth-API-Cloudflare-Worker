@@ -243,6 +243,18 @@ const routes = [
     component: load('/vue/pages/KvAdminConfigs.vue'),
     meta: { requiresAuth: true }
   },
+  {
+    path: '/admin/kv/audit',
+    name: 'KvAdminAuditConfigs',
+    component: load('/vue/pages/KvAdminAuditConfigs.vue'),
+    meta: { requiresAuth: true, superAdminOnly: true }
+  },
+  {
+    path: '/admin/kv/rate-limits',
+    name: 'KvAdminRateLimits',
+    component: load('/vue/pages/KvAdminRateLimits.vue'),
+    meta: { requiresAuth: true, superAdminOnly: true }
+  },
   { path: '/about', name: 'About', component: load('/vue/pages/About.vue') },
   { path: '/:pathMatch(.*)*', name: 'NotFound', component: load('/vue/pages/NotFound.vue') },
 ];

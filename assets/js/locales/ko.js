@@ -259,6 +259,8 @@ export default {
       security_incidents: '보안 사고',
       realtime_monitoring: '실시간 모니터링',
       kv_admin: 'KV 관리',
+      kv_admin_audit: 'KV 감사 설정',
+      kv_admin_rate_limits: 'KV 속도 제한',
       api_health: 'API 상태',
       api_version: 'API 버전',
       api_language: 'API 언어'

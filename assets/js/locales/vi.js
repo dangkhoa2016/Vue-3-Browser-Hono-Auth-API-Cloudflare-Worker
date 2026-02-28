@@ -258,7 +258,9 @@ export default {
       audit_logs: 'Nhật ký kiểm tra',
       security_incidents: 'Sự cố bảo mật',
       realtime_monitoring: 'Giám sát thời gian thực',
-      kv_admin: 'Quản trị KV',
+      kv_admin: 'Cấu hình KV',
+      kv_admin_audit: 'Cấu hình Audit KV',
+      kv_admin_rate_limits: 'Giới hạn Rate Limit',
       api_health: 'Tình trạng API',
       api_version: 'Phiên bản API',
       api_language: 'Ngôn ngữ API'

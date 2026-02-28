@@ -259,6 +259,8 @@ export default {
       security_incidents: 'セキュリティインシデント',
       realtime_monitoring: 'リアルタイム監視',
       kv_admin: 'KV管理',
+      kv_admin_audit: 'KV監査設定',
+      kv_admin_rate_limits: 'KVレート制限',
       api_health: 'API ヘルス',
       api_version: 'API バージョン',
       api_language: 'API 言語'

@@ -1,0 +1,11 @@
+{
+  "success": true,
+  "data": {
+    "maxQueryResults": 1000,
+    "defaultPageSize": 50,
+    "maxPageSize": 500,
+    "queryTimeoutMs": 30000,
+    "batchSize": 100
+  },
+  "message": "Audit performance settings retrieved by Test Super Admin User (5 settings)"
+}
