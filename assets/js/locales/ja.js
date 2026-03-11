@@ -451,6 +451,8 @@ export default {
       edit_title: '設定を編集',
       edit_action: '編集',
       delete_action: '削除',
+      delete_title: 'キーの削除',
+      delete_confirm: 'このキーを削除してもよろしいですか？',
       confirm_delete_title: '設定を削除',
       confirm_delete_message: '{key} を削除しますか？この操作は元に戻せません。',
       validation_error: '有効なキーと値を入力してください。',

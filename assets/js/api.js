@@ -183,6 +183,7 @@ export const DATA_PATHS = {
   KV_ADMIN_PERFORMANCE: '/assets/data/kv-admin/performance/response.json',
   KV_ADMIN_ALERTS: '/assets/data/kv-admin/alerts/response.json',
   KV_ADMIN_COMPLIANCE: '/assets/data/kv-admin/compliance/response.json',
+  KV_ADMIN_DELETE_SUCCESS: '/assets/data/kv-admin/delete/succeed/response.json',
   // Audit data
   AUDIT_LOGS_SUCCESS: '/assets/data/audit/logs/succeed/response.json',
   AUDIT_STATS_SUCCESS: '/assets/data/audit/stats/succeed/response.json',
@@ -1371,6 +1372,17 @@ export const initializeKVAdminMock = (mockAdapter) => {
       return [200, { success: true, data: { gdprEnabled: true, hipaaEnabled: false, pciDssEnabled: false, soc2Enabled: true, dataAnonymization: true, consentTracking: true } }];
     }
   });
+
+  mockAdapter.onDelete(MOCK_PATTERNS.KV_ADMIN_CONFIGS_SPECIFIC).reply(async (config) => {
+    try {
+      const data = await loadJson(DATA_PATHS.KV_ADMIN_DELETE_SUCCESS);
+      // Giả lập trả về key được xóa/reset theo URL (nếu có dynamic data từ URL, bạn có thể override ở đây)
+      return [200, data];
+    } catch {
+      return [200, { success: true, message: 'Deleted mock fallback' }];
+    }
+  });
+
   mockAdapter.onPost(MOCK_PATTERNS.KV_ADMIN_AUDIT_CONFIGS_TOGGLE).reply(async () => {
     return [200, await loadJson(DATA_PATHS.KV_ADMIN_FEATURES_TOGGLE_SUCCESS)];
   });

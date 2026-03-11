@@ -453,6 +453,8 @@ export default {
       edit_title: 'Konfiguration bearbeiten',
       edit_action: 'Bearbeiten',
       delete_action: 'Löschen',
+      delete_title: 'Schlüssel löschen',
+      delete_confirm: 'Sind Sie sicher, dass Sie diesen Schlüssel löschen möchten?',
       confirm_delete_title: 'Konfiguration löschen',
       confirm_delete_message: '{key} löschen? Diese Aktion kann nicht rückgängig gemacht werden.',
       validation_error: 'Bitte gültigen Schlüssel und Wert angeben.',

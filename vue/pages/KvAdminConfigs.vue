@@ -455,6 +455,41 @@
       </div>
     </transition>
 
+    <transition name="fade" mode="out-in">
+      <div v-if="deleteOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 px-4 py-8">
+        <div class="w-full max-w-md rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800 shadow-2xl p-6 text-center">
+          <i class="bi bi-exclamation-circle text-5xl text-rose-500 mb-4 inline-block"></i>
+          <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">{{ $t('message.kv_admin_page.delete_title') }}</h3>
+          <p class="text-slate-600 dark:text-slate-300 mb-6">
+            {{ $t('message.kv_admin_page.delete_confirm') }}
+            <br />
+            <strong class="text-slate-900 dark:text-white mt-2 block break-all">{{ deleteKey }}</strong>
+          </p>
+            
+          <p v-if="deleteError" class="kv-error-message mb-4 text-left">{{ deleteError }}</p>
+
+          <div class="flex flex-wrap justify-center gap-3">
+            <ActionTextButton
+              variant="soft"
+              shape="full"
+              @click="closeDelete"
+            >
+              {{ $t('message.kv_admin_page.cancel') || 'Cancel' }}
+            </ActionTextButton>
+            <ActionTextButton
+              tone="rose"
+              shape="full"
+              icon="bi bi-trash"
+              :disabled="isDeleting"
+              @click="confirmDelete"
+            >
+              {{ $t('message.kv_admin_page.delete_action') || 'Delete' }}
+            </ActionTextButton>
+          </div>
+        </div>
+      </div>
+    </transition>
+
   </div>
 </template>
 
@@ -903,13 +938,14 @@ export default {
       const valueLabel = formatValue(value);
       const defaultLabel = formatValue(defaultValue);
       const isOverride = valueLabel !== defaultLabel;
+      const source = isOverride ? 'kv' : (defaultValue !== undefined ? 'default' : 'unknown');
       const nextRow = {
         key,
         value,
         defaultValue,
         valueLabel,
         defaultLabel,
-        source: 'kv',
+        source,
         isOverride
       };
 
@@ -988,24 +1024,25 @@ export default {
       isDeleting.value = true;
 
       try {
-        let response;
-        if (mainStore.mockApi) {
-          rows.value = rows.value.filter((row) => row.key !== deleteKey.value);
-          allowedCount.value = Math.max(0, allowedCount.value - 1);
-          response = { success: true, message: t('message.kv_admin_page.delete_success') };
-        } else {
-          const endpoint = API_ENDPOINTS.KV_ADMIN_CONFIGS_SPECIFIC.replace(':key', encodeURIComponent(deleteKey.value));
-          const apiResponse = await apiClient.delete(endpoint, {
-            headers: { Authorization: `Bearer ${authStore.token}` }
-          });
-          response = apiResponse.data;
-          if (response.success) {
-            rows.value = rows.value.filter((row) => row.key !== deleteKey.value);
-            allowedCount.value = Math.max(0, allowedCount.value - 1);
+        const endpoint = API_ENDPOINTS.KV_ADMIN_CONFIGS_SPECIFIC.replace(':key', encodeURIComponent(deleteKey.value));
+        const apiResponse = await apiClient.delete(endpoint, {
+          headers: { Authorization: `Bearer ${authStore.token}` }
+        });
+        const response = apiResponse.data;
+
+        if (response.success) {
+          if (response.data && response.data.defaultValue !== undefined) {
+             // Reset back to default value instead of deleting row
+             applyLocalUpsert(deleteKey.value, response.data.defaultValue);
           } else {
-            throw new Error(response.error || 'Unknown error');
+             // Fallback behavior if no defaultValue returned
+             rows.value = rows.value.filter((row) => row.key !== deleteKey.value);
+             allowedCount.value = Math.max(0, allowedCount.value - 1);
           }
+        } else {
+          throw new Error(response.error || 'Unknown error');
         }
+
         const toastMsg = response.message || t('message.kv_admin_page.delete_success');
         showToast(toastMsg, 'success');
         deleteOpen.value = false;
@@ -1158,8 +1195,11 @@ export default {
           showLoginRequired.value = true;
           rows.value = [];
           allowedCount.value = 0;
-        } else if (isAuthenticated && isSuperAdmin.value) {
-          await loadConfigs();
+        } else {
+          showLoginRequired.value = false;
+          if (isSuperAdmin.value) {
+            await loadConfigs();
+          }
         }
       }
     );
@@ -1168,6 +1208,7 @@ export default {
       () => isSuperAdmin.value,
       async (value) => {
         if (value) {
+          showLoginRequired.value = false;
           await loadConfigs();
           return;
         }
