@@ -451,6 +451,8 @@ export default {
       edit_title: 'Sửa cấu hình',
       edit_action: 'Sửa',
       delete_action: 'Xóa',
+      delete_title: 'Xóa Key',
+      delete_confirm: 'Bạn có chắc chắn muốn xóa key này không?',
       confirm_delete_title: 'Xóa cấu hình',
       confirm_delete_message: 'Xóa {key}? Thao tác này không thể hoàn tác.',
       validation_error: 'Vui lòng nhập key và giá trị hợp lệ.',

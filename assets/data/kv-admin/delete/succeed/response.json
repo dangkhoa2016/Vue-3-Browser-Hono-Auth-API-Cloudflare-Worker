@@ -1,0 +1,10 @@
+{
+  "success": true,
+  "data": {
+    "key": "APP_NAME",
+    "oldValue": 123,
+    "defaultValue": "Hono Auth API",
+    "cacheCleared": true
+  },
+  "message": "Configuration \"APP_NAME\" reset to default by Test Super Admin User - was: 123, now: Hono Auth API"
+}

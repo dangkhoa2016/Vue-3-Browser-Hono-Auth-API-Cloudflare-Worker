@@ -453,6 +453,8 @@ export default {
       edit_title: '구성 편집',
       edit_action: '편집',
       delete_action: '삭제',
+      delete_title: '키 삭제',
+      delete_confirm: '이 키를 삭제하시겠습니까?',
       confirm_delete_title: '구성 삭제',
       confirm_delete_message: '{key}을(를) 삭제할까요? 이 작업은 되돌릴 수 없습니다.',
       validation_error: '유효한 키와 값을 입력하세요.',

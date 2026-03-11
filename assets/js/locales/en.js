@@ -453,6 +453,8 @@ export default {
       edit_title: 'Edit configuration',
       edit_action: 'Edit',
       delete_action: 'Delete',
+      delete_title: 'Delete Key',
+      delete_confirm: 'Are you sure you want to delete this key?',
       confirm_delete_title: 'Delete configuration',
       confirm_delete_message: 'Delete {key}? This action cannot be undone.',
       validation_error: 'Please provide a valid key and value.',
