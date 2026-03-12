@@ -359,6 +359,7 @@ export default {
       { name: t('message.navbar.system_stats'), path: '/admin/stats', icon: 'bi-graph-up' },
       { name: t('message.navbar.system_health'), path: '/admin/system-health', icon: 'bi-heart-pulse' },
       { name: t('message.navbar.audit_logs'), path: '/admin/audit-logs', icon: 'bi-journal-text' },
+      { name: t('message.navbar.advanced_audit'), path: '/admin/advanced-audit', icon: 'bi-shield-lock' },
       { name: t('message.navbar.security_incidents'), path: '/admin/security-incidents', icon: 'bi-shield-exclamation' },
       { name: t('message.navbar.realtime_monitoring'), path: '/admin/monitoring', icon: 'bi-activity' },
       ...(isSuperAdmin.value ? [

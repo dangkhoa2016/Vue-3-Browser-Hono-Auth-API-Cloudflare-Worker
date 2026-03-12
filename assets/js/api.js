@@ -54,6 +54,22 @@ export const API_ENDPOINTS = {
   AUDIT_LOGS: '/api/audit/logs',
   AUDIT_STATS: '/api/audit/stats',
   AUDIT_EXPORT: '/api/audit/export',
+  
+  // Advanced Audit
+  ADVANCED_AUDIT_ANALYTICS: '/api/advanced-audit/analytics',
+  ADVANCED_AUDIT_ANALYTICS_SECURITY: '/api/advanced-audit/analytics/security',
+  ADVANCED_AUDIT_ANALYTICS_BEHAVIOR: '/api/advanced-audit/analytics/behavior',
+  ADVANCED_AUDIT_ANALYTICS_PERFORMANCE: '/api/advanced-audit/analytics/performance',
+  ADVANCED_AUDIT_COMPLIANCE: '/api/advanced-audit/compliance/report',
+  ADVANCED_AUDIT_COMPLIANCE_MANAGEMENT: '/api/advanced-audit/compliance',
+  ADVANCED_AUDIT_ARCHIVAL: '/api/advanced-audit/archival/stats',
+  ADVANCED_AUDIT_ARCHIVAL_RUN: '/api/advanced-audit/archival/run',
+  ADVANCED_AUDIT_ARCHIVAL_RESTORE: '/api/advanced-audit/archival/restore',
+  ADVANCED_AUDIT_ARCHIVE: '/api/advanced-audit/archive',
+  ADVANCED_AUDIT_EXPORT_ADVANCED: '/api/advanced-audit/export-advanced',
+  ADVANCED_AUDIT_MIDDLEWARE_STATS: '/api/advanced-audit/middleware/stats',
+  ADVANCED_AUDIT_RETENTION: '/api/advanced-audit/retention',
+
   // Security incidents (match backend route)
   SECURITY_INCIDENTS: '/api/security-incident/incidents',
   // Realtime monitoring
@@ -124,6 +140,19 @@ const MOCK_PATTERNS = {
   AUDIT_LOGS: new RegExp(`${API_ENDPOINTS.AUDIT_LOGS.replace(/\//g, '\\/')}($|\\?)`),
   AUDIT_STATS: new RegExp(`${API_ENDPOINTS.AUDIT_STATS.replace(/\//g, '\\/')}($|\\?)`),
   AUDIT_EXPORT: new RegExp(`${API_ENDPOINTS.AUDIT_EXPORT.replace(/\//g, '\\/')}($|\\?)`),
+  ADVANCED_AUDIT_ANALYTICS: new RegExp(`${API_ENDPOINTS.ADVANCED_AUDIT_ANALYTICS.replace(/\//g, '\\/')}($|\\?)`),
+  ADVANCED_AUDIT_ANALYTICS_SECURITY: new RegExp(`${API_ENDPOINTS.ADVANCED_AUDIT_ANALYTICS_SECURITY.replace(/\//g, '\\/')}($|\\?)`),
+  ADVANCED_AUDIT_ANALYTICS_BEHAVIOR: new RegExp(`${API_ENDPOINTS.ADVANCED_AUDIT_ANALYTICS_BEHAVIOR.replace(/\//g, '\\/')}($|\\?)`),
+  ADVANCED_AUDIT_ANALYTICS_PERFORMANCE: new RegExp(`${API_ENDPOINTS.ADVANCED_AUDIT_ANALYTICS_PERFORMANCE.replace(/\//g, '\\/')}($|\\?)`),
+  ADVANCED_AUDIT_COMPLIANCE: new RegExp(`${API_ENDPOINTS.ADVANCED_AUDIT_COMPLIANCE.replace(/\//g, '\\/')}($|\\?)`),
+  ADVANCED_AUDIT_COMPLIANCE_MANAGEMENT: new RegExp(`${API_ENDPOINTS.ADVANCED_AUDIT_COMPLIANCE_MANAGEMENT.replace(/\//g, '\\/')}($|\\?)`),
+  ADVANCED_AUDIT_ARCHIVAL: new RegExp(`${API_ENDPOINTS.ADVANCED_AUDIT_ARCHIVAL.replace(/\//g, '\\/')}($|\\?)`),
+  ADVANCED_AUDIT_ARCHIVAL_RUN: new RegExp(`${API_ENDPOINTS.ADVANCED_AUDIT_ARCHIVAL_RUN.replace(/\//g, '\\/')}($|\\?)`),
+  ADVANCED_AUDIT_ARCHIVAL_RESTORE: new RegExp(`${API_ENDPOINTS.ADVANCED_AUDIT_ARCHIVAL_RESTORE.replace(/\//g, '\\/')}($|\\?)`),
+  ADVANCED_AUDIT_ARCHIVE: new RegExp(`${API_ENDPOINTS.ADVANCED_AUDIT_ARCHIVE.replace(/\//g, '\\/')}($|\\?)`),
+  ADVANCED_AUDIT_EXPORT_ADVANCED: new RegExp(`${API_ENDPOINTS.ADVANCED_AUDIT_EXPORT_ADVANCED.replace(/\//g, '\\/')}($|\\?)`),
+  ADVANCED_AUDIT_MIDDLEWARE_STATS: new RegExp(`${API_ENDPOINTS.ADVANCED_AUDIT_MIDDLEWARE_STATS.replace(/\//g, '\\/')}($|\\?)`),
+  ADVANCED_AUDIT_RETENTION: new RegExp(`${API_ENDPOINTS.ADVANCED_AUDIT_RETENTION.replace(/\//g, '\\/')}($|\\?)`),
   // Security incidents
   SECURITY_INCIDENTS: new RegExp(`${API_ENDPOINTS.SECURITY_INCIDENTS.replace(/\//g, '\\/')}($|\\?)`),
   // Realtime monitoring
@@ -1034,6 +1063,137 @@ export const setupMock = (enable) => {
           console.error('[Mock API] Audit stats handler error:', error);
           const message = (error && error.message) || 'Internal server error';
           return [500, { success: false, error: message }];
+        }
+      });
+      
+      // Advanced Audit mocks
+      mock.onGet(MOCK_PATTERNS.ADVANCED_AUDIT_ANALYTICS).reply(async () => {
+        try {
+          const data = await loadJson('/assets/data/advanced-audit/analytics/succeed/response.json');
+          return [200, data];
+        } catch {
+          return [500, { success: false, error: 'Mock fail' }];
+        }
+      });
+
+      mock.onGet(MOCK_PATTERNS.ADVANCED_AUDIT_COMPLIANCE_MANAGEMENT).reply(async () => {
+        try {
+          const data = await loadJson('/assets/data/advanced-audit/compliance/succeed/response.json');
+          return [200, data];
+        } catch {
+          return [500, { success: false, error: 'Mock fail' }];
+        }
+      });
+
+      mock.onPost(MOCK_PATTERNS.ADVANCED_AUDIT_COMPLIANCE_MANAGEMENT).reply(async () => {
+        try {
+          const data = await loadJson('/assets/data/advanced-audit/compliance/enforce-policy/succeed/response.json');
+          return [200, data];
+        } catch {
+          return [500, { success: false, error: 'Mock fail' }];
+        }
+      });
+
+      mock.onGet(MOCK_PATTERNS.ADVANCED_AUDIT_COMPLIANCE).reply(async () => {
+        try {
+          const data = await loadJson('/assets/data/advanced-audit/compliance/report/succeed/response.json');
+          return [200, data];
+        } catch {
+          return [500, { success: false, error: 'Mock fail' }];
+        }
+      });
+
+      mock.onGet(MOCK_PATTERNS.ADVANCED_AUDIT_ANALYTICS_SECURITY).reply(async () => {
+        try {
+          const data = await loadJson('/assets/data/advanced-audit/analytics/security/succeed/response.json');
+          return [200, data];
+        } catch {
+          return [500, { success: false, error: 'Mock fail' }];
+        }
+      });
+
+      mock.onGet(MOCK_PATTERNS.ADVANCED_AUDIT_MIDDLEWARE_STATS).reply(async () => {
+        try {
+          const data = await loadJson('/assets/data/advanced-audit/analytics/middleware/stats/succeed/response.json');
+          return [200, data];
+        } catch {
+          return [500, { success: false, error: 'Mock fail' }];
+        }
+      });
+
+      mock.onGet(MOCK_PATTERNS.ADVANCED_AUDIT_ANALYTICS_SECURITY).reply(async () => {
+        try {
+          const data = await loadJson('/assets/data/advanced-audit/analytics/security/succeed/response.json');
+          return [200, data];
+        } catch {
+          return [500, { success: false, error: 'Mock fail' }];
+        }
+      });
+
+      mock.onGet(MOCK_PATTERNS.ADVANCED_AUDIT_MIDDLEWARE_STATS).reply(async () => {
+        try {
+          const data = await loadJson('/assets/data/advanced-audit/analytics/middleware/stats/succeed/response.json');
+          return [200, data];
+        } catch {
+          return [500, { success: false, error: 'Mock fail' }];
+        }
+      });
+
+      mock.onGet(MOCK_PATTERNS.ADVANCED_AUDIT_ANALYTICS_SECURITY).reply(async () => {
+        try {
+          const data = await loadJson('/assets/data/advanced-audit/analytics/security/succeed/response.json');
+          return [200, data];
+        } catch {
+          return [500, { success: false, error: 'Mock fail' }];
+        }
+      });
+
+      mock.onGet(MOCK_PATTERNS.ADVANCED_AUDIT_MIDDLEWARE_STATS).reply(async () => {
+        try {
+          const data = await loadJson('/assets/data/advanced-audit/analytics/middleware/stats/succeed/response.json');
+          return [200, data];
+        } catch {
+          return [500, { success: false, error: 'Mock fail' }];
+        }
+      });
+
+      mock.onPost(MOCK_PATTERNS.ADVANCED_AUDIT_ARCHIVAL_RUN).reply(async () => { const data = await loadJson("/assets/data/advanced-audit/archival/run/succeed/response.json"); return [200, data]; });
+
+      mock.onPost(MOCK_PATTERNS.ADVANCED_AUDIT_ARCHIVAL_RESTORE).reply(async () => { const data = await loadJson("/assets/data/advanced-audit/archival/restore/fail/validate.json"); return [400, data]; });
+
+      mock.onGet(MOCK_PATTERNS.ADVANCED_AUDIT_ARCHIVAL).reply(async () => {
+        try {
+          const data = await loadJson('/assets/data/advanced-audit/archival/stats/succeed/response.json');
+          return [200, data];
+        } catch {
+          return [500, { success: false, error: 'Mock fail' }];
+        }
+      });
+
+      mock.onGet(MOCK_PATTERNS.ADVANCED_AUDIT_ARCHIVE).reply(async () => {
+        try {
+          const data = await loadJson('/assets/data/advanced-audit/archival/succeed/response.json');
+          return [200, data];
+        } catch {
+          return [500, { success: false, error: 'Mock fail' }];
+        }
+      });
+
+      mock.onPost(MOCK_PATTERNS.ADVANCED_AUDIT_ARCHIVE).reply(async (config) => {
+        try {
+          const body = JSON.parse(config.data || '{}');
+          return [200, { success: true, action: body.action }];
+        } catch {
+          return [500, { success: false, error: 'Mock fail' }];
+        }
+      });
+
+      mock.onPost(MOCK_PATTERNS.ADVANCED_AUDIT_RETENTION).reply(async () => {
+        try {
+          const data = await loadJson('/assets/data/advanced-audit/rention/succeed/response.json');
+          return [200, data];
+        } catch {
+          return [500, { success: false, error: 'Mock fail' }];
         }
       });
 

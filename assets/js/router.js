@@ -81,6 +81,13 @@ const load = (path) => {
       let isMounted = true;
 
       onErrorCaptured((err) => {
+        // If the error is an API error (AxiosError, 401, etc) coming from child component's lifecycle or watch functions,
+        // we don't want to blow up the entire component mount, let the component handle it or show local error.
+        if (err?.isAxiosError || err?.response?.status) {
+            console.warn(`[AsyncLoader] API error captured from child ${path}, ignoring at loader level:`, err);
+            return false; // Stop propagation but don't unmount the view.
+        }
+
         console.error(`[AsyncLoader] Render error in ${path}:`, err);
         error.value = err;
         resolvedComponent.value = null; // Unmount to show error
@@ -89,7 +96,7 @@ const load = (path) => {
           delete window.vueSfcOptions.moduleCache[path];
         }
 
-        return false;
+        return false; // Stop propagation
       });
 
       onUnmounted(() => {
@@ -211,6 +218,12 @@ const routes = [
     path: '/admin/audit-logs',
     name: 'AdminAuditLogs',
     component: load('/vue/pages/AdminAuditLogs.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/admin/advanced-audit',
+    name: 'AdminAdvancedAudit',
+    component: load('/vue/pages/AdminAdvancedAudit.vue'),
     meta: { requiresAuth: true }
   },
   {

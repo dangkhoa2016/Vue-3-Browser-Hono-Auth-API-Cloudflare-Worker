@@ -1,0 +1,22 @@
+{
+  "success": false,
+  "error": "2 validation errors - Validation failed: 2 errors",
+  "errors": [
+    {
+      "field": "startDate",
+      "message": "Start date is required",
+      "code": "invalid_type",
+      "value": "undefined"
+    },
+    {
+      "field": "endDate",
+      "message": "End date is required",
+      "code": "invalid_type",
+      "value": "undefined"
+    }
+  ],
+  "schemaName": "restoreQuerySchema",
+  "validationTime": "6ms",
+  "errorCount": 2,
+  "details": "Validation failed: 2 errors"
+}

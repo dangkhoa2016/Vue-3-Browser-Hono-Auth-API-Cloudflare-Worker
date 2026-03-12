@@ -1,0 +1,144 @@
+{
+  "success": true,
+  "data": {
+    "overview": {
+      "timeframe": "24h",
+      "generated_at": "2026-03-12T04:06:21.954Z",
+      "actor_role": "super_admin"
+    },
+    "security": {
+      "failed_logins": [],
+      "suspicious_ips": [],
+      "admin_activity": [
+        {
+          "actor_role": "super_admin",
+          "action": "view",
+          "count": 18,
+          "unique_admins": 1
+        },
+        {
+          "actor_role": "super_admin",
+          "action": "create",
+          "count": 4,
+          "unique_admins": 1
+        },
+        {
+          "actor_role": "super_admin",
+          "action": "delete",
+          "count": 4,
+          "unique_admins": 1
+        },
+        {
+          "actor_role": "super_admin",
+          "action": "login",
+          "count": 4,
+          "unique_admins": 1
+        }
+      ],
+      "rate_limit_events": []
+    },
+    "behavior": {
+      "activity_patterns": [
+        {
+          "actor_id": 1,
+          "actor_role": "super_admin",
+          "total_actions": 30,
+          "unique_actions": 4,
+          "active_days": 2,
+          "first_activity": "2026-03-11T20:25:10.293Z",
+          "last_activity": "2026-03-12T04:04:39.815Z",
+          "business_hours_percentage": 0
+        }
+      ],
+      "actions_by_role": [
+        {
+          "actor_role": "super_admin",
+          "action": "view",
+          "count": 18,
+          "unique_users": 1
+        },
+        {
+          "actor_role": "super_admin",
+          "action": "login",
+          "count": 4,
+          "unique_users": 1
+        },
+        {
+          "actor_role": "super_admin",
+          "action": "delete",
+          "count": 4,
+          "unique_users": 1
+        },
+        {
+          "actor_role": "super_admin",
+          "action": "create",
+          "count": 4,
+          "unique_users": 1
+        }
+      ],
+      "peak_hours": [
+        {
+          "hour": "20",
+          "activity_count": 29,
+          "unique_users": 1
+        },
+        {
+          "hour": "04",
+          "activity_count": 1,
+          "unique_users": 1
+        }
+      ]
+    },
+    "performance": {
+      "volume_analysis": [
+        {
+          "date": "2026-03-12",
+          "hour": "04",
+          "log_count": 3,
+          "unique_users": 1,
+          "unique_actions": 3
+        },
+        {
+          "date": "2026-03-11",
+          "hour": "20",
+          "log_count": 51,
+          "unique_users": 1,
+          "unique_actions": 4
+        }
+      ],
+      "database_size": {
+        "total_records": 1324,
+        "avg_details_size": 369.4191842900302,
+        "latest_record": "2026-03-12T04:04:39.815Z",
+        "oldest_record": "2026-01-22 13:22:00"
+      },
+      "action_frequency": [
+        {
+          "action": "view",
+          "frequency": 38,
+          "unique_users": 1,
+          "avg_duration_ms": 49.63157894736842
+        },
+        {
+          "action": "create",
+          "frequency": 8,
+          "unique_users": 1,
+          "avg_duration_ms": 52.375
+        },
+        {
+          "action": "delete",
+          "frequency": 4,
+          "unique_users": 1,
+          "avg_duration_ms": 22.5
+        },
+        {
+          "action": "login",
+          "frequency": 4,
+          "unique_users": 1,
+          "avg_duration_ms": 288.25
+        }
+      ]
+    }
+  },
+  "message": "Advanced audit analytics retrieved successfully"
+}

@@ -1,0 +1,111 @@
+{
+  "success": true,
+  "data": {
+    "report_period": "7d",
+    "generated_at": "2026-03-12T07:22:54.074Z",
+    "compliance_summary": {
+      "data_retention": {
+        "total_logs": 1476,
+        "logs_90d": 1476,
+        "logs_1y": 1476,
+        "oldest_log": "2026-01-22 13:22:00",
+        "newest_log": "2026-03-12T07:22:52.510Z"
+      },
+      "access_patterns": [
+        {
+          "action": "create",
+          "frequency": 13,
+          "unique_users": 0,
+          "actor_role": "anonymous",
+          "successful_attempts": 0,
+          "failed_attempts": 0
+        },
+        {
+          "action": "create",
+          "frequency": 8,
+          "unique_users": 1,
+          "actor_role": "super_admin",
+          "successful_attempts": 0,
+          "failed_attempts": 0
+        },
+        {
+          "action": "delete",
+          "frequency": 4,
+          "unique_users": 1,
+          "actor_role": "super_admin",
+          "successful_attempts": 0,
+          "failed_attempts": 0
+        },
+        {
+          "action": "login",
+          "frequency": 12,
+          "unique_users": 1,
+          "actor_role": "super_admin",
+          "successful_attempts": 0,
+          "failed_attempts": 0
+        },
+        {
+          "action": "view",
+          "frequency": 29,
+          "unique_users": 0,
+          "actor_role": "anonymous",
+          "successful_attempts": 0,
+          "failed_attempts": 0
+        },
+        {
+          "action": "view",
+          "frequency": 140,
+          "unique_users": 1,
+          "actor_role": "super_admin",
+          "successful_attempts": 0,
+          "failed_attempts": 0
+        }
+      ],
+      "administrative_actions": [
+        {
+          "actor_id": 1,
+          "actor_role": "super_admin",
+          "action": "create",
+          "target_type": "system",
+          "action_count": 5,
+          "first_action": "2026-03-11T20:25:39.086Z",
+          "last_action": "2026-03-12T07:09:26.542Z"
+        },
+        {
+          "actor_id": 1,
+          "actor_role": "super_admin",
+          "action": "create",
+          "target_type": "authentication",
+          "action_count": 3,
+          "first_action": "2026-03-11T20:31:50.101Z",
+          "last_action": "2026-03-11T20:57:36.946Z"
+        },
+        {
+          "actor_id": 1,
+          "actor_role": "super_admin",
+          "action": "delete",
+          "target_type": "system",
+          "action_count": 3,
+          "first_action": "2026-03-11T20:35:38.407Z",
+          "last_action": "2026-03-11T20:57:51.963Z"
+        },
+        {
+          "actor_id": 1,
+          "actor_role": "super_admin",
+          "action": "delete",
+          "target_type": "audit",
+          "action_count": 1,
+          "first_action": "2026-03-11T20:52:44.685Z",
+          "last_action": "2026-03-11T20:52:44.685Z"
+        }
+      ]
+    },
+    "compliance_status": {
+      "data_retention": "compliant",
+      "access_logging": "compliant",
+      "admin_oversight": "compliant"
+    },
+    "recommendations": []
+  },
+  "message": "Compliance audit report generated successfully"
+}

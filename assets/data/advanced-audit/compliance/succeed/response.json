@@ -1,0 +1,22 @@
+{
+  "success": true,
+  "data": {
+    "report_type": "GENERAL",
+    "generated_at": "2026-03-12T07:24:53.800Z",
+    "period": {},
+    "audit_trail_metrics": {
+      "total_events": 1477,
+      "unique_users": 15,
+      "unique_actions": 27,
+      "date_range": {
+        "earliest": "2026-01-22 13:22:00",
+        "latest": "2026-03-12T07:22:54.074Z"
+      }
+    },
+    "compliance_status": {
+      "audit_completeness": "compliant",
+      "data_integrity": "compliant",
+      "retention_policy": "compliant"
+    }
+  }
+}
