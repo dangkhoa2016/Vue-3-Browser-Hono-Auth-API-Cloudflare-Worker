@@ -1,0 +1,26 @@
+{
+  "success": true,
+  "data": {
+    "middleware_stats": {
+      "middleware_type": "unified_audit",
+      "batching_enabled": true,
+      "performance_tracking": true,
+      "audit_levels_available": [
+        "none",
+        "minimal",
+        "standard",
+        "detailed",
+        "debug"
+      ],
+      "route_types_supported": [
+        "public",
+        "auth",
+        "user",
+        "admin",
+        "system",
+        "api"
+      ]
+    },
+    "generated_at": "2026-03-12T06:22:19.700Z"
+  }
+}

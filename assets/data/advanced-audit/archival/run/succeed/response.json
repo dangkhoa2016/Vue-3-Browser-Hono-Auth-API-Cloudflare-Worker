@@ -1,0 +1,47 @@
+{
+  "success": true,
+  "data": {
+    "started_at": "2026-03-12T07:58:49.118Z",
+    "dry_run": true,
+    "categories_processed": [
+      {
+        "category": "authentication",
+        "retention_days": 365,
+        "dry_run": true,
+        "archived_count": 0,
+        "deleted_count": 0,
+        "total_found": 0
+      },
+      {
+        "category": "admin_operations",
+        "retention_days": 2555,
+        "dry_run": true,
+        "archived_count": 0,
+        "deleted_count": 0,
+        "total_found": 0
+      },
+      {
+        "category": "security_events",
+        "retention_days": 1095,
+        "dry_run": true,
+        "archived_count": 0,
+        "deleted_count": 0,
+        "total_found": 0
+      },
+      {
+        "category": "general",
+        "retention_days": 90,
+        "dry_run": true,
+        "archived_count": 0,
+        "deleted_count": 0,
+        "total_found": 0
+      }
+    ],
+    "total_archived": 0,
+    "total_deleted": 0,
+    "errors": [],
+    "completed_at": "2026-03-12T07:58:49.137Z",
+    "duration_ms": 19
+  },
+  "message": "Archival process completed successfully with 0 archived and 0 remaining"
+}

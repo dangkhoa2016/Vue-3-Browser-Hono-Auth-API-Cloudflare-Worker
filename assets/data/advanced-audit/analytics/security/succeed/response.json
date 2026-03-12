@@ -1,0 +1,45 @@
+{
+  "success": true,
+  "data": {
+    "timeframe": "7d",
+    "generated_at": "2026-03-12T06:22:19.639Z",
+    "security_summary": {
+      "failed_logins": [],
+      "suspicious_ips": [],
+      "admin_activity": [
+        {
+          "actor_role": "super_admin",
+          "action": "view",
+          "count": 36,
+          "unique_admins": 1
+        },
+        {
+          "actor_role": "super_admin",
+          "action": "create",
+          "count": 7,
+          "unique_admins": 1
+        },
+        {
+          "actor_role": "super_admin",
+          "action": "login",
+          "count": 6,
+          "unique_admins": 1
+        },
+        {
+          "actor_role": "super_admin",
+          "action": "delete",
+          "count": 4,
+          "unique_admins": 1
+        }
+      ],
+      "rate_limit_events": []
+    },
+    "risk_indicators": {
+      "high_risk_ips": 0,
+      "brute_force_attempts": 0,
+      "risk_score": 0
+    },
+    "recommendations": []
+  },
+  "message": "Security audit analysis completed successfully"
+}

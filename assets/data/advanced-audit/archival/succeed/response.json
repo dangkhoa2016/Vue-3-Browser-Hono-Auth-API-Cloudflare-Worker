@@ -1,0 +1,46 @@
+{
+  "success": true,
+  "data": {
+    "generated_at": "2026-03-12T08:16:33.550Z",
+    "main_table": {
+      "total_logs": 1538,
+      "logs_30d": 1503,
+      "logs_90d": 1538,
+      "logs_1y": 1538,
+      "oldest_log": "2026-01-22 13:22:00",
+      "newest_log": "2026-03-12T08:16:30.073Z"
+    },
+    "archive_table": {
+      "archived_logs": 0,
+      "oldest_archived": null,
+      "newest_archived": null,
+      "first_archival": null,
+      "last_archival": null
+    },
+    "retention_policies": {
+      "authentication": 365,
+      "admin_operations": 2555,
+      "security_events": 1095,
+      "general": 90
+    },
+    "eligibility_by_category": {
+      "authentication": {
+        "retention_days": 365,
+        "eligible_for_archival": 0
+      },
+      "admin_operations": {
+        "retention_days": 2555,
+        "eligible_for_archival": 0
+      },
+      "security_events": {
+        "retention_days": 1095,
+        "eligible_for_archival": 0
+      },
+      "general": {
+        "retention_days": 90,
+        "eligible_for_archival": 0
+      }
+    },
+    "recommendations": []
+  }
+}

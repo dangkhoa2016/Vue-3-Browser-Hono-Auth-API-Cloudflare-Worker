@@ -1,0 +1,15 @@
+{
+  "success": true,
+  "data": {
+    "action": "get_policy",
+    "policy": {
+      "audit_log_retention_days": 365,
+      "user_data_retention_days": 2555
+    },
+    "dry_run": true,
+    "simulation_results": {
+      "simulation": true
+    }
+  },
+  "message": "Retention action 'get_policy' completed successfully."
+}
