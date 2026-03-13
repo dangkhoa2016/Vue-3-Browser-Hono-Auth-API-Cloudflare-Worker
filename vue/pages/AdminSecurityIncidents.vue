@@ -5,10 +5,13 @@
       <div class="absolute inset-0 bg-[linear-gradient(transparent,rgba(15,23,42,0.03))]"></div>
     </div>
 
-    <section :class="heroSectionClass">
-      <div class="absolute -top-24 -right-24 w-72 h-72 bg-rose-500/10 rounded-full blur-3xl"></div>
-      <div class="absolute -bottom-24 -left-24 w-72 h-72 bg-teal-500/10 rounded-full blur-3xl"></div>
-      <div class="relative grid gap-6 lg:grid-cols-[1.25fr_0.75fr] lg:items-center">
+    <PageHeroSection
+      :section-class="heroSectionClass"
+      top-blob-class="absolute -top-24 -right-24 w-72 h-72 bg-rose-500/10 rounded-full blur-3xl"
+      bottom-blob-class="absolute -bottom-24 -left-24 w-72 h-72 bg-teal-500/10 rounded-full blur-3xl"
+      content-class="relative grid gap-6 lg:grid-cols-[1.25fr_0.75fr] lg:items-center"
+    >
+      <template #left>
         <div>
           <div class="inline-flex items-center gap-2 rounded-full bg-rose-900/10 text-rose-800 dark:bg-rose-400/10 dark:text-rose-200 px-3 py-1 text-xs font-semibold tracking-[0.2em]">
             <span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
@@ -32,7 +35,9 @@
             </ActionTextButton>
           </div>
         </div>
+      </template>
 
+      <template #right>
         <div class="grid gap-4">
           <template v-if="loading">
             <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm animate-pulse">
@@ -68,40 +73,42 @@
           </template>
 
           <template v-else>
-            <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm">
-              <p class="text-xs uppercase tracking-[0.3em] text-slate-500">{{ $t('message.admin_users.stats_total') }}</p>
-              <div class="mt-3 flex items-center justify-between">
-                <span class="text-3xl font-black text-slate-900 dark:text-white">{{ pagination.total || incidents.length || 0 }}</span>
-                <i class="bi bi-shield-exclamation text-2xl text-rose-500"></i>
-              </div>
-            </div>
+            <StatCard
+              :label="$t('message.admin_users.stats_total')"
+              :value="pagination.total || incidents.length || 0"
+              value-class="text-3xl font-black text-slate-900 dark:text-white"
+              icon-class="bi bi-shield-exclamation text-2xl text-rose-500"
+            />
             <div class="grid grid-cols-3 gap-3">
-              <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-4 shadow-sm">
-                <p class="text-[10px] uppercase tracking-[0.25em] text-slate-500">{{ $t('message.security_incidents.stats_open') }}</p>
-                <div class="mt-2 flex items-center justify-between">
-                  <span class="text-xl font-black text-slate-900 dark:text-white">{{ detectedCount }}</span>
-                  <i class="bi bi-activity text-rose-500"></i>
-                </div>
-              </div>
-              <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-4 shadow-sm">
-                <p class="text-[10px] uppercase tracking-[0.25em] text-slate-500">{{ $t('message.security_incidents.stats_resolved') }}</p>
-                <div class="mt-2 flex items-center justify-between">
-                  <span class="text-xl font-black text-slate-900 dark:text-white">{{ resolvedCount }}</span>
-                  <i class="bi bi-shield-check text-emerald-500"></i>
-                </div>
-              </div>
-              <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-4 shadow-sm">
-                <p class="text-[10px] uppercase tracking-[0.25em] text-slate-500">{{ $t('message.security_incidents.stats_high') }}</p>
-                <div class="mt-2 flex items-center justify-between">
-                  <span class="text-xl font-black text-slate-900 dark:text-white">{{ highSeverityCount }}</span>
-                  <i class="bi bi-exclamation-triangle text-amber-500"></i>
-                </div>
-              </div>
+              <StatCard
+                :label="$t('message.security_incidents.stats_open')"
+                :value="detectedCount"
+                card-class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-4 shadow-sm"
+                label-class="text-[10px] uppercase tracking-[0.25em] text-slate-500"
+                value-class="text-xl font-black text-slate-900 dark:text-white"
+                icon-class="bi bi-activity text-rose-500"
+              />
+              <StatCard
+                :label="$t('message.security_incidents.stats_resolved')"
+                :value="resolvedCount"
+                card-class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-4 shadow-sm"
+                label-class="text-[10px] uppercase tracking-[0.25em] text-slate-500"
+                value-class="text-xl font-black text-slate-900 dark:text-white"
+                icon-class="bi bi-shield-check text-emerald-500"
+              />
+              <StatCard
+                :label="$t('message.security_incidents.stats_high')"
+                :value="highSeverityCount"
+                card-class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-4 shadow-sm"
+                label-class="text-[10px] uppercase tracking-[0.25em] text-slate-500"
+                value-class="text-xl font-black text-slate-900 dark:text-white"
+                icon-class="bi bi-exclamation-triangle text-amber-500"
+              />
             </div>
           </template>
         </div>
-      </div>
-    </section>
+      </template>
+    </PageHeroSection>
 
     <section class="space-y-6">
       <div class="rounded-[28px] border border-slate-200/70 dark:border-slate-800 bg-white/85 dark:bg-slate-900/80 p-6 shadow-[0_18px_50px_-40px_rgba(15,23,42,0.7)] backdrop-blur">
@@ -151,86 +158,92 @@
       </div>
 
       <div ref="tableTopRef" class="rounded-[28px] border border-slate-200/70 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xl overflow-hidden">
-        <div v-if="loading" class="p-6 space-y-4 animate-pulse">
-          <div v-for="row in 6" :key="row" class="h-12 rounded-xl bg-slate-100 dark:bg-slate-800"></div>
-        </div>
+        <AsyncStateSection
+          :loading="loading"
+          :error="error"
+          :is-empty="filteredIncidents.length === 0"
+          :empty-title="$t('message.security_incidents.no_data') || 'No incidents found.'"
+        >
+          <template #loading>
+            <div class="p-6 space-y-4 animate-pulse">
+              <div v-for="row in 6" :key="row" class="h-12 rounded-xl bg-slate-100 dark:bg-slate-800"></div>
+            </div>
+          </template>
 
-        <div v-else-if="error" class="p-8 text-center">
-          <i class="bi bi-exclamation-triangle-fill text-4xl text-rose-500 mb-3"></i>
-          <h3 class="text-lg font-bold text-slate-900 dark:text-white">
-            {{ $t('message.errors.failed_to_load', { item: $t('message.security_incidents.title'), message: error }) }}
-          </h3>
-          <ActionTextButton
-            class="mt-4"
-            tone="rose"
-            shape="full"
-            icon="bi bi-arrow-clockwise"
-            @click="refresh"
-          >
-            {{ $t('message.common.retry') || 'Retry' }}
-          </ActionTextButton>
-        </div>
-
-        <div v-else-if="filteredIncidents.length === 0" class="p-10 text-center">
-          <i class="bi bi-emoji-neutral text-4xl text-slate-400 mb-3"></i>
-          <h3 class="text-lg font-bold text-slate-900 dark:text-white">{{ $t('message.security_incidents.no_data') || 'No incidents found.' }}</h3>
-        </div>
-
-        <div v-else class="overflow-x-auto">
-          <table class="max-[992px]:mt-4 mt-0 min-w-full text-sm max-[992px]:block">
-            <thead class="bg-slate-50 dark:bg-slate-800/70 text-slate-500 dark:text-slate-400 uppercase tracking-wider max-[992px]:hidden">
-              <tr>
-                <th class="px-6 py-3 text-center">{{ $t('message.security_incidents.actions') || 'Actions' }}</th>
-                <th class="px-6 py-3 text-left">{{ $t('message.security_incidents.incident') || 'Incident' }}</th>
-                <th class="px-6 py-3 text-left">{{ $t('message.security_incidents.severity_status') || 'Severity / Status' }}</th>
-                <th class="px-6 py-3 text-left">{{ $t('message.security_incidents.when_by') || 'When / By' }}</th>
-              </tr>
-            </thead>
-            <tbody class="max-[992px]:block max-[992px]:px-4">
-              <tr
-                v-for="incident in filteredIncidents"
-                :key="incident.id"
-                :class="tableRowClass"
+          <template #error>
+            <div class="p-8 text-center">
+              <i class="bi bi-exclamation-triangle-fill text-4xl text-rose-500 mb-3"></i>
+              <h3 class="text-lg font-bold text-slate-900 dark:text-white">
+                {{ $t('message.errors.failed_to_load', { item: $t('message.security_incidents.title'), message: error }) }}
+              </h3>
+              <ActionTextButton
+                class="mt-4"
+                tone="rose"
+                shape="full"
+                icon="bi bi-arrow-clockwise"
+                @click="refresh"
               >
-                <td :class="actionsCellClass" :data-label="$t('message.security_incidents.actions') || 'Actions'">
-                  <div class="flex items-center justify-center gap-2">
-                    <ActionIconButton
-                      @click="openIncident(incident)"
-                      icon="bi bi-eye-fill"
-                      tone="indigo"
-                      :title="$t('message.security_incidents.view_details') || 'View'"
-                      :aria-label="$t('message.security_incidents.view_details') || 'View'"
-                    />
-                  </div>
-                </td>
-                <td :class="incidentCellClass" :data-label="$t('message.security_incidents.incident') || 'Incident'">
-                  <div class="space-y-2 max-[992px]:text-right">
-                    <div class="font-semibold">#{{ incident.id }} · {{ incident.title }}</div>
-                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold" :class="typeBadgeClass(incident.type)">
-                      {{ incident.type }}
-                    </span>
-                  </div>
-                </td>
-                <td :class="severityStatusCellClass" :data-label="$t('message.security_incidents.severity_status') || 'Severity / Status'">
-                  <div class="flex flex-wrap gap-2 max-[992px]:justify-end">
-                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold" :class="severityBadgeClass(incident.severity)">
-                      {{ incident.severity }}
-                    </span>
-                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold" :class="statusBadgeClass(incident.status)">
-                      {{ formatStatus(incident.status) }}
-                    </span>
-                  </div>
-                </td>
-                <td :class="whenByCellClass" :data-label="$t('message.security_incidents.when_by') || 'When / By'">
-                  <div class="space-y-1 max-[992px]:text-right">
-                    <div>{{ formatDate(incident.detected_at) }}</div>
-                    <div class="font-semibold text-slate-700 dark:text-slate-200">{{ incident.created_by }}</div>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+                {{ $t('message.common.retry') || 'Retry' }}
+              </ActionTextButton>
+            </div>
+          </template>
+
+          <div class="overflow-x-auto">
+            <table class="max-[992px]:mt-4 mt-0 min-w-full text-sm max-[992px]:block">
+              <thead class="bg-slate-50 dark:bg-slate-800/70 text-slate-500 dark:text-slate-400 uppercase tracking-wider max-[992px]:hidden">
+                <tr>
+                  <th class="px-6 py-3 text-center">{{ $t('message.security_incidents.actions') || 'Actions' }}</th>
+                  <th class="px-6 py-3 text-left">{{ $t('message.security_incidents.incident') || 'Incident' }}</th>
+                  <th class="px-6 py-3 text-left">{{ $t('message.security_incidents.severity_status') || 'Severity / Status' }}</th>
+                  <th class="px-6 py-3 text-left">{{ $t('message.security_incidents.when_by') || 'When / By' }}</th>
+                </tr>
+              </thead>
+              <tbody class="max-[992px]:block max-[992px]:px-4">
+                <tr
+                  v-for="incident in filteredIncidents"
+                  :key="incident.id"
+                  :class="tableRowClass"
+                >
+                  <td :class="actionsCellClass" :data-label="$t('message.security_incidents.actions') || 'Actions'">
+                    <div class="flex items-center justify-center gap-2">
+                      <ActionIconButton
+                        @click="openIncident(incident)"
+                        icon="bi bi-eye-fill"
+                        tone="indigo"
+                        :title="$t('message.security_incidents.view_details') || 'View'"
+                        :aria-label="$t('message.security_incidents.view_details') || 'View'"
+                      />
+                    </div>
+                  </td>
+                  <td :class="incidentCellClass" :data-label="$t('message.security_incidents.incident') || 'Incident'">
+                    <div class="space-y-2 max-[992px]:text-right">
+                      <div class="font-semibold">#{{ incident.id }} · {{ incident.title }}</div>
+                      <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold" :class="typeBadgeClass(incident.type)">
+                        {{ incident.type }}
+                      </span>
+                    </div>
+                  </td>
+                  <td :class="severityStatusCellClass" :data-label="$t('message.security_incidents.severity_status') || 'Severity / Status'">
+                    <div class="flex flex-wrap gap-2 max-[992px]:justify-end">
+                      <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold" :class="severityBadgeClass(incident.severity)">
+                        {{ incident.severity }}
+                      </span>
+                      <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold" :class="statusBadgeClass(incident.status)">
+                        {{ formatStatus(incident.status) }}
+                      </span>
+                    </div>
+                  </td>
+                  <td :class="whenByCellClass" :data-label="$t('message.security_incidents.when_by') || 'When / By'">
+                    <div class="space-y-1 max-[992px]:text-right">
+                      <div>{{ formatDate(incident.detected_at) }}</div>
+                      <div class="font-semibold text-slate-700 dark:text-slate-200">{{ incident.created_by }}</div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </AsyncStateSection>
       </div>
 
       <div class="mt-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3" v-if="(pagination.totalPages || 1) > 1">
@@ -301,10 +314,13 @@ import ModalWindow from '/vue/components/ModalWindow.vue';
 import PaginationControls from '/vue/components/PaginationControls.vue';
 import ActionIconButton from '/vue/components/ActionIconButton.vue';
 import ActionTextButton from '/vue/components/ActionTextButton.vue';
+import AsyncStateSection from '/vue/components/AsyncStateSection.vue';
+import PageHeroSection from '/vue/components/PageHeroSection.vue';
+import StatCard from '/vue/components/StatCard.vue';
 
 export default {
   name: 'AdminSecurityIncidents',
-  components: { ModalWindow, PaginationControls, ActionIconButton, ActionTextButton },
+  components: { ModalWindow, PaginationControls, ActionIconButton, ActionTextButton, AsyncStateSection, PageHeroSection, StatCard },
   setup() {
     const { t } = useI18n({ useScope: 'global' });
     const mainStore = useMainStore();

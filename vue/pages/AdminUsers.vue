@@ -50,31 +50,31 @@
 
         <template #right>
           <div class="grid gap-4">
-            <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm">
-              <p class="text-xs uppercase tracking-[0.3em] text-slate-500">{{ $t('message.admin_users.stats_total') }}</p>
-              <div class="mt-3 flex items-center justify-between">
-                <span v-if="showDataSkeleton" class="h-9 w-20 rounded-lg bg-slate-200 dark:bg-slate-700 animate-pulse"></span>
-                <span v-else class="text-3xl font-black text-slate-900 dark:text-white">{{ pagination.total }}</span>
-                <i class="bi bi-people text-2xl text-teal-500"></i>
-              </div>
-            </div>
+            <StatCard
+              :label="$t('message.admin_users.stats_total')"
+              :value="pagination.total"
+              :loading="showDataSkeleton"
+              loading-class="h-9 w-20 rounded-lg bg-slate-200 dark:bg-slate-700 animate-pulse"
+              value-class="text-3xl font-black text-slate-900 dark:text-white"
+              icon-class="bi bi-people text-2xl text-teal-500"
+            />
             <div class="grid grid-cols-2 gap-4">
-              <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm">
-                <p class="text-xs uppercase tracking-[0.3em] text-slate-500">{{ $t('message.admin_users.stats_active') }}</p>
-                <div class="mt-3 flex items-center justify-between">
-                  <span v-if="showDataSkeleton" class="h-8 w-14 rounded-lg bg-slate-200 dark:bg-slate-700 animate-pulse"></span>
-                  <span v-else class="text-2xl font-black text-slate-900 dark:text-white">{{ activeCount }}</span>
-                  <i class="bi bi-check-circle text-xl text-emerald-500"></i>
-                </div>
-              </div>
-              <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm">
-                <p class="text-xs uppercase tracking-[0.3em] text-slate-500">{{ $t('message.admin_users.stats_inactive') }}</p>
-                <div class="mt-3 flex items-center justify-between">
-                  <span v-if="showDataSkeleton" class="h-8 w-14 rounded-lg bg-slate-200 dark:bg-slate-700 animate-pulse"></span>
-                  <span v-else class="text-2xl font-black text-slate-900 dark:text-white">{{ inactiveCount }}</span>
-                  <i class="bi bi-x-circle text-xl text-rose-500"></i>
-                </div>
-              </div>
+              <StatCard
+                :label="$t('message.admin_users.stats_active')"
+                :value="activeCount"
+                :loading="showDataSkeleton"
+                loading-class="h-8 w-14 rounded-lg bg-slate-200 dark:bg-slate-700 animate-pulse"
+                value-class="text-2xl font-black text-slate-900 dark:text-white"
+                icon-class="bi bi-check-circle text-xl text-emerald-500"
+              />
+              <StatCard
+                :label="$t('message.admin_users.stats_inactive')"
+                :value="inactiveCount"
+                :loading="showDataSkeleton"
+                loading-class="h-8 w-14 rounded-lg bg-slate-200 dark:bg-slate-700 animate-pulse"
+                value-class="text-2xl font-black text-slate-900 dark:text-white"
+                icon-class="bi bi-x-circle text-xl text-rose-500"
+              />
             </div>
           </div>
         </template>
@@ -153,93 +153,99 @@
             </ActionTextButton>
           </div>
 
-          <div v-if="showDataSkeleton" class="p-6 space-y-4 animate-pulse">
-            <div v-for="row in 6" :key="row" class="h-12 rounded-xl bg-slate-100 dark:bg-slate-800"></div>
-          </div>
+          <AsyncStateSection
+            :loading="showDataSkeleton"
+            :error="error"
+            :is-empty="filteredUsers.length === 0"
+            :empty-title="$t('message.admin_users.empty_title')"
+            :empty-message="$t('message.admin_users.empty_message')"
+          >
+            <template #loading>
+              <div class="p-6 space-y-4 animate-pulse">
+                <div v-for="row in 6" :key="row" class="h-12 rounded-xl bg-slate-100 dark:bg-slate-800"></div>
+              </div>
+            </template>
 
-          <div v-else-if="error" class="p-8 text-center">
-            <i class="bi bi-exclamation-triangle-fill text-4xl text-rose-500 mb-3"></i>
-            <h3 class="text-lg font-bold text-slate-900 dark:text-white">{{ $t('message.errors.failed_to_load', { item: $t('message.admin_users.list_title'), message: error }) }}</h3>
-            <ActionTextButton
-              class="mt-4"
-              tone="rose"
-              shape="full"
-              icon="bi bi-arrow-clockwise"
-              @click="reload"
-            >
-              {{ $t('message.common.retry') }}
-            </ActionTextButton>
-          </div>
-
-          <div v-else-if="filteredUsers.length === 0" class="p-10 text-center">
-            <i class="bi bi-emoji-neutral text-4xl text-slate-400 mb-3"></i>
-            <h3 class="text-lg font-bold text-slate-900 dark:text-white">{{ $t('message.admin_users.empty_title') }}</h3>
-            <p class="text-slate-500 dark:text-slate-400">{{ $t('message.admin_users.empty_message') }}</p>
-          </div>
-
-          <div v-else class="overflow-x-auto">
-            <table class="max-[992px]:mt-4 mt-0 min-w-full text-sm max-[992px]:block">
-              <thead class="bg-slate-50 dark:bg-slate-800/70 text-slate-500 dark:text-slate-400 uppercase tracking-wider max-[992px]:hidden">
-                <tr>
-                  <th class="px-6 py-3 text-center">{{ $t('message.common.actions', 'Actions') }}</th>
-                  <th class="px-6 py-3 text-left">{{ $t('message.admin_users.column_id') }}</th>
-                  <th class="px-6 py-3 text-left">{{ $t('message.admin_users.column_full_name') }}</th>
-                  <th class="px-6 py-3 text-left">{{ $t('message.admin_users.column_email') }}</th>
-                  <th class="px-6 py-3 text-left">{{ $t('message.admin_users.column_role') }}</th>
-                  <th class="px-6 py-3 text-left">{{ $t('message.admin_users.column_status') }}</th>
-                  <th class="px-6 py-3 text-left">{{ $t('message.admin_users.column_created_at') }}</th>
-                  <th class="px-6 py-3 text-left">{{ $t('message.admin_users.column_updated_at') }}</th>
-                </tr>
-              </thead>
-              <tbody class="max-[992px]:block max-[992px]:px-4">
-                <tr
-                  v-for="userItem in filteredUsers"
-                  :key="userItem.id"
-                  :class="tableRowClass"
+            <template #error>
+              <div class="p-8 text-center">
+                <i class="bi bi-exclamation-triangle-fill text-4xl text-rose-500 mb-3"></i>
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white">{{ $t('message.errors.failed_to_load', { item: $t('message.admin_users.list_title'), message: error }) }}</h3>
+                <ActionTextButton
+                  class="mt-4"
+                  tone="rose"
+                  shape="full"
+                  icon="bi bi-arrow-clockwise"
+                  @click="reload"
                 >
-                  <td :class="actionsCellClass" :data-label="$t('message.common.actions', 'Actions')">
-                    <div class="flex items-center justify-center gap-2">
-                      <ActionIconButton
-                        v-if="isAdmin && !isCurrentUser(userItem)"
-                        @click="openRoleModal(userItem)"
-                        icon="bi bi-shield-shaded"
-                        tone="amber"
-                        :title="$t('message.admin_users.change_role', 'Change Role')"
-                        :aria-label="$t('message.admin_users.change_role', 'Change Role')"
-                      />
-                      <ActionIconButton
-                        @click="openEditModal(userItem)"
-                        icon="bi bi-pencil-fill"
-                        tone="indigo"
-                        :title="$t('message.common.edit') || 'Edit'"
-                        :aria-label="$t('message.common.edit') || 'Edit'"
-                      />
-                      <ActionIconButton
-                        @click="confirmDelete(userItem)"
-                        icon="bi bi-trash-fill"
-                        tone="rose"
-                        :title="$t('message.common.delete') || 'Delete'"
-                        :aria-label="$t('message.common.delete') || 'Delete'"
-                      />
-                    </div>
-                  </td>
-                  <td :class="idCellClass" :data-label="$t('message.admin_users.column_id')">#{{ userItem.id }}</td>
-                  <td :class="nameCellClass" :data-label="$t('message.admin_users.column_full_name')">
-                    <div class="font-semibold">{{ userItem.full_name }}</div>
-                  </td>
-                  <td :class="emailCellClass" :data-label="$t('message.admin_users.column_email')">{{ userItem.email }}</td>
-                  <td :class="roleCellClass" :data-label="$t('message.admin_users.column_role')">
-                    <span :class="roleBadgeClass(userItem.role)">{{ formatRole(userItem.role) }}</span>
-                  </td>
-                  <td :class="statusCellClass" :data-label="$t('message.admin_users.column_status')">
-                    <span :class="statusBadgeClass(userItem.status)">{{ formatStatus(userItem.status) }}</span>
-                  </td>
-                  <td :class="createdAtCellClass" :data-label="$t('message.admin_users.column_created_at')">{{ formatDate(userItem.created_at) }}</td>
-                  <td :class="updatedAtCellClass" :data-label="$t('message.admin_users.column_updated_at')">{{ formatDate(userItem.updated_at) }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+                  {{ $t('message.common.retry') }}
+                </ActionTextButton>
+              </div>
+            </template>
+
+            <div class="overflow-x-auto">
+              <table class="max-[992px]:mt-4 mt-0 min-w-full text-sm max-[992px]:block">
+                <thead class="bg-slate-50 dark:bg-slate-800/70 text-slate-500 dark:text-slate-400 uppercase tracking-wider max-[992px]:hidden">
+                  <tr>
+                    <th class="px-6 py-3 text-center">{{ $t('message.common.actions', 'Actions') }}</th>
+                    <th class="px-6 py-3 text-left">{{ $t('message.admin_users.column_id') }}</th>
+                    <th class="px-6 py-3 text-left">{{ $t('message.admin_users.column_full_name') }}</th>
+                    <th class="px-6 py-3 text-left">{{ $t('message.admin_users.column_email') }}</th>
+                    <th class="px-6 py-3 text-left">{{ $t('message.admin_users.column_role') }}</th>
+                    <th class="px-6 py-3 text-left">{{ $t('message.admin_users.column_status') }}</th>
+                    <th class="px-6 py-3 text-left">{{ $t('message.admin_users.column_created_at') }}</th>
+                    <th class="px-6 py-3 text-left">{{ $t('message.admin_users.column_updated_at') }}</th>
+                  </tr>
+                </thead>
+                <tbody class="max-[992px]:block max-[992px]:px-4">
+                  <tr
+                    v-for="userItem in filteredUsers"
+                    :key="userItem.id"
+                    :class="tableRowClass"
+                  >
+                    <td :class="actionsCellClass" :data-label="$t('message.common.actions', 'Actions')">
+                      <div class="flex items-center justify-center gap-2">
+                        <ActionIconButton
+                          v-if="isAdmin && !isCurrentUser(userItem)"
+                          @click="openRoleModal(userItem)"
+                          icon="bi bi-shield-shaded"
+                          tone="amber"
+                          :title="$t('message.admin_users.change_role', 'Change Role')"
+                          :aria-label="$t('message.admin_users.change_role', 'Change Role')"
+                        />
+                        <ActionIconButton
+                          @click="openEditModal(userItem)"
+                          icon="bi bi-pencil-fill"
+                          tone="indigo"
+                          :title="$t('message.common.edit') || 'Edit'"
+                          :aria-label="$t('message.common.edit') || 'Edit'"
+                        />
+                        <ActionIconButton
+                          @click="confirmDelete(userItem)"
+                          icon="bi bi-trash-fill"
+                          tone="rose"
+                          :title="$t('message.common.delete') || 'Delete'"
+                          :aria-label="$t('message.common.delete') || 'Delete'"
+                        />
+                      </div>
+                    </td>
+                    <td :class="idCellClass" :data-label="$t('message.admin_users.column_id')">#{{ userItem.id }}</td>
+                    <td :class="nameCellClass" :data-label="$t('message.admin_users.column_full_name')">
+                      <div class="font-semibold">{{ userItem.full_name }}</div>
+                    </td>
+                    <td :class="emailCellClass" :data-label="$t('message.admin_users.column_email')">{{ userItem.email }}</td>
+                    <td :class="roleCellClass" :data-label="$t('message.admin_users.column_role')">
+                      <span :class="roleBadgeClass(userItem.role)">{{ formatRole(userItem.role) }}</span>
+                    </td>
+                    <td :class="statusCellClass" :data-label="$t('message.admin_users.column_status')">
+                      <span :class="statusBadgeClass(userItem.status)">{{ formatStatus(userItem.status) }}</span>
+                    </td>
+                    <td :class="createdAtCellClass" :data-label="$t('message.admin_users.column_created_at')">{{ formatDate(userItem.created_at) }}</td>
+                    <td :class="updatedAtCellClass" :data-label="$t('message.admin_users.column_updated_at')">{{ formatDate(userItem.updated_at) }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </AsyncStateSection>
         </div>
 
         <div class="mt-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3" v-if="(pagination.totalPages || 1) > 1">
@@ -307,6 +313,8 @@ import ActionIconButton from '../components/ActionIconButton.vue';
 import ActionTextButton from '../components/ActionTextButton.vue';
 import LoginRequiredPrompt from '../components/LoginRequiredPrompt.vue';
 import PageHeroSection from '../components/PageHeroSection.vue';
+import AsyncStateSection from '../components/AsyncStateSection.vue';
+import StatCard from '../components/StatCard.vue';
 
 export default {
   name: 'AdminUsers',
@@ -318,7 +326,9 @@ export default {
     ActionIconButton,
     ActionTextButton,
     LoginRequiredPrompt,
-    PageHeroSection
+    PageHeroSection,
+    AsyncStateSection,
+    StatCard
   },
   setup() {
     const { t } = useI18n({ useScope: 'global' });

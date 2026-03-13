@@ -106,67 +106,58 @@
       </section>
 
       <section v-else class="space-y-6">
-        <!-- Optimized Skeleton Loader -->
-        <div v-if="loading" class="grid gap-6 lg:grid-cols-2 animate-pulse">
-            <!-- Left Column Skeleton -->
+        <AsyncStateSection
+          :loading="loading"
+          :error="error"
+          :is-empty="!hasData"
+          :empty-title="$t('message.system_health.empty_title')"
+          :empty-message="$t('message.system_health.empty_message')"
+        >
+          <template #loading>
+          <div class="grid gap-6 lg:grid-cols-2 animate-pulse">
             <div class="rounded-[24px] border border-slate-200/70 dark:border-slate-800 bg-white/90 dark:bg-slate-900/80 p-6 shadow-xl">
-                 <div class="h-6 w-40 rounded bg-slate-200 dark:bg-slate-700 mb-6"></div>
-                 <div class="grid grid-cols-2 gap-3 mb-4">
-                     <div class="h-20 rounded-xl bg-slate-100 dark:bg-slate-800"></div>
-                     <div class="h-20 rounded-xl bg-slate-100 dark:bg-slate-800"></div>
-                 </div>
-                 <div class="space-y-2">
-                     <div v-for="i in 4" :key="i" class="h-12 rounded-lg bg-slate-100 dark:bg-slate-800"></div>
-                 </div>
+               <div class="h-6 w-40 rounded bg-slate-200 dark:bg-slate-700 mb-6"></div>
+               <div class="grid grid-cols-2 gap-3 mb-4">
+                 <div class="h-20 rounded-xl bg-slate-100 dark:bg-slate-800"></div>
+                 <div class="h-20 rounded-xl bg-slate-100 dark:bg-slate-800"></div>
+               </div>
+               <div class="space-y-2">
+                 <div v-for="i in 4" :key="i" class="h-12 rounded-lg bg-slate-100 dark:bg-slate-800"></div>
+               </div>
             </div>
 
-            <!-- Right Column Skeleton (System & Security) -->
             <div class="rounded-[24px] border border-slate-200/70 dark:border-slate-800 bg-white/90 dark:bg-slate-900/80 p-6 shadow-xl space-y-3">
-                 <div class="h-6 w-32 rounded bg-slate-200 dark:bg-slate-700 mb-6"></div>
-                 <div v-for="i in 3" :key="i" class="rounded-xl border border-slate-200/50 dark:border-slate-800 p-4 bg-slate-50/50 dark:bg-slate-800/30">
-                     <div class="h-4 w-24 rounded bg-slate-200 dark:bg-slate-700 mb-3"></div>
-                     <div class="grid grid-cols-2 gap-2">
-                         <div v-for="j in 4" :key="j" class="h-4 rounded bg-slate-200 dark:bg-slate-700"></div>
-                     </div>
+               <div class="h-6 w-32 rounded bg-slate-200 dark:bg-slate-700 mb-6"></div>
+               <div v-for="i in 3" :key="i" class="rounded-xl border border-slate-200/50 dark:border-slate-800 p-4 bg-slate-50/50 dark:bg-slate-800/30">
+                 <div class="h-4 w-24 rounded bg-slate-200 dark:bg-slate-700 mb-3"></div>
+                 <div class="grid grid-cols-2 gap-2">
+                   <div v-for="j in 4" :key="j" class="h-4 rounded bg-slate-200 dark:bg-slate-700"></div>
                  </div>
+               </div>
             </div>
 
-            <!-- Full Width Skeleton (Tables & Roles) -->
             <div class="lg:col-span-2 grid gap-6 lg:grid-cols-2">
-                 <div class="rounded-[24px] border border-slate-200/70 dark:border-slate-800 bg-white/90 dark:bg-slate-900/80 p-6 shadow-xl">
-                     <div class="h-6 w-48 rounded bg-slate-200 dark:bg-slate-700 mb-4"></div>
-                     <div class="space-y-3">
-                         <div class="h-8 bg-slate-100 dark:bg-slate-800 rounded"></div>
-                         <div v-for="i in 5" :key="i" class="h-8 border-b border-slate-100 dark:border-slate-800"></div>
-                     </div>
+               <div class="rounded-[24px] border border-slate-200/70 dark:border-slate-800 bg-white/90 dark:bg-slate-900/80 p-6 shadow-xl">
+                 <div class="h-6 w-48 rounded bg-slate-200 dark:bg-slate-700 mb-4"></div>
+                 <div class="space-y-3">
+                   <div class="h-8 bg-slate-100 dark:bg-slate-800 rounded"></div>
+                   <div v-for="i in 5" :key="i" class="h-8 border-b border-slate-100 dark:border-slate-800"></div>
                  </div>
-                 <div class="rounded-[24px] border border-slate-200/70 dark:border-slate-800 bg-white/90 dark:bg-slate-900/80 p-6 shadow-xl space-y-4">
-                     <div class="h-6 w-40 rounded bg-slate-200 dark:bg-slate-700 mb-4"></div>
-                     <div class="grid grid-cols-3 gap-3">
-                         <div v-for="i in 3" :key="i" class="h-20 rounded-xl bg-slate-100 dark:bg-slate-800"></div>
-                     </div>
-                     <div class="h-6 w-32 rounded bg-slate-200 dark:bg-slate-700 mt-4 mb-2"></div>
-                     <div class="space-y-2">
-                         <div v-for="i in 3" :key="i" class="h-10 rounded-lg bg-slate-100 dark:bg-slate-800"></div>
-                     </div>
+               </div>
+               <div class="rounded-[24px] border border-slate-200/70 dark:border-slate-800 bg-white/90 dark:bg-slate-900/80 p-6 shadow-xl space-y-4">
+                 <div class="h-6 w-40 rounded bg-slate-200 dark:bg-slate-700 mb-4"></div>
+                 <div class="grid grid-cols-3 gap-3">
+                   <div v-for="i in 3" :key="i" class="h-20 rounded-xl bg-slate-100 dark:bg-slate-800"></div>
                  </div>
+                 <div class="h-6 w-32 rounded bg-slate-200 dark:bg-slate-700 mt-4 mb-2"></div>
+                 <div class="space-y-2">
+                   <div v-for="i in 3" :key="i" class="h-10 rounded-lg bg-slate-100 dark:bg-slate-800"></div>
+                 </div>
+               </div>
             </div>
-        </div>
-
-        <div v-else-if="error" class="rounded-[28px] border border-rose-200 dark:border-rose-800 bg-rose-50 dark:bg-rose-900/20 p-6 text-rose-700 dark:text-rose-300">
-          <div class="flex items-center gap-2">
-            <i class="bi bi-exclamation-triangle-fill"></i>
-            <span>{{ error }}</span>
           </div>
-        </div>
+          </template>
 
-        <div v-else-if="!hasData" class="rounded-[28px] border border-slate-200/70 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xl p-10 text-center">
-          <i class="bi bi-emoji-neutral text-4xl text-slate-400 mb-3"></i>
-          <h3 class="text-lg font-bold text-slate-900 dark:text-white">{{ $t('message.system_health.empty_title') }}</h3>
-          <p class="text-slate-500 dark:text-slate-400">{{ $t('message.system_health.empty_message') }}</p>
-        </div>
-
-        <template v-else>
           <div class="grid gap-6 lg:grid-cols-2">
             <section class="rounded-[24px] border border-slate-200/70 dark:border-slate-800 bg-white/90 dark:bg-slate-900/80 p-6 shadow-[0_18px_50px_-40px_rgba(15,23,42,0.7)]">
               <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-4">{{ $t('message.system_health.database_title') }}</h2>
@@ -362,7 +353,7 @@
               </div>
             </div>
           </section>
-        </template>
+        </AsyncStateSection>
       </section>
     </template>
   </div>
@@ -379,10 +370,11 @@ import { useMainStore } from '/assets/js/stores/mainStore.js';
 import ActionTextButton from '/vue/components/ActionTextButton.vue';
 import LoginRequiredPrompt from '/vue/components/LoginRequiredPrompt.vue';
 import PageHeroSection from '/vue/components/PageHeroSection.vue';
+import AsyncStateSection from '/vue/components/AsyncStateSection.vue';
 
 export default {
   name: 'AdminSystemHealth',
-  components: { ActionTextButton, LoginRequiredPrompt, PageHeroSection },
+  components: { ActionTextButton, LoginRequiredPrompt, PageHeroSection, AsyncStateSection },
   setup() {
     const systemHealthStore = useSystemHealthStore();
     const authStore = useAuthStore();
