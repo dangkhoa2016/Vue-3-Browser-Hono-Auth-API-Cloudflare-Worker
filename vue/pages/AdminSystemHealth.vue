@@ -372,6 +372,7 @@ import LoginRequiredPrompt from '/vue/components/LoginRequiredPrompt.vue';
 import PageHeroSection from '/vue/components/PageHeroSection.vue';
 import AsyncStateSection from '/vue/components/AsyncStateSection.vue';
 import { useAuthGate } from '../composables/useAuthGate.js';
+import { getHealthTextClass, getHealthCheckBadgeClass, getBooleanHealthTextClass } from '/vue/composables/useUiClassMap.js';
 
 export default {
   name: 'AdminSystemHealth',
@@ -404,9 +405,7 @@ export default {
     });
 
     const statusTextClass = computed(() => {
-      if (status.value === 'healthy') return 'text-emerald-600 dark:text-emerald-400';
-      if (status.value === 'unhealthy') return 'text-rose-600 dark:text-rose-400';
-      return 'text-slate-600 dark:text-slate-300';
+      return getHealthTextClass(status.value);
     });
 
     const responseTime = computed(() => String(healthData.value?.responseTime || '-'));
@@ -424,11 +423,7 @@ export default {
 
     const databaseConnected = computed(() => Boolean(healthData.value?.database?.isConnected));
     const databaseConnectedText = computed(() => (databaseConnected.value ? t('message.system_health.yes') : t('message.system_health.no')));
-    const databaseConnectedClass = computed(() => (
-      databaseConnected.value
-        ? 'text-emerald-600 dark:text-emerald-400'
-        : 'text-rose-600 dark:text-rose-400'
-    ));
+    const databaseConnectedClass = computed(() => getBooleanHealthTextClass(databaseConnected.value));
 
     const sqliteVersion = computed(() => String(healthData.value?.database?.info?.version || '-'));
 
@@ -536,11 +531,7 @@ export default {
     };
 
     const healthCheckStatusClass = (value) => {
-      const normalized = String(value || '').toLowerCase();
-      if (normalized === 'healthy' || normalized === 'pass') return 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300';
-      if (normalized === 'warn') return 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300';
-      if (normalized === 'unhealthy' || normalized === 'fail') return 'bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-300';
-      return 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-200';
+      return getHealthCheckBadgeClass(value);
     };
 
     const refresh = async () => {

@@ -387,6 +387,7 @@ import LoginRequiredPrompt from '../components/LoginRequiredPrompt.vue';
 import { useDebouncedFilters } from '/vue/composables/useDebouncedFilters.js';
 import { useModalState } from '/vue/composables/useModalState.js';
 import { useAuthGate } from '/vue/composables/useAuthGate.js';
+import { getTokenAuditActionClass } from '/vue/composables/useUiClassMap.js';
 
 export default {
   name: 'AdminTokenAudit',
@@ -477,19 +478,6 @@ export default {
       } catch (e) {
         return metadata;
       }
-    };
-
-    const getActionTailwindClass = (action, baseClasses = '') => {
-      const actions = {
-        'LOGIN': 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 px-2 py-0.5 rounded-md',
-        'LOGOUT': 'text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-md',
-        'REFRESH_TOKEN': 'text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-900/30 px-2 py-0.5 rounded-md',
-        'REVOKE': 'text-orange-600 dark:text-orange-400 bg-orange-50 dark:bg-orange-900/30 px-2 py-0.5 rounded-md',
-        'INVALID_TOKEN': 'text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/30 px-2 py-0.5 rounded-md'
-      };
-      
-      const defaultStyle = 'text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-md font-mono text-xs';
-      return `${baseClasses} ${actions[action] || defaultStyle}`;
     };
 
     const fetchLogs = async (page = 1) => {
@@ -646,7 +634,7 @@ export default {
       clearSelection,
       formatDate,
       formatMetadata,
-      getActionTailwindClass,
+      getActionTailwindClass: getTokenAuditActionClass,
       openLoginModal,
       viewLogDetails,
       confirmDeleteLog,

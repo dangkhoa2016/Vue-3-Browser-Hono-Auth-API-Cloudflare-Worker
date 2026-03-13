@@ -318,6 +318,7 @@ import StatCard from '../components/StatCard.vue';
 import { useAuthGate } from '/vue/composables/useAuthGate.js';
 import { useDebouncedFilters } from '/vue/composables/useDebouncedFilters.js';
 import { useModalState } from '/vue/composables/useModalState.js';
+import { getUserRoleBadgeClass, getUserStatusBadgeClass } from '/vue/composables/useUiClassMap.js';
 
 export default {
   name: 'AdminUsers',
@@ -704,24 +705,9 @@ export default {
       deleteConfirmModal.close({ reset: true });
     };
 
-    const roleBadgeClass = (role) => {
-      const normalized = (role || '').toLowerCase();
-      if (normalized === 'super_admin') {
-        return 'inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300';
-      }
-      if (normalized === 'admin') {
-        return 'inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-300';
-      }
-      return 'inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-200';
-    };
+    const roleBadgeClass = (role) => getUserRoleBadgeClass(role);
 
-    const statusBadgeClass = (status) => {
-      const normalized = (status || '').toLowerCase();
-      if (normalized === 'active') {
-        return 'inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300';
-      }
-      return 'inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-300';
-    };
+    const statusBadgeClass = (status) => getUserStatusBadgeClass(status);
 
     const { runDebounced, clearDebounce } = useDebouncedFilters(400);
 
