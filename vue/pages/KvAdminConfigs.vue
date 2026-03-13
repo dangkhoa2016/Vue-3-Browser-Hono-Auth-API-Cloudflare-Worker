@@ -502,6 +502,8 @@ import ActionTextButton from '/vue/components/ActionTextButton.vue';
 import ActionIconButton from '/vue/components/ActionIconButton.vue';
 import LoginRequiredPrompt from '/vue/components/LoginRequiredPrompt.vue';
 import PageHeroSection from '/vue/components/PageHeroSection.vue';
+import { useAuthGate } from '/vue/composables/useAuthGate.js';
+import { useModalState } from '/vue/composables/useModalState.js';
 
 export default {
   name: 'KvAdminConfigs',
@@ -512,7 +514,6 @@ export default {
     const modalStore = useModalStore();
     const mainStore = useMainStore();
 
-    const showLoginRequired = ref(false);
     const loading = ref(false);
     const error = ref(null);
     const search = ref('');
@@ -523,17 +524,22 @@ export default {
     const lastUpdated = ref(null);
     const copiedKey = ref(null);
     const copiedValue = ref(null);
-    const editorOpen = ref(false);
-    const editorMode = ref('add');
+    const editorModal = useModalState({ initialOpen: false, initialMode: 'add' });
+    const editorOpen = editorModal.isOpen;
+    const editorMode = editorModal.mode;
     const editorKey = ref('');
     const editorValue = ref('');
     const editorError = ref('');
     const isSaving = ref(false);
-    const deleteOpen = ref(false);
+
+    const deleteModal = useModalState({ initialOpen: false, initialMode: 'delete' });
+    const deleteOpen = deleteModal.isOpen;
     const deleteKey = ref('');
     const deleteError = ref('');
     const isDeleting = ref(false);
-    const bulkOpen = ref(false);
+
+    const bulkModal = useModalState({ initialOpen: false, initialMode: 'bulk' });
+    const bulkOpen = bulkModal.isOpen;
     const bulkItems = ref([]);
     const bulkError = ref('');
     const isBulkSaving = ref(false);
@@ -553,8 +559,6 @@ export default {
       'mt-2 w-full rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-3 text-sm text-slate-700 dark:text-slate-100 focus:ring-2 focus:ring-amber-500 outline-none disabled:opacity-60';
     const editorValueTextareaClass =
       'mt-2 w-full rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-3 text-sm text-slate-700 dark:text-slate-100 focus:ring-2 focus:ring-amber-500 outline-none font-mono';
-
-    authStore.init();
 
     const isSuperAdmin = computed(() => authStore.user?.role?.toLowerCase() === 'super_admin');
 
@@ -589,36 +593,9 @@ export default {
       return Number.isNaN(date.getTime()) ? lastUpdated.value : date.toLocaleString();
     });
 
-    const openLoginModal = () => {
-      modalStore.openLogin(
-        async () => {
-          sessionStorage.removeItem('authRequired');
-          sessionStorage.removeItem('intendedRoute');
-          showLoginRequired.value = false;
-          await loadConfigs();
-        },
-        () => {
-          if (!authStore.isAuthenticated) {
-            showLoginRequired.value = true;
-          }
-        }
-      );
-    };
-
-    const checkAuthAndLoad = async () => {
-      if (!authStore.isAuthenticated) {
-        showLoginRequired.value = true;
-        rows.value = [];
-        allowedCount.value = 0;
-        const authRequired = sessionStorage.getItem('authRequired') === 'true';
-        if (authRequired) {
-          openLoginModal();
-        }
-        return;
-      }
-
-      showLoginRequired.value = false;
-      await loadConfigs();
+    const resetKvState = () => {
+      rows.value = [];
+      allowedCount.value = 0;
     };
 
     const buildRows = ({ configs = {}, defaults = {}, allowedKeys: allowedKeyList = [] } = {}) => {
@@ -693,13 +670,36 @@ export default {
         const status = err.response?.status;
         if (status === 401 || status === 403) {
           authStore.logout();
-          showLoginRequired.value = true;
+          markUnauthenticated();
         }
         error.value = (err && err.message) || t('message.kv_admin_page.error_loading');
       } finally {
         loading.value = false;
       }
     };
+
+    const {
+      showLoginRequired,
+      openLoginModal,
+      ensureAuthenticated,
+      handleAuthStateChange,
+      markUnauthenticated
+    } = useAuthGate({
+      authStore,
+      modalStore,
+      sessionAuthFlagKey: 'authRequired',
+      resetProtectedState: resetKvState,
+      onAuthenticated: async () => {
+        if (isSuperAdmin.value) {
+          await loadConfigs();
+        }
+      },
+      onModalSuccess: async () => {
+        if (isSuperAdmin.value) {
+          await loadConfigs();
+        }
+      }
+    });
 
     const reload = async () => {
       await loadConfigs();
@@ -750,7 +750,7 @@ export default {
       editorKey.value = '';
       editorValue.value = '';
       editorError.value = '';
-      editorOpen.value = true;
+      editorModal.open(null, 'add');
     };
 
     const openEditModal = (row) => {
@@ -758,11 +758,11 @@ export default {
       editorKey.value = row.key;
       editorValue.value = formatValueForEdit(row.value);
       editorError.value = '';
-      editorOpen.value = true;
+      editorModal.open(null, 'edit');
     };
 
     const closeEditor = () => {
-      editorOpen.value = false;
+      editorModal.close({ reset: false });
       editorError.value = '';
     };
 
@@ -809,12 +809,12 @@ export default {
     const openBulkModal = async () => {
       bulkItems.value = [createBulkItem()];
       bulkError.value = '';
-      bulkOpen.value = true;
+      bulkModal.open(null, 'bulk');
       await ensureBulkKeyOptionsLoaded();
     };
 
     const closeBulkModal = () => {
-      bulkOpen.value = false;
+      bulkModal.close({ reset: false });
       bulkError.value = '';
       isBulkSaving.value = false;
       bulkListRowId.value = null;
@@ -892,11 +892,11 @@ export default {
     const openDeleteModal = (row) => {
       deleteKey.value = row.key;
       deleteError.value = '';
-      deleteOpen.value = true;
+      deleteModal.open(null, 'delete');
     };
 
     const closeDelete = () => {
-      deleteOpen.value = false;
+      deleteModal.close({ reset: false });
       deleteError.value = '';
     };
 
@@ -995,7 +995,7 @@ export default {
         }
         const toastMsg = response.message || (editorMode.value === 'add' ? t('message.kv_admin_page.add_success') : t('message.kv_admin_page.edit_success'));
         showToast(toastMsg, 'success');
-        editorOpen.value = false;
+        closeEditor();
       } catch (error) {
         let fullError = t('message.errors.unknown_error');
         if (error.response?.data) {
@@ -1044,7 +1044,7 @@ export default {
 
         const toastMsg = response.message || t('message.kv_admin_page.delete_success');
         showToast(toastMsg, 'success');
-        deleteOpen.value = false;
+        closeDelete();
       } catch (error) {
         let errorMsg = t('message.errors.unknown_error');
         if (error.response?.data) {
@@ -1150,7 +1150,7 @@ export default {
           }), 'error');
         } else {
           showToast(payload.message || t('message.kv_admin_page.edit_success'), 'success');
-          bulkOpen.value = false;
+          closeBulkModal();
         }
       } catch (error) {
         let errorMsg = t('message.errors.unknown_error');
@@ -1190,16 +1190,7 @@ export default {
     watch(
       () => authStore.isAuthenticated,
       async (isAuthenticated) => {
-        if (!isAuthenticated) {
-          showLoginRequired.value = true;
-          rows.value = [];
-          allowedCount.value = 0;
-        } else {
-          showLoginRequired.value = false;
-          if (isSuperAdmin.value) {
-            await loadConfigs();
-          }
-        }
+        await handleAuthStateChange(isAuthenticated);
       }
     );
 
@@ -1207,12 +1198,12 @@ export default {
       () => isSuperAdmin.value,
       async (value) => {
         if (value) {
-          showLoginRequired.value = false;
-          await loadConfigs();
+          if (authStore.isAuthenticated) {
+            await loadConfigs();
+          }
           return;
         }
-        rows.value = [];
-        allowedCount.value = 0;
+        resetKvState();
       }
     );
 
@@ -1223,7 +1214,9 @@ export default {
       }
     );
 
-    onMounted(checkAuthAndLoad);
+    onMounted(async () => {
+      await ensureAuthenticated({ checkSessionFlag: true, openModal: true });
+    });
 
     return {
       showLoginRequired,
