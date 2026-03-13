@@ -108,6 +108,7 @@ import { useToastStore } from '/assets/js/stores/toastStore.js';
 import ActionTextButton from '/vue/components/ActionTextButton.vue';
 import LoginRequiredPrompt from '/vue/components/LoginRequiredPrompt.vue';
 import PageHeroSection from '/vue/components/PageHeroSection.vue';
+import { useAuthGate } from '../composables/useAuthGate.js';
 
 export default {
   name: 'KvAdminRateLimits',
@@ -118,17 +119,16 @@ export default {
     const modalStore = useModalStore();
     const toastStore = useToastStore();
 
-    const showLoginRequired = ref(false);
+    const { showLoginRequired, openLoginModal, ensureAuthenticated, handleAuthStateChange } = useAuthGate({
+      authStore,
+      modalStore
+    });
     const isSuperAdmin = computed(() => authStore.user?.role?.toLowerCase() === 'super_admin');
     const loading = ref(false);
     const result = ref(null);
 
     const cleanForm = ref({ prefix: 'rate_limit:', dryRun: true });
     const pruneForm = ref({ prefix: 'rate_limit:', start: '', end: '', dryRun: true });
-
-    const openLoginModal = () => {
-      modalStore.openLogin();
-    };
 
     const runClean = async () => {
       loading.value = true;
@@ -170,7 +170,7 @@ export default {
     };
 
     onMounted(() => {
-      if (!authStore.isAuthenticated) showLoginRequired.value = true;
+      ensureAuthenticated({ checkSessionFlag: true, openModal: false });
       
       const now = new Date();
       const past = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
@@ -178,8 +178,8 @@ export default {
       pruneForm.value.end = now.toISOString().slice(0, 16);
     });
 
-    watch(() => authStore.isAuthenticated, (val) => {
-      showLoginRequired.value = !val;
+    watch(() => authStore.isAuthenticated, async (val) => {
+      await handleAuthStateChange(val);
     });
 
     return {
