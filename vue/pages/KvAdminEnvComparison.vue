@@ -177,6 +177,7 @@ import ActionTextButton from '/vue/components/ActionTextButton.vue';
 import LoginRequiredPrompt from '/vue/components/LoginRequiredPrompt.vue';
 import PageHeroSection from '/vue/components/PageHeroSection.vue';
 import { useAuthGate } from '../composables/useAuthGate.js';
+import { getKvEnvSourceBadgeClass } from '/vue/composables/useUiClassMap.js';
 
 export default {
   name: 'KvAdminEnvComparison',
@@ -218,12 +219,6 @@ export default {
       if (typeof val === 'object') return JSON.stringify(val);
       if (val === '') return t('message.kv_admin_page.env_comparison.value_empty_string') || '"" (Empty string)';
       return String(val);
-    };
-
-    const sourceBadgeClass = (source) => {
-      if (source === 'kv') return 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/30';
-      if (source === 'env') return 'bg-indigo-100 text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-500/30';
-      return 'bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-600';
     };
 
     const filteredKeys = computed(() => {
@@ -298,7 +293,7 @@ export default {
     return {
       showLoginRequired, isSuperAdmin, loading, error, 
       comparison, summary, search, sourceFilter, filteredKeys,
-      openLoginModal, formatValue, sourceBadgeClass, fetchComparison
+      openLoginModal, formatValue, sourceBadgeClass: getKvEnvSourceBadgeClass, fetchComparison
     };
   }
 };

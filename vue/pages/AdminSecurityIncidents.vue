@@ -319,6 +319,11 @@ import PageHeroSection from '/vue/components/PageHeroSection.vue';
 import StatCard from '/vue/components/StatCard.vue';
 import { useDebouncedFilters } from '/vue/composables/useDebouncedFilters.js';
 import { useModalState } from '/vue/composables/useModalState.js';
+import {
+  getSecurityIncidentTypeBadgeClass,
+  getSecurityIncidentSeverityBadgeClass,
+  getSecurityIncidentStatusBadgeClass
+} from '/vue/composables/useUiClassMap.js';
 
 export default {
   name: 'AdminSecurityIncidents',
@@ -395,23 +400,13 @@ export default {
     };
 
     const typeBadgeClass = (type) => {
-      if (!type) return '';
-      if (type === 'brute_force_login') return 'bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-300';
-      if (type === 'privilege_escalation') return 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300';
-      return 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-200';
+      return getSecurityIncidentTypeBadgeClass(type);
     };
     const severityBadgeClass = (severity) => {
-      if (!severity) return '';
-      if (severity === 'high') return 'bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-300';
-      if (severity === 'medium') return 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300';
-      if (severity === 'low') return 'bg-sky-100 text-sky-700 dark:bg-sky-900/30 dark:text-sky-300';
-      return 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-200';
+      return getSecurityIncidentSeverityBadgeClass(severity);
     };
     const statusBadgeClass = (status) => {
-      if (!status) return '';
-      if (status === 'detected') return 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300';
-      if (status === 'resolved') return 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300';
-      return 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-200';
+      return getSecurityIncidentStatusBadgeClass(status);
     };
 
     const openIncident = (incident) => {
