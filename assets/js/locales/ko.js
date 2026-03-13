@@ -52,6 +52,44 @@ export default {
             "login_required": "토큰 블랙리스트에 액세스하려면 로그인해야 합니다."
       }
     },
+    token_audit: {
+      "title": "토큰 감사 로그",
+      "subtitle": "로그인, 로그아웃, 토큰 갱신 및 의심스러운 활동을 포함한 시스템 전체 토큰 활동을 검토합니다.",
+      "security": "감사 추적",
+      "search_placeholder": "이메일, JTI, 사용자 ID 또는 작업으로 검색...",
+      "no_logs_title": "감사 로그가 없습니다",
+      "no_logs_desc": "현재 조건과 일치하는 최근 토큰 활동 기록이 없습니다.",
+      "delete_selected": "선택 삭제",
+      "delete_success": "감사 로그가 성공적으로 삭제되었습니다.",
+      "bulk_delete_success": "{count}개의 감사 로그를 성공적으로 삭제했습니다.",
+      "table": {
+        "action": "작업",
+        "user": "사용자",
+        "ip_address": "IP 주소",
+        "status": "상태",
+        "created_at": "타임스탬프",
+        "actions": "작업",
+        "status_success": "성공",
+        "status_failure": "실패"
+      },
+      "detail_modal": {
+        "title": "감사 로그 상세",
+        "error_message": "오류 메시지"
+      },
+      "delete_modal": {
+        "title": "감사 로그를 삭제하시겠습니까?",
+        "message": "이 토큰 감사 로그를 삭제하시겠습니까? 이 작업은 실행 취소할 수 없으며 기록이 영구적으로 제거됩니다."
+      },
+      "bulk_delete_modal": {
+        "title": "여러 로그를 삭제하시겠습니까?",
+        "message": "선택한 감사 로그를 삭제하시겠습니까? 이 작업은 실행 취소할 수 없습니다."
+      },
+      "access_denied": {
+        "title": "접근 거부됨",
+        "message": "최고 관리자만 토큰 감사 로그에 액세스할 수 있습니다.",
+        "login_required": "토큰 감사 로그에 액세스하려면 로그인해야 합니다."
+      }
+    },
     advanced_audit: {
       "general": {
         "advanced_protection": "Advanced Protection (KO)",
@@ -331,6 +369,8 @@ export default {
       loading_data: '데이터를 불러오는 중...',
       retry: '다시 시도',
       refresh: '새로고침',
+      reload: '다시 불러오기',
+      select: '선택',
       success: '성공',
       error: '오류',
       view: '보기',
@@ -510,6 +550,7 @@ export default {
       admin: '관리자',
       admin_dashboard: '대시보드',
       admin_token_blacklist: '토큰 블랙리스트',
+      admin_token_audit: '토큰 감사 로그',
       kv_admin_env: 'KV 환경 비교',
       user_management: '사용자 관리',
       system_stats: '시스템 통계',

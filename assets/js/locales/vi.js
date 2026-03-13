@@ -52,6 +52,44 @@ export default {
             "login_required": "Bạn cần đăng nhập để truy cập danh sách đen token."
       }
     },
+    token_audit: {
+      "title": "Nhật ký kiểm tra Token",
+      "subtitle": "Xem xét các hoạt động token trên toàn hệ thống bao gồm đăng nhập, đăng xuất, làm mới token và các hoạt động đáng ngờ.",
+      "security": "NHẬT KÝ KIỂM TRA",
+      "search_placeholder": "Tìm kiếm bằng Email, JTI, ID Người dùng hoặc Hành động...",
+      "no_logs_title": "Không tìm thấy nhật ký kiểm tra",
+      "no_logs_desc": "Hiện tại không có bản ghi nào chỉ ra hoạt động token gần đây phù hợp với tiêu chí của bạn.",
+      "delete_selected": "Xóa đã chọn",
+      "delete_success": "Đã xóa nhật ký kiểm tra thành công.",
+      "bulk_delete_success": "Đã xóa thành công {count} nhật ký kiểm tra.",
+      "table": {
+        "action": "Hành động",
+        "user": "Người dùng",
+        "ip_address": "Địa chỉ IP",
+        "status": "Trạng thái",
+        "created_at": "Dấu thời gian",
+        "actions": "Thao tác",
+        "status_success": "Thành công",
+        "status_failure": "Thất bại"
+      },
+      "detail_modal": {
+        "title": "Chi tiết Nhật ký kiểm tra",
+        "error_message": "Thông báo lỗi"
+      },
+      "delete_modal": {
+        "title": "Xóa Nhật ký kiểm tra?",
+        "message": "Bạn có chắc chắn muốn xóa nhật ký kiểm tra token này không? Hành động này không thể hoàn tác và sẽ xóa bản ghi vĩnh viễn."
+      },
+      "bulk_delete_modal": {
+        "title": "Xóa nhiều nhật ký?",
+        "message": "Bạn có chắc chắn muốn xóa các nhật ký kiểm tra đã chọn không? Hành động này không thể hoàn tác."
+      },
+      "access_denied": {
+        "title": "Từ chối truy cập",
+        "message": "Chỉ có Quản trị viên cấp cao (Super Admin) mới có thể truy cập Nhật ký kiểm tra Token.",
+        "login_required": "Bạn cần đăng nhập để truy cập nhật ký kiểm tra token."
+      }
+    },
     advanced_audit: {
       "general": {
         "advanced_protection": "Bảo vệ nâng cao",
@@ -331,6 +369,8 @@ export default {
       loading_data: 'Đang tải dữ liệu...',
       retry: 'Thử lại',
       refresh: 'Làm mới',
+      reload: 'Tải lại',
+      select: 'Chọn',
       success: 'Thành công',
       error: 'Lỗi',
       view: 'Xem',
@@ -510,6 +550,7 @@ export default {
       admin: 'Quản trị',
       admin_dashboard: 'Bảng điều khiển',
       admin_token_blacklist: 'Danh sách Token đen',
+      admin_token_audit: 'Nhật ký kiểm tra Token',
       kv_admin_env: 'So Sánh Biến KV', user_management: 'Quản lý người dùng',
       system_stats: 'Thống kê hệ thống',
       system_health: 'Tình trạng hệ thống',
