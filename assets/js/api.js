@@ -33,6 +33,7 @@ export const API_ENDPOINTS = {
   ADMIN_SYSTEM_HEALTH: '/api/admin/system-health',
   ADMIN_USER_ROLE: '/api/admin/users/:id/role', // Helper for pattern matching
   ADMIN_TOKEN_BLACKLIST: '/api/admin/token-blacklist',
+  ADMIN_TOKEN_AUDIT: '/api/admin/token-audit',
   KV_ADMIN_CONFIGS: '/api/kv-admin/configs',
   KV_ADMIN_CONFIGS_SPECIFIC: '/api/kv-admin/configs/:key',
   KV_ADMIN_CONFIGS_BATCH: '/api/kv-admin/configs/batch',
@@ -118,6 +119,7 @@ const MOCK_PATTERNS = {
   ADMIN_SYSTEM_HEALTH: new RegExp(`${API_ENDPOINTS.ADMIN_SYSTEM_HEALTH.replace(/\//g, '\\/')}($|\\?)`),
   ADMIN_USER_ROLE: new RegExp(`${API_ENDPOINTS.USERS.replace(/\//g, '\\/')}\\/\\d+\\/role($|\\?)`),
   ADMIN_TOKEN_BLACKLIST: new RegExp(`${API_ENDPOINTS.ADMIN_TOKEN_BLACKLIST.replace(/\//g, '\\/')}(?:\\/.*|\\?.*|)$`),
+  ADMIN_TOKEN_AUDIT: new RegExp(`${API_ENDPOINTS.ADMIN_TOKEN_AUDIT.replace(/\//g, '\\/')}(?:\\/.*|\\?.*|)$`),
 
   // KV Admin patterns
   KV_ADMIN_ENV_COMPARISON: new RegExp(`${API_ENDPOINTS.KV_ADMIN_CONFIGS.replace(/\//g, '\\/')}\\/env-comparison($|\\?)`),
@@ -207,6 +209,10 @@ export const DATA_PATHS = {
   CHANGE_PASSWORD_SUCCESS: '/assets/data/users/change-password/succeed/response.json',
   TOKEN_BLACKLIST_CREATE_SUCCESS: '/assets/data/token-blacklist/create/succeed/response.json',
   TOKEN_BLACKLIST_LIST_SUCCESS: '/assets/data/token-blacklist/list/succeed/response.json',
+  TOKEN_AUDIT_LIST_SUCCESS: '/assets/data/token-audit/list/succeed/response.json',
+  TOKEN_AUDIT_DETAIL_SUCCESS: '/assets/data/token-audit/detail/succeed/response.json',
+  TOKEN_AUDIT_DELETE_SUCCESS: '/assets/data/token-audit/delete/succeed/response.json',
+  TOKEN_AUDIT_BULK_DELETE_SUCCESS: '/assets/data/token-audit/bulk-delete/succeed/response.json',
   // KV Admin Toggle data
   KV_ADMIN_FEATURES_TOGGLE_SUCCESS: '/assets/data/kv-admin/features/toggle/succeed/response.json',
   KV_ADMIN_FEATURES: '/assets/data/kv-admin/features/response.json',
@@ -1059,6 +1065,44 @@ export const setupMock = (enable) => {
         return [200, { success: true, message: "Token successfully removed from blacklist" }];
       });
       
+      // Admin: Token Audit
+      mock.onGet(MOCK_PATTERNS.ADMIN_TOKEN_AUDIT).reply(async (config) => {
+        try {
+          const isDetail = /\/api\/admin\/token-audit\/\d+(?:\?.*)?$/.test(config.url);
+          if (isDetail) {
+            const data = await loadJson(DATA_PATHS.TOKEN_AUDIT_DETAIL_SUCCESS);
+            return [200, data];
+          }
+          const data = await loadJson(DATA_PATHS.TOKEN_AUDIT_LIST_SUCCESS);
+          return [200, data];
+        } catch (error) {
+          const message = error.message || 'Internal Server Error';
+          return [500, { success: false, error: message }];
+        }
+      });
+
+      mock.onDelete(MOCK_PATTERNS.ADMIN_TOKEN_AUDIT).reply(async () => {
+        try {
+          const data = await loadJson(DATA_PATHS.TOKEN_AUDIT_DELETE_SUCCESS);
+          return [200, data];
+        } catch (error) {
+          return [500, { success: false, error: error.message || 'Internal Server Error' }];
+        }
+      });
+
+      mock.onPost(MOCK_PATTERNS.ADMIN_TOKEN_AUDIT).reply(async (config) => {
+        const isBulkDelete = /\/api\/admin\/token-audit\/bulk-delete(?:\?.*)?$/.test(config.url);
+        if (isBulkDelete) {
+          try {
+            const data = await loadJson(DATA_PATHS.TOKEN_AUDIT_BULK_DELETE_SUCCESS);
+            return [200, data];
+          } catch (error) {
+            return [500, { success: false, error: error.message || 'Internal Server Error' }];
+          }
+        }
+        return [404, { success: false, error: 'Not found' }];
+      });
+
       // Audit: logs
       mock.onGet(MOCK_PATTERNS.AUDIT_LOGS).reply(async (config) => {
         try {

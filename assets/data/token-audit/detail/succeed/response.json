@@ -1,0 +1,20 @@
+{
+  "success": true,
+  "data": {
+    "id": 36,
+    "user_id": 2,
+    "action": "login",
+    "token_jti": "cb71c0e3-26c2-4c95-8759-39efee632f99",
+    "refresh_jti": "6673cfec-bcd1-40d5-a88d-d72cd036acbd",
+    "ip_address": "3.112.217.127",
+    "user_agent": "node",
+    "success": 1,
+    "error_message": null,
+    "metadata": "{\"method\":\"password\"}",
+    "created_at": "2026-03-12 14:15:35",
+    "user_email": "test-user@example.com",
+    "user_full_name": "Test Regular User",
+    "user_role": "user"
+  },
+  "message": "Audit log details retrieved successfully"
+}

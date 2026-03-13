@@ -52,6 +52,44 @@ export default {
             "login_required": "トークンブラックリストにアクセスするにはログインする必要があります。"
       }
     },
+    token_audit: {
+      "title": "トークン監査ログ",
+      "subtitle": "ログイン、ログアウト、トークン更新、不審なアクティビティなど、システム全体のトークン・アクティビティを確認します。",
+      "security": "監査証跡",
+      "search_placeholder": "電子メール、JTI、ユーザーIDまたはアクションで検索...",
+      "no_logs_title": "監査ログが見つかりません",
+      "no_logs_desc": "現在の条件に一致する最近のトークン・アクティビティを示す記録は現在ありません。",
+      "delete_selected": "選択した項目を削除",
+      "delete_success": "監査ログが正常に削除されました。",
+      "bulk_delete_success": "{count}件の監査ログを正常に削除しました。",
+      "table": {
+        "action": "アクション",
+        "user": "ユーザー",
+        "ip_address": "IPアドレス",
+        "status": "ステータス",
+        "created_at": "タイムスタンプ",
+        "actions": "アクション",
+        "status_success": "成功",
+        "status_failure": "失敗"
+      },
+      "detail_modal": {
+        "title": "監査ログの詳細",
+        "error_message": "エラーメッセージ"
+      },
+      "delete_modal": {
+        "title": "監査ログを削除しますか？",
+        "message": "このトークン監査ログを削除してもよろしいですか？この操作は元に戻すことができず、記録は完全に削除されます。"
+      },
+      "bulk_delete_modal": {
+        "title": "複数のログを削除しますか？",
+        "message": "選択した監査ログを削除してもよろしいですか？このアクションは元に戻せません。"
+      },
+      "access_denied": {
+        "title": "アクセス拒否",
+        "message": "スーパー管理者のみがトークン監査ログにアクセスできます。",
+        "login_required": "トークン監査ログにアクセスするにはログインする必要があります。"
+      }
+    },
     advanced_audit: {
       "general": {
         "advanced_protection": "Advanced Protection (JA)",
@@ -331,6 +369,8 @@ export default {
       loading_data: 'データを読み込んでいます...',
       retry: '再試行',
       refresh: '更新',
+      reload: '再読み込み',
+      select: '選択',
       success: '成功',
       error: 'エラー',
       view: '表示',
@@ -510,6 +550,7 @@ export default {
       admin: '管理者',
       admin_dashboard: 'ダッシュボード',
       admin_token_blacklist: 'トークンブラックリスト',
+      admin_token_audit: 'トークン監査ログ',
       kv_admin_env: 'KV環境の比較', user_management: 'ユーザー管理',
       system_stats: 'システム統計',
       system_health: 'システムヘルス',

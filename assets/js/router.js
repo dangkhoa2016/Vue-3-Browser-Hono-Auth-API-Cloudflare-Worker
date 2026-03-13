@@ -280,6 +280,12 @@ const routes = [
     component: load('/vue/pages/AdminTokenBlacklist.vue'),
     meta: { requiresAuth: true, superAdminOnly: true }
   },
+  {
+    path: '/admin/token-audit',
+    name: 'AdminTokenAudit',
+    component: load('/vue/pages/AdminTokenAudit.vue'),
+    meta: { requiresAuth: true, superAdminOnly: true }
+  },
   { path: '/about', name: 'About', component: load('/vue/pages/About.vue') },
   { path: '/:pathMatch(.*)*', name: 'NotFound', component: load('/vue/pages/NotFound.vue') },
 ];
