@@ -5,29 +5,24 @@
       <div class="absolute inset-0 bg-[linear-gradient(transparent,rgba(15,23,42,0.03))]"></div>
     </div>
 
-    <template v-if="showLoginRequired">
-      <section class="bg-emerald-50/80 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 rounded-3xl p-8 text-center shadow-sm">
-        <i class="bi bi-lock-fill text-5xl text-emerald-600 dark:text-emerald-400 mb-4"></i>
-        <h3 class="text-xl font-bold text-emerald-900 dark:text-emerald-100 mb-2">{{ $t('message.auth.login_required') }}</h3>
-        <p class="text-emerald-700 dark:text-emerald-300 mb-4">{{ $t('message.system_health.login_required_message') }}</p>
-        <ActionTextButton
-          tone="emerald"
-          shape="xl"
-          size="sm"
-          icon="bi bi-box-arrow-in-right text-lg"
-          class="shadow-lg hover:shadow-xl"
-          @click="openLoginModal"
-        >
-          {{ $t('message.auth.login') }}
-        </ActionTextButton>
-      </section>
-    </template>
+    <LoginRequiredPrompt
+      v-if="showLoginRequired"
+      tone="teal"
+      button-tone="emerald"
+      button-icon="bi bi-box-arrow-in-right text-lg"
+      :title="$t('message.auth.login_required')"
+      :message="$t('message.system_health.login_required_message')"
+      :button-text="$t('message.auth.login')"
+      @action="openLoginModal"
+    />
 
     <template v-else>
-      <section :class="heroSectionClass">
-        <div class="absolute -top-20 -right-16 w-72 h-72 bg-emerald-400/10 rounded-full blur-3xl"></div>
-        <div class="absolute -bottom-24 -left-24 w-72 h-72 bg-cyan-500/10 rounded-full blur-3xl"></div>
-        <div class="relative grid gap-6 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
+      <PageHeroSection
+        :section-class="heroSectionClass"
+        top-blob-class="absolute -top-20 -right-16 w-72 h-72 bg-emerald-400/10 rounded-full blur-3xl"
+        bottom-blob-class="absolute -bottom-24 -left-24 w-72 h-72 bg-cyan-500/10 rounded-full blur-3xl"
+      >
+        <template #left>
           <div>
             <div class="inline-flex items-center gap-2 rounded-full bg-emerald-900/10 text-emerald-800 dark:bg-emerald-400/10 dark:text-emerald-200 px-3 py-1 text-xs font-semibold tracking-[0.2em]">
               <span class="w-2 h-2 rounded-full" :class="statusDotClass"></span>
@@ -54,7 +49,9 @@
               </span>
             </div>
           </div>
+        </template>
 
+        <template #right>
           <div class="grid grid-cols-2 gap-4">
             <!-- Skeleton for Stats Cards -->
             <template v-if="loading">
@@ -99,8 +96,8 @@
               </div>
             </template>
           </div>
-        </div>
-      </section>
+        </template>
+      </PageHeroSection>
 
       <section v-if="!isAdmin" class="bg-rose-50/80 dark:bg-rose-900/20 border border-rose-200 dark:border-rose-800 rounded-3xl p-8 text-center shadow-sm">
         <i class="bi bi-shield-lock-fill text-5xl text-rose-600 dark:text-rose-400 mb-4"></i>
@@ -380,10 +377,12 @@ import { useAuthStore } from '/assets/js/stores/authStore.js';
 import { useModalStore } from '/assets/js/stores/modalStore.js';
 import { useMainStore } from '/assets/js/stores/mainStore.js';
 import ActionTextButton from '/vue/components/ActionTextButton.vue';
+import LoginRequiredPrompt from '/vue/components/LoginRequiredPrompt.vue';
+import PageHeroSection from '/vue/components/PageHeroSection.vue';
 
 export default {
   name: 'AdminSystemHealth',
-  components: { ActionTextButton },
+  components: { ActionTextButton, LoginRequiredPrompt, PageHeroSection },
   setup() {
     const systemHealthStore = useSystemHealthStore();
     const authStore = useAuthStore();

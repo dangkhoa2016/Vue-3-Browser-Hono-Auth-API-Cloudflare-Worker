@@ -1,26 +1,22 @@
 <template>
   <div class="relative max-w-7xl mx-auto space-y-8">
-    <!-- Show login prompt when user is not authenticated -->
-    <div v-if="showLoginRequired" class="bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-200 dark:border-blue-800 rounded-2xl p-8 text-center">
-      <i class="bi bi-lock-fill text-5xl text-blue-600 dark:text-blue-400 mb-4"></i>
-      <h3 class="text-xl font-bold text-blue-900 dark:text-blue-100 mb-2">{{ $t('message.audit.login_required') || $t('message.auth.login_required') || 'Login required' }}</h3>
-      <p class="text-blue-700 dark:text-blue-300 mb-4">{{ $t('message.audit.login_required_message') || $t('message.auth.login_required_message') || 'Please login to view audit logs.' }}</p>
-      <ActionTextButton
-        icon="bi bi-box-arrow-in-right"
-        tone="blue"
-        size="sm"
-        shape="xl"
-        @click="openLoginModal"
-      >
-        {{ $t('message.auth.login') || 'Login' }}
-      </ActionTextButton>
-    </div>
+    <LoginRequiredPrompt
+      v-if="showLoginRequired"
+      tone="blue"
+      :title="$t('message.audit.login_required') || $t('message.auth.login_required') || 'Login required'"
+      :message="$t('message.audit.login_required_message') || $t('message.auth.login_required_message') || 'Please login to view audit logs.'"
+      :button-text="$t('message.auth.login') || 'Login'"
+      @action="openLoginModal"
+    />
 
     <template v-else>
-      <section :class="heroSectionClass">
-        <div class="absolute -top-24 -right-24 w-72 h-72 bg-cyan-500/10 rounded-full blur-3xl"></div>
-        <div class="absolute -bottom-24 -left-24 w-72 h-72 bg-teal-500/10 rounded-full blur-3xl"></div>
-        <div class="relative grid gap-6 lg:grid-cols-[1.25fr_0.75fr] lg:items-center">
+      <PageHeroSection
+        :section-class="heroSectionClass"
+        top-blob-class="absolute -top-24 -right-24 w-72 h-72 bg-cyan-500/10 rounded-full blur-3xl"
+        bottom-blob-class="absolute -bottom-24 -left-24 w-72 h-72 bg-teal-500/10 rounded-full blur-3xl"
+        content-class="relative grid gap-6 lg:grid-cols-[1.25fr_0.75fr] lg:items-center"
+      >
+        <template #left>
           <div>
             <div class="inline-flex items-center gap-2 rounded-full bg-cyan-900/10 text-cyan-800 dark:bg-cyan-400/10 dark:text-cyan-200 px-3 py-1 text-xs font-semibold tracking-[0.2em]">
               <span class="w-2 h-2 rounded-full bg-cyan-500 animate-pulse"></span>
@@ -41,7 +37,9 @@
               </ActionTextButton>
             </div>
           </div>
+        </template>
 
+        <template #right>
           <div class="grid gap-4">
             <!-- Stats Skeleton -->
             <template v-if="auditStore.loading">
@@ -97,8 +95,8 @@
               </div>
             </template>
           </div>
-        </div>
-      </section>
+        </template>
+      </PageHeroSection>
 
       <section class="rounded-[28px] border border-slate-200/70 dark:border-slate-800 bg-white/85 dark:bg-slate-900 p-6 shadow-[0_18px_50px_-40px_rgba(15,23,42,0.7)]">
       <!-- Enhanced Filters Section -->
@@ -451,6 +449,8 @@ import ModalWindow from '/vue/components/ModalWindow.vue';
 import PaginationControls from '/vue/components/PaginationControls.vue';
 import ActionIconButton from '/vue/components/ActionIconButton.vue';
 import ActionTextButton from '/vue/components/ActionTextButton.vue';
+import LoginRequiredPrompt from '/vue/components/LoginRequiredPrompt.vue';
+import PageHeroSection from '/vue/components/PageHeroSection.vue';
 
 export default {
   name: 'AdminAuditLogs',
@@ -458,7 +458,9 @@ export default {
     ModalWindow,
     PaginationControls,
     ActionIconButton,
-    ActionTextButton
+    ActionTextButton,
+    LoginRequiredPrompt,
+    PageHeroSection
   },
   setup() {
     const auditStore = useAuditStore();

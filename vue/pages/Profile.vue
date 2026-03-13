@@ -53,21 +53,14 @@
       </div>
     </div>
 
-    <!-- Login Required State -->
-    <div v-else-if="showLoginRequired" class="bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-200 dark:border-blue-800 rounded-2xl p-8 text-center">
-      <i class="bi bi-lock-fill text-5xl text-blue-600 dark:text-blue-400 mb-4"></i>
-      <h3 class="text-xl font-bold text-blue-900 dark:text-blue-100 mb-2">{{ $t('message.auth.login_required') }}</h3>
-      <p class="text-blue-700 dark:text-blue-300 mb-4">{{ $t('message.auth.login_required_message') }}</p>
-      <ActionTextButton
-        icon="bi bi-box-arrow-in-right"
-        tone="blue"
-        size="sm"
-        shape="xl"
-        @click="openLoginModal"
-      >
-        {{ $t('message.auth.login') }}
-      </ActionTextButton>
-    </div>
+    <LoginRequiredPrompt
+      v-else-if="showLoginRequired"
+      tone="blue"
+      :title="$t('message.auth.login_required')"
+      :message="$t('message.auth.login_required_message')"
+      :button-text="$t('message.auth.login')"
+      @action="openLoginModal"
+    />
 
     <!-- Error State -->
     <div v-else-if="error" class="bg-red-50 dark:bg-red-900/20 border-2 border-red-200 dark:border-red-800 rounded-2xl p-8 text-center">
@@ -394,11 +387,13 @@ import { useModalStore } from '/assets/js/stores/modalStore.js';
 import { useToastStore } from '/assets/js/stores/toastStore.js';
 import { apiClient, API_ENDPOINTS } from '/assets/js/api.js';
 import ActionTextButton from '/vue/components/ActionTextButton.vue';
+import LoginRequiredPrompt from '/vue/components/LoginRequiredPrompt.vue';
 
 export default {
   name: 'Profile',
   components: {
-    ActionTextButton
+    ActionTextButton,
+    LoginRequiredPrompt
   },
   setup() {
     const profile = ref(null);

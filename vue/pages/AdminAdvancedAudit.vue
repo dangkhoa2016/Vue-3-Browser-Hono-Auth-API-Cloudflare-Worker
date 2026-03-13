@@ -1,20 +1,13 @@
 <template>
   <div class="relative max-w-7xl mx-auto space-y-8">
-    <!-- Show login prompt when user is not authenticated/authorized -->
-    <div v-if="!isAuthenticated" class="bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-200 dark:border-blue-800 rounded-2xl p-8 text-center">
-      <i class="bi bi-lock-fill text-5xl text-blue-600 dark:text-blue-400 mb-4"></i>
-      <h3 class="text-xl font-bold text-blue-900 dark:text-blue-100 mb-2">{{ $t?.('message.auth.login_required') || 'Login Required' }}</h3>
-      <p class="text-blue-700 dark:text-blue-300 mb-4">{{ $t?.('message.auth.login_required_message') || 'Please login with administrator privileges to view advanced audit features.' }}</p>
-      <ActionTextButton
-        icon="bi bi-box-arrow-in-right"
-        tone="blue"
-        size="sm"
-        shape="xl"
-        @click="openLoginModal"
-      >
-        {{ $t?.('message.auth.login') || 'Login' }}
-      </ActionTextButton>
-    </div>
+    <LoginRequiredPrompt
+      v-if="!isAuthenticated"
+      tone="blue"
+      :title="$t?.('message.auth.login_required') || 'Login Required'"
+      :message="$t?.('message.auth.login_required_message') || 'Please login with administrator privileges to view advanced audit features.'"
+      :button-text="$t?.('message.auth.login') || 'Login'"
+      @action="openLoginModal"
+    />
 
     <template v-else>
       <!-- Enhanced Hero Section -->
@@ -100,6 +93,7 @@ import AdvancedAuditAnalyticsTab from '/vue/components/AdvancedAuditAnalyticsTab
 import AdvancedAuditComplianceTab from '/vue/components/AdvancedAuditComplianceTab.vue';
 import AdvancedAuditArchivalTab from '/vue/components/AdvancedAuditArchivalTab.vue';
 import ActionTextButton from '/vue/components/ActionTextButton.vue';
+import LoginRequiredPrompt from '/vue/components/LoginRequiredPrompt.vue';
 import { useAuthStore } from '/assets/js/stores/authStore.js';
 import { useAdvancedAuditStore } from '/assets/js/stores/advancedAuditStore.js';
 import { useMainStore } from '/assets/js/stores/mainStore.js';
@@ -111,6 +105,7 @@ export default {
   name: 'AdminAdvancedAudit',
   components: {
     ActionTextButton,
+    LoginRequiredPrompt,
     AdvancedAuditAnalyticsTab,
     AdvancedAuditComplianceTab,
     AdvancedAuditArchivalTab
