@@ -194,7 +194,7 @@
         
         <!-- Pagination -->
         <div class="px-5 py-4 border-t border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30">
-          <PaginationControls :currentPage="pagination.page" :totalPages="pagination.totalPages" :loading="loading" @change="changePage" />
+          <PaginationControls :current-page="pagination.page || 1" :total-pages="pagination.totalPages || 1" :loading="loading" @change="changePage" />
         </div>
       </div>
     </template>
