@@ -32,6 +32,7 @@ export const API_ENDPOINTS = {
   ADMIN_STATS: '/api/admin/stats',
   ADMIN_SYSTEM_HEALTH: '/api/admin/system-health',
   ADMIN_USER_ROLE: '/api/admin/users/:id/role', // Helper for pattern matching
+  ADMIN_TOKEN_BLACKLIST: '/api/admin/token-blacklist',
   KV_ADMIN_CONFIGS: '/api/kv-admin/configs',
   KV_ADMIN_CONFIGS_SPECIFIC: '/api/kv-admin/configs/:key',
   KV_ADMIN_CONFIGS_BATCH: '/api/kv-admin/configs/batch',
@@ -116,6 +117,7 @@ const MOCK_PATTERNS = {
   ADMIN_STATS: new RegExp(`${API_ENDPOINTS.ADMIN_STATS.replace(/\//g, '\\/')}($|\\?)`),
   ADMIN_SYSTEM_HEALTH: new RegExp(`${API_ENDPOINTS.ADMIN_SYSTEM_HEALTH.replace(/\//g, '\\/')}($|\\?)`),
   ADMIN_USER_ROLE: new RegExp(`${API_ENDPOINTS.USERS.replace(/\//g, '\\/')}\\/\\d+\\/role($|\\?)`),
+  ADMIN_TOKEN_BLACKLIST: new RegExp(`${API_ENDPOINTS.ADMIN_TOKEN_BLACKLIST.replace(/\//g, '\\/')}(?:\\/.*|\\?.*|)$`),
 
   // KV Admin patterns
   KV_ADMIN_ENV_COMPARISON: new RegExp(`${API_ENDPOINTS.KV_ADMIN_CONFIGS.replace(/\//g, '\\/')}\\/env-comparison($|\\?)`),
@@ -203,6 +205,8 @@ export const DATA_PATHS = {
   CHANGE_PASSWORD_FAIL: '/assets/data/users/change-password/fail/validate-1.json',
   CHANGE_PASSWORD_INVALID_CURRENT: '/assets/data/users/change-password/fail/invalid-current-password.json',
   CHANGE_PASSWORD_SUCCESS: '/assets/data/users/change-password/succeed/response.json',
+  TOKEN_BLACKLIST_CREATE_SUCCESS: '/assets/data/token-blacklist/create/succeed/response.json',
+  TOKEN_BLACKLIST_LIST_SUCCESS: '/assets/data/token-blacklist/list/succeed/response.json',
   // KV Admin Toggle data
   KV_ADMIN_FEATURES_TOGGLE_SUCCESS: '/assets/data/kv-admin/features/toggle/succeed/response.json',
   KV_ADMIN_FEATURES: '/assets/data/kv-admin/features/response.json',
@@ -1029,6 +1033,30 @@ export const setupMock = (enable) => {
           const message = (error && error.message) || 'Internal server error';
           return [500, { success: false, error: message }];
         }
+      });
+
+      // Admin: Token Blacklist
+      mock.onGet(MOCK_PATTERNS.ADMIN_TOKEN_BLACKLIST).reply(async () => {
+        try {
+          const data = await loadJson(DATA_PATHS.TOKEN_BLACKLIST_LIST_SUCCESS);
+          return [200, data];
+        } catch (error) {
+          const message = error.message || 'Internal Server Error';
+          return [500, { success: false, error: message }];
+        }
+      });
+
+      mock.onPost(MOCK_PATTERNS.ADMIN_TOKEN_BLACKLIST).reply(async () => {
+        try {
+          const data = await loadJson(DATA_PATHS.TOKEN_BLACKLIST_CREATE_SUCCESS);
+          return [200, data];
+        } catch (error) {
+          return [500, { success: false, error: 'Internal error' }];
+        }
+      });
+
+      mock.onDelete(MOCK_PATTERNS.ADMIN_TOKEN_BLACKLIST).reply(async () => {
+        return [200, { success: true, message: "Token successfully removed from blacklist" }];
       });
       
       // Audit: logs

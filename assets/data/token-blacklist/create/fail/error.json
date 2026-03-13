@@ -1,0 +1,4 @@
+{
+  "success": false,
+  "error": "Internal server error occurred (Database insertion failed. Please check if userId exists and parameters are valid.)"
+}

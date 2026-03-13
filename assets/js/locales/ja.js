@@ -1,5 +1,57 @@
 export default {
   message: {
+    token_blacklist: {
+      "title": "トークンブラックリスト",
+      "subtitle": "失効したアクセストークンを管理し、侵害されたアカウントを即座に無効にしてシステムを保護します。",
+      "security": "セキュリティ",
+      "add_token": "トークンを追加",
+      "search_placeholder": "JTIまたは理由で検索...",
+      "no_tokens_title": "ブラックリスト化されたトークンはありません",
+      "no_tokens_desc": "現在、トークンの失効を必要とするセキュリティ上の脅威は検出されていません。",
+      "table": {
+            "id": "ID",
+            "jti": "JTI",
+            "userId": "ユーザーID",
+            "reason": "理由",
+            "expiresAt": "有効期限",
+            "createdAt": "作成日時",
+            "actions": "アクション",
+            "manual": "手動"
+      },
+      "add_modal": {
+            "title": "ブラックリストに追加",
+            "jti_label": "JTI (トークンID) *",
+            "jti_placeholder": "例: 550e8400-e29b-41d4-a716-446655440000",
+            "user_id_label": "ユーザーID (オプション)",
+            "user_id_placeholder": "例: 42",
+            "reason_label": "理由 *",
+            "reasons": {
+                  "admin_security": "管理者のセキュリティアクション",
+                  "user_logout": "ユーザーのログアウト",
+                  "password_reset": "パスワードのリセット",
+                  "compromised": "侵害されたトークン",
+                  "suspended": "ユーザーの停止",
+                  "other": "その他"
+            },
+            "expires_label": "有効期限 (オプション)",
+            "expires_hint": "設定しない場合、デフォルトで現在から24時間後になります。",
+            "submit": "ブラックリストに追加",
+            "success": "トークンがブラックリストに正常に追加されました。",
+            "failed": "トークンのブラックリストへの追加に失敗しました。"
+      },
+      "delete_modal": {
+            "title": "ブラックリストからトークンを削除しますか？",
+            "message": "このトークンをブラックリストから削除してもよろしいですか？ トークンが自然に期限切れになっていない場合、再び有効になる可能性があります。",
+            "remove": "削除",
+            "success": "トークンがブラックリストから正常に削除されました。",
+            "failed": "ブラックリストからのトークンの削除に失敗しました。"
+      },
+      "access_denied": {
+            "title": "アクセス拒否",
+            "message": "スーパー管理者のみがトークンブラックリストにアクセスできます。",
+            "login_required": "トークンブラックリストにアクセスするにはログインする必要があります。"
+      }
+    },
     advanced_audit: {
       "general": {
         "advanced_protection": "Advanced Protection (JA)",
@@ -276,7 +328,11 @@ export default {
       close: '閉じる',
       page_of: 'ページ {current} / {total}',
       loading: '読み込み中...',
+      loading_data: 'データを読み込んでいます...',
       retry: '再試行',
+      refresh: '更新',
+      success: '成功',
+      error: 'エラー',
       view: '表示',
       retry_title: 'データを再読み込み'
     },
@@ -452,7 +508,9 @@ export default {
       this_project: 'このプロジェクト',
       toggle_api_mode: 'APIモード切替',
       admin: '管理者',
-      admin_dashboard: 'ダッシュボード', kv_admin_env: 'KV環境の比較', user_management: 'ユーザー管理',
+      admin_dashboard: 'ダッシュボード',
+      admin_token_blacklist: 'トークンブラックリスト',
+      kv_admin_env: 'KV環境の比較', user_management: 'ユーザー管理',
       system_stats: 'システム統計',
       system_health: 'システムヘルス',
       audit_logs: '監査ログ',
