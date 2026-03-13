@@ -374,6 +374,7 @@ import { useMainStore } from '/assets/js/stores/mainStore.js';
 import ActionTextButton from '/vue/components/ActionTextButton.vue';
 import LoginRequiredPrompt from '/vue/components/LoginRequiredPrompt.vue';
 import PageHeroSection from '/vue/components/PageHeroSection.vue';
+import { useAuthGate } from '../composables/useAuthGate.js';
 
 export default {
   name: 'AdminRealtimeMonitoring',
@@ -405,7 +406,6 @@ export default {
     } = storeToRefs(monitoringStore);
 
     const isAuthenticated = computed(() => authStore.isAuthenticated);
-    const showLoginRequired = computed(() => !isAuthenticated.value);
 
     const isMonitoringActive = computed(() => monitoringStore.isMonitoringActive);
 
@@ -488,6 +488,14 @@ export default {
       await monitoringStore.refreshSnapshot();
     };
 
+    const { showLoginRequired, openLoginModal, ensureAuthenticated, handleAuthStateChange } = useAuthGate({
+      authStore,
+      modalStore,
+      onAuthenticated: async () => {
+        await loadInitialMonitoringData();
+      }
+    });
+
     const exportDashboard = async () => {
       if (!isAuthenticated.value) return;
       await monitoringStore.exportDashboard({ format: 'json', timeRange: 'last_24h' });
@@ -525,10 +533,6 @@ export default {
       }
     };
 
-    const openLoginModal = () => {
-      modalStore.openLogin();
-    };
-
     watch(() => mainStore.mockApi, async (value, oldValue) => {
       if (!isAuthenticated.value || value === oldValue) {
         return;
@@ -545,18 +549,16 @@ export default {
       await loadInitialMonitoringData();
     });
 
-    watch(() => authStore.isAuthenticated, async (value, oldValue) => {
-      if (value && !oldValue) {
-        await loadInitialMonitoringData();
-      }
+    watch(() => authStore.isAuthenticated, async (value) => {
+      await handleAuthStateChange(value);
     });
 
     onMounted(async () => {
-      await loadInitialMonitoringData();
+      await ensureAuthenticated({ checkSessionFlag: true, openModal: false });
     });
 
     onActivated(async () => {
-      await loadInitialMonitoringData();
+      await ensureAuthenticated({ checkSessionFlag: true, openModal: false });
     });
 
     return {

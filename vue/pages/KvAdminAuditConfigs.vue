@@ -183,6 +183,7 @@ import { useMainStore } from '/assets/js/stores/mainStore.js';
 import ActionTextButton from '/vue/components/ActionTextButton.vue';
 import LoginRequiredPrompt from '/vue/components/LoginRequiredPrompt.vue';
 import PageHeroSection from '/vue/components/PageHeroSection.vue';
+import { useAuthGate } from '../composables/useAuthGate.js';
 
 export default {
   name: 'KvAdminAuditConfigs',
@@ -194,7 +195,15 @@ export default {
     const toastStore = useToastStore();
     const mainStore = useMainStore();
 
-    const showLoginRequired = ref(false);
+    const { showLoginRequired, openLoginModal, ensureAuthenticated, handleAuthStateChange, markUnauthenticated } = useAuthGate({
+      authStore,
+      modalStore,
+      onAuthenticated: async () => {
+        if (isSuperAdmin.value) {
+          await loadData();
+        }
+      }
+    });
     const isSuperAdmin = computed(() => authStore.user?.role?.toLowerCase() === 'super_admin');
     const loadingState = ref({
       features: true,
@@ -213,10 +222,6 @@ export default {
       alerts: {},
       compliance: {}
     });
-
-    const openLoginModal = () => {
-      modalStore.openLogin(() => { loadData(); });
-    };
 
     const loadData = async () => {
       if (!isSuperAdmin.value) return;
@@ -261,6 +266,7 @@ export default {
       } catch (err) {
         if (err?.code === 'REAUTH_REQUIRED' || err?.response?.status === 401 || err?.response?.status === 403) {
           authStore.logout();
+          markUnauthenticated();
           openLoginModal();
         } else {
           error.value = err.message || 'Failed to load configs';
@@ -298,17 +304,12 @@ export default {
     };
     const formatValue = (val) => typeof val === 'object' ? JSON.stringify(val) : val;
 
-    onMounted(() => {
-      if (!authStore.isAuthenticated) {
-        showLoginRequired.value = true;
-      } else {
-        loadData();
-      }
+    onMounted(async () => {
+      await ensureAuthenticated({ checkSessionFlag: true, openModal: false });
     });
 
-    watch(() => authStore.isAuthenticated, (val) => {
-      showLoginRequired.value = !val;
-      if (val && isSuperAdmin.value) loadData();
+    watch(() => authStore.isAuthenticated, async (val) => {
+      await handleAuthStateChange(val);
     });
 
     watch(() => mainStore.mockApi, (value, oldValue) => {

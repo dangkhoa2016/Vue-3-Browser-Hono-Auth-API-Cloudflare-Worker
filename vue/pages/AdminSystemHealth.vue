@@ -371,6 +371,7 @@ import ActionTextButton from '/vue/components/ActionTextButton.vue';
 import LoginRequiredPrompt from '/vue/components/LoginRequiredPrompt.vue';
 import PageHeroSection from '/vue/components/PageHeroSection.vue';
 import AsyncStateSection from '/vue/components/AsyncStateSection.vue';
+import { useAuthGate } from '../composables/useAuthGate.js';
 
 export default {
   name: 'AdminSystemHealth',
@@ -387,7 +388,6 @@ export default {
     const isAuthenticated = computed(() => authStore.isAuthenticated);
     const role = computed(() => String(authStore.user?.role || '').toLowerCase());
     const isAdmin = computed(() => role.value === 'admin' || role.value === 'super_admin');
-    const showLoginRequired = computed(() => !isAuthenticated.value);
 
     const status = computed(() => String(healthData.value?.status || '').toLowerCase());
     const t = (key) => i18n.global.t(key);
@@ -553,14 +553,16 @@ export default {
       await systemHealthStore.fetchSystemHealth();
     };
 
-    const openLoginModal = () => {
-      modalStore.openLogin();
-    };
-
-    watch(() => authStore.isAuthenticated, async (value, oldValue) => {
-      if (value && !oldValue) {
+    const { showLoginRequired, openLoginModal, ensureAuthenticated, handleAuthStateChange } = useAuthGate({
+      authStore,
+      modalStore,
+      onAuthenticated: async () => {
         await loadInitial();
       }
+    });
+
+    watch(() => authStore.isAuthenticated, async (value) => {
+      await handleAuthStateChange(value);
     });
 
     watch(() => mainStore.mockApi, async (value, oldValue) => {
@@ -569,11 +571,11 @@ export default {
     });
 
     onMounted(async () => {
-      await loadInitial();
+      await ensureAuthenticated({ checkSessionFlag: true, openModal: false });
     });
 
     onActivated(async () => {
-      await loadInitial();
+      await ensureAuthenticated({ checkSessionFlag: true, openModal: false });
     });
 
     return {

@@ -160,6 +160,7 @@ import { useModalStore } from '/assets/js/stores/modalStore.js';
 import ActionTextButton from '/vue/components/ActionTextButton.vue';
 import ActionIconButton from '/vue/components/ActionIconButton.vue';
 import LoginRequiredPrompt from '/vue/components/LoginRequiredPrompt.vue';
+import { useAuthGate } from '../composables/useAuthGate.js';
 
 export default {
   name: 'ApiExplorer',
@@ -172,7 +173,6 @@ export default {
     const apiInfo = ref(null);
     const loading = ref(true);
     const error = ref(null);
-    const showLoginRequired = ref(false);
     const collapsed = ref({});
 
     const mainStore = useMainStore();
@@ -182,38 +182,20 @@ export default {
 
     authStore.init();
 
-    const openLoginModal = () => {
-      modalStore.openLogin(
-        async () => {
-          sessionStorage.removeItem('authRequired');
-          sessionStorage.removeItem('intendedRoute');
-          showLoginRequired.value = false;
-          await loadApiInfo();
-        },
-        () => {
-          if (!authStore.isAuthenticated) {
-            showLoginRequired.value = true;
-          }
-        }
-      );
-    };
-
-    const checkAuthAndShowModal = () => {
-      const authRequired = sessionStorage.getItem('authRequired');
-      if (!authStore.isAuthenticated || authRequired === 'true') {
-        showLoginRequired.value = true;
-        openLoginModal();
-        return false;
+    const { showLoginRequired, openLoginModal, ensureAuthenticated, handleAuthStateChange, markUnauthenticated } = useAuthGate({
+      authStore,
+      modalStore,
+      onAuthenticated: async () => {
+        await loadApiInfo();
       }
-      return true;
-    };
+    });
 
     const loadApiInfo = async () => {
       try {
         loading.value = true;
         error.value = null;
 
-        const isAuth = checkAuthAndShowModal();
+        const isAuth = await ensureAuthenticated({ checkSessionFlag: true, openModal: true });
         if (!isAuth) {
           loading.value = false;
           return;
@@ -234,7 +216,8 @@ export default {
 
         if (status === 401) {
           authStore.logout();
-          checkAuthAndShowModal();
+          markUnauthenticated();
+          openLoginModal();
         }
       } finally {
         loading.value = false;
@@ -288,15 +271,11 @@ export default {
     watch(
       () => authStore.isAuthenticated,
       async (isAuthenticated) => {
-        if (isAuthenticated === false && !showLoginRequired.value) {
-          // User logged out, show login required and reset API info
+        if (isAuthenticated === false) {
           apiInfo.value = null;
           error.value = null;
-          showLoginRequired.value = true;
-        } else if (isAuthenticated === true && showLoginRequired.value) {
-          // User logged in, reload API info
-          await loadApiInfo();
         }
+        await handleAuthStateChange(isAuthenticated);
       },
       { immediate: false }
     );

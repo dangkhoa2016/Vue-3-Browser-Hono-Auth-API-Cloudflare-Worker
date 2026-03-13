@@ -724,21 +724,17 @@ export default {
     };
 
     const { runDebounced, clearDebounce } = useDebouncedFilters(400);
-    let skeletonTimer = null;
 
     watch(
       loading,
       (isLoading) => {
-        if (skeletonTimer) {
-          clearTimeout(skeletonTimer);
-          skeletonTimer = null;
-        }
+        clearDebounce('admin-users-skeleton');
 
         if (isLoading && (users.value.length === 0 || forceSkeletonOnLoading.value)) {
           // If explicitly forced (pagination/filters/reload), show immediately or very short delay
           // This fixes "sometimes shows, sometimes doesn't" perception
           const delay = forceSkeletonOnLoading.value ? 0 : 180;
-          skeletonTimer = setTimeout(() => {
+          runDebounced('admin-users-skeleton', async () => {
             showDataSkeleton.value = true;
           }, delay);
           return;
@@ -793,9 +789,7 @@ export default {
 
     onBeforeUnmount(() => {
       clearDebounce('admin-users-search');
-      if (skeletonTimer) {
-        clearTimeout(skeletonTimer);
-      }
+      clearDebounce('admin-users-skeleton');
     });
 
     onMounted(async () => {

@@ -1,7 +1,7 @@
 <template>
   <div class="relative max-w-7xl mx-auto space-y-8">
     <LoginRequiredPrompt
-      v-if="!isAuthenticated"
+      v-if="showLoginRequired"
       tone="blue"
       :title="$t?.('message.auth.login_required') || 'Login Required'"
       :message="$t?.('message.auth.login_required_message') || 'Please login with administrator privileges to view advanced audit features.'"
@@ -100,6 +100,7 @@ import { useMainStore } from '/assets/js/stores/mainStore.js';
 import { useModalStore } from '/assets/js/stores/modalStore.js';
 import { useToastStore } from '/assets/js/stores/toastStore.js';
 import { useI18n } from 'vue-i18n';
+import { useAuthGate } from '../composables/useAuthGate.js';
 
 export default {
   name: 'AdminAdvancedAudit',
@@ -119,10 +120,6 @@ export default {
     const toastStore = useToastStore();
     
     const isAuthenticated = computed(() => authStore.isAuthenticated);
-    
-    const openLoginModal = () => {
-      modalStore.openLogin();
-    };
     
     const tabs = [
       { id: 'analytics', name: t('message.advanced_audit.tabs.analytics') || 'Analytics', icon: 'bi-graph-up' },
@@ -149,20 +146,27 @@ export default {
       }
     };
     
-    // Initial fetch
-    onMounted(() => {
-      if (isAuthenticated.value) {
-        loadTabData(activeTab.value);
-      } else {
-        openLoginModal();
+    const resetCachedData = () => {
+      auditStore.analytics = null;
+      auditStore.compliance = null;
+      auditStore.archival = null;
+    };
+
+    const { showLoginRequired, openLoginModal, ensureAuthenticated, handleAuthStateChange } = useAuthGate({
+      authStore,
+      modalStore,
+      resetProtectedState: resetCachedData,
+      onAuthenticated: async () => {
+        await loadTabData(activeTab.value);
       }
     });
 
-    // Auto-reload data when authentication state changes to true
-    watch(isAuthenticated, (newValue, oldValue) => {
-      if (newValue && !oldValue) {
-        loadTabData(activeTab.value);
-      }
+    onMounted(async () => {
+      await ensureAuthenticated({ checkSessionFlag: true, openModal: true });
+    });
+
+    watch(isAuthenticated, async (newValue) => {
+      await handleAuthStateChange(newValue);
     });
     
     watch(activeTab, (newTab) => {
@@ -173,19 +177,8 @@ export default {
       if (value === oldValue) return;
       if (!authStore.isAuthenticated) return;
       // Reset stores when mock API setting changes to forcefully reload
-      auditStore.analytics = null;
-      auditStore.compliance = null;
-      auditStore.archival = null;
+      resetCachedData();
       loadTabData(activeTab.value);
-    });
-
-    watch(isAuthenticated, (newValue) => {
-       if (!newValue) {
-         // Clear cached data on logout so they reload automatically on next login
-         auditStore.analytics = null;
-         auditStore.compliance = null;
-         auditStore.archival = null;
-       }
     });
 
     const refreshData = async () => {
@@ -260,7 +253,7 @@ export default {
     };
 
     return {
-      isAuthenticated,
+      showLoginRequired,
       openLoginModal,
       activeTab,
       tabs,
