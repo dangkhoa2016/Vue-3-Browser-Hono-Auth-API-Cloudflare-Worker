@@ -5,27 +5,23 @@
       <div class="absolute inset-0 bg-[linear-gradient(transparent,rgba(15,23,42,0.03))]"></div>
     </div>
 
-    <!-- Login Required Section -->
-    <section v-if="showLoginRequired" class="bg-teal-50/80 dark:bg-teal-900/20 border border-teal-200 dark:border-teal-800 rounded-3xl p-8 text-center shadow-sm">
-      <i class="bi bi-lock-fill text-5xl text-teal-600 dark:text-teal-400 mb-4"></i>
-      <h3 class="text-xl font-bold text-teal-900 dark:text-teal-100 mb-2">{{ $t('message.auth.login_required') }}</h3>
-      <p class="text-teal-700 dark:text-teal-300 mb-4">{{ $t('message.admin_users.login_required_message') }}</p>
-      <ActionTextButton
-        icon="bi bi-box-arrow-in-right"
-        tone="teal"
-        size="sm"
-        shape="xl"
-        @click="openLoginModal"
-      >
-        {{ $t('message.auth.login') }}
-      </ActionTextButton>
-    </section>
+    <LoginRequiredPrompt
+      v-if="showLoginRequired"
+      tone="teal"
+      :title="$t('message.auth.login_required')"
+      :message="$t('message.admin_users.login_required_message')"
+      :button-text="$t('message.auth.login')"
+      @action="openLoginModal"
+    />
 
     <template v-else>
-      <section :class="heroSectionClass">
-        <div class="absolute -top-24 -right-24 w-72 h-72 bg-teal-500/10 rounded-full blur-3xl"></div>
-        <div class="absolute -bottom-24 -left-24 w-72 h-72 bg-amber-400/10 rounded-full blur-3xl"></div>
-        <div class="relative grid gap-6 lg:grid-cols-[1.3fr_0.7fr] lg:items-center">
+      <PageHeroSection
+        :section-class="heroSectionClass"
+        top-blob-class="absolute -top-24 -right-24 w-72 h-72 bg-teal-500/10 rounded-full blur-3xl"
+        bottom-blob-class="absolute -bottom-24 -left-24 w-72 h-72 bg-amber-400/10 rounded-full blur-3xl"
+        content-class="relative grid gap-6 lg:grid-cols-[1.3fr_0.7fr] lg:items-center"
+      >
+        <template #left>
           <div>
             <div class="inline-flex items-center gap-2 rounded-full bg-teal-900/10 text-teal-800 dark:bg-teal-400/10 dark:text-teal-200 px-3 py-1 text-xs font-semibold tracking-[0.2em]">
               <span class="w-2 h-2 rounded-full bg-teal-500 animate-pulse"></span>
@@ -50,6 +46,9 @@
               </ActionTextButton>
             </div>
           </div>
+        </template>
+
+        <template #right>
           <div class="grid gap-4">
             <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm">
               <p class="text-xs uppercase tracking-[0.3em] text-slate-500">{{ $t('message.admin_users.stats_total') }}</p>
@@ -78,8 +77,8 @@
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </template>
+      </PageHeroSection>
 
 
       <section v-if="!isAdmin" class="bg-amber-50/80 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-3xl p-8 text-center shadow-sm">
@@ -306,6 +305,8 @@ import RoleChangeModal from '../components/RoleChangeModal.vue';
 import PaginationControls from '../components/PaginationControls.vue';
 import ActionIconButton from '../components/ActionIconButton.vue';
 import ActionTextButton from '../components/ActionTextButton.vue';
+import LoginRequiredPrompt from '../components/LoginRequiredPrompt.vue';
+import PageHeroSection from '../components/PageHeroSection.vue';
 
 export default {
   name: 'AdminUsers',
@@ -315,7 +316,9 @@ export default {
     RoleChangeModal,
     PaginationControls,
     ActionIconButton,
-    ActionTextButton
+    ActionTextButton,
+    LoginRequiredPrompt,
+    PageHeroSection
   },
   setup() {
     const { t } = useI18n({ useScope: 'global' });

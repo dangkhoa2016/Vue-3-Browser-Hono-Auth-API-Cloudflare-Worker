@@ -5,30 +5,24 @@
       <div class="absolute inset-0 bg-[linear-gradient(transparent,rgba(15,23,42,0.03))]"></div>
     </div>
 
-    <template v-if="showLoginRequired">
-      <section class="bg-indigo-50/80 dark:bg-indigo-900/20 border border-indigo-200 dark:border-indigo-800 rounded-3xl p-8 text-center shadow-sm">
-        <i class="bi bi-lock-fill text-5xl text-indigo-600 dark:text-indigo-400 mb-4"></i>
-        <h3 class="text-xl font-bold text-indigo-900 dark:text-indigo-100 mb-2">{{ $t('message.auth.login_required') }}</h3>
-        <p class="text-indigo-700 dark:text-indigo-300 mb-4">{{ $t('message.system_stats_page.login_required_message') }}</p>
-        <ActionTextButton
-          tone="indigo"
-          shape="xl"
-          size="sm"
-          icon="bi bi-box-arrow-in-right text-lg"
-          class="shadow-lg hover:shadow-xl"
-          @click="openLoginModal"
-        >
-          {{ $t('message.auth.login') }}
-        </ActionTextButton>
-      </section>
-    </template>
+    <LoginRequiredPrompt
+      v-if="showLoginRequired"
+      tone="blue"
+      button-tone="indigo"
+      button-icon="bi bi-box-arrow-in-right text-lg"
+      :title="$t('message.auth.login_required')"
+      :message="$t('message.system_stats_page.login_required_message')"
+      :button-text="$t('message.auth.login')"
+      @action="openLoginModal"
+    />
 
     <template v-else>
-      <section :class="heroSectionClass">
-        <div class="absolute -top-20 -right-16 w-72 h-72 bg-indigo-400/10 rounded-full blur-3xl"></div>
-        <div class="absolute -bottom-24 -left-24 w-72 h-72 bg-cyan-500/10 rounded-full blur-3xl"></div>
-
-        <div class="relative grid gap-6 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
+      <PageHeroSection
+        :section-class="heroSectionClass"
+        top-blob-class="absolute -top-20 -right-16 w-72 h-72 bg-indigo-400/10 rounded-full blur-3xl"
+        bottom-blob-class="absolute -bottom-24 -left-24 w-72 h-72 bg-cyan-500/10 rounded-full blur-3xl"
+      >
+        <template #left>
           <div>
             <div class="inline-flex items-center gap-2 rounded-full bg-indigo-900/10 text-indigo-800 dark:bg-indigo-400/10 dark:text-indigo-200 px-3 py-1 text-xs font-semibold tracking-[0.2em]">
               <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
@@ -55,9 +49,16 @@
               </span>
             </div>
           </div>
+        </template>
 
+        <template #right>
           <div class="grid grid-cols-2 gap-4">
-            <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm relative overflow-hidden">
+            <StatCard
+              :label="$t('message.system_stats_page.total_users')"
+              :value="stats.totalUsers"
+              icon-class="bi bi-people text-2xl text-indigo-500"
+              card-class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm relative overflow-hidden"
+            >
               <div v-if="loading" class="absolute inset-0 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm z-10 flex flex-col justify-center px-5">
                 <div class="h-3 w-24 rounded bg-slate-200 dark:bg-slate-700 animate-pulse mb-4"></div>
                 <div class="flex justify-between items-center">
@@ -65,14 +66,15 @@
                   <div class="h-8 w-8 rounded bg-slate-200 dark:bg-slate-700 animate-pulse"></div>
                 </div>
               </div>
-              <p class="text-xs uppercase tracking-[0.3em] text-slate-500">{{ $t('message.system_stats_page.total_users') }}</p>
-              <div class="mt-3 flex items-center justify-between">
-                <span class="text-xl font-black text-slate-900 dark:text-white">{{ stats.totalUsers }}</span>
-                <i class="bi bi-people text-2xl text-indigo-500"></i>
-              </div>
-            </div>
+            </StatCard>
 
-            <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm relative overflow-hidden">
+            <StatCard
+              :label="$t('message.system_stats_page.active_users')"
+              :value="stats.activeUsers"
+              value-class="text-xl font-black text-emerald-600 dark:text-emerald-400"
+              icon-class="bi bi-person-check text-2xl text-emerald-500"
+              card-class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm relative overflow-hidden"
+            >
               <div v-if="loading" class="absolute inset-0 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm z-10 flex flex-col justify-center px-5">
                 <div class="h-3 w-24 rounded bg-slate-200 dark:bg-slate-700 animate-pulse mb-4"></div>
                 <div class="flex justify-between items-center">
@@ -80,37 +82,33 @@
                   <div class="h-8 w-8 rounded bg-slate-200 dark:bg-slate-700 animate-pulse"></div>
                 </div>
               </div>
-              <p class="text-xs uppercase tracking-[0.3em] text-slate-500">{{ $t('message.system_stats_page.active_users') }}</p>
-              <div class="mt-3 flex items-center justify-between">
-                <span class="text-xl font-black text-emerald-600 dark:text-emerald-400">{{ stats.activeUsers }}</span>
-                <i class="bi bi-person-check text-2xl text-emerald-500"></i>
-              </div>
-            </div>
+            </StatCard>
 
-            <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm relative overflow-hidden group">
+            <StatCard
+              :label="`${$t('message.system_stats_page.audit_total_events')} (7d)`"
+              :value="auditBasicStats.total_events"
+              icon-class="bi bi-journal-text text-2xl text-slate-500 group-hover:text-amber-500 transition-colors"
+              card-class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm relative overflow-hidden group"
+            >
               <div v-if="auditStatsLoading" class="absolute inset-0 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm z-10 flex items-center justify-center">
                 <i class="bi bi-arrow-repeat animate-spin text-2xl text-slate-400"></i>
               </div>
-              <p class="text-xs uppercase tracking-[0.3em] text-slate-500">{{ $t('message.system_stats_page.audit_total_events') }} (7d)</p>
-              <div class="mt-3 flex items-center justify-between">
-                <span class="text-xl font-black text-slate-900 dark:text-white">{{ auditBasicStats.total_events }}</span>
-                <i class="bi bi-journal-text text-2xl text-slate-500 group-hover:text-amber-500 transition-colors"></i>
-              </div>
-            </div>
+            </StatCard>
 
-            <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm relative overflow-hidden group">
+            <StatCard
+              :label="`${$t('message.system_stats_page.audit_security_events')} (7d)`"
+              :value="auditBasicStats.security_events"
+              value-class="text-xl font-black text-rose-600 dark:text-rose-400"
+              icon-class="bi bi-shield-exclamation text-2xl text-rose-500 group-hover:scale-110 transition-transform"
+              card-class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm relative overflow-hidden group"
+            >
               <div v-if="auditStatsLoading" class="absolute inset-0 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm z-10 flex items-center justify-center">
                 <i class="bi bi-arrow-repeat animate-spin text-2xl text-slate-400"></i>
               </div>
-              <p class="text-xs uppercase tracking-[0.3em] text-slate-500">{{ $t('message.system_stats_page.audit_security_events') }} (7d)</p>
-              <div class="mt-3 flex items-center justify-between">
-                <span class="text-xl font-black text-rose-600 dark:text-rose-400">{{ auditBasicStats.security_events }}</span>
-                <i class="bi bi-shield-exclamation text-2xl text-rose-500 group-hover:scale-110 transition-transform"></i>
-              </div>
-            </div>
+            </StatCard>
           </div>
-        </div>
-      </section>
+        </template>
+      </PageHeroSection>
 
       <section v-if="!isAdmin" class="bg-rose-50/80 dark:bg-rose-900/20 border border-rose-200 dark:border-rose-800 rounded-3xl p-8 text-center shadow-sm">
         <i class="bi bi-shield-lock-fill text-5xl text-rose-600 dark:text-rose-400 mb-4"></i>
@@ -375,10 +373,13 @@ import { useAuthStore } from '/assets/js/stores/authStore.js';
 import { useModalStore } from '/assets/js/stores/modalStore.js';
 import { useMainStore } from '/assets/js/stores/mainStore.js';
 import ActionTextButton from '/vue/components/ActionTextButton.vue';
+import LoginRequiredPrompt from '/vue/components/LoginRequiredPrompt.vue';
+import PageHeroSection from '/vue/components/PageHeroSection.vue';
+import StatCard from '/vue/components/StatCard.vue';
 
 export default {
   name: 'AdminSystemStats',
-  components: { ActionTextButton },
+  components: { ActionTextButton, LoginRequiredPrompt, PageHeroSection, StatCard },
   setup() {
     const { t } = useI18n({ useScope: 'global' });
     const systemStatsStore = useSystemStatsStore();

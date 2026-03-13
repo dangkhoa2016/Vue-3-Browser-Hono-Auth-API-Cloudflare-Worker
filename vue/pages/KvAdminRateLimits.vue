@@ -5,14 +5,15 @@
       <div class="absolute inset-0 bg-[linear-gradient(transparent,rgba(15,23,42,0.03))]"></div>
     </div>
 
-    <template v-if="showLoginRequired">
-      <section class="bg-amber-50/80 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-3xl p-8 text-center shadow-sm">
-        <i class="bi bi-lock-fill text-5xl text-amber-600 dark:text-amber-400 mb-4"></i>
-        <h3 class="text-xl font-bold text-amber-900 dark:text-amber-100 mb-2">{{ $t('message.auth.login_required') }}</h3>
-        <p class="text-amber-700 dark:text-amber-300 mb-4">{{ $t('message.kv_admin_page.login_required_message') }}</p>
-        <ActionTextButton tone="amber" shape="xl" size="sm" icon="bi bi-box-arrow-in-right text-lg" @click="openLoginModal">Login</ActionTextButton>
-      </section>
-    </template>
+    <LoginRequiredPrompt
+      v-if="showLoginRequired"
+      tone="amber"
+      button-icon="bi bi-box-arrow-in-right text-lg"
+      :title="$t('message.auth.login_required')"
+      :message="$t('message.kv_admin_page.login_required_message')"
+      :button-text="$t('message.auth.login') || 'Login'"
+      @action="openLoginModal"
+    />
     
     <template v-else-if="!isSuperAdmin">
       <section class="bg-rose-50/80 dark:bg-rose-900/20 border border-rose-200 dark:border-rose-800 rounded-3xl p-8 text-center shadow-sm">
@@ -23,10 +24,13 @@
     </template>
 
     <template v-else>
-      <section class="relative overflow-hidden rounded-[32px] border border-slate-200/70 dark:border-slate-800 bg-gradient-to-br from-white via-red-50/40 to-orange-50/40 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 p-8 shadow-[0_24px_80px_-60px_rgba(15,23,42,0.8)]">
-        <div class="absolute -top-20 -right-16 w-72 h-72 bg-red-400/10 rounded-full blur-3xl"></div>
-        <div class="absolute -bottom-24 -left-24 w-72 h-72 bg-orange-500/10 rounded-full blur-3xl"></div>
-        <div class="relative flex flex-col md:flex-row gap-6 md:items-center justify-between">
+      <PageHeroSection
+        section-class="relative overflow-hidden rounded-[32px] border border-slate-200/70 dark:border-slate-800 bg-gradient-to-br from-white via-red-50/40 to-orange-50/40 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 p-8 shadow-[0_24px_80px_-60px_rgba(15,23,42,0.8)]"
+        top-blob-class="absolute -top-20 -right-16 w-72 h-72 bg-red-400/10 rounded-full blur-3xl"
+        bottom-blob-class="absolute -bottom-24 -left-24 w-72 h-72 bg-orange-500/10 rounded-full blur-3xl"
+        content-class="relative flex flex-col md:flex-row gap-6 md:items-center justify-between"
+      >
+        <template #left>
           <div>
             <div class="inline-flex items-center gap-2 rounded-full bg-red-900/10 text-red-800 dark:bg-red-400/10 dark:text-red-200 px-3 py-1 text-xs font-semibold tracking-[0.2em]">
               <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
@@ -35,8 +39,8 @@
             <h1 class="mt-4 text-3xl font-black text-slate-900 dark:text-white">Rate Limits Management</h1>
             <p class="mt-2 text-slate-600 dark:text-slate-300">Clean, prune, and configure rate limit keys across the system.</p>
           </div>
-        </div>
-      </section>
+        </template>
+      </PageHeroSection>
 
       <div class="grid lg:grid-cols-2 gap-6">
         <!-- Clean Prefix -->
@@ -102,10 +106,12 @@ import { useAuthStore } from '/assets/js/stores/authStore.js';
 import { useModalStore } from '/assets/js/stores/modalStore.js';
 import { useToastStore } from '/assets/js/stores/toastStore.js';
 import ActionTextButton from '/vue/components/ActionTextButton.vue';
+import LoginRequiredPrompt from '/vue/components/LoginRequiredPrompt.vue';
+import PageHeroSection from '/vue/components/PageHeroSection.vue';
 
 export default {
   name: 'KvAdminRateLimits',
-  components: { ActionTextButton },
+  components: { ActionTextButton, LoginRequiredPrompt, PageHeroSection },
   setup() {
     const { t } = useI18n();
     const authStore = useAuthStore();

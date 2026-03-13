@@ -6,14 +6,15 @@
       <div class="absolute inset-0 bg-[linear-gradient(transparent,rgba(15,23,42,0.03))]"></div>
     </div>
 
-    <template v-if="showLoginRequired">
-      <section class="bg-amber-50/80 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-3xl p-8 text-center shadow-sm">
-        <i class="bi bi-lock-fill text-5xl text-amber-600 dark:text-amber-400 mb-4"></i>
-        <h3 class="text-xl font-bold text-amber-900 dark:text-amber-100 mb-2">{{ $t('message.auth.login_required') }}</h3>
-        <p class="text-amber-700 dark:text-amber-300 mb-4">{{ $t('message.kv_admin_page.login_required_message') }}</p>
-        <ActionTextButton tone="amber" shape="xl" size="sm" icon="bi bi-box-arrow-in-right text-lg" @click="openLoginModal">{{ $t('message.auth.login') || 'Login' }}</ActionTextButton>
-      </section>
-    </template>
+    <LoginRequiredPrompt
+      v-if="showLoginRequired"
+      tone="amber"
+      button-icon="bi bi-box-arrow-in-right text-lg"
+      :title="$t('message.auth.login_required')"
+      :message="$t('message.kv_admin_page.login_required_message')"
+      :button-text="$t('message.auth.login') || 'Login'"
+      @action="openLoginModal"
+    />
     
     <template v-else-if="!isSuperAdmin">
       <section class="bg-rose-50/80 dark:bg-rose-900/20 border border-rose-200 dark:border-rose-800 rounded-3xl p-8 text-center shadow-sm">
@@ -25,11 +26,13 @@
 
     <template v-else>
       <!-- Header Section -->
-      <section class="relative overflow-hidden rounded-[32px] border border-slate-200/70 dark:border-slate-800 bg-gradient-to-br from-white via-indigo-50/40 to-teal-50/40 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 p-8 shadow-[0_24px_80px_-60px_rgba(15,23,42,0.8)]">
-        <div class="absolute -top-20 -right-16 w-72 h-72 bg-indigo-400/10 rounded-full blur-3xl"></div>
-        <div class="absolute -bottom-24 -left-24 w-72 h-72 bg-teal-500/10 rounded-full blur-3xl"></div>
-        
-        <div class="relative flex flex-col md:flex-row gap-6 md:items-center justify-between">
+      <PageHeroSection
+        section-class="relative overflow-hidden rounded-[32px] border border-slate-200/70 dark:border-slate-800 bg-gradient-to-br from-white via-indigo-50/40 to-teal-50/40 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 p-8 shadow-[0_24px_80px_-60px_rgba(15,23,42,0.8)]"
+        top-blob-class="absolute -top-20 -right-16 w-72 h-72 bg-indigo-400/10 rounded-full blur-3xl"
+        bottom-blob-class="absolute -bottom-24 -left-24 w-72 h-72 bg-teal-500/10 rounded-full blur-3xl"
+        content-class="relative flex flex-col md:flex-row gap-6 md:items-center justify-between"
+      >
+        <template #left>
           <div>
             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-100/50 dark:bg-indigo-500/10 border border-indigo-200/50 dark:border-indigo-500/20 text-indigo-700 dark:text-indigo-300 text-xs font-semibold tracking-wide uppercase mb-3">
               <i class="bi bi-arrow-left-right"></i>
@@ -40,13 +43,15 @@
               {{ $t('message.kv_admin_page.env_comparison.subtitle') }}
             </p>
           </div>
-          
+
+        </template>
+        <template #right>
           <div class="flex items-center gap-3">
             <ActionTextButton tone="slate" icon="bi bi-arrow-clockwise" :loading="loading" @click="fetchComparison">
               {{ $t('message.kv_admin_page.reload') || 'Reload' }}
             </ActionTextButton>
           </div>
-        </div>
+        </template>
 
         <!-- Summary Stats (Loaded State) -->
         <div v-if="!loading && summary.total" class="relative mt-8 p-4 rounded-2xl bg-white/60 dark:bg-slate-800/60 border border-slate-200/50 dark:border-slate-700/50 backdrop-blur-sm flex flex-wrap gap-4 items-center">
@@ -67,7 +72,7 @@
                <span class="text-xl font-bold text-slate-700 dark:text-slate-300">{{ summary.fromDefault }}</span>
              </button>
         </div>
-      </section>
+      </PageHeroSection>
 
       <!-- Search Bar and Active Filters -->
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -169,10 +174,12 @@ import { useModalStore } from '/assets/js/stores/modalStore.js';
 import { useToastStore } from '/assets/js/stores/toastStore.js';
 import { useMainStore } from '/assets/js/stores/mainStore.js';
 import ActionTextButton from '/vue/components/ActionTextButton.vue';
+import LoginRequiredPrompt from '/vue/components/LoginRequiredPrompt.vue';
+import PageHeroSection from '/vue/components/PageHeroSection.vue';
 
 export default {
   name: 'KvAdminEnvComparison',
-  components: { ActionTextButton },
+  components: { ActionTextButton, LoginRequiredPrompt, PageHeroSection },
   setup() {
     const { t } = useI18n();
     const authStore = useAuthStore();

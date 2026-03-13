@@ -10,20 +10,14 @@
       <div class="h-64 bg-gray-200 dark:bg-gray-700 rounded-2xl"></div>
     </div>
 
-    <!-- Login Required -->
-    <div v-else-if="showLoginRequired" class="bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-200 dark:border-blue-800 rounded-2xl p-8 text-center">
-      <i class="bi bi-lock-fill text-5xl text-blue-600 dark:text-blue-400 mb-4"></i>
-      <h3 class="text-xl font-bold text-blue-900 dark:text-blue-100 mb-2">{{ $t('message.api_explorer.login_required_title') }}</h3>
-      <p class="text-blue-700 dark:text-blue-300 mb-4">{{ $t('message.api_explorer.login_required_message') }}</p>
-      <ActionTextButton
-        icon="bi bi-box-arrow-in-right"
-        tone="blue"
-        shape="xl"
-        @click="openLoginModal"
-      >
-        {{ $t('message.auth.login') }}
-      </ActionTextButton>
-    </div>
+    <LoginRequiredPrompt
+      v-else-if="showLoginRequired"
+      tone="blue"
+      :title="$t('message.api_explorer.login_required_title')"
+      :message="$t('message.api_explorer.login_required_message')"
+      :button-text="$t('message.auth.login')"
+      @action="openLoginModal"
+    />
 
     <!-- Error State -->
     <div v-else-if="error" class="bg-red-50 dark:bg-red-900/20 border-2 border-red-200 dark:border-red-800 rounded-2xl p-8 text-center">
@@ -165,12 +159,14 @@ import { useAuthStore } from '/assets/js/stores/authStore.js';
 import { useModalStore } from '/assets/js/stores/modalStore.js';
 import ActionTextButton from '/vue/components/ActionTextButton.vue';
 import ActionIconButton from '/vue/components/ActionIconButton.vue';
+import LoginRequiredPrompt from '/vue/components/LoginRequiredPrompt.vue';
 
 export default {
   name: 'ApiExplorer',
   components: {
     ActionTextButton,
-    ActionIconButton
+    ActionIconButton,
+    LoginRequiredPrompt
   },
   setup() {
     const apiInfo = ref(null);

@@ -5,21 +5,14 @@
       <div class="absolute inset-0 bg-[linear-gradient(transparent,rgba(15,23,42,0.03))]"></div>
     </div>
 
-    <!-- Login Required Section -->
-    <section v-if="showLoginRequired" class="bg-red-50/80 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-3xl p-8 text-center shadow-sm">
-      <i class="bi bi-lock-fill text-5xl text-red-600 dark:text-red-400 mb-4"></i>
-      <h3 class="text-xl font-bold text-red-900 dark:text-red-100 mb-2">{{ $t('message.auth.login_required') }}</h3>
-      <p class="text-red-700 dark:text-red-300 mb-4">{{ $t('message.token_blacklist.access_denied.login_required') || 'You need to log in to access the token blacklist.' }}</p>
-      <ActionTextButton
-        icon="bi bi-box-arrow-in-right"
-        tone="red"
-        size="sm"
-        shape="xl"
-        @click="openLoginModal"
-      >
-        {{ $t('message.auth.login') }}
-      </ActionTextButton>
-    </section>
+    <LoginRequiredPrompt
+      v-if="showLoginRequired"
+      tone="red"
+      :title="$t('message.auth.login_required')"
+      :message="$t('message.token_blacklist.access_denied.login_required') || 'You need to log in to access the token blacklist.'"
+      :button-text="$t('message.auth.login')"
+      @action="openLoginModal"
+    />
 
     <!-- Super Admin Required Section -->
     <section v-else-if="!isSuperAdmin" class="bg-red-50/80 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-3xl p-8 text-center shadow-sm">
@@ -157,7 +150,12 @@
         
         <!-- Pagination -->
         <div class="px-5 py-4 border-t border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30">
-          <PaginationControls :pagination="pagination" @page-change="changePage" />
+          <PaginationControls
+            :current-page="pagination.page"
+            :total-pages="pagination.totalPages || 1"
+            :loading="loading"
+            @change="changePage"
+          />
         </div>
       </div>
     </template>
@@ -247,6 +245,7 @@ import ActionTextButton from '../components/ActionTextButton.vue';
 import PaginationControls from '../components/PaginationControls.vue';
 import ConfirmDeleteModal from '../components/ConfirmDeleteModal.vue';
 import ModalWindow from '../components/ModalWindow.vue';
+import LoginRequiredPrompt from '../components/LoginRequiredPrompt.vue';
 
 export default {
   components: {
@@ -254,7 +253,8 @@ export default {
     ActionTextButton,
     PaginationControls,
     ConfirmDeleteModal,
-    ModalWindow
+    ModalWindow,
+    LoginRequiredPrompt
   },
   setup() {
     const { t } = useI18n();

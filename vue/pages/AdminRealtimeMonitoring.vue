@@ -1,26 +1,21 @@
 <template>
   <div class="relative max-w-7xl mx-auto space-y-8">
-    <div v-if="showLoginRequired" class="bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-200 dark:border-blue-800 rounded-2xl p-8 text-center">
-      <i class="bi bi-lock-fill text-5xl text-blue-600 dark:text-blue-400 mb-4"></i>
-      <h3 class="text-xl font-bold text-blue-900 dark:text-blue-100 mb-2">{{ $t('message.audit.login_required') || $t('message.auth.login_required') }}</h3>
-      <p class="text-blue-700 dark:text-blue-300 mb-4">{{ $t('message.audit.login_required_message') || $t('message.auth.login_required_message') }}</p>
-      <ActionTextButton
-        icon="bi bi-box-arrow-in-right"
-        tone="blue"
-        size="sm"
-        shape="xl"
-        @click="openLoginModal"
-      >
-        {{ $t('message.auth.login') || 'Login' }}
-      </ActionTextButton>
-    </div>
+    <LoginRequiredPrompt
+      v-if="showLoginRequired"
+      tone="blue"
+      :title="$t('message.audit.login_required') || $t('message.auth.login_required')"
+      :message="$t('message.audit.login_required_message') || $t('message.auth.login_required_message')"
+      :button-text="$t('message.auth.login') || 'Login'"
+      @action="openLoginModal"
+    />
 
     <template v-else>
-      <section :class="heroSectionClass">
-        <div class="absolute -top-24 -right-24 w-72 h-72 bg-violet-500/10 rounded-full blur-3xl"></div>
-        <div class="absolute -bottom-24 -left-24 w-72 h-72 bg-cyan-500/10 rounded-full blur-3xl"></div>
-
-        <div class="relative grid gap-6 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
+      <PageHeroSection
+        :section-class="heroSectionClass"
+        top-blob-class="absolute -top-24 -right-24 w-72 h-72 bg-violet-500/10 rounded-full blur-3xl"
+        bottom-blob-class="absolute -bottom-24 -left-24 w-72 h-72 bg-cyan-500/10 rounded-full blur-3xl"
+      >
+        <template #left>
           <div>
             <div class="inline-flex items-center gap-2 rounded-full bg-violet-900/10 text-violet-800 dark:bg-violet-400/10 dark:text-violet-200 px-3 py-1 text-xs font-semibold tracking-[0.2em]">
               <span class="w-2 h-2 rounded-full bg-violet-500"></span>
@@ -98,7 +93,9 @@
               </ActionTextButton>
             </div>
           </div>
+        </template>
 
+        <template #right>
           <div class="grid grid-cols-2 gap-4">
             <template v-if="loading">
               <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm animate-pulse">
@@ -165,8 +162,8 @@
               </div>
             </template>
           </div>
-        </div>
-      </section>
+        </template>
+      </PageHeroSection>
 
       <section v-if="error" class="rounded-[18px] border border-rose-200 dark:border-rose-800 bg-rose-50 dark:bg-rose-900/20 p-4 text-rose-700 dark:text-rose-300">
         <div class="flex items-center gap-2">
@@ -375,11 +372,15 @@ import { useAuthStore } from '/assets/js/stores/authStore.js';
 import { useModalStore } from '/assets/js/stores/modalStore.js';
 import { useMainStore } from '/assets/js/stores/mainStore.js';
 import ActionTextButton from '/vue/components/ActionTextButton.vue';
+import LoginRequiredPrompt from '/vue/components/LoginRequiredPrompt.vue';
+import PageHeroSection from '/vue/components/PageHeroSection.vue';
 
 export default {
   name: 'AdminRealtimeMonitoring',
   components: {
-    ActionTextButton
+    ActionTextButton,
+    LoginRequiredPrompt,
+    PageHeroSection
   },
   setup() {
     const monitoringStore = useRealtimeMonitoringStore();
