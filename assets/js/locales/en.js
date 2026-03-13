@@ -52,6 +52,44 @@ export default {
             "login_required": "You need to log in to access the token blacklist."
       }
     },
+    token_audit: {
+      "title": "Token Audit Logs",
+      "subtitle": "Review system-wide token activities including logins, logouts, token refreshes, and suspicious activities.",
+      "security": "AUDIT TRAIL",
+      "search_placeholder": "Search by Email, JTI, User ID or Action...",
+      "no_logs_title": "No Audit Logs Found",
+      "no_logs_desc": "There are currently no records indicating recent token activity matching your criteria.",
+      "delete_selected": "Delete Selected",
+      "delete_success": "Audit log successfully deleted.",
+      "bulk_delete_success": "Successfully deleted {count} audit logs.",
+      "table": {
+        "action": "Action",
+        "user": "User",
+        "ip_address": "IP Address",
+        "status": "Status",
+        "created_at": "Timestamp",
+        "actions": "Actions",
+        "status_success": "Success",
+        "status_failure": "Failed"
+      },
+      "detail_modal": {
+        "title": "Audit Log Details",
+        "error_message": "Error Message"
+      },
+      "delete_modal": {
+        "title": "Delete Audit Log?",
+        "message": "Are you sure you want to delete this token audit log? This action cannot be undone and will remove the record permanently."
+      },
+      "bulk_delete_modal": {
+        "title": "Delete Multiple Logs?",
+        "message": "Are you sure you want to delete the selected audit logs? This action cannot be undone."
+      },
+      "access_denied": {
+        "title": "Access Denied",
+        "message": "Only Super Admins can access the Token Audit Logs.",
+        "login_required": "You need to log in to access the token audit logs."
+      }
+    },
     advanced_audit: {
       "general": {
         "advanced_protection": "Advanced Protection",
@@ -331,6 +369,8 @@ export default {
       loading_data: 'Loading data...',
       retry: 'Retry',
       refresh: 'Refresh',
+      reload: 'Reload',
+      select: 'Select',
       success: 'Success',
       error: 'Error',
       view: 'View',
@@ -510,6 +550,7 @@ export default {
       admin: 'Admin',
       admin_dashboard: 'Dashboard',
       admin_token_blacklist: 'Token Blacklist',
+      admin_token_audit: 'Token Audit Logs',
       kv_admin_env: 'KV Env Compare',
       user_management: 'User Management',
       system_stats: 'System Stats',

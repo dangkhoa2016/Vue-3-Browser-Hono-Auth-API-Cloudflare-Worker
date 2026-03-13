@@ -52,6 +52,44 @@ export default {
             "login_required": "Sie müssen sich anmelden, um auf die Token-Sperrliste zuzugreifen."
       }
     },
+    token_audit: {
+      "title": "Token-Audit-Logs",
+      "subtitle": "Überprüfen Sie systemweite Token-Aktivitäten, einschließlich Anmeldungen, Abmeldungen, Aktualisierungen und verdächtigen Vorgängen.",
+      "security": "AUDIT-TRAIL",
+      "search_placeholder": "Suche nach E-Mail, JTI, Benutzer-ID oder Aktion...",
+      "no_logs_title": "Keine Audit-Logs gefunden",
+      "no_logs_desc": "Derzeit liegen keine Aufzeichnungen über aktuelle Token-Aktivitäten vor, die Ihren Kriterien entsprechen.",
+      "delete_selected": "Ausgewählte löschen",
+      "delete_success": "Audit-Log erfolgreich gelöscht.",
+      "bulk_delete_success": "{count} Audit-Logs erfolgreich gelöscht.",
+      "table": {
+        "action": "Aktion",
+        "user": "Benutzer",
+        "ip_address": "IP-Adresse",
+        "status": "Status",
+        "created_at": "Zeitstempel",
+        "actions": "Aktionen",
+        "status_success": "Erfolg",
+        "status_failure": "Fehler"
+      },
+      "detail_modal": {
+        "title": "Details zum Audit-Log",
+        "error_message": "Fehlermeldung"
+      },
+      "delete_modal": {
+        "title": "Audit-Log löschen?",
+        "message": "Sind Sie sicher, dass Sie dieses Token-Audit-Log löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden, und der Datensatz wird endgültig entfernt."
+      },
+      "bulk_delete_modal": {
+        "title": "Mehrere Logs löschen?",
+        "message": "Sind Sie sicher, dass Sie die ausgewählten Audit-Logs löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden."
+      },
+      "access_denied": {
+        "title": "Zugriff verweigert",
+        "message": "Nur Super-Admins können auf die Token-Audit-Logs zugreifen.",
+        "login_required": "Sie müssen sich anmelden, um auf die Token-Audit-Logs zuzugreifen."
+      }
+    },
     advanced_audit: {
       "general": {
         "advanced_protection": "Advanced Protection (DE)",
@@ -331,6 +369,8 @@ export default {
       loading_data: 'Daten werden geladen...',
       retry: 'Wiederholen',
       refresh: 'Aktualisieren',
+      reload: 'Neu laden',
+      select: 'Auswählen',
       success: 'Erfolg',
       error: 'Fehler',
       view: 'Anzeigen',
@@ -510,6 +550,7 @@ export default {
       admin: 'Admin',
       admin_dashboard: 'Dashboard',
       admin_token_blacklist: 'Token-Sperrliste',
+      admin_token_audit: 'Token-Audit-Logs',
       kv_admin_env: 'KV-Umgebung vergleichen',
       user_management: 'Benutzerverwaltung',
       system_stats: 'Systemstatistiken',

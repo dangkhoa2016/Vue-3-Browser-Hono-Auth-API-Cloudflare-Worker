@@ -1,0 +1,7 @@
+{
+  "success": true,
+  "data": {
+    "deleted_sub_count": 2
+  },
+  "message": "Audit logs deleted successfully"
+}
