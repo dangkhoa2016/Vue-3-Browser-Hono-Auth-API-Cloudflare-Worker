@@ -1,0 +1,17 @@
+{
+  "success": false,
+  "error": {
+    "issues": [
+      {
+        "code": "invalid_type",
+        "expected": "number",
+        "received": "undefined",
+        "path": [
+          "userId"
+        ],
+        "message": "Required"
+      }
+    ],
+    "name": "ZodError"
+  }
+}

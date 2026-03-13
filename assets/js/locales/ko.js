@@ -1,5 +1,57 @@
 export default {
   message: {
+    token_blacklist: {
+      "title": "토큰 블랙리스트",
+      "subtitle": "취소된 액세스 토큰을 관리하여 손상된 계정을 즉시 비활성화하고 시스템을 보호합니다.",
+      "security": "보안",
+      "add_token": "토큰 추가",
+      "search_placeholder": "JTI 또는 이유별 검색...",
+      "no_tokens_title": "블랙리스트에 등록된 토큰 없음",
+      "no_tokens_desc": "현재 취소된 토큰이 필요한 감지된 보안 위협이 없습니다.",
+      "table": {
+            "id": "ID",
+            "jti": "JTI",
+            "userId": "사용자 ID",
+            "reason": "이유",
+            "expiresAt": "만료 일시",
+            "createdAt": "생성 일시",
+            "actions": "작업",
+            "manual": "수동"
+      },
+      "add_modal": {
+            "title": "블랙리스트에 추가",
+            "jti_label": "JTI (토큰 ID) *",
+            "jti_placeholder": "예: 550e8400-e29b-41d4-a716-446655440000",
+            "user_id_label": "사용자 ID (선택 사항)",
+            "user_id_placeholder": "예: 42",
+            "reason_label": "이유 *",
+            "reasons": {
+                  "admin_security": "관리자 보안 조치",
+                  "user_logout": "사용자 로그아웃",
+                  "password_reset": "비밀번호 재설정",
+                  "compromised": "손상된 토큰",
+                  "suspended": "사용자 정지됨",
+                  "other": "기타"
+            },
+            "expires_label": "만료일 (선택 사항)",
+            "expires_hint": "설정하지 않으면 기본값은 현재부터 24시간 후입니다.",
+            "submit": "블랙리스트에 추가",
+            "success": "토큰이 블랙리스트에 성공적으로 추가되었습니다.",
+            "failed": "토큰을 블랙리스트에 추가하지 못했습니다."
+      },
+      "delete_modal": {
+            "title": "블랙리스트에서 토큰을 제거하시겠습니까?",
+            "message": "블랙리스트에서 이 토큰을 제거하시겠습니까? 토큰이 자연적으로 만료되지 않은 경우 다시 유효해질 수 있습니다.",
+            "remove": "제거",
+            "success": "토큰이 블랙리스트에서 성공적으로 제거되었습니다.",
+            "failed": "블랙리스트에서 토큰을 제거하지 못했습니다."
+      },
+      "access_denied": {
+            "title": "접근 거부됨",
+            "message": "최고 관리자만 토큰 블랙리스트에 액세스할 수 있습니다.",
+            "login_required": "토큰 블랙리스트에 액세스하려면 로그인해야 합니다."
+      }
+    },
     advanced_audit: {
       "general": {
         "advanced_protection": "Advanced Protection (KO)",
@@ -276,7 +328,11 @@ export default {
       close: '닫기',
       page_of: '페이지 {current} / {total}',
       loading: '로딩 중...',
+      loading_data: '데이터를 불러오는 중...',
       retry: '다시 시도',
+      refresh: '새로고침',
+      success: '성공',
+      error: '오류',
       view: '보기',
       retry_title: '데이터 다시 로드'
     },
@@ -453,6 +509,7 @@ export default {
       toggle_api_mode: 'API 모드 전환',
       admin: '관리자',
       admin_dashboard: '대시보드',
+      admin_token_blacklist: '토큰 블랙리스트',
       kv_admin_env: 'KV 환경 비교',
       user_management: '사용자 관리',
       system_stats: '시스템 통계',

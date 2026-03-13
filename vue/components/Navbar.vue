@@ -366,7 +366,8 @@ export default {
         { name: t('message.navbar.kv_admin'), path: '/admin/kv', icon: 'bi-database' },
         { name: t('message.navbar.kv_admin_audit') || 'KV Audit Configs', path: '/admin/kv/audit', icon: 'bi-shield-check' },
         { name: t('message.navbar.kv_admin_env') || 'KV Env Compare', path: '/admin/kv/env-comparison', icon: 'bi-arrow-left-right' },
-        { name: t('message.navbar.kv_admin_rate_limits') || 'KV Rate Limits', path: '/admin/kv/rate-limits', icon: 'bi-speedometer' }
+        { name: t('message.navbar.kv_admin_rate_limits') || 'KV Rate Limits', path: '/admin/kv/rate-limits', icon: 'bi-speedometer' },
+        { name: t('message.navbar.admin_token_blacklist'), path: '/admin/token-blacklist', icon: 'bi-ban' }
       ] : [])
     ]);
 

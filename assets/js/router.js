@@ -274,6 +274,12 @@ const routes = [
     component: load('/vue/pages/KvAdminRateLimits.vue'),
     meta: { requiresAuth: true, superAdminOnly: true }
   },
+  {
+    path: '/admin/token-blacklist',
+    name: 'AdminTokenBlacklist',
+    component: load('/vue/pages/AdminTokenBlacklist.vue'),
+    meta: { requiresAuth: true, superAdminOnly: true }
+  },
   { path: '/about', name: 'About', component: load('/vue/pages/About.vue') },
   { path: '/:pathMatch(.*)*', name: 'NotFound', component: load('/vue/pages/NotFound.vue') },
 ];
