@@ -97,14 +97,14 @@
       icon-bg-class="bg-cyan-100 dark:bg-cyan-900/30"
       icon-color-class="text-cyan-600 dark:text-cyan-400"
       panel-class="max-w-5xl"
-      @close="showJsonModal = false"
+      @close="closeJsonModal"
     >
       <div class="rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-950 text-slate-100 p-4 overflow-auto max-h-[60vh]">
         <pre class="text-xs sm:text-sm leading-6">{{ formattedPayload }}</pre>
       </div>
       <template #footer>
         <div class="flex justify-end">
-          <ActionTextButton variant="soft" @click="showJsonModal = false">
+          <ActionTextButton variant="soft" @click="closeJsonModal">
             {{ $t('message.common.close') }}
           </ActionTextButton>
         </div>
@@ -121,6 +121,7 @@ import { SUPPORTED_LANGUAGES, loadLanguageAsync } from '/assets/js/i18n.js';
 import { useMainStore } from '/assets/js/stores/mainStore.js';
 import ActionTextButton from '/vue/components/ActionTextButton.vue';
 import ModalWindow from '/vue/components/ModalWindow.vue';
+import { useModalState } from '../composables/useModalState.js';
 
 export default {
   name: 'PublicLanguage',
@@ -131,7 +132,8 @@ export default {
     const loading = ref(false);
     const error = ref('');
     const payload = ref(null);
-    const showJsonModal = ref(false);
+    const jsonModal = useModalState({ initialMode: 'json' });
+    const showJsonModal = jsonModal.isOpen;
     const currentLanguage = computed(() => locale.value);
     const supportedLanguageCodeSet = new Set(SUPPORTED_LANGUAGES.map((item) => item.code));
 
@@ -159,7 +161,11 @@ export default {
 
     const openJsonModal = () => {
       if (!payload.value) return;
-      showJsonModal.value = true;
+      jsonModal.open(null, 'json');
+    };
+
+    const closeJsonModal = () => {
+      jsonModal.close({ reset: true });
     };
 
     const changeLanguage = async (langCode) => {
@@ -192,6 +198,7 @@ export default {
       normalizeLanguageCode,
       loadData,
       openJsonModal,
+      closeJsonModal,
       changeLanguage
     };
   }

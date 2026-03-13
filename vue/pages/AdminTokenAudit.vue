@@ -354,7 +354,7 @@
       :confirm-label="$t('message.common.delete') || 'Delete'"
       :loading="isDeleting"
       @confirm="executeDeleteLog"
-      @cancel="showDeleteModal = false"
+      @cancel="closeDeleteModal"
     />
     
     <!-- Bulk Delete Confirm Modal -->
@@ -365,7 +365,7 @@
       :confirm-label="$t('message.token_audit.delete_selected') || 'Delete Selected'"
       :loading="isDeleting"
       @confirm="executeBulkDelete"
-      @cancel="showBulkDeleteModal = false"
+      @cancel="closeBulkDeleteModal"
     />
   </div>
 </template>
@@ -424,8 +424,10 @@ export default {
     // Modals state
     const detailModal = useModalState({ initialMode: 'detail', initialValue: null });
     const showDetailModal = detailModal.isOpen;
-    const showDeleteModal = ref(false);
-    const showBulkDeleteModal = ref(false);
+    const deleteModal = useModalState({ initialMode: 'delete', initialValue: null });
+    const showDeleteModal = deleteModal.isOpen;
+    const bulkDeleteModal = useModalState({ initialMode: 'bulk-delete', initialValue: null });
+    const showBulkDeleteModal = bulkDeleteModal.isOpen;
     const deletingId = ref(null);
 
     // Auth state access
@@ -557,22 +559,31 @@ export default {
 
     const confirmDeleteLog = (id) => {
       deletingId.value = id;
-      showDeleteModal.value = true;
+      deleteModal.open(id, 'delete');
     };
 
     const confirmBulkDelete = () => {
       if (selectedItems.value.length === 0) return;
-      showBulkDeleteModal.value = true;
+      bulkDeleteModal.open(null, 'bulk-delete');
+    };
+
+    const closeDeleteModal = () => {
+      deleteModal.close({ reset: true });
+    };
+
+    const closeBulkDeleteModal = () => {
+      bulkDeleteModal.close({ reset: true });
     };
 
     const executeDeleteLog = async () => {
       if (!deletingId.value) return;
+      const targetId = deletingId.value;
       const success = await auditStore.deleteLog(deletingId.value);
       
       if (success) {
-        showDeleteModal.value = false;
+        closeDeleteModal();
         deletingId.value = null;
-        selectedItems.value = selectedItems.value.filter(id => id !== deletingId.value);
+        selectedItems.value = selectedItems.value.filter(id => id !== targetId);
       }
     };
     
@@ -580,7 +591,7 @@ export default {
       if (selectedItems.value.length === 0) return;
       const success = await auditStore.bulkDeleteLogs(selectedItems.value);
       if (success) {
-        showBulkDeleteModal.value = false;
+        closeBulkDeleteModal();
         selectedItems.value = [];
       }
     };
@@ -622,6 +633,8 @@ export default {
       isFetchingLog,
       showDeleteModal,
       showBulkDeleteModal,
+      closeDeleteModal,
+      closeBulkDeleteModal,
       isDeleting,
       selectedItems,
       isAllSelected,

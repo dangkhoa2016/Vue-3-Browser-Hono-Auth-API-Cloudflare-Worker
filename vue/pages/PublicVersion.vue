@@ -93,14 +93,14 @@
       icon-bg-class="bg-indigo-100 dark:bg-indigo-900/30"
       icon-color-class="text-indigo-600 dark:text-indigo-400"
       panel-class="max-w-5xl"
-      @close="showJsonModal = false"
+      @close="closeJsonModal"
     >
       <div class="rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-950 text-slate-100 p-4 overflow-auto max-h-[60vh]">
         <pre class="text-xs sm:text-sm leading-6">{{ formattedPayload }}</pre>
       </div>
       <template #footer>
         <div class="flex justify-end">
-          <ActionTextButton variant="soft" @click="showJsonModal = false">
+          <ActionTextButton variant="soft" @click="closeJsonModal">
             {{ $t('message.common.close') }}
           </ActionTextButton>
         </div>
@@ -116,6 +116,7 @@ import { apiClient, API_ENDPOINTS } from '/assets/js/api.js';
 import { useMainStore } from '/assets/js/stores/mainStore.js';
 import ActionTextButton from '/vue/components/ActionTextButton.vue';
 import ModalWindow from '/vue/components/ModalWindow.vue';
+import { useModalState } from '../composables/useModalState.js';
 
 export default {
   name: 'PublicVersion',
@@ -126,7 +127,8 @@ export default {
     const loading = ref(false);
     const error = ref('');
     const payload = ref(null);
-    const showJsonModal = ref(false);
+    const jsonModal = useModalState({ initialMode: 'json' });
+    const showJsonModal = jsonModal.isOpen;
 
     const endpointData = computed(() => payload.value?.data || {});
     const endpointMessage = computed(() => payload.value?.message || payload.value?.data?.message || '—');
@@ -148,7 +150,11 @@ export default {
 
     const openJsonModal = () => {
       if (!payload.value) return;
-      showJsonModal.value = true;
+      jsonModal.open(null, 'json');
+    };
+
+    const closeJsonModal = () => {
+      jsonModal.close({ reset: true });
     };
 
     watch(() => mainStore.mockApi, async (value, oldValue) => {
@@ -168,7 +174,8 @@ export default {
       endpointPath,
       formattedPayload,
       loadData,
-      openJsonModal
+      openJsonModal,
+      closeJsonModal
     };
   }
 };

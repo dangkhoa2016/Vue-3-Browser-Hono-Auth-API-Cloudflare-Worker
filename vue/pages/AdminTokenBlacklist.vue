@@ -161,7 +161,7 @@
     </template>
 
     <!-- Add Token Modal -->
-    <ModalWindow :show="showAddModal" :title="$t('message.token_blacklist.add_modal.title') || 'Add To Blacklist'" @close="showAddModal = false">
+    <ModalWindow :show="showAddModal" :title="$t('message.token_blacklist.add_modal.title') || 'Add To Blacklist'" @close="closeAddTokenModal">
       <div class="p-6">
         <form @submit.prevent="submitAddToken">
           <fieldset :disabled="isSubmitting">
@@ -206,7 +206,7 @@
           </div>
           
           <div class="mt-6 flex justify-end gap-3">
-            <ActionTextButton tone="slate" size="md" @click="showAddModal = false" type="button">
+            <ActionTextButton tone="slate" size="md" @click="closeAddTokenModal" type="button">
               {{ $t('message.common.cancel') || 'Cancel' }}
             </ActionTextButton>
             <ActionTextButton tone="red" size="md" type="submit" icon="bi bi-shield-lock" :disabled="isSubmitting" :class="{ 'opacity-50 cursor-not-allowed': isSubmitting }">
@@ -227,7 +227,7 @@
       :confirm-label="$t('message.token_blacklist.delete_modal.remove') || 'Remove'"
       :loading="isDeleting"
       @confirm="executeDeleteToken"
-      @cancel="showDeleteModal = false"
+      @cancel="closeDeleteTokenModal"
     />
   </div>
 </template>
@@ -246,6 +246,9 @@ import PaginationControls from '../components/PaginationControls.vue';
 import ConfirmDeleteModal from '../components/ConfirmDeleteModal.vue';
 import ModalWindow from '../components/ModalWindow.vue';
 import LoginRequiredPrompt from '../components/LoginRequiredPrompt.vue';
+import { useModalState } from '../composables/useModalState.js';
+import { useDebouncedFilters } from '../composables/useDebouncedFilters.js';
+import { useAuthGate } from '../composables/useAuthGate.js';
 
 export default {
   components: {
@@ -271,10 +274,11 @@ export default {
     
     // Local state for UI
     const searchQuery = ref('');
-    const debounceTimer = ref(null);
+    const { runDebounced, clearDebounce } = useDebouncedFilters();
 
     // Modals state
-    const showAddModal = ref(false);
+    const addTokenModal = useModalState({ initialMode: 'add-token' });
+    const showAddModal = addTokenModal.isOpen;
     const addError = computed(() => blacklistStore.addError);
     const isSubmitting = computed(() => blacklistStore.isSubmitting);
     const addForm = ref({
@@ -284,14 +288,22 @@ export default {
       expiresAt: ''
     });
 
-    const showDeleteModal = ref(false);
+    const deleteTokenModal = useModalState({ initialMode: 'delete-token', initialValue: null });
+    const showDeleteModal = deleteTokenModal.isOpen;
     const isDeleting = computed(() => blacklistStore.isDeleting);
     const deletingId = ref(null);
 
     // Auth state access
-    const showLoginRequired = computed(() => !authStore.isAuthenticated);
     const isSuperAdmin = computed(() => {
       return authStore.user?.role?.toUpperCase() === 'SUPER_ADMIN';
+    });
+
+    const { showLoginRequired, openLoginModal, ensureAuthenticated, handleAuthStateChange } = useAuthGate({
+      authStore,
+      modalStore,
+      onAuthenticated: async () => {
+        await fetchTokens();
+      }
     });
 
     // Formatting utilities
@@ -324,10 +336,9 @@ export default {
     };
 
     const handleSearch = () => {
-      clearTimeout(debounceTimer.value);
-      debounceTimer.value = setTimeout(() => {
-        fetchTokens(1);
-      }, 300);
+      runDebounced('token-blacklist-search', async () => {
+        await fetchTokens(1);
+      });
     };
 
     const openAddTokenModal = () => {
@@ -338,19 +349,27 @@ export default {
         expiresAt: ''
       };
       blacklistStore.addError = null;
-      showAddModal.value = true;
+      addTokenModal.open(null, 'add-token');
+    };
+
+    const closeAddTokenModal = () => {
+      addTokenModal.close({ reset: true });
     };
 
     const submitAddToken = async () => {
       const success = await blacklistStore.addToken(addForm.value);
       if (success) {
-        showAddModal.value = false;
+        closeAddTokenModal();
       }
     };
 
     const confirmDeleteToken = (id) => {
       deletingId.value = id;
-      showDeleteModal.value = true;
+      deleteTokenModal.open(id, 'delete-token');
+    };
+
+    const closeDeleteTokenModal = () => {
+      deleteTokenModal.close({ reset: true });
     };
 
     const executeDeleteToken = async () => {
@@ -358,19 +377,13 @@ export default {
       const success = await blacklistStore.removeToken(deletingId.value);
       
       if (success) {
-        showDeleteModal.value = false;
+        closeDeleteTokenModal();
         deletingId.value = null;
       }
     };
 
-    const openLoginModal = () => {
-      modalStore.openLogin();
-    };
-
-    onMounted(() => {
-      if (authStore.isAuthenticated && isSuperAdmin.value) {
-        fetchTokens();
-      }
+    onMounted(async () => {
+      await ensureAuthenticated({ openModal: false });
     });
 
     watch(() => mainStore.mockApi, (newVal, oldVal) => {
@@ -379,9 +392,13 @@ export default {
       }
     });
 
-    watch(() => authStore.isAuthenticated, (newVal) => {
-      if (newVal && isSuperAdmin.value) {
-        fetchTokens();
+    watch(() => authStore.isAuthenticated, async (newVal) => {
+      await handleAuthStateChange(newVal);
+    });
+
+    watch(searchQuery, (newVal) => {
+      if (!newVal) {
+        clearDebounce('token-blacklist-search');
       }
     });
 
@@ -399,6 +416,8 @@ export default {
       isSubmitting,
       showDeleteModal,
       isDeleting,
+      closeAddTokenModal,
+      closeDeleteTokenModal,
       
       fetchTokens,
       changePage,
