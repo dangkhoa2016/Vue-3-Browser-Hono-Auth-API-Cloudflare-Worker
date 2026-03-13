@@ -1,5 +1,57 @@
 export default {
   message: {
+    token_blacklist: {
+      "title": "Danh sách đen Token",
+      "subtitle": "Quản lý các token truy cập đã bị thu hồi để vô hiệu hóa ngay lập tức các tài khoản bị xâm phạm và bảo mật hệ thống.",
+      "security": "BẢO MẬT",
+      "add_token": "Thêm Token",
+      "search_placeholder": "Tìm kiếm bằng JTI hoặc Lý do...",
+      "no_tokens_title": "Không có Token nào bị đưa vào danh sách đen",
+      "no_tokens_desc": "Hiện tại không có mối đe dọa bảo mật nào được phát hiện yêu cầu thu hồi token.",
+      "table": {
+            "id": "ID",
+            "jti": "JTI",
+            "userId": "ID Người dùng",
+            "reason": "Lý do",
+            "expiresAt": "Hết hạn lúc",
+            "createdAt": "Tạo lúc",
+            "actions": "Hành động",
+            "manual": "THỦ CÔNG"
+      },
+      "add_modal": {
+            "title": "Thêm vào Danh sách đen",
+            "jti_label": "JTI (ID Token) *",
+            "jti_placeholder": "vd. 550e8400-e29b-41d4-a716-446655440000",
+            "user_id_label": "ID Người dùng (Tùy chọn)",
+            "user_id_placeholder": "vd. 42",
+            "reason_label": "Lý do *",
+            "reasons": {
+                  "admin_security": "Hành động Bảo mật của Quản trị viên",
+                  "user_logout": "Người dùng Đăng xuất",
+                  "password_reset": "Đặt lại Mật khẩu",
+                  "compromised": "Token bị xâm phạm",
+                  "suspended": "Người dùng bị đình chỉ",
+                  "other": "Khác"
+            },
+            "expires_label": "Ngày Hết hạn (Tùy chọn)",
+            "expires_hint": "Nếu không được đặt, mặc định là 24 giờ kể từ bây giờ.",
+            "submit": "Thêm vào Danh sách đen",
+            "success": "Đã thêm token vào danh sách đen thành công.",
+            "failed": "Không thể thêm token vào danh sách đen."
+      },
+      "delete_modal": {
+            "title": "Xóa Token khỏi Danh sách đen?",
+            "message": "Bạn có chắc chắn muốn xóa token này khỏi danh sách đen không? Token có thể có hiệu lực trở lại nếu chưa hết thời hạn tự nhiên.",
+            "remove": "Xóa",
+            "success": "Đã xóa token khỏi danh sách đen thành công.",
+            "failed": "Không thể xóa token khỏi danh sách đen."
+      },
+      "access_denied": {
+            "title": "Từ chối truy cập",
+            "message": "Chỉ Super Admin mới có thể truy cập Danh sách đen Token.",
+            "login_required": "Bạn cần đăng nhập để truy cập danh sách đen token."
+      }
+    },
     advanced_audit: {
       "general": {
         "advanced_protection": "Bảo vệ nâng cao",
@@ -276,7 +328,11 @@ export default {
       close: 'Đóng',
       page_of: 'Trang {current} trên {total}',
       loading: 'Đang tải...',
+      loading_data: 'Đang tải dữ liệu...',
       retry: 'Thử lại',
+      refresh: 'Làm mới',
+      success: 'Thành công',
+      error: 'Lỗi',
       view: 'Xem',
       retry_title: 'Thử tải lại dữ liệu'
     },
@@ -452,7 +508,9 @@ export default {
       this_project: 'Dự án này',
       toggle_api_mode: 'Chuyển chế độ API',
       admin: 'Quản trị',
-      admin_dashboard: 'Bảng điều khiển', kv_admin_env: 'So Sánh Biến KV', user_management: 'Quản lý người dùng',
+      admin_dashboard: 'Bảng điều khiển',
+      admin_token_blacklist: 'Danh sách Token đen',
+      kv_admin_env: 'So Sánh Biến KV', user_management: 'Quản lý người dùng',
       system_stats: 'Thống kê hệ thống',
       system_health: 'Tình trạng hệ thống',
       audit_logs: 'Nhật ký kiểm tra',

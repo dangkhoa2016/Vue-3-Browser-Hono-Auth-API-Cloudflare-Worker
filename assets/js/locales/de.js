@@ -1,5 +1,57 @@
 export default {
   message: {
+    token_blacklist: {
+      "title": "Token-Sperrliste",
+      "subtitle": "Verwalten Sie widerrufene Zugriffstoken, um kompromittierte Konten sofort zu deaktivieren und das System zu schützen.",
+      "security": "SICHERHEIT",
+      "add_token": "Token hinzufügen",
+      "search_placeholder": "Suche nach JTI oder Grund...",
+      "no_tokens_title": "Keine Token auf der Sperrliste",
+      "no_tokens_desc": "Derzeit sind keine Sicherheitsbedrohungen bekannt, die widerrufene Token erfordern.",
+      "table": {
+            "id": "ID",
+            "jti": "JTI",
+            "userId": "Benutzer-ID",
+            "reason": "Grund",
+            "expiresAt": "Läuft ab am",
+            "createdAt": "Erstellt am",
+            "actions": "Aktionen",
+            "manual": "MANUELL"
+      },
+      "add_modal": {
+            "title": "Zur Sperrliste hinzufügen",
+            "jti_label": "JTI (Token-ID) *",
+            "jti_placeholder": "z.B. 550e8400-e29b-41d4-a716-446655440000",
+            "user_id_label": "Benutzer-ID (Optional)",
+            "user_id_placeholder": "z.B. 42",
+            "reason_label": "Grund *",
+            "reasons": {
+                  "admin_security": "Sicherheitsmaßnahme des Administrators",
+                  "user_logout": "Benutzer abgemeldet",
+                  "password_reset": "Passwort zurücksetzen",
+                  "compromised": "Kompromittiertes Token",
+                  "suspended": "Benutzer gesperrt",
+                  "other": "Andere"
+            },
+            "expires_label": "Ablaufdatum (Optional)",
+            "expires_hint": "Wenn nicht festgelegt, standardmäßig 24 Stunden ab jetzt.",
+            "submit": "Zur Sperrliste hinzufügen",
+            "success": "Token erfolgreich zur Sperrliste hinzugefügt.",
+            "failed": "Fehler beim Hinzufügen des Tokens zur Sperrliste."
+      },
+      "delete_modal": {
+            "title": "Token von der Sperrliste entfernen?",
+            "message": "Sind Sie sicher, dass Sie dieses Token von der Sperrliste entfernen möchten? Das Token könnte wieder gültig werden, wenn es nicht natürlich abgelaufen ist.",
+            "remove": "Entfernen",
+            "success": "Token erfolgreich von der Sperrliste entfernt.",
+            "failed": "Fehler beim Entfernen des Tokens von der Sperrliste."
+      },
+      "access_denied": {
+            "title": "Zugriff verweigert",
+            "message": "Nur Super-Admins können auf die Token-Sperrliste zugreifen.",
+            "login_required": "Sie müssen sich anmelden, um auf die Token-Sperrliste zuzugreifen."
+      }
+    },
     advanced_audit: {
       "general": {
         "advanced_protection": "Advanced Protection (DE)",
@@ -276,7 +328,11 @@ export default {
       close: 'Schließen',
       page_of: 'Seite {current} von {total}',
       loading: 'Laden...',
+      loading_data: 'Daten werden geladen...',
       retry: 'Wiederholen',
+      refresh: 'Aktualisieren',
+      success: 'Erfolg',
+      error: 'Fehler',
       view: 'Anzeigen',
       retry_title: 'Daten erneut laden'
     },
@@ -453,6 +509,7 @@ export default {
       toggle_api_mode: 'API-Modus umschalten',
       admin: 'Admin',
       admin_dashboard: 'Dashboard',
+      admin_token_blacklist: 'Token-Sperrliste',
       kv_admin_env: 'KV-Umgebung vergleichen',
       user_management: 'Benutzerverwaltung',
       system_stats: 'Systemstatistiken',

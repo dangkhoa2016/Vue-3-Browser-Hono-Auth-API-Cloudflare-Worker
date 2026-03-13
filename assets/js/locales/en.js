@@ -1,5 +1,57 @@
 export default {
   message: {
+    token_blacklist: {
+      "title": "Token Blacklist",
+      "subtitle": "Manage revoked access tokens to immediately disable compromised accounts and secure the system.",
+      "security": "SECURITY",
+      "add_token": "Add Token",
+      "search_placeholder": "Search by JTI or Reason...",
+      "no_tokens_title": "No Blacklisted Tokens",
+      "no_tokens_desc": "There are currently no security threats detected requiring revoked tokens.",
+      "table": {
+            "id": "ID",
+            "jti": "JTI",
+            "userId": "User ID",
+            "reason": "Reason",
+            "expiresAt": "Expires At",
+            "createdAt": "Created At",
+            "actions": "Actions",
+            "manual": "MANUAL"
+      },
+      "add_modal": {
+            "title": "Add To Blacklist",
+            "jti_label": "JTI (Token ID) *",
+            "jti_placeholder": "e.g. 550e8400-e29b-41d4-a716-446655440000",
+            "user_id_label": "User ID (Optional)",
+            "user_id_placeholder": "e.g. 42",
+            "reason_label": "Reason *",
+            "reasons": {
+                  "admin_security": "Administrator Security Action",
+                  "user_logout": "User Logout",
+                  "password_reset": "Password Reset",
+                  "compromised": "Compromised Token",
+                  "suspended": "User Suspended",
+                  "other": "Other"
+            },
+            "expires_label": "Expiration Date (Optional)",
+            "expires_hint": "If not set, defaults to 24 hours from now.",
+            "submit": "Add to Blacklist",
+            "success": "Token successfully added to blacklist.",
+            "failed": "Failed to add token to blacklist."
+      },
+      "delete_modal": {
+            "title": "Remove Token from Blacklist?",
+            "message": "Are you sure you want to remove this token from the blacklist? The token might become valid again if it hasn't expired naturally.",
+            "remove": "Remove",
+            "success": "Token successfully removed from blacklist.",
+            "failed": "Failed to remove token from blacklist."
+      },
+      "access_denied": {
+            "title": "Access Denied",
+            "message": "Only Super Admins can access the Token Blacklist.",
+            "login_required": "You need to log in to access the token blacklist."
+      }
+    },
     advanced_audit: {
       "general": {
         "advanced_protection": "Advanced Protection",
@@ -276,7 +328,11 @@ export default {
       close: 'Close',
       page_of: 'Page {current} of {total}',
       loading: 'Loading...',
+      loading_data: 'Loading data...',
       retry: 'Retry',
+      refresh: 'Refresh',
+      success: 'Success',
+      error: 'Error',
       view: 'View',
       retry_title: 'Retry loading data'
     },
@@ -453,6 +509,7 @@ export default {
       toggle_api_mode: 'Toggle API Mode',
       admin: 'Admin',
       admin_dashboard: 'Dashboard',
+      admin_token_blacklist: 'Token Blacklist',
       kv_admin_env: 'KV Env Compare',
       user_management: 'User Management',
       system_stats: 'System Stats',
