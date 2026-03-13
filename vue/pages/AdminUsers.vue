@@ -315,6 +315,9 @@ import LoginRequiredPrompt from '../components/LoginRequiredPrompt.vue';
 import PageHeroSection from '../components/PageHeroSection.vue';
 import AsyncStateSection from '../components/AsyncStateSection.vue';
 import StatCard from '../components/StatCard.vue';
+import { useAuthGate } from '/vue/composables/useAuthGate.js';
+import { useDebouncedFilters } from '/vue/composables/useDebouncedFilters.js';
+import { useModalState } from '/vue/composables/useModalState.js';
 
 export default {
   name: 'AdminUsers',
@@ -337,10 +340,6 @@ export default {
     const modalStore = useModalStore();
     const userStore = useUserStore();
     const toastStore = useToastStore();
-
-    authStore.init();
-
-    const showLoginRequired = ref(false);
     const search = ref('');
     const roleFilter = ref('all');
     const statusFilter = ref('all');
@@ -367,22 +366,42 @@ export default {
     const updatedAtCellClass = `whitespace-nowrap px-6 py-4 text-slate-500 dark:text-slate-300 ${mobileDataLabelBaseClass}`;
 
     // Modal state
-    const showModal = ref(false);
-    const modalMode = ref('create'); // 'create' or 'edit'
-    const userForm = ref({
+    const initialUserForm = {
       full_name: '',
       email: '',
       password: '',
       role: 'user',
       status: 'active'
+    };
+    const userModal = useModalState({
+      initialOpen: false,
+      initialMode: 'create',
+      createInitialValue: () => ({ ...initialUserForm })
     });
+    const showModal = userModal.isOpen;
+    const modalMode = userModal.mode;
+    const userForm = userModal.value;
+
     const selectedUserId = ref(null);
     const formError = ref(null);
     const isSubmitting = ref(false);
-    const showConfirm = ref(null); // { id, full_name }
+
+    const deleteConfirmModal = useModalState({
+      initialOpen: false,
+      initialMode: 'delete',
+      initialValue: null
+    });
+    const showConfirm = deleteConfirmModal.value;
+
     const isDeleting = ref(false);
-    const showRoleModal = ref(false);
-    const selectedRoleUser = ref(null);
+
+    const roleModal = useModalState({
+      initialOpen: false,
+      initialMode: 'role',
+      initialValue: null
+    });
+    const showRoleModal = roleModal.isOpen;
+    const selectedRoleUser = roleModal.value;
     const selectedRoleValue = ref('user');
     const isChangingRole = ref(false);
     const tableTopRef = ref(null);
@@ -444,42 +463,6 @@ export default {
     const activeCount = computed(() => filteredUsers.value.filter(userItem => userItem.status === 'active').length);
     const inactiveCount = computed(() => filteredUsers.value.filter(userItem => userItem.status === 'inactive').length);
 
-    const openLoginModal = () => {
-      modalStore.openLogin(
-        async () => {
-          sessionStorage.removeItem('authRequired');
-          sessionStorage.removeItem('intendedRoute');
-          showLoginRequired.value = false;
-          await loadUsers();
-        },
-        () => {
-          if (!authStore.isAuthenticated) {
-            showLoginRequired.value = true;
-          }
-        }
-      );
-    };
-
-    const checkAuthAndLoad = async () => {
-      // Check if auth is required from router guard
-      const authRequired = sessionStorage.getItem('authRequired') === 'true';
-
-      if (!authStore.isAuthenticated) {
-        // Reset state
-        userStore.users = []; 
-        userStore.pagination = { total: 0, page: 1, limit: 20, totalPages: 1 };
-        showLoginRequired.value = true;
-        
-        if (authRequired) {
-          openLoginModal();
-        }
-        return;
-      }
-
-      showLoginRequired.value = false;
-      await loadUsers(1);
-    };
-
     const loadUsers = async (page = pagination.value.page, limit = pagination.value.limit) => {
       if (!authStore.isAuthenticated) {
         return;
@@ -498,6 +481,29 @@ export default {
         useServerFilter: useServerFilter.value
       });
     };
+
+    const resetUserPageState = () => {
+      userStore.users = [];
+      userStore.pagination = { total: 0, page: 1, limit: 20, totalPages: 1 };
+    };
+
+    const {
+      showLoginRequired,
+      openLoginModal,
+      ensureAuthenticated,
+      handleAuthStateChange
+    } = useAuthGate({
+      authStore,
+      modalStore,
+      sessionAuthFlagKey: 'authRequired',
+      resetProtectedState: resetUserPageState,
+      onAuthenticated: async () => {
+        await loadUsers(1);
+      },
+      onModalSuccess: async () => {
+        await loadUsers();
+      }
+    });
 
     const reload = async () => {
       forceSkeletonOnLoading.value = true;
@@ -553,24 +559,19 @@ export default {
 
     const openCreateModal = () => {
       selectedUserId.value = null;
-      userForm.value = {};
       formError.value = null;
-      modalMode.value = 'create';
-      showModal.value = true;
+      userModal.open({ ...initialUserForm }, 'create');
     };
 
     const openEditModal = (user) => {
       selectedUserId.value = user.id;
-      userForm.value = { ...user };
       formError.value = null;
-      modalMode.value = 'edit';
-      showModal.value = true;
+      userModal.open({ ...user }, 'edit');
     };
 
     const closeModal = () => {
-      showModal.value = false;
+      userModal.close({ reset: true });
       selectedUserId.value = null;
-      userForm.value = {};
       formError.value = null;
     };
 
@@ -613,20 +614,18 @@ export default {
         return;
       }
 
-      selectedRoleUser.value = userItem;
       const currentRole = (userItem.role || '').toLowerCase();
       selectedRoleValue.value = roleChangeOptions.value.includes(currentRole)
         ? currentRole
         : roleChangeOptions.value[0] || 'user';
-      showRoleModal.value = true;
+      roleModal.open(userItem, 'role');
     };
 
     const closeRoleModal = (force = false) => {
       if (isChangingRole.value && !force) {
         return;
       }
-      showRoleModal.value = false;
-      selectedRoleUser.value = null;
+      roleModal.close({ reset: true });
       selectedRoleValue.value = 'user';
     };
 
@@ -679,7 +678,7 @@ export default {
     };
 
     const confirmDelete = (user) => {
-      showConfirm.value = { id: user.id, full_name: user.full_name };
+      deleteConfirmModal.open({ id: user.id, full_name: user.full_name }, 'delete');
     };
 
     const performDelete = async () => {
@@ -689,7 +688,7 @@ export default {
       try {
         await userStore.deleteUser(showConfirm.value.id);
         toastStore.success(t('message.admin_users.deleted_success', { id: showConfirm.value.id, name: showConfirm.value.full_name }));
-        showConfirm.value = null;
+        deleteConfirmModal.close({ reset: true });
         await loadUsers();
       } catch (err) {
         const reason = (err && err.response && err.response.data && err.response.data.message) || err.message || t('message.errors.unknown_error');
@@ -702,7 +701,7 @@ export default {
     };
 
     const cancelDelete = () => {
-      showConfirm.value = null;
+      deleteConfirmModal.close({ reset: true });
     };
 
     const roleBadgeClass = (role) => {
@@ -724,7 +723,7 @@ export default {
       return 'inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-300';
     };
 
-    let searchTimer = null;
+    const { runDebounced, clearDebounce } = useDebouncedFilters(400);
     let skeletonTimer = null;
 
     watch(
@@ -754,15 +753,12 @@ export default {
     );
 
     watch(search, () => {
-      if (searchTimer) {
-        clearTimeout(searchTimer);
-      }
-      searchTimer = setTimeout(() => {
+      runDebounced('admin-users-search', async () => {
         if (useServerFilter.value) {
           forceSkeletonOnLoading.value = true;
-          loadUsers(1);
+          await loadUsers(1);
         }
-      }, 400);
+      });
     });
 
     watch([roleFilter, statusFilter], () => {
@@ -790,30 +786,21 @@ export default {
     watch(
       () => authStore.isAuthenticated,
       async (isAuthenticated) => {
-        if (isAuthenticated === false) {
-          // User logged out
-          userStore.users = []; // Clear data
-          userStore.pagination = { total: 0, page: 1, limit: 20, totalPages: 1 };
-          showLoginRequired.value = true;
-        } else if (isAuthenticated === true && showLoginRequired.value) {
-          // User logged in
-          showLoginRequired.value = false;
-          await loadUsers(1);
-        }
+        await handleAuthStateChange(isAuthenticated);
       },
       { immediate: false }
     );
 
     onBeforeUnmount(() => {
-      if (searchTimer) {
-        clearTimeout(searchTimer);
-      }
+      clearDebounce('admin-users-search');
       if (skeletonTimer) {
         clearTimeout(skeletonTimer);
       }
     });
 
-    onMounted(checkAuthAndLoad);
+    onMounted(async () => {
+      await ensureAuthenticated({ checkSessionFlag: true, openModal: true });
+    });
 
     return {
       t,

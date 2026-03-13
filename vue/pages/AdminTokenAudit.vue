@@ -200,7 +200,7 @@
     </template>
 
     <!-- Details Modal -->
-    <ModalWindow :show="showDetailModal" :title="$t('message.token_audit.detail_modal.title') || 'Audit Log Details'" panelClass="!max-w-4xl !p-0 !overflow-hidden flex flex-col token-audit-detail-modal" @close="showDetailModal = false">
+    <ModalWindow :show="showDetailModal" :title="$t('message.token_audit.detail_modal.title') || 'Audit Log Details'" panelClass="!max-w-4xl !p-0 !overflow-hidden flex flex-col token-audit-detail-modal" @close="closeDetailModal">
       <div v-if="isFetchingLog" class="p-0 flex flex-col h-full">
         <div class="bg-gradient-to-r from-slate-100 to-slate-50 dark:from-slate-800 dark:to-slate-800/50 px-6 py-5 border-b border-slate-200 dark:border-slate-800 animate-pulse shrink-0">
           <div class="flex items-center justify-between mb-2 pr-8">
@@ -384,6 +384,9 @@ import PaginationControls from '../components/PaginationControls.vue';
 import ConfirmDeleteModal from '../components/ConfirmDeleteModal.vue';
 import ModalWindow from '../components/ModalWindow.vue';
 import LoginRequiredPrompt from '../components/LoginRequiredPrompt.vue';
+import { useDebouncedFilters } from '/vue/composables/useDebouncedFilters.js';
+import { useModalState } from '/vue/composables/useModalState.js';
+import { useAuthGate } from '/vue/composables/useAuthGate.js';
 
 export default {
   name: 'AdminTokenAudit',
@@ -415,17 +418,17 @@ export default {
     
     // Local state for UI
     const searchQuery = ref('');
-    const debounceTimer = ref(null);
     const selectedItems = ref([]);
+    const { runDebounced, clearDebounce } = useDebouncedFilters(300);
 
     // Modals state
-    const showDetailModal = ref(false);
+    const detailModal = useModalState({ initialMode: 'detail', initialValue: null });
+    const showDetailModal = detailModal.isOpen;
     const showDeleteModal = ref(false);
     const showBulkDeleteModal = ref(false);
     const deletingId = ref(null);
 
     // Auth state access
-    const showLoginRequired = computed(() => !authStore.isAuthenticated);
     const isSuperAdmin = computed(() => {
       return authStore.user?.role?.toUpperCase() === 'SUPER_ADMIN';
     });
@@ -498,19 +501,35 @@ export default {
       });
     };
 
+    const {
+      showLoginRequired,
+      openLoginModal,
+      ensureAuthenticated,
+      handleAuthStateChange
+    } = useAuthGate({
+      authStore,
+      modalStore,
+      sessionAuthFlagKey: 'authRequired',
+      onAuthenticated: async () => {
+        if (isSuperAdmin.value) {
+          await fetchLogs();
+        }
+      }
+    });
+
     const changePage = (newPage) => {
       if (newPage < 1 || (pagination.value.totalPages && newPage > pagination.value.totalPages)) return;
       fetchLogs(newPage);
     };
 
     const handleSearch = () => {
-      clearTimeout(debounceTimer.value);
-      debounceTimer.value = setTimeout(() => {
-        fetchLogs(1);
-      }, 300);
+      runDebounced('admin-token-audit-search', async () => {
+        await fetchLogs(1);
+      });
     };
 
     const clearSearch = () => {
+      clearDebounce('admin-token-audit-search');
       searchQuery.value = '';
       fetchLogs(1);
     };
@@ -528,8 +547,12 @@ export default {
     };
 
     const viewLogDetails = async (id) => {
-      showDetailModal.value = true;
+      detailModal.open(id, 'detail');
       await auditStore.fetchLogDetails(id);
+    };
+
+    const closeDetailModal = () => {
+      detailModal.close({ reset: true });
     };
 
     const confirmDeleteLog = (id) => {
@@ -562,14 +585,8 @@ export default {
       }
     };
 
-    const openLoginModal = () => {
-      modalStore.openLogin();
-    };
-
-    onMounted(() => {
-      if (authStore.isAuthenticated && isSuperAdmin.value) {
-        fetchLogs();
-      }
+    onMounted(async () => {
+      await ensureAuthenticated({ checkSessionFlag: true, openModal: true });
     });
 
     watch(() => mainStore.mockApi, (newVal, oldVal) => {
@@ -578,10 +595,8 @@ export default {
       }
     });
 
-    watch(() => authStore.isAuthenticated, (newVal) => {
-      if (newVal && isSuperAdmin.value) {
-        fetchLogs();
-      }
+    watch(() => authStore.isAuthenticated, async (newVal) => {
+      await handleAuthStateChange(newVal);
     });
 
     return {
@@ -602,6 +617,7 @@ export default {
       showLoginRequired,
       isSuperAdmin,
       showDetailModal,
+      closeDetailModal,
       currentLog,
       isFetchingLog,
       showDeleteModal,

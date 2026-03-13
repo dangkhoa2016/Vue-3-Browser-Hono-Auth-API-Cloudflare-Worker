@@ -451,6 +451,8 @@ import ActionIconButton from '/vue/components/ActionIconButton.vue';
 import ActionTextButton from '/vue/components/ActionTextButton.vue';
 import LoginRequiredPrompt from '/vue/components/LoginRequiredPrompt.vue';
 import PageHeroSection from '/vue/components/PageHeroSection.vue';
+import { useAuthGate } from '/vue/composables/useAuthGate.js';
+import { useModalState } from '/vue/composables/useModalState.js';
 
 export default {
   name: 'AdminAuditLogs',
@@ -466,8 +468,12 @@ export default {
     const auditStore = useAuditStore();
     const toastStore = useToastStore();
 
-    const showModal = ref(false);
-    const selectedLog = ref(null);
+    const logDetailModal = useModalState({
+      initialMode: 'view',
+      initialValue: null
+    });
+    const showModal = logDetailModal.isOpen;
+    const selectedLog = logDetailModal.value;
     const tableTopRef = ref(null);
 
     const heroSectionClass =
@@ -576,38 +582,23 @@ export default {
     const { t } = useI18n({ useScope: 'global' });
     const authStore = useAuthStore();
     const modalStore = useModalStore();
-    const showLoginRequired = ref(false);
 
-    // Initialize auth from localStorage
-    authStore.init();
-
-    const openLoginModal = () => {
-      modalStore.openLogin(
-        // on success
-        async () => {
-          sessionStorage.removeItem('authRequired');
-          sessionStorage.removeItem('intendedRoute');
-          showLoginRequired.value = false;
-          await auditStore.fetchLogs();
-        },
-        // on close
-        () => {
-          if (!authStore.isAuthenticated) {
-            showLoginRequired.value = true;
-          }
-        }
-      );
-    };
-
-    const checkAuthAndShowModal = () => {
-      const authRequired = sessionStorage.getItem('authRequired');
-      if (!authStore.isAuthenticated || authRequired === 'true') {
-        showLoginRequired.value = true;
-        openLoginModal();
-        return false;
+    const {
+      showLoginRequired,
+      openLoginModal,
+      ensureAuthenticated,
+      handleAuthStateChange
+    } = useAuthGate({
+      authStore,
+      modalStore,
+      sessionAuthFlagKey: 'authRequired',
+      onAuthenticated: async () => {
+        await auditStore.fetchLogs();
+      },
+      onModalSuccess: async () => {
+        await auditStore.fetchLogs();
       }
-      return true;
-    };
+    });
 
     watch(() => mainStore.mockApi, async (value, oldValue) => {
       if (value === oldValue) return;
@@ -697,23 +688,18 @@ export default {
     };
 
     const openLog = (log) => {
-      selectedLog.value = log;
-      showModal.value = true;
+      logDetailModal.open(log, 'view');
     };
 
     const closeLog = () => {
-      showModal.value = false;
-      selectedLog.value = null;
+      logDetailModal.close({ reset: true });
     };
 
-    onMounted(() => {
-      // Initial load: require auth before fetching
-      const ok = checkAuthAndShowModal();
-      if (ok) {
-        auditStore.fetchLogs();
-        if (auditStore.fetchStats) {
-          auditStore.fetchStats().catch(() => {});
-        }
+    onMounted(async () => {
+      const ok = await ensureAuthenticated({ checkSessionFlag: true, openModal: true });
+      if (!ok) return;
+      if (auditStore.fetchStats) {
+        auditStore.fetchStats().catch(() => {});
       }
     });
 
@@ -721,12 +707,7 @@ export default {
     watch(
       () => authStore.isAuthenticated,
       async (isAuthenticated) => {
-        if (isAuthenticated === false && !showLoginRequired.value) {
-          checkAuthAndShowModal();
-        } else if (isAuthenticated === true && showLoginRequired.value) {
-          showLoginRequired.value = false;
-          await auditStore.fetchLogs();
-        }
+        await handleAuthStateChange(isAuthenticated);
       }
     );
 

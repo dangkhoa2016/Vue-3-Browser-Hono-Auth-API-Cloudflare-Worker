@@ -317,6 +317,8 @@ import ActionTextButton from '/vue/components/ActionTextButton.vue';
 import AsyncStateSection from '/vue/components/AsyncStateSection.vue';
 import PageHeroSection from '/vue/components/PageHeroSection.vue';
 import StatCard from '/vue/components/StatCard.vue';
+import { useDebouncedFilters } from '/vue/composables/useDebouncedFilters.js';
+import { useModalState } from '/vue/composables/useModalState.js';
 
 export default {
   name: 'AdminSecurityIncidents',
@@ -326,13 +328,15 @@ export default {
     const mainStore = useMainStore();
     const securityStore = useSecurityIncidentStore();
     const { incidents, loading, error, pagination } = storeToRefs(securityStore);
-    const showModal = ref(false);
-    const selectedIncident = ref(null);
+    const incidentModal = useModalState({ initialMode: 'view', initialValue: null });
+    const showModal = incidentModal.isOpen;
+    const selectedIncident = incidentModal.value;
     const tableTopRef = ref(null);
     const search = ref('');
     const severityFilter = ref('all');
     const statusFilter = ref('all');
     const useServerFilter = ref(true);
+    const { runDebounced } = useDebouncedFilters(400);
 
     const heroSectionClass =
       'relative overflow-hidden rounded-[32px] border border-slate-200/70 dark:border-slate-800 bg-gradient-to-br from-white via-amber-50/40 to-teal-50/40 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 p-8 shadow-[0_24px_80px_-60px_rgba(15,23,42,0.8)]';
@@ -411,12 +415,10 @@ export default {
     };
 
     const openIncident = (incident) => {
-      selectedIncident.value = incident;
-      showModal.value = true;
+      incidentModal.open(incident, 'view');
     };
     const closeIncident = () => {
-      showModal.value = false;
-      selectedIncident.value = null;
+      incidentModal.close({ reset: true });
     };
 
     const scrollToTableTop = () => {
@@ -456,16 +458,11 @@ export default {
 
     const refresh = () => loadIncidents(pagination.value?.page || 1);
 
-    let searchTimer = null;
-
     watch(search, () => {
       if (!useServerFilter.value) return;
-      if (searchTimer) {
-        clearTimeout(searchTimer);
-      }
-      searchTimer = setTimeout(() => {
-        loadIncidents(1);
-      }, 400);
+      runDebounced('admin-security-incidents-search', async () => {
+        await loadIncidents(1);
+      });
     });
 
     watch([severityFilter, statusFilter], () => {

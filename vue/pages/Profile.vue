@@ -388,6 +388,7 @@ import { useToastStore } from '/assets/js/stores/toastStore.js';
 import { apiClient, API_ENDPOINTS } from '/assets/js/api.js';
 import ActionTextButton from '/vue/components/ActionTextButton.vue';
 import LoginRequiredPrompt from '/vue/components/LoginRequiredPrompt.vue';
+import { useAuthGate } from '/vue/composables/useAuthGate.js';
 
 export default {
   name: 'Profile',
@@ -400,7 +401,6 @@ export default {
     const loadingProfile = ref(true);
     const error = ref(null);
     const { locale, t } = useI18n({ useScope: 'global' });
-    const showLoginRequired = ref(false);
     const isEditing = ref(false);
     const isSavingProfile = ref(false);
     const isClearingPendingEmail = ref(false);
@@ -435,9 +435,6 @@ export default {
     const authStore = useAuthStore();
     const modalStore = useModalStore();
     const toastStore = useToastStore();
-    
-    // Initialize auth store from localStorage
-    authStore.init();
 
     const normalizeText = (value) => String(value || '').trim();
 
@@ -505,6 +502,10 @@ export default {
         newPassword: '',
         confirmPassword: ''
       };
+    };
+
+    const resetProfileSessionState = () => {
+      resetEditingState();
     };
 
     const resetPasswordForm = () => {
@@ -611,7 +612,8 @@ export default {
 
         if (err?.response?.status === 401) {
           authStore.logout();
-          checkAuthAndShowModal();
+          markUnauthenticated();
+          openLoginModal();
         }
       } finally {
         isSavingProfile.value = false;
@@ -661,7 +663,8 @@ export default {
 
         if (err?.response?.status === 401) {
           authStore.logout();
-          checkAuthAndShowModal();
+          markUnauthenticated();
+          openLoginModal();
         }
       } finally {
         isClearingPendingEmail.value = false;
@@ -708,56 +711,18 @@ export default {
 
         if (err?.response?.status === 401) {
           authStore.logout();
-          checkAuthAndShowModal();
+          markUnauthenticated();
+          openLoginModal();
         }
       } finally {
         isSavingPassword.value = false;
       }
     };
 
-    const openLoginModal = () => {
-      modalStore.openLogin(
-        // On success callback
-        async (loginData) => {
-          sessionStorage.removeItem('authRequired');
-          sessionStorage.removeItem('intendedRoute');
-          showLoginRequired.value = false;
-          await loadProfile();
-        },
-        // On close callback
-        () => {
-          if (!authStore.isAuthenticated) {
-            showLoginRequired.value = true;
-          }
-        }
-      );
-    };
-    
-    // Check authentication and show modal if needed
-    const checkAuthAndShowModal = () => {
-      // Check if auth is required from router guard
-      const authRequired = sessionStorage.getItem('authRequired');
-      
-      if (!authStore.isAuthenticated || authRequired === 'true') {
-        showLoginRequired.value = true;
-        openLoginModal();
-        return false;
-      }
-      
-      return true;
-    };
-
-    const loadProfile = async () => {
+    const fetchProfileData = async () => {
       try {
         loadingProfile.value = true;
         error.value = null;
-
-        // Check authentication
-        const isAuth = checkAuthAndShowModal();
-        if (!isAuth) {
-          loadingProfile.value = false;
-          return;
-        }
 
         // Fetch profile from API
         const response = await apiClient.get(API_ENDPOINTS.PROFILE, {
@@ -769,7 +734,6 @@ export default {
         if (response.data.success) {
           profile.value = response.data.data;
           syncEditFormWithProfile();
-          showLoginRequired.value = false;
         } else {
           throw new Error(response.data.error || 'Failed to load profile');
         }
@@ -784,13 +748,15 @@ export default {
         ) {
           error.value = t('message.auth.relogin_required_reason', 'Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.');
           authStore.logout();
-          checkAuthAndShowModal();
+          markUnauthenticated();
+          openLoginModal();
         } else {
           error.value = err.response?.data?.error || err.message || 'Failed to load profile';
           // If unauthorized, show login
           if (err.response?.status === 401) {
             authStore.logout();
-            checkAuthAndShowModal();
+            markUnauthenticated();
+            openLoginModal();
           }
         }
         console.error('Failed to load profile:', err);
@@ -799,18 +765,41 @@ export default {
       }
     };
 
+    const {
+      showLoginRequired,
+      openLoginModal,
+      ensureAuthenticated,
+      handleAuthStateChange,
+      markUnauthenticated
+    } = useAuthGate({
+      authStore,
+      modalStore,
+      sessionAuthFlagKey: 'authRequired',
+      resetProtectedState: resetProfileSessionState,
+      onAuthenticated: async () => {
+        await fetchProfileData();
+      },
+      onModalSuccess: async () => {
+        await fetchProfileData();
+      }
+    });
+
+    const loadProfile = async () => {
+      await ensureAuthenticated({ checkSessionFlag: true, openModal: true });
+    };
+
     // Watch for authentication changes
     watch(
       () => authStore.isAuthenticated,
       async (isAuthenticated) => {
-        if (isAuthenticated === false && !showLoginRequired.value) {
-          // User logged out, show modal
+        if (isAuthenticated === false) {
           resetEditingState();
-          checkAuthAndShowModal();
-        } else if (isAuthenticated === true && showLoginRequired.value) {
-          // User logged in, reload profile
-          await loadProfile();
+          markUnauthenticated();
+          openLoginModal();
+          return;
         }
+
+        await handleAuthStateChange(isAuthenticated);
       },
       { immediate: false }
     );
@@ -832,13 +821,7 @@ export default {
 
     // Check auth when component is reactivated (from keep-alive)
     onActivated(async () => {
-      // Recheck authentication when page becomes active
-      if (!authStore.isAuthenticated) {
-        checkAuthAndShowModal();
-      } else {
-        // Refresh profile data
-        await loadProfile();
-      }
+      await loadProfile();
     });
 
     const formatDate = (dateString) => {
