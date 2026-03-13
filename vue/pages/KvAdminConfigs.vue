@@ -129,7 +129,7 @@
                 class="absolute right-2 top-1/2 -translate-y-1/2"
                 :title="$t('message.common.clear') || 'Clear'"
                 :aria-label="$t('message.common.clear') || 'Clear'"
-                @click="search = ''; $refs.searchInput && $refs.searchInput.focus()"
+                @click="clearSearch"
               />
             </div>
             <div class="flex flex-wrap items-center gap-3">
@@ -504,6 +504,7 @@ import LoginRequiredPrompt from '/vue/components/LoginRequiredPrompt.vue';
 import PageHeroSection from '/vue/components/PageHeroSection.vue';
 import { useAuthGate } from '/vue/composables/useAuthGate.js';
 import { useModalState } from '/vue/composables/useModalState.js';
+import { useDebouncedFilters } from '/vue/composables/useDebouncedFilters.js';
 
 export default {
   name: 'KvAdminConfigs',
@@ -517,6 +518,7 @@ export default {
     const loading = ref(false);
     const error = ref(null);
     const search = ref('');
+    const debouncedSearch = ref('');
     const showOverridesOnly = ref(false);
     const rows = ref([]);
     const allowedKeys = ref([]);
@@ -546,6 +548,7 @@ export default {
     const bulkSeed = ref(0);
     const bulkListRowId = ref(null);
     const toastStore = useToastStore();
+    const { runDebounced, clearDebounce } = useDebouncedFilters(200);
 
     const heroSectionClass =
       'relative overflow-hidden rounded-[32px] border border-slate-200/70 dark:border-slate-800 bg-gradient-to-br from-white via-amber-50/40 to-teal-50/40 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 p-8 shadow-[0_24px_80px_-60px_rgba(15,23,42,0.8)]';
@@ -570,7 +573,7 @@ export default {
     });
 
     const filteredRows = computed(() => {
-      const term = search.value.trim().toLowerCase();
+      const term = debouncedSearch.value.trim().toLowerCase();
       return rows.value.filter((row) => {
         if (showOverridesOnly.value && !(row.source === 'kv' && row.isOverride)) {
           return false;
@@ -703,6 +706,12 @@ export default {
 
     const reload = async () => {
       await loadConfigs();
+    };
+
+    const clearSearch = () => {
+      clearDebounce('kv-admin-configs-search');
+      search.value = '';
+      debouncedSearch.value = '';
     };
 
     const formatValue = (value) => {
@@ -1188,6 +1197,16 @@ export default {
     };
 
     watch(
+      search,
+      () => {
+        runDebounced('kv-admin-configs-search', () => {
+          debouncedSearch.value = search.value;
+        });
+      },
+      { immediate: true }
+    );
+
+    watch(
       () => authStore.isAuthenticated,
       async (isAuthenticated) => {
         await handleAuthStateChange(isAuthenticated);
@@ -1242,6 +1261,7 @@ export default {
       lastUpdatedLabel,
       openLoginModal,
       reload,
+      clearSearch,
       sourceBadgeClass,
       sourceLabel,
       copyText,
