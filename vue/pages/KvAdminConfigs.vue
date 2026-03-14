@@ -1,512 +1,335 @@
 <template>
-  <div class="relative max-w-7xl mx-auto space-y-8">
+  <div class="max-w-7xl mx-auto space-y-6">
+    <LoginRequiredPrompt
       v-if="showLoginRequired"
       tone="amber"
       button-icon="bi bi-box-arrow-in-right text-lg"
       :title="$t('message.auth.login_required')"
-  import { useKvAdminConfigsPage } from '/vue/composables/useKvAdminConfigsPage.js';
+      :message="$t('message.kv_admin_page.login_required_message')"
+      :button-text="$t('message.auth.login')"
+      @action="openLoginModal"
+    />
+
     <template v-else>
       <PageHeroSection
         :section-class="heroSectionClass"
         top-blob-class="absolute -top-20 -right-16 w-72 h-72 bg-amber-400/10 rounded-full blur-3xl"
         bottom-blob-class="absolute -bottom-24 -left-24 w-72 h-72 bg-teal-500/10 rounded-full blur-3xl"
-      return useKvAdminConfigsPage();
-        }
+      >
+        <template #left>
+          <h1 class="text-3xl md:text-4xl font-black text-slate-900 dark:text-white">
+            {{ $t('message.kv_admin_page.title') }}
+          </h1>
+          <p class="mt-2 text-slate-600 dark:text-slate-300 max-w-2xl">
+            {{ $t('message.kv_admin_page.subtitle') }}
+          </p>
+        </template>
 
-        const defaultsEndpoint = `${API_ENDPOINTS.KV_ADMIN_CONFIGS}/defaults`;
-        const defaultsRes = await apiClient.get(defaultsEndpoint, {
-          headers: { Authorization: `Bearer ${authStore.token}` }
-        });
-        const defaultsPayload = defaultsRes?.data || {};
-        const defaultsData = defaultsPayload?.data || defaultsPayload || {};
-        hydrateAllowedKeys(defaultsData);
-      } catch (_error) {
-      }
-    };
+        <template #right>
+          <div class="grid grid-cols-3 gap-3 w-full sm:w-auto">
+            <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-4 text-center">
+              <div class="text-xs uppercase tracking-[0.2em] text-slate-500">{{ $t('message.kv_admin_page.stats_total') }}</div>
+              <div class="mt-2 text-2xl font-black text-slate-900 dark:text-white">{{ stats.total }}</div>
+            </div>
+            <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-4 text-center">
+              <div class="text-xs uppercase tracking-[0.2em] text-slate-500">{{ $t('message.kv_admin_page.stats_overrides') }}</div>
+              <div class="mt-2 text-2xl font-black text-slate-900 dark:text-white">{{ stats.overrides }}</div>
+            </div>
+            <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-4 text-center">
+              <div class="text-xs uppercase tracking-[0.2em] text-slate-500">{{ $t('message.kv_admin_page.stats_allowed') }}</div>
+              <div class="mt-2 text-2xl font-black text-slate-900 dark:text-white">{{ stats.allowed }}</div>
+            </div>
+          </div>
+        </template>
+      </PageHeroSection>
 
-    const openBulkModal = async () => {
-      bulkItems.value = [createBulkItem()];
-      bulkError.value = '';
-      bulkModal.open(null, 'bulk');
-      await ensureBulkKeyOptionsLoaded();
-    };
+      <section v-if="!isSuperAdmin" class="bg-rose-50/80 dark:bg-rose-900/20 border border-rose-200 dark:border-rose-800 rounded-3xl p-8 text-center shadow-sm">
+        <i class="bi bi-shield-lock-fill text-5xl text-rose-600 dark:text-rose-400 mb-4"></i>
+        <h3 class="text-xl font-bold text-rose-900 dark:text-rose-100 mb-2">{{ $t('message.kv_admin_page.access_denied_title') }}</h3>
+        <p class="text-rose-700 dark:text-rose-300">{{ $t('message.kv_admin_page.access_denied_message') }}</p>
+      </section>
 
-    const closeBulkModal = () => {
-      bulkModal.close({ reset: false });
-      bulkError.value = '';
-      isBulkSaving.value = false;
-      bulkListRowId.value = null;
-    };
+      <section v-else class="space-y-6">
+        <div class="rounded-3xl border border-slate-200/70 dark:border-slate-800 bg-white/90 dark:bg-slate-900/90 p-5 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+          <div class="relative flex-1">
+            <i class="bi bi-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+            <input
+              v-model="search"
+              :class="searchInputClass"
+              type="text"
+              :placeholder="$t('message.kv_admin_page.search_placeholder')"
+            />
+          </div>
+          <label :class="overrideFilterLabelClass">
+            <input
+              v-model="showOverridesOnly"
+              type="checkbox"
+              class="h-4 w-4 rounded border-slate-300 text-amber-600 focus:ring-amber-500"
+            />
+            <span>{{ $t('message.kv_admin_page.show_overrides_only') }}</span>
+          </label>
+          <div class="flex flex-wrap gap-2">
+            <ActionTextButton variant="soft" shape="full" icon="bi bi-arrow-clockwise" @click="reload">
+              {{ $t('message.kv_admin_page.reload') }}
+            </ActionTextButton>
+            <ActionTextButton variant="soft" shape="full" icon="bi bi-x-circle" @click="clearSearch">
+              {{ tf('message.common.clear', 'Clear') }}
+            </ActionTextButton>
+            <ActionTextButton variant="primary" shape="full" icon="bi bi-plus-circle" @click="openAddModal">
+              {{ $t('message.kv_admin_page.add_key') }}
+            </ActionTextButton>
+            <ActionTextButton variant="soft" shape="full" icon="bi bi-list-check" @click="openBulkModal">
+              {{ $t('message.kv_admin_page.bulk_update') }}
+            </ActionTextButton>
+          </div>
+        </div>
 
-    const addBulkRow = () => {
-      bulkItems.value = [...bulkItems.value, createBulkItem()];
-    };
+        <div class="rounded-3xl border border-slate-200/70 dark:border-slate-800 bg-white dark:bg-slate-900 p-6">
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-xl font-bold text-slate-900 dark:text-white">{{ $t('message.kv_admin_page.table_title') }}</h2>
+            <span class="text-xs text-slate-500">{{ $t('message.kv_admin_page.last_updated') }}: {{ lastUpdatedLabel }}</span>
+          </div>
 
-    const removeBulkRow = (index) => {
-      if (bulkItems.value.length <= 1) return;
-      bulkItems.value = bulkItems.value.filter((_, itemIndex) => itemIndex !== index);
-    };
+          <div v-if="isLoading" class="space-y-3 animate-pulse">
+            <div v-for="row in 5" :key="row" class="h-12 rounded-xl bg-slate-100 dark:bg-slate-800"></div>
+          </div>
 
-    const openBulkKeySuggestions = async (itemId) => {
-      await ensureBulkKeyOptionsLoaded();
-      bulkListRowId.value = itemId;
-    };
+          <div v-else-if="errorMessage" class="text-center py-10">
+            <p class="text-rose-600 dark:text-rose-300">{{ errorMessage }}</p>
+            <div class="mt-4">
+              <ActionTextButton variant="soft" shape="full" icon="bi bi-arrow-clockwise" @click="reload">
+                {{ $t('message.kv_admin_page.reload') }}
+              </ActionTextButton>
+            </div>
+          </div>
 
-    const onBulkKeyBlur = (itemId) => {
-      if (bulkListRowId.value === itemId) {
-        bulkListRowId.value = null;
-      }
-    };
+          <div v-else-if="filteredRows.length === 0" class="text-center py-10 text-slate-500 dark:text-slate-400">
+            {{ $t('message.kv_admin_page.empty_title') }}
+          </div>
 
-    const focusBulkValueInput = (itemId) => {
-      const valueInput = document.getElementById(`bulk-value-${itemId}`);
-      if (!valueInput) return;
-      requestAnimationFrame(() => {
-        valueInput.focus();
-      });
-    };
+          <div v-else class="space-y-4">
+            <article
+              v-for="row in filteredRows"
+              :key="row.key"
+              :class="configCardClass"
+            >
+              <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
+                <div class="space-y-2 min-w-0">
+                  <div class="font-mono text-sm md:text-base text-slate-900 dark:text-slate-100 break-all">{{ row.key }}</div>
+                  <span :class="sourceBadgeClass(row.source)">{{ sourceLabel(row.source) }}</span>
+                </div>
+                <div class="flex flex-wrap items-center gap-2">
+                  <ActionTextButton variant="soft" shape="full" icon="bi bi-key" @click="copyText('key', row.key, row.key)">
+                    {{ copiedKey === row.key ? $t('message.kv_admin_page.copied') : $t('message.kv_admin_page.copy_key') }}
+                  </ActionTextButton>
+                  <ActionTextButton variant="soft" shape="full" icon="bi bi-clipboard" @click="copyText('value', row.key, row.valueLabel)">
+                    {{ copiedValue === row.key ? $t('message.kv_admin_page.copied') : $t('message.kv_admin_page.copy_value') }}
+                  </ActionTextButton>
+                  <ActionTextButton variant="soft" shape="full" icon="bi bi-pencil" @click="openEditModal(row)">
+                    {{ $t('message.common.edit') }}
+                  </ActionTextButton>
+                  <ActionTextButton variant="danger" shape="full" icon="bi bi-trash" @click="openDeleteModal(row)">
+                    {{ $t('message.common.delete') }}
+                  </ActionTextButton>
+                </div>
+              </div>
+              <div class="mt-4 grid md:grid-cols-2 gap-3">
+                <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-800/70 p-3 text-xs">
+                  <div class="uppercase tracking-[0.2em] text-slate-500 mb-2">{{ $t('message.kv_admin_page.column_value') }}</div>
+                  <div class="font-mono break-all text-slate-700 dark:text-slate-200">{{ row.valueLabel }}</div>
+                </div>
+                <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white dark:bg-slate-900 p-3 text-xs">
+                  <div class="uppercase tracking-[0.2em] text-slate-500 mb-2">{{ $t('message.kv_admin_page.column_default') }}</div>
+                  <div class="font-mono break-all text-slate-700 dark:text-slate-200">{{ row.defaultLabel }}</div>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+    </template>
 
-    const onBulkKeyInput = (event, itemId) => {
-      const keyInput = event?.target;
-      if (!keyInput) return;
-      bulkListRowId.value = itemId;
+    <transition name="fade" mode="out-in">
+      <div v-if="editorOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 px-4 py-8">
+        <div class="w-full max-w-2xl rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800 shadow-2xl p-6">
+          <div class="flex items-center justify-between gap-3">
+            <h3 class="text-xl font-bold text-slate-900 dark:text-white">
+              {{ editorMode === 'add' ? $t('message.kv_admin_page.add_title') : $t('message.common.edit') }}
+            </h3>
+            <ActionIconButton icon="bi bi-x-lg" tone="slate" @click="closeEditor" />
+          </div>
 
-      requestAnimationFrame(() => {
-        const value = String(keyInput.value || '').trim();
-        if (!value) return;
-        if (!bulkKeyOptions.value.includes(value)) return;
+          <div class="mt-6 space-y-4">
+            <div>
+              <label class="text-xs uppercase tracking-[0.2em] text-slate-500">{{ $t('message.kv_admin_page.key_label') }}</label>
+              <input v-model="editorKey" :disabled="editorMode === 'edit'" :class="editorKeyInputClass" type="text" />
+            </div>
+            <div>
+              <label class="text-xs uppercase tracking-[0.2em] text-slate-500">{{ $t('message.kv_admin_page.value_label') }}</label>
+              <textarea v-model="editorValue" :class="editorValueTextareaClass" rows="8"></textarea>
+            </div>
+            <p v-if="editorError" class="kv-error-message">{{ editorError }}</p>
+          </div>
 
-        bulkListRowId.value = null;
-        keyInput.blur();
-        focusBulkValueInput(itemId);
-      });
-    };
+          <div class="mt-6 flex flex-wrap justify-end gap-3">
+            <ActionTextButton variant="soft" shape="full" @click="closeEditor">{{ $t('message.common.cancel') }}</ActionTextButton>
+            <ActionTextButton :disabled="isSaving" variant="primary" shape="full" @click="saveConfig">
+              {{ isSaving ? $t('message.common.loading') : $t('message.common.save') }}
+            </ActionTextButton>
+          </div>
+        </div>
+      </div>
+    </transition>
 
-    const onBulkValueEnter = async (itemId) => {
-      const currentIndex = bulkItems.value.findIndex((item) => item.id === itemId);
-      if (currentIndex < 0) return;
+    <transition name="fade" mode="out-in">
+      <div v-if="bulkOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 px-4 py-8">
+        <div class="w-full max-w-4xl rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800 shadow-2xl p-6">
+          <div class="flex items-center justify-between gap-3">
+            <h3 class="text-xl font-bold text-slate-900 dark:text-white">{{ $t('message.kv_admin_page.bulk_modal_title') }}</h3>
+            <ActionIconButton icon="bi bi-x-lg" tone="slate" @click="closeBulkModal" />
+          </div>
 
-      const isLastRow = currentIndex === bulkItems.value.length - 1;
-      if (isLastRow) {
-        const nextItem = createBulkItem();
-        bulkItems.value = [...bulkItems.value, nextItem];
-        await nextTick();
-        const nextKeyInput = document.getElementById(`bulk-key-${nextItem.id}`);
-        if (nextKeyInput) {
-          nextKeyInput.focus();
-        }
-        return;
-      }
+          <div class="mt-6 space-y-3 max-h-[55vh] overflow-auto pr-1">
+            <article v-for="(item, index) in bulkItems" :key="item.id" class="rounded-2xl border border-slate-200/70 dark:border-slate-800 p-4">
+              <div class="grid gap-3 lg:grid-cols-[1fr_1fr_auto] lg:items-end">
+                <div>
+                  <label class="text-xs uppercase tracking-[0.2em] text-slate-500">{{ $t('message.kv_admin_page.key_label') }}</label>
+                  <input
+                    :id="`bulk-key-${item.id}`"
+                    v-model="item.key"
+                    type="text"
+                    list="kv-bulk-key-options"
+                    :class="editorKeyInputClass"
+                    @focus="openBulkKeySuggestions(item.id)"
+                    @blur="onBulkKeyBlur(item.id)"
+                    @input="onBulkKeyInput($event, item.id)"
+                  />
+                </div>
+                <div>
+                  <label class="text-xs uppercase tracking-[0.2em] text-slate-500">{{ $t('message.kv_admin_page.value_label') }}</label>
+                  <input
+                    :id="`bulk-value-${item.id}`"
+                    v-model="item.value"
+                    type="text"
+                    :class="editorKeyInputClass"
+                    @keydown.enter.prevent="onBulkValueEnter(item.id)"
+                  />
+                </div>
+                <div class="flex justify-end">
+                  <ActionIconButton icon="bi bi-trash" tone="danger" :disabled="bulkItems.length <= 1" @click="removeBulkRow(index)" />
+                </div>
+              </div>
+            </article>
 
-      const nextRow = bulkItems.value[currentIndex + 1];
-      if (!nextRow) return;
-      await nextTick();
-      const nextKeyInput = document.getElementById(`bulk-key-${nextRow.id}`);
-      if (nextKeyInput) {
-        nextKeyInput.focus();
-      }
-    };
+            <datalist id="kv-bulk-key-options">
+              <option v-for="keyOption in bulkKeyOptions" :key="keyOption" :value="keyOption"></option>
+            </datalist>
+          </div>
 
-    const openDeleteModal = (row) => {
-      deleteKey.value = row.key;
-      deleteError.value = '';
-      deleteModal.open(null, 'delete');
-    };
+          <p v-if="bulkError" class="kv-error-message mt-4">{{ bulkError }}</p>
 
-    const closeDelete = () => {
-      deleteModal.close({ reset: false });
-      deleteError.value = '';
-    };
+          <div class="mt-6 flex flex-wrap justify-between gap-3">
+            <ActionTextButton variant="soft" shape="full" icon="bi bi-plus-circle" @click="addBulkRow">
+              {{ $t('message.kv_admin_page.bulk_add_row') }}
+            </ActionTextButton>
+            <div class="flex gap-2">
+              <ActionTextButton variant="soft" shape="full" @click="closeBulkModal">{{ $t('message.common.cancel') }}</ActionTextButton>
+              <ActionTextButton :disabled="isBulkSaving" variant="primary" shape="full" @click="submitBulkUpdate">
+                {{ isBulkSaving ? $t('message.common.loading') : $t('message.common.save') }}
+              </ActionTextButton>
+            </div>
+          </div>
+        </div>
+      </div>
+    </transition>
 
-    const parseInputValue = (value) => {
-      const trimmed = String(value).trim();
-      if (trimmed === '') return '';
-      if (trimmed === 'true') return true;
-      if (trimmed === 'false') return false;
-      if (trimmed === 'null') return null;
-      if (/^-?\d+(\.\d+)?$/.test(trimmed)) return Number(trimmed);
-      if (trimmed.startsWith('{') || trimmed.startsWith('[')) {
-        try {
-          return JSON.parse(trimmed);
-        } catch (error) {
-          return trimmed;
-        }
-      }
-      return trimmed;
-    };
+    <transition name="fade" mode="out-in">
+      <div v-if="deleteOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 px-4 py-8">
+        <div class="w-full max-w-md rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800 shadow-2xl p-6 text-center">
+          <i class="bi bi-exclamation-triangle-fill text-4xl text-rose-500 mb-4"></i>
+          <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">{{ $t('message.kv_admin_page.delete_title') }}</h3>
+          <p class="text-slate-600 dark:text-slate-300 mb-5">
+            {{ $t('message.kv_admin_page.delete_confirm') }}
+            <strong class="text-slate-900 dark:text-white mt-2 block break-all">{{ deleteKey }}</strong>
+          </p>
+          <p v-if="deleteError" class="kv-error-message mb-4">{{ deleteError }}</p>
+          <div class="flex flex-wrap justify-center gap-3">
+            <ActionTextButton variant="soft" shape="full" @click="closeDelete">{{ $t('message.common.cancel') }}</ActionTextButton>
+            <ActionTextButton :disabled="isDeleting" variant="danger" shape="full" @click="confirmDelete">
+              {{ isDeleting ? $t('message.common.loading') : $t('message.common.delete') }}
+            </ActionTextButton>
+          </div>
+        </div>
+      </div>
+    </transition>
+  </div>
+</template>
 
-    const showToast = (message, type = 'info', title = null) => {
-      if (!toastStore) return;
-      toastStore.add(message, type, 7500, title);
-    };
+<script setup>
+import ActionTextButton from '/vue/components/ActionTextButton.vue';
+import ActionIconButton from '/vue/components/ActionIconButton.vue';
+import LoginRequiredPrompt from '/vue/components/LoginRequiredPrompt.vue';
+import PageHeroSection from '/vue/components/PageHeroSection.vue';
+import { useKvAdminConfigsPage } from '/vue/composables/useKvAdminConfigsPage.js';
 
-    const isAuthTokenError = (error) => {
-      const status = error?.response?.status;
-      if (status === 401 || status === 403) return true;
-      const code = String(error?.code || '').toUpperCase();
-      if (code === 'REAUTH_REQUIRED') return true;
-      const message = String(error?.message || '').toLowerCase();
-      return message.includes('token') || message.includes('re-login') || message.includes('reauth');
-    };
-
-    const applyLocalUpsert = (key, value) => {
-      const existingIndex = rows.value.findIndex((row) => row.key === key);
-      const defaultValue = existingIndex >= 0 ? rows.value[existingIndex].defaultValue : undefined;
-      const valueLabel = formatValue(value);
-      const defaultLabel = formatValue(defaultValue);
-      const isOverride = valueLabel !== defaultLabel;
-      const source = isOverride ? 'kv' : (defaultValue !== undefined ? 'default' : 'unknown');
-      const nextRow = {
-        key,
-        value,
-        defaultValue,
-        valueLabel,
-        defaultLabel,
-        source,
-        isOverride
-      };
-
-      if (existingIndex >= 0) {
-        const next = [...rows.value];
-        next[existingIndex] = nextRow;
-        rows.value = next;
-      } else {
-        rows.value = [nextRow, ...rows.value];
-        allowedCount.value += 1;
-      }
-    };
-
-    const saveConfig = async () => {
-      editorError.value = '';
-      const key = editorKey.value.trim();
-      if (!key) {
-        editorError.value = t('message.kv_admin_page.validation_error');
-        showToast(editorError.value, 'error');
-        return;
-      }
-
-      if (editorMode.value === 'add' && rows.value.some((row) => row.key === key)) {
-        editorError.value = t('message.kv_admin_page.validation_error');
-        showToast(editorError.value, 'error');
-        return;
-      }
-
-      const payloadValue = parseInputValue(editorValue.value);
-      isSaving.value = true;
-
-      try {
-        let response;
-        if (mainStore.mockApi) {
-          applyLocalUpsert(key, payloadValue);
-          response = { success: true, message: editorMode.value === 'add' ? t('message.kv_admin_page.add_success') : t('message.kv_admin_page.edit_success') };
-        } else {
-          const endpoint = API_ENDPOINTS.KV_ADMIN_CONFIGS_SPECIFIC.replace(':key', encodeURIComponent(key));
-          const apiResponse = await apiClient.put(endpoint, { value: payloadValue }, {
-            headers: { Authorization: `Bearer ${authStore.token}` }
-          });
-          response = apiResponse.data;
-          if (response.success) {
-            applyLocalUpsert(key, payloadValue);
-          } else {
-            throw new Error(response.error || 'Unknown error');
-          }
-        }
-        const toastMsg = response.message || (editorMode.value === 'add' ? t('message.kv_admin_page.add_success') : t('message.kv_admin_page.edit_success'));
-        showToast(toastMsg, 'success');
-        closeEditor();
-      } catch (error) {
-        let fullError = t('message.errors.unknown_error');
-        if (error.response?.data) {
-          const data = error.response.data;
-          fullError = data.error || data.message || fullError;
-        } else if (error.message) {
-          fullError = error.message;
-        }
-        // show full error in modal
-        editorError.value = fullError;
-
-        if (isAuthTokenError(error)) {
-          closeEditor();
-        }
-
-        showToast(t(`message.kv_admin_page.save_error_default`, { key }), 'error');
-      } finally {
-        isSaving.value = false;
-      }
-    };
-
-    const confirmDelete = async () => {
-      deleteError.value = '';
-      if (!deleteKey.value) return;
-      isDeleting.value = true;
-
-      try {
-        const endpoint = API_ENDPOINTS.KV_ADMIN_CONFIGS_SPECIFIC.replace(':key', encodeURIComponent(deleteKey.value));
-        const apiResponse = await apiClient.delete(endpoint, {
-          headers: { Authorization: `Bearer ${authStore.token}` }
-        });
-        const response = apiResponse.data;
-
-        if (response.success) {
-          if (response.data && response.data.defaultValue !== undefined) {
-             // Reset back to default value instead of deleting row
-             applyLocalUpsert(deleteKey.value, response.data.defaultValue);
-          } else {
-             // Fallback behavior if no defaultValue returned
-             rows.value = rows.value.filter((row) => row.key !== deleteKey.value);
-             allowedCount.value = Math.max(0, allowedCount.value - 1);
-          }
-        } else {
-          throw new Error(response.error || 'Unknown error');
-        }
-
-        const toastMsg = response.message || t('message.kv_admin_page.delete_success');
-        showToast(toastMsg, 'success');
-        closeDelete();
-      } catch (error) {
-        let errorMsg = t('message.errors.unknown_error');
-        if (error.response?.data) {
-          const data = error.response.data;
-          errorMsg = data.error || data.message || errorMsg;
-        } else if (error.message) {
-          errorMsg = error.message;
-        }
-        deleteError.value = errorMsg;
-        showToast(errorMsg, 'error');
-      } finally {
-        isDeleting.value = false;
-      }
-    };
-
-    const submitBulkUpdate = async () => {
-      bulkError.value = '';
-
-      const normalizedItems = bulkItems.value
-        .map((item) => ({
-          key: String(item.key || '').trim(),
-          rawValue: item.value
-        }))
-        .filter((item) => item.key || String(item.rawValue || '').trim() !== '');
-
-      if (!normalizedItems.length) {
-        bulkError.value = t('message.kv_admin_page.bulk_validation_min_items');
-        showToast(bulkError.value, 'error');
-        return;
-      }
-
-      const missingKey = normalizedItems.some((item) => !item.key);
-      if (missingKey) {
-        bulkError.value = t('message.kv_admin_page.bulk_validation_missing_key');
-        showToast(bulkError.value, 'error');
-        return;
-      }
-
-      const duplicateKeys = new Set();
-      const seenKeys = new Set();
-      normalizedItems.forEach((item) => {
-        if (seenKeys.has(item.key)) {
-          duplicateKeys.add(item.key);
-        }
-        seenKeys.add(item.key);
-      });
-
-      if (duplicateKeys.size > 0) {
-        bulkError.value = t('message.kv_admin_page.bulk_validation_duplicate_keys', {
-          keys: Array.from(duplicateKeys).join(', ')
-        });
-        showToast(bulkError.value, 'error');
-        return;
-      }
-
-      const availableKeys = new Set(bulkKeyOptions.value);
-      const invalidKeys = normalizedItems
-        .map((item) => item.key)
-        .filter((key) => availableKeys.size > 0 && !availableKeys.has(key));
-
-      if (invalidKeys.length > 0) {
-        bulkError.value = t('message.kv_admin_page.bulk_validation_invalid_keys', {
-          keys: invalidKeys.join(', ')
-        });
-        showToast(bulkError.value, 'error');
-        return;
-      }
-
-      const requestConfigs = normalizedItems.map((item) => ({
-        key: item.key,
-        value: parseInputValue(item.rawValue)
-      }));
-
-      isBulkSaving.value = true;
-
-      try {
-        const endpoint = `${API_ENDPOINTS.KV_ADMIN_CONFIGS}/batch`;
-        const apiResponse = await apiClient.post(endpoint, {
-          configs: requestConfigs
-        }, {
-          headers: { Authorization: `Bearer ${authStore.token}` }
-        });
-
-        const payload = apiResponse.data || {};
-        const resultData = payload.data || {};
-        const responseErrors = resultData.errors || {};
-        const failedKeys = new Set(Object.keys(responseErrors));
-        const updatedCount = Number(resultData.summary?.updated) || (requestConfigs.length - failedKeys.size);
-
-        requestConfigs.forEach((configItem) => {
-          if (!failedKeys.has(configItem.key)) {
-            applyLocalUpsert(configItem.key, configItem.value);
-          }
-        });
-
-        if (failedKeys.size > 0) {
-          bulkError.value = Object.entries(responseErrors)
-            .map(([key, message]) => `${key}: ${message}`)
-            .join('\n');
-          showToast(t('message.kv_admin_page.bulk_partial_error', {
-            updated: updatedCount,
-            failed: failedKeys.size
-          }), 'error');
-        } else {
-          showToast(payload.message || t('message.kv_admin_page.edit_success'), 'success');
-          closeBulkModal();
-        }
-      } catch (error) {
-        let errorMsg = t('message.errors.unknown_error');
-        if (error.response?.data) {
-          const data = error.response.data;
-          errorMsg = data.error || data.message || errorMsg;
-        } else if (error.message) {
-          errorMsg = error.message;
-        }
-        bulkError.value = errorMsg;
-
-        if (isAuthTokenError(error)) {
-          closeBulkModal();
-        }
-
-        showToast(errorMsg, 'error');
-      } finally {
-        isBulkSaving.value = false;
-      }
-    };
-
-    const copyText = async (type, key, value) => {
-      try {
-        await navigator.clipboard.writeText(String(value));
-        if (type === 'key') {
-          copiedKey.value = key;
-          setTimeout(() => { copiedKey.value = null; }, 1200);
-        } else {
-          copiedValue.value = key;
-          setTimeout(() => { copiedValue.value = null; }, 1200);
-        }
-      } catch (err) {
-        console.warn('Copy failed:', err);
-      }
-    };
-
-    watch(
-      search,
-      () => {
-        runDebounced('kv-admin-configs-search', () => {
-          debouncedSearch.value = search.value;
-        });
-      },
-      { immediate: true }
-    );
-
-    watch(
-      () => authStore.isAuthenticated,
-      async (isAuthenticated) => {
-        await handleAuthStateChange(isAuthenticated);
-      }
-    );
-
-    watch(
-      () => isSuperAdmin.value,
-      async (value) => {
-        if (value) {
-          if (authStore.isAuthenticated) {
-            await loadConfigs();
-          }
-          return;
-        }
-        resetKvState();
-      }
-    );
-
-    watch(() => mainStore.mockApi, async (value, oldValue) => {
-        if (value === oldValue) return;
-        if (!authStore.isAuthenticated || !isSuperAdmin.value) return;
-        await loadConfigs();
-      }
-    );
-
-    onMounted(async () => {
-      await ensureAuthenticated({ checkSessionFlag: true, openModal: true });
-    });
-
-    return {
-      showLoginRequired,
-      isSuperAdmin,
-      tf,
-      isLoading,
-      errorMessage,
-      search,
-      showOverridesOnly,
-      heroSectionClass,
-      searchInputClass,
-      overrideFilterLabelClass,
-      configCardClass,
-      editorKeyInputClass,
-      editorValueTextareaClass,
-      rows,
-      bulkOpen,
-      bulkItems,
-      bulkError,
-      isBulkSaving,
-      bulkKeyOptions,
-      filteredRows,
-      stats,
-      lastUpdatedLabel,
-      openLoginModal,
-      reload,
-      clearSearch,
-      sourceBadgeClass: getKvSourceBadgeClass,
-      sourceLabel,
-      copyText,
-      copiedKey,
-      copiedValue,
-      editorOpen,
-      editorMode,
-      editorKey,
-      editorValue,
-      editorError,
-      isSaving,
-      deleteOpen,
-      deleteKey,
-      deleteError,
-      isDeleting,
-      openAddModal,
-      openBulkModal,
-      closeBulkModal,
-      addBulkRow,
-      removeBulkRow,
-      openBulkKeySuggestions,
-      onBulkKeyBlur,
-      bulkListRowId,
-      onBulkKeyInput,
-      onBulkValueEnter,
-      submitBulkUpdate,
-      openEditModal,
-      closeEditor,
-      saveConfig,
-      openDeleteModal,
-      closeDelete,
-      confirmDelete
-    };
-  }
-};
+const {
+  showLoginRequired,
+  isSuperAdmin,
+  tf,
+  isLoading,
+  errorMessage,
+  search,
+  showOverridesOnly,
+  heroSectionClass,
+  searchInputClass,
+  overrideFilterLabelClass,
+  configCardClass,
+  editorKeyInputClass,
+  editorValueTextareaClass,
+  bulkOpen,
+  bulkItems,
+  bulkError,
+  isBulkSaving,
+  bulkKeyOptions,
+  filteredRows,
+  stats,
+  lastUpdatedLabel,
+  openLoginModal,
+  reload,
+  clearSearch,
+  sourceBadgeClass,
+  sourceLabel,
+  copyText,
+  copiedKey,
+  copiedValue,
+  editorOpen,
+  editorMode,
+  editorKey,
+  editorValue,
+  editorError,
+  isSaving,
+  deleteOpen,
+  deleteKey,
+  deleteError,
+  isDeleting,
+  openAddModal,
+  openBulkModal,
+  closeBulkModal,
+  addBulkRow,
+  removeBulkRow,
+  openBulkKeySuggestions,
+  onBulkKeyBlur,
+  bulkListRowId,
+  onBulkKeyInput,
+  onBulkValueEnter,
+  submitBulkUpdate,
+  openEditModal,
+  closeEditor,
+  saveConfig,
+  openDeleteModal,
+  closeDelete,
+  confirmDelete
+} = useKvAdminConfigsPage();
 </script>
 
 <style scoped>

@@ -172,7 +172,7 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { ref, computed, onMounted, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { apiClient, API_ENDPOINTS } from '/assets/js/api.js';
@@ -185,143 +185,131 @@ import LoginRequiredPrompt from '/vue/components/LoginRequiredPrompt.vue';
 import PageHeroSection from '/vue/components/PageHeroSection.vue';
 import { useAuthGate } from '../composables/useAuthGate.js';
 
-export default {
-  name: 'KvAdminAuditConfigs',
-  components: { ActionTextButton, LoginRequiredPrompt, PageHeroSection },
-  setup() {
-    const { t } = useI18n();
-    const authStore = useAuthStore();
-    const modalStore = useModalStore();
-    const toastStore = useToastStore();
-    const mainStore = useMainStore();
+const { t } = useI18n();
+const authStore = useAuthStore();
+const modalStore = useModalStore();
+const toastStore = useToastStore();
+const mainStore = useMainStore();
 
-    const { showLoginRequired, openLoginModal, ensureAuthenticated, handleAuthStateChange, markUnauthenticated } = useAuthGate({
-      authStore,
-      modalStore,
-      onAuthenticated: async () => {
-        if (isSuperAdmin.value) {
-          await loadData();
-        }
-      }
+const { showLoginRequired, openLoginModal, ensureAuthenticated, handleAuthStateChange, markUnauthenticated } = useAuthGate({
+  authStore,
+  modalStore,
+  onAuthenticated: async () => {
+    if (isSuperAdmin.value) {
+      await loadData();
+    }
+  }
+});
+const isSuperAdmin = computed(() => authStore.user?.role?.toLowerCase() === 'super_admin');
+const loadingState = ref({
+  features: true,
+  retention: true,
+  performance: true,
+  alerts: true,
+  compliance: true
+});
+const errorMessage = ref(null);
+const isToggling = ref({});
+
+const auditData = ref({
+  features: {},
+  retention: {},
+  performance: {},
+  alerts: {},
+  compliance: {}
+});
+
+const loadData = async () => {
+  if (!isSuperAdmin.value) return;
+  loadingState.value = { features: true, retention: true, performance: true, alerts: true, compliance: true };
+  errorMessage.value = null;
+  try {
+    const featuresReq = await apiClient.get(API_ENDPOINTS.KV_ADMIN_AUDIT_CONFIGS_FEATURES, { headers: { Authorization: `Bearer ${authStore.token}` } }).catch((err) => {
+      if (err?.response?.status === 401 || err?.response?.status === 403 || err?.code === 'REAUTH_REQUIRED') throw err;
+      return { data: { data: {} } };
     });
-    const isSuperAdmin = computed(() => authStore.user?.role?.toLowerCase() === 'super_admin');
-    const loadingState = ref({
-      features: true,
-      retention: true,
-      performance: true,
-      alerts: true,
-      compliance: true
+    auditData.value.features = featuresReq.data?.data || {};
+    loadingState.value.features = false;
+
+    const retentionReq = await apiClient.get(API_ENDPOINTS.KV_ADMIN_AUDIT_CONFIGS_RETENTION, { headers: { Authorization: `Bearer ${authStore.token}` } }).catch((err) => {
+      if (err?.response?.status === 401 || err?.response?.status === 403 || err?.code === 'REAUTH_REQUIRED') throw err;
+      return { data: { data: {} } };
     });
-    const errorMessage = ref(null);
-    const isToggling = ref({});
+    auditData.value.retention = retentionReq.data?.data || {};
+    loadingState.value.retention = false;
 
-    const auditData = ref({
-      features: {},
-      retention: {},
-      performance: {},
-      alerts: {},
-      compliance: {}
+    const perfReq = await apiClient.get(API_ENDPOINTS.KV_ADMIN_AUDIT_CONFIGS_PERFORMANCE, { headers: { Authorization: `Bearer ${authStore.token}` } }).catch((err) => {
+      if (err?.response?.status === 401 || err?.response?.status === 403 || err?.code === 'REAUTH_REQUIRED') throw err;
+      return { data: { data: {} } };
     });
+    auditData.value.performance = perfReq.data?.data || {};
+    loadingState.value.performance = false;
 
-    const loadData = async () => {
-      if (!isSuperAdmin.value) return;
-      loadingState.value = { features: true, retention: true, performance: true, alerts: true, compliance: true };
-      errorMessage.value = null;
-      try {
-        // Fetch sequentially to avoid rate limits
-        const featuresReq = await apiClient.get(API_ENDPOINTS.KV_ADMIN_AUDIT_CONFIGS_FEATURES, { headers: { Authorization: `Bearer ${authStore.token}` } }).catch((err) => {
-          if (err?.response?.status === 401 || err?.response?.status === 403 || err?.code === 'REAUTH_REQUIRED') throw err;
-          return { data: { data: {} } };
-        });
-        auditData.value.features = featuresReq.data?.data || {};
-        loadingState.value.features = false;
-
-        const retentionReq = await apiClient.get(API_ENDPOINTS.KV_ADMIN_AUDIT_CONFIGS_RETENTION, { headers: { Authorization: `Bearer ${authStore.token}` } }).catch((err) => {
-          if (err?.response?.status === 401 || err?.response?.status === 403 || err?.code === 'REAUTH_REQUIRED') throw err;
-          return { data: { data: {} } };
-        });
-        auditData.value.retention = retentionReq.data?.data || {};
-        loadingState.value.retention = false;
-
-        const perfReq = await apiClient.get(API_ENDPOINTS.KV_ADMIN_AUDIT_CONFIGS_PERFORMANCE, { headers: { Authorization: `Bearer ${authStore.token}` } }).catch((err) => {
-          if (err?.response?.status === 401 || err?.response?.status === 403 || err?.code === 'REAUTH_REQUIRED') throw err;
-          return { data: { data: {} } };
-        });
-        auditData.value.performance = perfReq.data?.data || {};
-        loadingState.value.performance = false;
-
-        const alertsReq = await apiClient.get(API_ENDPOINTS.KV_ADMIN_AUDIT_CONFIGS_ALERTS, { headers: { Authorization: `Bearer ${authStore.token}` } }).catch((err) => {
-          if (err?.response?.status === 401 || err?.response?.status === 403 || err?.code === 'REAUTH_REQUIRED') throw err;
-          return { data: { data: {} } };
-        });
-        auditData.value.alerts = alertsReq.data?.data || {};
-        loadingState.value.alerts = false;
-
-        const complianceReq = await apiClient.get(API_ENDPOINTS.KV_ADMIN_AUDIT_CONFIGS_COMPLIANCE, { headers: { Authorization: `Bearer ${authStore.token}` } }).catch((err) => {
-          if (err?.response?.status === 401 || err?.response?.status === 403 || err?.code === 'REAUTH_REQUIRED') throw err;
-          return { data: { data: {} } };
-        });
-        auditData.value.compliance = complianceReq.data?.data || {};
-        loadingState.value.compliance = false;
-      } catch (err) {
-        if (err?.code === 'REAUTH_REQUIRED' || err?.response?.status === 401 || err?.response?.status === 403) {
-          authStore.logout();
-          markUnauthenticated();
-          openLoginModal();
-        } else {
-          errorMessage.value = err.message || 'Failed to load configs';
-        }
-      } finally {
-        loadingState.value = { features: false, retention: false, performance: false, alerts: false, compliance: false };
-      }
-    };
-
-    const toggleFeature = async (feature, enabled) => {
-      isToggling.value[feature] = true;
-      try {
-        const url = API_ENDPOINTS.KV_ADMIN_AUDIT_CONFIGS_TOGGLE.replace(':feature', feature);
-        const response = await apiClient.post(url, { enabled }, {
-          headers: { Authorization: `Bearer ${authStore.token}` }
-        });
-        auditData.value.features[feature] = enabled;
-        
-        const successMessage = response.data?.data?.message || `Feature ${feature} set to ${enabled}`;
-        toastStore.add(successMessage, 'success');
-      } catch (err) {
-        toastStore.add(`Failed to toggle ${feature}`, 'error');
-      } finally {
-        isToggling.value[feature] = false;
-      }
-    };
-
-    const formatFeatureName = (key) => key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
-    const formatValueUnit = (key, val) => {
-      if (typeof val === 'boolean') return val ? 'Enabled' : 'Disabled';
-      const lowerKey = key.toLowerCase();
-      if (lowerKey.includes('days')) return `${val} Days`;
-      if (lowerKey.includes('ms')) return `${val} ms`;
-      return typeof val === 'object' ? JSON.stringify(val) : val;
-    };
-    const formatValue = (val) => typeof val === 'object' ? JSON.stringify(val) : val;
-
-    onMounted(async () => {
-      await ensureAuthenticated({ checkSessionFlag: true, openModal: false });
+    const alertsReq = await apiClient.get(API_ENDPOINTS.KV_ADMIN_AUDIT_CONFIGS_ALERTS, { headers: { Authorization: `Bearer ${authStore.token}` } }).catch((err) => {
+      if (err?.response?.status === 401 || err?.response?.status === 403 || err?.code === 'REAUTH_REQUIRED') throw err;
+      return { data: { data: {} } };
     });
+    auditData.value.alerts = alertsReq.data?.data || {};
+    loadingState.value.alerts = false;
 
-    watch(() => authStore.isAuthenticated, async (val) => {
-      await handleAuthStateChange(val);
+    const complianceReq = await apiClient.get(API_ENDPOINTS.KV_ADMIN_AUDIT_CONFIGS_COMPLIANCE, { headers: { Authorization: `Bearer ${authStore.token}` } }).catch((err) => {
+      if (err?.response?.status === 401 || err?.response?.status === 403 || err?.code === 'REAUTH_REQUIRED') throw err;
+      return { data: { data: {} } };
     });
-
-    watch(() => mainStore.mockApi, (value, oldValue) => {
-      if (value === oldValue) return;
-      if (!authStore.isAuthenticated || !isSuperAdmin.value) return;
-      loadData();
-    });
-
-    return {
-      showLoginRequired, isSuperAdmin, loadingState, errorMessage, auditData, openLoginModal, loadData,
-      toggleFeature, isToggling, formatFeatureName, formatValue, formatValueUnit
-    };
+    auditData.value.compliance = complianceReq.data?.data || {};
+    loadingState.value.compliance = false;
+  } catch (err) {
+    if (err?.code === 'REAUTH_REQUIRED' || err?.response?.status === 401 || err?.response?.status === 403) {
+      authStore.logout();
+      markUnauthenticated();
+      openLoginModal();
+    } else {
+      errorMessage.value = err.message || 'Failed to load configs';
+    }
+  } finally {
+    loadingState.value = { features: false, retention: false, performance: false, alerts: false, compliance: false };
   }
 };
+
+const toggleFeature = async (feature, enabled) => {
+  isToggling.value[feature] = true;
+  try {
+    const url = API_ENDPOINTS.KV_ADMIN_AUDIT_CONFIGS_TOGGLE.replace(':feature', feature);
+    const response = await apiClient.post(url, { enabled }, {
+      headers: { Authorization: `Bearer ${authStore.token}` }
+    });
+    auditData.value.features[feature] = enabled;
+
+    const successMessage = response.data?.data?.message || `Feature ${feature} set to ${enabled}`;
+    toastStore.add(successMessage, 'success');
+  } catch (err) {
+    toastStore.add(`Failed to toggle ${feature}`, 'error');
+  } finally {
+    isToggling.value[feature] = false;
+  }
+};
+
+const formatFeatureName = (key) => key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
+const formatValueUnit = (key, val) => {
+  if (typeof val === 'boolean') return val ? 'Enabled' : 'Disabled';
+  const lowerKey = key.toLowerCase();
+  if (lowerKey.includes('days')) return `${val} Days`;
+  if (lowerKey.includes('ms')) return `${val} ms`;
+  return typeof val === 'object' ? JSON.stringify(val) : val;
+};
+const formatValue = (val) => typeof val === 'object' ? JSON.stringify(val) : val;
+
+onMounted(async () => {
+  await ensureAuthenticated({ checkSessionFlag: true, openModal: false });
+});
+
+watch(() => authStore.isAuthenticated, async (val) => {
+  await handleAuthStateChange(val);
+});
+
+watch(() => mainStore.mockApi, (value, oldValue) => {
+  if (value === oldValue) return;
+  if (!authStore.isAuthenticated || !isSuperAdmin.value) return;
+  loadData();
+});
 </script>

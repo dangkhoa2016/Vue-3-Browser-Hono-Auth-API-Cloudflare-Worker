@@ -15,9 +15,9 @@ const pagesThresholdArg = args.find((arg) => arg.startsWith('--pages-threshold='
 const componentsThresholdArg = args.find((arg) => arg.startsWith('--components-threshold='));
 const globalThresholdArg = args.find((arg) => arg.startsWith('--global-threshold='));
 
-const pagesThreshold = Number(pagesThresholdArg?.split('=')[1] || 30);
-const componentsThreshold = Number(componentsThresholdArg?.split('=')[1] || 10);
-const globalThreshold = Number(globalThresholdArg?.split('=')[1] || 20);
+const pagesThreshold = Number(pagesThresholdArg?.split('=')[1] || 100);
+const componentsThreshold = Number(componentsThresholdArg?.split('=')[1] || 100);
+const globalThreshold = Number(globalThresholdArg?.split('=')[1] || 100);
 
 function collectVueFiles(dirPath, collector = []) {
   if (!fs.existsSync(dirPath)) return collector;
