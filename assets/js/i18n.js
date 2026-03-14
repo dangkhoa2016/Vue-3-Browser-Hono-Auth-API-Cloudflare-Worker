@@ -60,7 +60,7 @@ export async function loadLanguageAsync(lang) {
   try {
     if (loadedLanguages.length > 0) {
       // Artificial delay to simulate loading time
-      await sleep(200);
+      // await sleep(200); // Removed artificial delay
     }
 
     // console.log(`[i18n] Loading language file for: ${lang}`);

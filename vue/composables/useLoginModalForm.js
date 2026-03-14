@@ -1,12 +1,13 @@
 import { reactive, ref } from 'vue';
 import { apiClient } from '/assets/js/api.js';
+const formFields = {
+  email: '',
+  password: '',
+  remember: false
+};
 
 export function useLoginModalForm(emit) {
-  const formData = reactive({
-    email: '',
-    password: '',
-    remember: false
-  });
+  const formData = reactive({ ...formFields });
 
   const isLoading = ref(false);
   const errorMessage = ref('');
@@ -18,9 +19,7 @@ export function useLoginModalForm(emit) {
   };
 
   const resetForm = () => {
-    formData.email = '';
-    formData.password = '';
-    formData.remember = false;
+    Object.assign(formData, { ...formFields });
   };
 
   const hasFieldError = (fieldName) => {
