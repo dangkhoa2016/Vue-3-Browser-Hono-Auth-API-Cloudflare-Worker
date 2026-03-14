@@ -7,13 +7,13 @@
         <p class="text-slate-500 dark:text-slate-400 text-sm">{{ $t('message.advanced_audit.analytics.subtitle') }}</p>
         <div v-if="data?.overview" class="text-xs text-slate-400 mt-1">{{ $t('message.advanced_audit.common.generated_at') }} {{ new Date(data.overview.generated_at).toLocaleString() }} - Timeframe: {{ data.overview.timeframe }}</div>
       </div>
-      <button @click="$emit('refresh')" :disabled="loading || loadingExtras" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 text-sm font-medium transition-all disabled:opacity-50">
-        <i class="bi bi-arrow-clockwise" :class="{'animate-spin': loading}"></i> <span class="hidden sm:inline">{{ $t('message.advanced_audit.common.reload') }}</span>
+      <button @click="$emit('refresh')" :disabled="isLoading || isExtrasLoading" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 text-sm font-medium transition-all disabled:opacity-50">
+        <i class="bi bi-arrow-clockwise" :class="{'animate-spin': isLoading}"></i> <span class="hidden sm:inline">{{ $t('message.advanced_audit.common.reload') }}</span>
       </button>
     </div>
     
     <!-- Top Level Dashboard Skeleton (Only shows on main load) -->
-    <div v-show="loading && !data" class="animate-pulse flex space-x-4 transition-all">
+    <div v-show="isLoading && !data" class="animate-pulse flex space-x-4 transition-all">
        <div class="flex-1 space-y-6 py-1">
          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div class="h-32 bg-slate-200 dark:bg-slate-700/50 rounded-2xl"></div>
@@ -28,7 +28,7 @@
     </div>
     
     <!-- Top Area Skeleton (Shows during reload when data already exists) -->
-    <div v-show="loading && data" class="animate-pulse flex flex-col space-y-6">
+    <div v-show="isLoading && data" class="animate-pulse flex flex-col space-y-6">
        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
          <div class="h-32 bg-slate-100 dark:bg-slate-800/80 rounded-2xl border border-slate-200/50 dark:border-slate-700/50"></div>
          <div class="h-32 bg-slate-100 dark:bg-slate-800/80 rounded-2xl border border-slate-200/50 dark:border-slate-700/50"></div>
@@ -41,7 +41,7 @@
     </div>
     
     <!-- Main Dashboard Top Cards -->
-    <div v-if="data" v-show="!loading">
+    <div v-if="data" v-show="!isLoading">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
         <div class="bg-indigo-50/50 dark:bg-slate-800/50 rounded-2xl p-6 border border-slate-100 dark:border-slate-700 flex flex-col justify-center">
           <h3 class="text-slate-500 dark:text-slate-400 text-xs font-semibold uppercase tracking-wider mb-2">{{ $t('message.advanced_audit.analytics.total_records') }}</h3>
@@ -106,11 +106,11 @@
     <div v-if="data" class="mt-8 border-t border-slate-200 dark:border-slate-700 pt-6">
         <div class="flex justify-between items-center mb-4">
           <h3 class="text-lg font-bold text-slate-800 dark:text-slate-200">{{ $t('message.advanced_audit.analytics.extended_metrics') }}</h3>
-          <button @click="loadExtendedMetrics" :disabled="loadingExtras" class="inline-flex items-center gap-2 px-4 py-2 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 dark:bg-indigo-500/10 dark:text-indigo-400 dark:hover:bg-indigo-500/20 rounded-xl font-bold text-sm transition-colors disabled:opacity-50">
-            <i class="bi" :class="loadingExtras ? 'bi-arrow-repeat animate-spin' : 'bi-hdd-network'"></i>{{ $t('message.advanced_audit.analytics.load_more') }}</button>
+          <button @click="loadExtendedMetrics" :disabled="isExtrasLoading" class="inline-flex items-center gap-2 px-4 py-2 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 dark:bg-indigo-500/10 dark:text-indigo-400 dark:hover:bg-indigo-500/20 rounded-xl font-bold text-sm transition-colors disabled:opacity-50">
+            <i class="bi" :class="isExtrasLoading ? 'bi-arrow-repeat animate-spin' : 'bi-hdd-network'"></i>{{ $t('message.advanced_audit.analytics.load_more') }}</button>
         </div>
         
-        <div v-if="loadingExtras" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div v-if="isExtrasLoading" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <!-- Loading Security Details -->
           <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl p-6 shadow-sm animate-pulse">
             <div class="h-6 w-40 bg-slate-200 dark:bg-slate-700 rounded mb-6"></div>
@@ -156,7 +156,7 @@
             </div>
           </div>
         </div>
-        <div v-else-if="extendedDataLoaded" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div v-else-if="isExtendedDataReady" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <!-- Security Details -->
           <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl p-6 shadow-sm">
             <h4 class="font-bold text-slate-800 dark:text-slate-200 flex items-center gap-2 mb-4">
@@ -303,7 +303,7 @@ export default {
       type: Object,
       default: null
     },
-    loading: {
+    isLoading: {
       type: Boolean,
       default: false
     }
@@ -311,14 +311,14 @@ export default {
   emits: ['refresh'],
   setup(props, { emit }) {
     const store = useAdvancedAuditStore();
-    const loadingExtras = ref(false);
-    const extendedDataLoaded = ref(false);
+    const isExtrasLoading = ref(false);
+    const isExtendedDataReady = ref(false);
     
     const detailedSecurity = ref(null);
     const middlewareStats = ref(null);
 
     const loadExtendedMetrics = async () => {
-      loadingExtras.value = true;
+      isExtrasLoading.value = true;
       try {
         const [secRes, mwRes] = await Promise.all([
           store.fetchSecurityAnalytics('7d', true, true).catch(e => ({ error: e.message })),
@@ -329,17 +329,17 @@ export default {
         detailedSecurity.value = secRes.error ? secRes : (secRes.data || secRes);
         middlewareStats.value = mwRes.error ? mwRes : (mwRes.data || mwRes);
         
-        extendedDataLoaded.value = true;
+        isExtendedDataReady.value = true;
       } catch (err) {
         console.error('Failed to load extras', err);
       } finally {
-        loadingExtras.value = false;
+        isExtrasLoading.value = false;
       }
     };
 
     return {
-      loadingExtras,
-      extendedDataLoaded,
+      isExtrasLoading,
+      isExtendedDataReady,
       detailedSecurity,
       middlewareStats,
       loadExtendedMetrics

@@ -6,19 +6,19 @@
         <h2 class="text-xl font-bold text-slate-800 dark:text-slate-200">{{ $t('message.advanced_audit.archival.title') }}</h2>
         <p class="text-slate-500 dark:text-slate-400 text-sm">{{ $t('message.advanced_audit.archival.subtitle') }}</p>
       </div>
-      <button @click="$emit('refresh')" :disabled="loading || loadingExtras" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 text-sm font-medium transition-all disabled:opacity-50">
-        <i class="bi bi-arrow-clockwise" :class="{'animate-spin': loading}"></i> <span class="hidden sm:inline">{{ $t('message.advanced_audit.common.reload') }}</span>
+      <button @click="$emit('refresh')" :disabled="isLoading || isExtrasLoading" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 text-sm font-medium transition-all disabled:opacity-50">
+        <i class="bi bi-arrow-clockwise" :class="{'animate-spin': isLoading}"></i> <span class="hidden sm:inline">{{ $t('message.advanced_audit.common.reload') }}</span>
       </button>
     </div>
   
     <!-- First Load Skeleton -->
-    <div v-show="loading && !data" class="animate-pulse space-y-6 mt-6 transition-all">
+    <div v-show="isLoading && !data" class="animate-pulse space-y-6 mt-6 transition-all">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6"><div class="h-32 bg-slate-200 dark:bg-slate-700/50 rounded-xl"></div><div class="h-32 bg-slate-200 dark:bg-slate-700/50 rounded-xl"></div></div>
       <div class="h-64 bg-slate-200 dark:bg-slate-700/50 rounded-xl"></div>
     </div>
 
     <!-- Reload Skeleton -->
-    <div v-show="loading && data" class="animate-pulse space-y-6 mt-6">
+    <div v-show="isLoading && data" class="animate-pulse space-y-6 mt-6">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div class="h-32 bg-slate-100 dark:bg-slate-800/80 rounded-xl border border-slate-200/50 dark:border-slate-700/50"></div>
         <div class="h-32 bg-slate-100 dark:bg-slate-800/80 rounded-xl border border-slate-200/50 dark:border-slate-700/50"></div>
@@ -27,7 +27,7 @@
     </div>
 
     <!-- Main Archival Top Data -->
-    <div v-if="data" v-show="!loading" class="mt-8 space-y-6">
+    <div v-if="data" v-show="!isLoading" class="mt-8 space-y-6">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <!-- Main Table Stats -->
         <div class="bg-indigo-50/50 dark:bg-slate-800/50 rounded-2xl p-6 border border-slate-100 dark:border-slate-700">
@@ -110,21 +110,21 @@
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
           <h3 class="text-lg font-bold text-slate-800 dark:text-slate-200">{{ $t('message.advanced_audit.archival.advanced_config') }}</h3>
           <div class="flex gap-2 flex-wrap">
-            <button @click="loadArchivePolicies" :disabled="loadingExtras" class="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700 rounded-xl font-bold text-sm transition-colors disabled:opacity-50">
-              <i class="bi" :class="loadingExtras ? 'bi-arrow-repeat animate-spin' : 'bi-boxes'"></i>{{ $t('message.advanced_audit.archival.review_storage') }}</button>
-            <button @click="manageRetention" :disabled="loadingExtras" class="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700 rounded-xl font-bold text-sm transition-colors disabled:opacity-50">
-              <i class="bi" :class="loadingExtras ? 'bi-arrow-repeat animate-spin' : 'bi-calendar2-range'"></i>{{ $t('message.advanced_audit.archival.check_retention_policy') }}</button>
-            <button @click="openSetPolicyModal" :disabled="loadingExtras" class="inline-flex items-center gap-2 px-4 py-2 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 dark:bg-indigo-500/10 dark:text-indigo-400 dark:hover:bg-indigo-500/20 rounded-xl font-bold text-sm transition-colors disabled:opacity-50">
+            <button @click="loadArchivePolicies" :disabled="isExtrasLoading" class="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700 rounded-xl font-bold text-sm transition-colors disabled:opacity-50">
+              <i class="bi" :class="isExtrasLoading ? 'bi-arrow-repeat animate-spin' : 'bi-boxes'"></i>{{ $t('message.advanced_audit.archival.review_storage') }}</button>
+            <button @click="manageRetention" :disabled="isExtrasLoading" class="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700 rounded-xl font-bold text-sm transition-colors disabled:opacity-50">
+              <i class="bi" :class="isExtrasLoading ? 'bi-arrow-repeat animate-spin' : 'bi-calendar2-range'"></i>{{ $t('message.advanced_audit.archival.check_retention_policy') }}</button>
+            <button @click="openSetPolicyModal" :disabled="isExtrasLoading" class="inline-flex items-center gap-2 px-4 py-2 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 dark:bg-indigo-500/10 dark:text-indigo-400 dark:hover:bg-indigo-500/20 rounded-xl font-bold text-sm transition-colors disabled:opacity-50">
               <i class="bi bi-gear"></i>{{ $t('message.advanced_audit.archival.configure_policy') }}</button>
           </div>
         </div>
 
         <!-- First Load Skeleton -->
-        <div v-show="loadingExtras && !extendedData" class="h-32 bg-slate-100 dark:bg-slate-800/50 rounded-xl animate-pulse"></div>
+        <div v-show="isExtrasLoading && !extendedData" class="h-32 bg-slate-100 dark:bg-slate-800/50 rounded-xl animate-pulse"></div>
         <!-- Reload Skeleton -->
-        <div v-show="loadingExtras && extendedData" class="h-40 bg-slate-100 dark:bg-slate-800/50 rounded-xl animate-pulse border border-slate-200/50 dark:border-slate-700/50 mb-4"></div>
+        <div v-show="isExtrasLoading && extendedData" class="h-40 bg-slate-100 dark:bg-slate-800/50 rounded-xl animate-pulse border border-slate-200/50 dark:border-slate-700/50 mb-4"></div>
         
-        <div v-if="extendedData" v-show="!loadingExtras" class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl p-6 transition-all">
+        <div v-if="extendedData" v-show="!isExtrasLoading" class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl p-6 transition-all">
           <div class="flex items-center justify-between mb-4 border-b border-slate-100 dark:border-slate-800 pb-3">
             <h4 class="font-bold text-slate-800 dark:text-slate-200 flex items-center gap-2">
               <i class="bi bi-info-circle-fill text-indigo-500"></i> {{ extendedData.context || 'Operation Result' }}
@@ -544,15 +544,15 @@ export default {
       type: Object,
       default: null
     },
-    loading: {
+    isLoading: {
       type: Boolean,
       default: false
     }
   },
-  emits: ['refresh', 'runArchival', 'restoreArchive', 'setPolicy'],
+  emits: ['refresh', 'run-archival', 'restore-archive', 'set-policy'],
   setup(props, { emit }) {
     const store = useAdvancedAuditStore();
-    const loadingExtras = ref(false);
+    const isExtrasLoading = ref(false);
     const extendedData = ref(null);
     
     const showSetPolicyModal = ref(false);
@@ -584,32 +584,32 @@ export default {
     });
 
     const loadArchivePolicies = async () => {
-      loadingExtras.value = true;
+      isExtrasLoading.value = true;
       try {
         const res = await store.getArchive(true);
         extendedData.value = { context: 'Review Storage Details', data: res };
       } catch (err) {
         extendedData.value = { error: err.message };
       } finally {
-        loadingExtras.value = false;
+        isExtrasLoading.value = false;
       }
     };
 
     const manageRetention = async () => {
-      loadingExtras.value = true;
+      isExtrasLoading.value = true;
       try {
         const res = await store.manageRetention({ action: 'get_policy', dryRun: true }, true);
         extendedData.value = { context: 'Retention Policies (Simulation)', data: res };
       } catch (err) {
         extendedData.value = { error: err.message };
       } finally {
-        loadingExtras.value = false;
+        isExtrasLoading.value = false;
       }
     };
     
     const executeRunArchival = () => {
       showRunModal.value = false;
-      emit('runArchival', { ...runForm.value });
+      emit('run-archival', { ...runForm.value });
     };
     
     const openSetPolicyModal = () => {
@@ -623,7 +623,7 @@ export default {
 
     const executeSetPolicy = () => {
       showSetPolicyModal.value = false;
-      emit('setPolicy', {
+      emit('set-policy', {
         audit_log_retention_days: Number(policyForm.value.audit_log_retention_days),
         user_data_retention_days: Number(policyForm.value.user_data_retention_days)
       });
@@ -631,11 +631,11 @@ export default {
 
     const executeRestoreProcess = () => {
       showRestoreModal.value = false;
-      emit('restoreArchive', { ...restoreForm.value });
+      emit('restore-archive', { ...restoreForm.value });
     };
 
     return {
-      loadingExtras,
+      isExtrasLoading,
       extendedData,
       loadArchivePolicies,
       manageRetention,
