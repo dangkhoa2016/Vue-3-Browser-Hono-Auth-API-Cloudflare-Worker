@@ -497,7 +497,8 @@ export default {
       error_message: 'エラーメッセージ',
       full_payload: 'フルペイロード',
       copy_json: 'JSON をコピー',
-      copied: 'クリップボードにコピーしました'
+      copied: 'クリップボードにコピーしました',
+      copy_failed: 'ログの詳細をコピーできませんでした'
     },
     loader: {
       app: 'アプリ',

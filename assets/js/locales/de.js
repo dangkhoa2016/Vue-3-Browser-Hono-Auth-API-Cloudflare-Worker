@@ -497,7 +497,8 @@ export default {
       error_message: 'Fehlermeldung',
       full_payload: 'Voller Inhalt',
       copy_json: 'JSON kopieren',
-      copied: 'In Zwischenablage kopiert'
+      copied: 'In Zwischenablage kopiert',
+      copy_failed: 'Protokolldetails konnten nicht kopiert werden'
     },
     loader: {
       app: 'App',

@@ -314,225 +314,41 @@
         </div>
       </div>
     
-    <!-- Modals -->
-    <ModalWindow
-      :show="showRunModal"
-      title="Run Archival Process"
-      icon="bi bi-lightning-charge-fill"
-      @close="showRunModal = false"
-    >
+    <ModalWindow :show="showRunModal" title="Run Archival Process" icon="bi bi-lightning-charge-fill" @close="showRunModal = false">
       <div class="space-y-4 pt-4">
         <p class="text-sm text-slate-600 dark:text-slate-400">{{ $t('message.advanced_audit.archival.run_archival_desc') }}</p>
-
-        <div>
-          <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{{ $t('message.advanced_audit.archival.batch_size') }}</label>
-          <input 
-            type="number" 
-            min="100"
-            v-model.number="runForm.batchSize" 
-            class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-slate-700 text-slate-900 dark:text-white sm:text-sm"
-            placeholder="1000"
-          >
-        </div>
-        
-        <div>
-          <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{{ $t('message.advanced_audit.archival.category_filter') }}</label>
-          <select 
-            v-model="runForm.categoryFilter"
-            class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-slate-700 text-slate-900 dark:text-white sm:text-sm"
-          >
-            <option value="">{{ $t('message.advanced_audit.archival.all_categories') }}</option>
-            <option value="authentication">{{ $t('message.advanced_audit.archival.cat_auth') }}</option>
-            <option value="admin_operations">{{ $t('message.advanced_audit.archival.cat_admin') }}</option>
-            <option value="security_events">{{ $t('message.advanced_audit.archival.cat_security') }}</option>
-            <option value="general">{{ $t('message.advanced_audit.archival.cat_general') }}</option>
-          </select>
-        </div>
-
-        <div class="flex items-center gap-2">
-          <input 
-            type="checkbox" 
-            id="runDryRun"
-            v-model="runForm.dryRun" 
-            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-          >
-          <label for="runDryRun" class="text-sm font-medium text-slate-700 dark:text-slate-300">
-            {{ $t('message.advanced_audit.archival.dry_run') }}
-          </label>
-        </div>
-        
-        <div class="flex items-center gap-2">
-          <input 
-            type="checkbox" 
-            id="runForceArchival"
-            v-model="runForm.forceArchival" 
-            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-          >
-          <label for="runForceArchival" class="text-sm font-medium text-slate-700 dark:text-slate-300">
-            {{ $t('message.advanced_audit.archival.force_archival') }}
-          </label>
-        </div>
-
-        <div class="flex gap-3 mt-6">
-          <button
-            @click="showRunModal = false"
-            class="flex-1 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 dark:bg-slate-700 dark:hover:bg-slate-600 dark:text-slate-300 rounded-lg font-medium transition-colors"
-          >{{ $t('message.advanced_audit.archival.cancel_btn') }}</button>
-          <button
-            @click="executeRunArchival"
-            class="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors"
-          >{{ $t('message.advanced_audit.archival.execute_btn') }}</button>
-        </div>
+        <div><label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{{ $t('message.advanced_audit.archival.batch_size') }}</label><input type="number" min="100" v-model.number="runForm.batchSize" class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-slate-700 text-slate-900 dark:text-white sm:text-sm" placeholder="1000"></div>
+        <div><label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{{ $t('message.advanced_audit.archival.category_filter') }}</label><select v-model="runForm.categoryFilter" class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-slate-700 text-slate-900 dark:text-white sm:text-sm"><option value="">{{ $t('message.advanced_audit.archival.all_categories') }}</option><option value="authentication">{{ $t('message.advanced_audit.archival.cat_auth') }}</option><option value="admin_operations">{{ $t('message.advanced_audit.archival.cat_admin') }}</option><option value="security_events">{{ $t('message.advanced_audit.archival.cat_security') }}</option><option value="general">{{ $t('message.advanced_audit.archival.cat_general') }}</option></select></div>
+        <div class="flex items-center gap-2"><input type="checkbox" id="runDryRun" v-model="runForm.dryRun" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"><label for="runDryRun" class="text-sm font-medium text-slate-700 dark:text-slate-300">{{ $t('message.advanced_audit.archival.dry_run') }}</label></div>
+        <div class="flex items-center gap-2"><input type="checkbox" id="runForceArchival" v-model="runForm.forceArchival" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"><label for="runForceArchival" class="text-sm font-medium text-slate-700 dark:text-slate-300">{{ $t('message.advanced_audit.archival.force_archival') }}</label></div>
+        <div class="flex gap-3 mt-6"><button @click="showRunModal = false" class="flex-1 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 dark:bg-slate-700 dark:hover:bg-slate-600 dark:text-slate-300 rounded-lg font-medium transition-colors">{{ $t('message.advanced_audit.archival.cancel_btn') }}</button><button @click="executeRunArchival" class="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors">{{ $t('message.advanced_audit.archival.execute_btn') }}</button></div>
       </div>
     </ModalWindow>
 
-    <ModalWindow
-      :show="showRestoreModal"
-      title="Restore Archive"
-      icon="bi bi-arrow-counterclockwise"
-      @close="showRestoreModal = false"
-    >
+    <ModalWindow :show="showRestoreModal" title="Restore Archive" icon="bi bi-arrow-counterclockwise" @close="showRestoreModal = false">
       <div class="space-y-4 pt-4">
         <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">{{ $t('message.advanced_audit.archival.restore_archive_desc') }}</p>
-        
-        <div class="grid grid-cols-2 gap-4">
-          <div>
-            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{{ $t('message.advanced_audit.archival.start_date') }}</label>
-            <input 
-              type="date" 
-              v-model="restoreForm.startDate" 
-              class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-slate-700 text-slate-900 dark:text-white sm:text-sm"
-            >
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{{ $t('message.advanced_audit.archival.end_date') }}</label>
-            <input 
-              type="date" 
-              v-model="restoreForm.endDate" 
-              class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-slate-700 text-slate-900 dark:text-white sm:text-sm"
-            >
-          </div>
-        </div>
-
-        <div class="flex items-center gap-2 mt-4">
-          <input 
-            type="checkbox" 
-            id="restoreDryRun"
-            v-model="restoreForm.dryRun" 
-            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-          >
-          <label for="restoreDryRun" class="text-sm font-medium text-slate-700 dark:text-slate-300">
-            {{ $t('message.advanced_audit.archival.dry_run') }}
-          </label>
-        </div>
-
-        <div class="flex gap-3 mt-6">
-          <button
-            @click="showRestoreModal = false"
-            class="flex-1 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 dark:bg-slate-700 dark:hover:bg-slate-600 dark:text-slate-300 rounded-lg font-medium transition-colors"
-          >{{ $t('message.advanced_audit.archival.cancel_btn') }}</button>
-          <button
-            @click="executeRestoreProcess"
-            class="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors"
-          >{{ $t('message.advanced_audit.archival.restore_btn') }}</button>
-        </div>
+        <div class="grid grid-cols-2 gap-4"><div><label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{{ $t('message.advanced_audit.archival.start_date') }}</label><input type="date" v-model="restoreForm.startDate" class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-slate-700 text-slate-900 dark:text-white sm:text-sm"></div><div><label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{{ $t('message.advanced_audit.archival.end_date') }}</label><input type="date" v-model="restoreForm.endDate" class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-slate-700 text-slate-900 dark:text-white sm:text-sm"></div></div>
+        <div class="flex items-center gap-2 mt-4"><input type="checkbox" id="restoreDryRun" v-model="restoreForm.dryRun" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"><label for="restoreDryRun" class="text-sm font-medium text-slate-700 dark:text-slate-300">{{ $t('message.advanced_audit.archival.dry_run') }}</label></div>
+        <div class="flex gap-3 mt-6"><button @click="showRestoreModal = false" class="flex-1 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 dark:bg-slate-700 dark:hover:bg-slate-600 dark:text-slate-300 rounded-lg font-medium transition-colors">{{ $t('message.advanced_audit.archival.cancel_btn') }}</button><button @click="executeRestoreProcess" class="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors">{{ $t('message.advanced_audit.archival.restore_btn') }}</button></div>
       </div>
     </ModalWindow>
 
-    <ModalWindow
-      :show="showSetPolicyModal"
-      title="Configure Retention Policy"
-      icon="bi bi-gear"
-      @close="showSetPolicyModal = false"
-    >
+    <ModalWindow :show="showSetPolicyModal" title="Configure Retention Policy" icon="bi bi-gear" @close="showSetPolicyModal = false">
       <div class="space-y-4 pt-4">
         <p class="text-sm text-slate-600 dark:text-slate-400">{{ $t('message.advanced_audit.archival.set_retention_desc') }}</p>
-
-        <div>
-          <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{{ $t('message.advanced_audit.archival.audit_retention_days') }}</label>
-          <input 
-            type="number" 
-            v-model="policyForm.audit_log_retention_days" 
-            class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-slate-700 text-slate-900 dark:text-white sm:text-sm"
-            placeholder="90"
-            min="1"
-          >
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{{ $t('message.advanced_audit.archival.user_retention_days') }}</label>
-          <input 
-            type="number" 
-            v-model="policyForm.user_data_retention_days" 
-            class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-slate-700 text-slate-900 dark:text-white sm:text-sm"
-            placeholder="90"
-            min="1"
-          >
-        </div>
-
-        <div class="flex gap-3 mt-6">
-          <button
-            @click="showSetPolicyModal = false"
-            class="flex-1 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 dark:bg-slate-700 dark:hover:bg-slate-600 dark:text-slate-300 rounded-lg font-medium transition-colors"
-          >{{ $t('message.advanced_audit.archival.cancel_btn') }}</button>
-          <button
-            @click="executeSetPolicy"
-            class="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors"
-          >{{ $t('message.advanced_audit.archival.save_policy_btn') }}</button>
-        </div>
+        <div><label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{{ $t('message.advanced_audit.archival.audit_retention_days') }}</label><input type="number" v-model="policyForm.audit_log_retention_days" class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-slate-700 text-slate-900 dark:text-white sm:text-sm" placeholder="90" min="1"></div>
+        <div><label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{{ $t('message.advanced_audit.archival.user_retention_days') }}</label><input type="number" v-model="policyForm.user_data_retention_days" class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-slate-700 text-slate-900 dark:text-white sm:text-sm" placeholder="90" min="1"></div>
+        <div class="flex gap-3 mt-6"><button @click="showSetPolicyModal = false" class="flex-1 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 dark:bg-slate-700 dark:hover:bg-slate-600 dark:text-slate-300 rounded-lg font-medium transition-colors">{{ $t('message.advanced_audit.archival.cancel_btn') }}</button><button @click="executeSetPolicy" class="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors">{{ $t('message.advanced_audit.archival.save_policy_btn') }}</button></div>
       </div>
     </ModalWindow>
 
-    <ModalWindow
-      :show="showSetPolicyModal"
-      title="Configure Retention Policy"
-      icon="bi bi-gear"
-      @close="showSetPolicyModal = false"
-    >
-      <div class="space-y-4 pt-4">
-        <p class="text-sm text-slate-600 dark:text-slate-400">{{ $t('message.advanced_audit.archival.set_retention_desc') }}</p>
-
-        <div>
-          <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{{ $t('message.advanced_audit.archival.audit_retention_days') }}</label>
-          <input 
-            type="number" 
-            v-model="policyForm.audit_log_retention_days" 
-            class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-slate-700 text-slate-900 dark:text-white sm:text-sm"
-            placeholder="90"
-            min="1"
-          >
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{{ $t('message.advanced_audit.archival.user_retention_days') }}</label>
-          <input 
-            type="number" 
-            v-model="policyForm.user_data_retention_days" 
-            class="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-slate-700 text-slate-900 dark:text-white sm:text-sm"
-            placeholder="90"
-            min="1"
-          >
-        </div>
-
-        <div class="flex gap-3 mt-6">
-          <button
-            @click="showSetPolicyModal = false"
-            class="flex-1 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 dark:bg-slate-700 dark:hover:bg-slate-600 dark:text-slate-300 rounded-lg font-medium transition-colors"
-          >{{ $t('message.advanced_audit.archival.cancel_btn') }}</button>
-          <button
-            @click="executeSetPolicy"
-            class="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors"
-          >{{ $t('message.advanced_audit.archival.save_policy_btn') }}</button>
-        </div>
-      </div>
-    </ModalWindow>
   </div>
 </template>
 
 <script>
-import { ref } from 'vue';
 import ModalWindow from './ModalWindow.vue';
-import { useAdvancedAuditStore } from '/assets/js/stores/advancedAuditStore.js';
+import { useAdvancedAuditArchivalTab } from '/vue/composables/useAdvancedAuditArchivalTab.js';
 
 export default {
   name: 'AdvancedAuditArchivalTab',
@@ -551,105 +367,7 @@ export default {
   },
   emits: ['refresh', 'run-archival', 'restore-archive', 'set-policy'],
   setup(props, { emit }) {
-    const store = useAdvancedAuditStore();
-    const isExtrasLoading = ref(false);
-    const extendedData = ref(null);
-    
-    const showSetPolicyModal = ref(false);
-    const policyForm = ref({
-      audit_log_retention_days: 90,
-      user_data_retention_days: 90
-    });
-    
-    const showRunModal = ref(false);
-    const runForm = ref({
-      batchSize: 1000,
-      dryRun: true,
-      categoryFilter: '',
-      forceArchival: false
-    });
-    
-    const showRestoreModal = ref(false);
-    // Provide a default date
-    const d = new Date();
-    d.setDate(d.getDate() - 30);
-    const defaultStart = d.toISOString().split('T')[0];
-    const defaultEnd = new Date().toISOString().split('T')[0];
-    
-    const restoreForm = ref({
-      startDate: defaultStart,
-      endDate: defaultEnd,
-      action: 'restore',
-      dryRun: true
-    });
-
-    const loadArchivePolicies = async () => {
-      isExtrasLoading.value = true;
-      try {
-        const res = await store.getArchive(true);
-        extendedData.value = { context: 'Review Storage Details', data: res };
-      } catch (err) {
-        extendedData.value = { error: err.message };
-      } finally {
-        isExtrasLoading.value = false;
-      }
-    };
-
-    const manageRetention = async () => {
-      isExtrasLoading.value = true;
-      try {
-        const res = await store.manageRetention({ action: 'get_policy', dryRun: true }, true);
-        extendedData.value = { context: 'Retention Policies (Simulation)', data: res };
-      } catch (err) {
-        extendedData.value = { error: err.message };
-      } finally {
-        isExtrasLoading.value = false;
-      }
-    };
-    
-    const executeRunArchival = () => {
-      showRunModal.value = false;
-      emit('run-archival', { ...runForm.value });
-    };
-    
-    const openSetPolicyModal = () => {
-      // Initialize with backend data if available
-      if (extendedData.value?.context === 'Retention Policies (Simulation)' && extendedData.value?.data?.policy) {
-        policyForm.value.audit_log_retention_days = extendedData.value.data.policy.audit_log_retention_days || 90;
-        policyForm.value.user_data_retention_days = extendedData.value.data.policy.user_data_retention_days || 90;
-      }
-      showSetPolicyModal.value = true;
-    };
-
-    const executeSetPolicy = () => {
-      showSetPolicyModal.value = false;
-      emit('set-policy', {
-        audit_log_retention_days: Number(policyForm.value.audit_log_retention_days),
-        user_data_retention_days: Number(policyForm.value.user_data_retention_days)
-      });
-    };
-
-    const executeRestoreProcess = () => {
-      showRestoreModal.value = false;
-      emit('restore-archive', { ...restoreForm.value });
-    };
-
-    return {
-      isExtrasLoading,
-      extendedData,
-      loadArchivePolicies,
-      manageRetention,
-      showRunModal,
-      runForm,
-      showRestoreModal,
-      restoreForm,
-      executeRunArchival,
-      executeRestoreProcess,
-      showSetPolicyModal,
-      policyForm,
-      openSetPolicyModal,
-      executeSetPolicy
-    };
+    return useAdvancedAuditArchivalTab(emit);
   }
 }
 </script>
