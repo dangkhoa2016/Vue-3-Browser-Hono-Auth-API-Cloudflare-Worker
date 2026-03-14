@@ -14,9 +14,26 @@ const options = {
     '/assets/js/appServices.js': AppServices,
   },
   async getFile(url) {
-    const res = await fetch(url);
+    // Optimization: Use Cache API to prevent redundant fetching of SFC components
+    const CACHE_NAME = 'vue-sfc-cache-v1';
+    let cache, cachedRes;
+
+    const isDevMode = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
+    if (window.caches && !isDevMode) {
+      cache = await caches.open(CACHE_NAME);
+      cachedRes = await cache.match(url);
+    }
+
+    // Fallback to fetch if not cached or dev mode
+    const res = cachedRes || await fetch(url);
     if (!res.ok)
       throw Object.assign(new Error(res.status + ' ' + res.statusText + ' ' + url), { res });
+
+    // Store successful response to Cache (needs clone() to be read later)
+    if (cache && !cachedRes) {
+      cache.put(url, res.clone());
+    }
 
     if (url.match(/\.(png|jpe?g|gif|svg|ico|webp)$/i)) {
       return {
@@ -88,10 +105,22 @@ async function initMainApp() {
       toastStore: toastStoreModule.useToastStore(pinia),
     });
 
+    // Enable detailed DevTools locally to trace performance issues
+    const isDevMode = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    if (isDevMode) {
+      app.config.devtools = true;
+      app.config.performance = true;
+    }
+
     // Catch unhandled Vue component errors globally so they don't silently disappear
     app.config.errorHandler = (err, _instance, info) => {
       console.error('[Vue] Unhandled error in', info, err);
-      AppServices.getToastStore()?.error?.('An unexpected error occurred.');
+      AppServices.getToastStore()?.error?.(`An unexpected error occurred: ${err.message || 'Check console'}`);
+    };
+
+    // Warning handler for missing properties or deprecations
+    app.config.warnHandler = (msg, _instance, trace) => {
+      console.warn('[Vue Warn]', msg, trace);
     };
 
     // Default to mock API
