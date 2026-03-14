@@ -135,6 +135,7 @@ const {
   openJsonModal,
   closeJsonModal
 } = usePublicEndpointPage({
+  cacheKey: 'public-language',
   endpointPath: API_ENDPOINTS.PUBLIC_LANGUAGE,
   loadErrorKey: 'message.public_endpoints.language.load_error'
 });
