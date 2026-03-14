@@ -24,70 +24,57 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { useI18n } from 'vue-i18n';
 import { computed } from 'vue';
 
-export default {
-  name: 'ConfirmDeleteModal',
-  props: {
-    show: { type: Boolean, default: false },
-    itemId: { type: [String, Number], default: null },
-    itemName: { type: String, default: '' },
-    model: { type: String, default: null },
-    loading: { type: Boolean, default: false },
-    title: { type: String, default: null },
-    message: { type: String, default: null },
-    confirmLabel: { type: String, default: null },
-    cancelLabel: { type: String, default: null }
-  },
-  emits: ['confirm', 'cancel'],
-  setup(props, { emit }) {
-    const { t } = useI18n({ useScope: 'global' });
+const props = defineProps({
+  show: { type: Boolean, default: false },
+  itemId: { type: [String, Number], default: null },
+  itemName: { type: String, default: '' },
+  model: { type: String, default: null },
+  loading: { type: Boolean, default: false },
+  title: { type: String, default: null },
+  message: { type: String, default: null },
+  confirmLabel: { type: String, default: null },
+  cancelLabel: { type: String, default: null }
+});
 
-    const onConfirm = () => {
-      if (props.loading) return;
-      emit('confirm');
-    };
+const emit = defineEmits(['confirm', 'cancel']);
 
-    const onCancel = () => {
-      if (props.loading) return;
-      emit('cancel');
-    };
+const { t } = useI18n({ useScope: 'global' });
 
-    const displayItem = computed(() => {
-      if (!props.itemId && !props.itemName) return '';
-      return `${props.itemId ? '#' + props.itemId : ''}${props.itemId && props.itemName ? ' — ' : ''}${props.itemName || ''}`;
-    });
-
-    const cancelText = computed(() => props.cancelLabel || t('message.common.cancel'));
-    const confirmText = computed(() => props.confirmLabel || t('message.common.delete'));
-
-    const titleText = computed(() => props.title || t('message.common.confirm_title'));
-
-    const modelName = computed(() => {
-      if (props.model) return props.model;
-      if (props.itemName) return props.itemName;
-      return t('message.admin_users.models.user');
-    });
-
-    const messageText = computed(() => {
-      if (props.message) return props.message;
-      return t('message.common.confirm_message', {
-        model: modelName.value,
-        id: props.itemId || ''
-      });
-    });
-
-    return {
-      onConfirm,
-      onCancel,
-      displayItem,
-      cancelText,
-      confirmText,
-      titleText,
-      messageText
-    };
-  }
+const onConfirm = () => {
+  if (props.loading) return;
+  emit('confirm');
 };
+
+const onCancel = () => {
+  if (props.loading) return;
+  emit('cancel');
+};
+
+const displayItem = computed(() => {
+  if (!props.itemId && !props.itemName) return '';
+  return `${props.itemId ? '#' + props.itemId : ''}${props.itemId && props.itemName ? ' — ' : ''}${props.itemName || ''}`;
+});
+
+const cancelText = computed(() => props.cancelLabel || t('message.common.cancel'));
+const confirmText = computed(() => props.confirmLabel || t('message.common.delete'));
+
+const titleText = computed(() => props.title || t('message.common.confirm_title'));
+
+const modelName = computed(() => {
+  if (props.model) return props.model;
+  if (props.itemName) return props.itemName;
+  return t('message.admin_users.models.user');
+});
+
+const messageText = computed(() => {
+  if (props.message) return props.message;
+  return t('message.common.confirm_message', {
+    model: modelName.value,
+    id: props.itemId || ''
+  });
+});
 </script>

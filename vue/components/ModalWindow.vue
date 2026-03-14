@@ -48,74 +48,74 @@
   </transition>
 </template>
 
-<script>
-export default {
-  props: {
-    show: {
-      type: Boolean,
-      default: false
-    },
-    title: {
-      type: String,
-      required: true
-    },
-    subtitle: {
-      type: String,
-      default: ''
-    },
-    icon: {
-      type: String,
-      default: ''
-    },
-    iconBgClass: {
-      type: String,
-      default: 'bg-blue-100 dark:bg-blue-900/30'
-    },
-    iconColorClass: {
-      type: String,
-      default: 'text-blue-600 dark:text-blue-400'
-    },
-    panelClass: {
-      type: String,
-      default: ''
-    },
-    closeOnClickOutside: {
-      type: Boolean,
-      default: true
-    },
-    zIndexClass: {
-      type: String,
-      default: 'z-50'
-    }
+<script setup>
+import { onBeforeUnmount, onMounted, toRefs, watch } from 'vue';
+
+const props = defineProps({
+  show: {
+    type: Boolean,
+    default: false
   },
-  emits: ['close'],
-  watch: {
-    show(val) {
-      try {
-        if (val) document.body.classList.add('overflow-hidden');
-        else document.body.classList.remove('overflow-hidden');
-      } catch (e) {
-        // ignore in non-browser environments
-      }
-    }
+  title: {
+    type: String,
+    required: true
   },
-  mounted() {
-    // ensure correct body class if modal initially shown
-    if (this.show) {
-      try { document.body.classList.add('overflow-hidden'); } catch (e) {}
-    }
+  subtitle: {
+    type: String,
+    default: ''
   },
-  beforeUnmount() {
-    try { document.body.classList.remove('overflow-hidden'); } catch (e) {}
+  icon: {
+    type: String,
+    default: ''
   },
-  methods: {
-    handleOutsideClick() {
-      if (this.closeOnClickOutside) {
-        this.$emit('close');
-      }
-    }
+  iconBgClass: {
+    type: String,
+    default: 'bg-blue-100 dark:bg-blue-900/30'
+  },
+  iconColorClass: {
+    type: String,
+    default: 'text-blue-600 dark:text-blue-400'
+  },
+  panelClass: {
+    type: String,
+    default: ''
+  },
+  closeOnClickOutside: {
+    type: Boolean,
+    default: true
+  },
+  zIndexClass: {
+    type: String,
+    default: 'z-50'
   }
-}
+});
+
+const emit = defineEmits(['close']);
+const { show, closeOnClickOutside } = toRefs(props);
+
+watch(show, (val) => {
+  try {
+    if (val) document.body.classList.add('overflow-hidden');
+    else document.body.classList.remove('overflow-hidden');
+  } catch (e) {
+  }
+});
+
+onMounted(() => {
+  if (show.value) {
+    try { document.body.classList.add('overflow-hidden'); } catch (e) {}
+  }
+});
+
+onBeforeUnmount(() => {
+  try { document.body.classList.remove('overflow-hidden'); } catch (e) {}
+});
+
+const handleOutsideClick = () => {
+  if (closeOnClickOutside.value) {
+    emit('close');
+  }
+};
 </script>
 
 <style scoped>

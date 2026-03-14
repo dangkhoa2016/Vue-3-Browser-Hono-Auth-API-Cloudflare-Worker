@@ -147,89 +147,73 @@
   </div>
 </template>
 
-<script>
-import { ref, watch, toRefs } from 'vue';
+<script setup>
+import { ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
-export default {
-  name: 'UserModal',
-  props: {
-    show: {
-      type: Boolean,
-      default: false
-    },
-    mode: {
-      type: String,
-      default: 'create',
-      validator: (value) => ['create', 'edit'].includes(value)
-    },
-    initialData: {
-      type: Object,
-      default: () => ({})
-    },
-    loading: {
-      type: Boolean,
-      default: false
-    },
-    error: {
-      type: String,
-      default: null
-    }
+const props = defineProps({
+  show: {
+    type: Boolean,
+    default: false
   },
-  emits: ['close', 'save'],
-  setup(props, { emit }) {
-    const { t } = useI18n({ useScope: 'global' });
-    const { show, initialData } = toRefs(props);
-    
-    const getInitialState = () => ({
-      full_name: '',
-      email: '',
-      password: '',
-      role: 'user',
-      status: 'active'
-    });
-
-    const textInputClass =
-      'w-full pl-11 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 focus:bg-white dark:focus:bg-slate-800 transition-all outline-none';
-    const selectInputClass =
-      'w-full pl-11 pr-10 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 focus:bg-white dark:focus:bg-slate-800 transition-all outline-none appearance-none';
-    const errorAlertClass =
-      'group p-4 bg-rose-50 dark:bg-rose-900/10 border border-rose-100 dark:border-rose-900/30 text-rose-600 dark:text-rose-400 text-sm rounded-xl flex items-start gap-3 transition-all hover:bg-rose-100 dark:hover:bg-rose-900/20';
-    const cancelButtonClass =
-      'px-5 py-2.5 text-sm font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors focus:outline-none focus:ring-2 focus:ring-slate-200 dark:focus:ring-slate-700';
-    const submitButtonClass =
-      'px-5 py-2.5 text-sm font-bold text-white bg-teal-600 hover:bg-teal-700 rounded-xl shadow-lg shadow-teal-500/20 hover:shadow-teal-500/30 transition-all disabled:opacity-70 disabled:cursor-not-allowed flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900';
-
-    const formData = ref(getInitialState());
-
-    watch(show, (newVal) => {
-      if (newVal) {
-        if (props.mode === 'edit') {
-           formData.value = {
-            ...getInitialState(),
-            ...props.initialData,
-            password: '' // Don't populate password on edit
-           };
-        } else {
-          formData.value = getInitialState();
-        }
-      }
-    });
-
-    const handleSubmit = () => {
-      emit('save', formData.value);
-    };
-
-    return {
-      t,
-      formData,
-      textInputClass,
-      selectInputClass,
-      errorAlertClass,
-      cancelButtonClass,
-      submitButtonClass,
-      handleSubmit
-    };
+  mode: {
+    type: String,
+    default: 'create',
+    validator: (value) => ['create', 'edit'].includes(value)
+  },
+  initialData: {
+    type: Object,
+    default: () => ({})
+  },
+  loading: {
+    type: Boolean,
+    default: false
+  },
+  error: {
+    type: String,
+    default: null
   }
+});
+
+const emit = defineEmits(['close', 'save']);
+const { t } = useI18n({ useScope: 'global' });
+
+const getInitialState = () => ({
+  full_name: '',
+  email: '',
+  password: '',
+  role: 'user',
+  status: 'active'
+});
+
+const textInputClass =
+  'w-full pl-11 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 focus:bg-white dark:focus:bg-slate-800 transition-all outline-none';
+const selectInputClass =
+  'w-full pl-11 pr-10 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 focus:bg-white dark:focus:bg-slate-800 transition-all outline-none appearance-none';
+const errorAlertClass =
+  'group p-4 bg-rose-50 dark:bg-rose-900/10 border border-rose-100 dark:border-rose-900/30 text-rose-600 dark:text-rose-400 text-sm rounded-xl flex items-start gap-3 transition-all hover:bg-rose-100 dark:hover:bg-rose-900/20';
+const cancelButtonClass =
+  'px-5 py-2.5 text-sm font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors focus:outline-none focus:ring-2 focus:ring-slate-200 dark:focus:ring-slate-700';
+const submitButtonClass =
+  'px-5 py-2.5 text-sm font-bold text-white bg-teal-600 hover:bg-teal-700 rounded-xl shadow-lg shadow-teal-500/20 hover:shadow-teal-500/30 transition-all disabled:opacity-70 disabled:cursor-not-allowed flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900';
+
+const formData = ref(getInitialState());
+
+watch(() => props.show, (newVal) => {
+  if (newVal) {
+    if (props.mode === 'edit') {
+      formData.value = {
+        ...getInitialState(),
+        ...props.initialData,
+        password: ''
+      };
+    } else {
+      formData.value = getInitialState();
+    }
+  }
+});
+
+const handleSubmit = () => {
+  emit('save', formData.value);
 };
 </script>

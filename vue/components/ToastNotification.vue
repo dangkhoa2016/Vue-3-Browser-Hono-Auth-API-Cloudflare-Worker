@@ -27,7 +27,7 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { computed } from 'vue';
 import { useToastStore } from '/assets/js/stores/toastStore.js';
 
@@ -39,27 +39,16 @@ const TOAST_VARIANT_CLASS = {
   info: 'bg-slate-50/90 dark:bg-slate-800/80 border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100'
 };
 
-export default {
-  name: 'ToastNotification',
-  setup() {
-    const toastStore = useToastStore();
-    const toasts = computed(() => toastStore.toasts);
+const toastStore = useToastStore();
+const toasts = computed(() => toastStore.toasts);
 
-    const remove = (id) => {
-      toastStore.remove(id);
-    };
+const remove = (id) => {
+  toastStore.remove(id);
+};
 
-    const getToastClass = (type) => {
-      const variantClass = TOAST_VARIANT_CLASS[type] || TOAST_VARIANT_CLASS.info;
-      return [TOAST_BASE_CLASS, variantClass];
-    };
-
-    return {
-      toasts,
-      remove,
-      getToastClass
-    };
-  }
+const getToastClass = (type) => {
+  const variantClass = TOAST_VARIANT_CLASS[type] || TOAST_VARIANT_CLASS.info;
+  return [TOAST_BASE_CLASS, variantClass];
 };
 </script>
 
