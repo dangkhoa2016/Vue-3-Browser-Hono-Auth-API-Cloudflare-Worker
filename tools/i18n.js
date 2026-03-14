@@ -2,31 +2,36 @@
 
 /**
  * i18n Management CLI
- * 
- * Quản lý i18n locales - kiểm tra, so sánh, xuất báo cáo
- * 
- * Usage:
- *   node tools/i18n.js audit                    - Kiểm tra consistency
- *   node tools/i18n.js audit --sort             - Kiểm tra + hiển thị danh sách key
- *   node tools/i18n.js audit --export           - Kiểm tra + export JSON
- *   node tools/i18n.js audit --csv              - Kiểm tra + export CSV
- *   node tools/i18n.js keys [lang]              - Liệt kê tất cả key
- *   node tools/i18n.js count                    - Đếm key theo ngôn ngữ
- *   node tools/i18n.js help                     - Hiển thị trợ giúp
+ *
+ * EN: Manage i18n locales - validate, compare, and export reports.
+ * VI: Quản lý i18n locales - kiểm tra, so sánh, và xuất báo cáo.
+ *
+ * Commands:
+ *   node tools/i18n.js audit                    - EN: Check consistency / VI: Kiểm tra consistency
+ *   node tools/i18n.js audit --sort             - EN: Check + show sorted keys / VI: Kiểm tra + hiển thị danh sách key
+ *   node tools/i18n.js audit --export           - EN: Check + export JSON / VI: Kiểm tra + export JSON
+ *   node tools/i18n.js audit --csv              - EN: Check + export CSV / VI: Kiểm tra + export CSV
+ *   node tools/i18n.js keys [lang]              - EN: List all keys / VI: Liệt kê tất cả key
+ *   node tools/i18n.js count                    - EN: Count keys by language / VI: Đếm key theo ngôn ngữ
+ *   node tools/i18n.js usage                    - EN: Validate used keys in source / VI: Kiểm tra key dùng trong source
+ *   node tools/i18n.js check                    - EN: Run audit + usage (CI) / VI: Chạy audit + usage (CI)
+ *   node tools/i18n.js help                     - EN: Show help / VI: Hiển thị trợ giúp
  */
 
-import { spawn } from 'child_process';
+import { spawn, spawnSync } from 'child_process';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-// Detect locale from args or environment
+// EN: Detect UI language from CLI args or environment.
+// VI: Xác định ngôn ngữ hiển thị từ tham số CLI hoặc biến môi trường.
 const args = process.argv.slice(2);
 const langArg = args.find(a => a.startsWith('--lang='));
 const LOCALE = langArg ? langArg.split('=')[1] : (process.env.LANG?.startsWith('vi') ? 'vi' : 'en');
 
-// i18n translations
+// EN: Localized strings for CLI help and runtime messages.
+// VI: Chuỗi bản địa hóa cho phần trợ giúp và thông báo runtime của CLI.
 const translations = {
   en: {
     helpTitle: 'i18n Management CLI - Help & Usage',
@@ -50,6 +55,20 @@ const translations = {
     count: {
       title: 'count',
       description: 'Count and display number of keys by language',
+      examples: 'Examples',
+    },
+    usage: {
+      title: 'usage',
+      description: 'Validate i18n keys used in source code against locale files',
+      options: 'Options',
+      detailDesc: 'Show detailed key + file references',
+      exportDesc: 'Export report to JSON',
+      localeDesc: 'Check only one locale (e.g. --locale=vi)',
+      examples: 'Examples',
+    },
+    check: {
+      title: 'check',
+      description: 'Run audit + usage checks together (recommended for CI)',
       examples: 'Examples',
     },
     help: {
@@ -103,6 +122,20 @@ const translations = {
       description: 'Đếm và hiển thị số lượng key theo ngôn ngữ',
       examples: 'Ví dụ',
     },
+    usage: {
+      title: 'usage',
+      description: 'Kiểm tra key i18n dùng trong source có tồn tại trong locale hay không',
+      options: 'Tùy chọn',
+      detailDesc: 'Hiển thị chi tiết key + file tham chiếu',
+      exportDesc: 'Xuất báo cáo sang JSON',
+      localeDesc: 'Chỉ kiểm tra một locale (vd: --locale=vi)',
+      examples: 'Ví dụ',
+    },
+    check: {
+      title: 'check',
+      description: 'Chạy đồng thời audit + usage check (khuyến nghị cho CI)',
+      examples: 'Ví dụ',
+    },
     help: {
       title: 'help',
       description: 'Hiển thị trợ giúp này',
@@ -132,7 +165,8 @@ const translations = {
   },
 };
 
-// Translation function
+// EN: Translation helper with English fallback.
+// VI: Hàm dịch với fallback sang tiếng Anh.
 const t = (key, subkey = null) => {
   if (subkey) {
     return translations[LOCALE]?.[key]?.[subkey] || translations.en[key]?.[subkey] || `${key}.${subkey}`;
@@ -188,6 +222,25 @@ ${colors.bright}${t('availableCommands')}:${colors.reset}
     ${colors.dim}${t('count', 'examples')}:${colors.reset}
       node tools/i18n.js count
 
+  ${colors.cyan}${t('usage', 'title')}${colors.reset}
+    ${t('usage', 'description')}
+    ${colors.gray}${t('usage', 'options')}:${colors.reset}
+      --detail    ${t('usage', 'detailDesc')}
+      --export    ${t('usage', 'exportDesc')}
+      --locale    ${t('usage', 'localeDesc')}
+
+    ${colors.dim}${t('usage', 'examples')}:${colors.reset}
+      node tools/i18n.js usage
+      node tools/i18n.js usage --detail
+      node tools/i18n.js usage --export
+      node tools/i18n.js usage --locale=vi
+
+  ${colors.cyan}${t('check', 'title')}${colors.reset}
+    ${t('check', 'description')}
+
+    ${colors.dim}${t('check', 'examples')}:${colors.reset}
+      node tools/i18n.js check
+
   ${colors.cyan}${t('help', 'title')}${colors.reset}
     ${t('help', 'description')}
     
@@ -225,6 +278,32 @@ function runAudit(args) {
   child.on('exit', (code) => process.exit(code));
 }
 
+function runUsage(args) {
+  const usageArgs = langArg ? [...args, langArg] : args;
+  const child = spawn('node', [path.join(__dirname, 'i18n-usage-check.js'), ...usageArgs], {
+    stdio: 'inherit',
+  });
+  child.on('exit', (code) => process.exit(code));
+}
+
+function runCheck(args) {
+  const filteredArgs = args.filter(a => !a.startsWith('--lang='));
+  const sharedArgs = langArg ? [...filteredArgs, langArg] : filteredArgs;
+
+  const auditResult = spawnSync('node', [path.join(__dirname, 'i18n-audit.js'), ...sharedArgs], {
+    stdio: 'inherit',
+  });
+
+  const usageResult = spawnSync('node', [path.join(__dirname, 'i18n-usage-check.js'), ...sharedArgs], {
+    stdio: 'inherit',
+  });
+
+  const auditCode = Number(auditResult.status ?? 1);
+  const usageCode = Number(usageResult.status ?? 1);
+  const finalCode = auditCode !== 0 ? auditCode : usageCode;
+  process.exit(finalCode);
+}
+
 function main() {
   const command = args.find(a => !a.startsWith('--'))?.toLowerCase();
 
@@ -233,12 +312,18 @@ function main() {
       runAudit(args.filter(a => !a.startsWith('--lang=')));
       break;
     case 'keys':
-      console.log(`${colors.yellow}${t('notImplemented', 'keys')}: 'keys'${colors.reset}`);
+      console.log(`${colors.yellow}${t('notImplemented')}: 'keys'${colors.reset}`);
       process.exit(1);
       break;
     case 'count':
-      console.log(`${colors.yellow}${t('notImplemented', 'count')}: 'count'${colors.reset}`);
+      console.log(`${colors.yellow}${t('notImplemented')}: 'count'${colors.reset}`);
       process.exit(1);
+      break;
+    case 'usage':
+      runUsage(args.filter(a => !a.startsWith('--lang=')));
+      break;
+    case 'check':
+      runCheck(args.filter(a => !a.startsWith('--lang=')));
       break;
     case 'help':
     case '--help':

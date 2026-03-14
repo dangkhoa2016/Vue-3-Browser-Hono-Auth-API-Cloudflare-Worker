@@ -36,5 +36,28 @@ This project is a Vue 3 web application that provides an admin interface for aut
 2. Open `index.html` with Live Server or a static server to view the demo.
 3. Configure API endpoints and authentication as needed.
 
+## i18n Tools (EN/VI Supported)
+Use the CLI tools in `tools/` to validate locale consistency and translation key usage.
+
+```bash
+# Audit locale consistency
+node tools/i18n.js audit
+
+# Usage check (scan source keys vs locale files)
+node tools/i18n.js usage
+node tools/i18n.js usage --detail
+node tools/i18n.js usage --export
+
+# UI language for CLI output
+node tools/i18n.js usage --lang=en
+node tools/i18n.js usage --lang=vi
+
+# Check only one locale
+node tools/i18n.js usage --locale=vi
+
+# Run both checks (CI-friendly)
+node tools/i18n.js check
+```
+
 ## Contribution
 This is a sample admin project. You can fork and develop additional features or improve the project structure.
