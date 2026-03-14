@@ -20,8 +20,8 @@
         <div class="flex items-center gap-2">
           <ActionTextButton
             tone="indigo"
-            :icon="loading ? 'bi bi-arrow-clockwise animate-spin' : 'bi bi-arrow-clockwise'"
-            :disabled="loading"
+            :icon="isLoading ? 'bi bi-arrow-clockwise animate-spin' : 'bi bi-arrow-clockwise'"
+            :disabled="isLoading"
             @click="loadData"
           >
             {{ $t('message.refresh', 'Refresh') }}
@@ -38,13 +38,13 @@
       </div>
     </section>
 
-    <section v-if="loading" class="grid grid-cols-1 md:grid-cols-4 gap-4 animate-pulse">
+    <section v-if="isLoading" class="grid grid-cols-1 md:grid-cols-4 gap-4 animate-pulse">
       <div v-for="i in 4" :key="i" class="h-24 rounded-2xl bg-slate-200 dark:bg-slate-800"></div>
       <div class="md:col-span-4 h-56 rounded-2xl bg-slate-200 dark:bg-slate-800"></div>
     </section>
 
-    <section v-else-if="error" class="rounded-2xl border border-rose-200 dark:border-rose-800 bg-rose-50 dark:bg-rose-900/20 p-5 text-rose-700 dark:text-rose-300">
-      {{ error }}
+    <section v-else-if="errorMessage" class="rounded-2xl border border-rose-200 dark:border-rose-800 bg-rose-50 dark:bg-rose-900/20 p-5 text-rose-700 dark:text-rose-300">
+      {{ errorMessage }}
     </section>
 
     <template v-else-if="payload">
@@ -124,8 +124,8 @@ export default {
   setup() {
     const { t } = useI18n({ useScope: 'global' });
     const mainStore = useMainStore();
-    const loading = ref(false);
-    const error = ref('');
+    const isLoading = ref(false);
+    const errorMessage = ref('');
     const payload = ref(null);
     const jsonModal = useModalState({ initialMode: 'json' });
     const showJsonModal = jsonModal.isOpen;
@@ -137,14 +137,14 @@ export default {
 
     const loadData = async () => {
       try {
-        loading.value = true;
-        error.value = '';
+        isLoading.value = true;
+        errorMessage.value = '';
         const response = await apiClient.get(endpointPath);
         payload.value = response.data;
       } catch (err) {
-        error.value = err?.response?.data?.error || err?.message || t('message.public_endpoints.version.load_error');
+        errorMessage.value = err?.response?.data?.error || err?.message || t('message.public_endpoints.version.load_error');
       } finally {
-        loading.value = false;
+        isLoading.value = false;
       }
     };
 
@@ -165,8 +165,8 @@ export default {
     onMounted(loadData);
 
     return {
-      loading,
-      error,
+      isLoading,
+      errorMessage,
       payload,
       showJsonModal,
       endpointData,

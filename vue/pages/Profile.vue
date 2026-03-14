@@ -63,10 +63,10 @@
     />
 
     <!-- Error State -->
-    <div v-else-if="error" class="bg-red-50 dark:bg-red-900/20 border-2 border-red-200 dark:border-red-800 rounded-2xl p-8 text-center">
+    <div v-else-if="errorMessage" class="bg-red-50 dark:bg-red-900/20 border-2 border-red-200 dark:border-red-800 rounded-2xl p-8 text-center">
       <i class="bi bi-exclamation-triangle-fill text-5xl text-red-600 dark:text-red-400 mb-4"></i>
       <h3 class="text-xl font-bold text-red-900 dark:text-red-100 mb-2">{{ $t('message.errors.failed_to_load', { item: 'Profile' }) }}</h3>
-      <p class="text-red-700 dark:text-red-300 mb-4">{{ error }}</p>
+      <p class="text-red-700 dark:text-red-300 mb-4">{{ errorMessage }}</p>
 
       <ActionTextButton
         icon="bi bi-arrow-clockwise"
@@ -399,7 +399,7 @@ export default {
   setup() {
     const profile = ref(null);
     const loadingProfile = ref(true);
-    const error = ref(null);
+    const errorMessage = ref(null);
     const { locale, t } = useI18n({ useScope: 'global' });
     const isEditing = ref(false);
     const isSavingProfile = ref(false);
@@ -480,7 +480,7 @@ export default {
       }
       syncEditFormWithProfile();
       isEditing.value = true;
-      error.value = null;
+      errorMessage.value = null;
     };
 
     const cancelEditingProfile = () => {
@@ -519,7 +519,7 @@ export default {
     const startChangingPassword = () => {
       isChangingPassword.value = true;
       resetPasswordForm();
-      error.value = null;
+      errorMessage.value = null;
     };
 
     const cancelChangingPassword = () => {
@@ -722,7 +722,7 @@ export default {
     const fetchProfileData = async () => {
       try {
         loadingProfile.value = true;
-        error.value = null;
+        errorMessage.value = null;
 
         // Fetch profile from API
         const response = await apiClient.get(API_ENDPOINTS.PROFILE, {
@@ -746,12 +746,12 @@ export default {
             err?.response?.data?.message === 'Invalid or malformed authentication token'
           )
         ) {
-          error.value = t('message.auth.relogin_required_reason', 'Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.');
+          errorMessage.value = t('message.auth.relogin_required_reason', 'Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.');
           authStore.logout();
           markUnauthenticated();
           openLoginModal();
         } else {
-          error.value = err.response?.data?.error || err.message || 'Failed to load profile';
+          errorMessage.value = err.response?.data?.error || err.message || 'Failed to load profile';
           // If unauthorized, show login
           if (err.response?.status === 401) {
             authStore.logout();
@@ -855,7 +855,7 @@ export default {
     return {
       profile,
       loadingProfile,
-      error,
+      errorMessage,
       showLoginRequired,
       isEditing,
       isSavingProfile,

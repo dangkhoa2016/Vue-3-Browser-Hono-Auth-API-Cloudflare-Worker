@@ -33,11 +33,11 @@
       </div>
 
       <!-- Error Alert -->
-      <div v-if="error" class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-3">
+      <div v-if="errorMessage" class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-3">
         <div class="flex items-center">
           <i class="bi bi-exclamation-triangle-fill text-red-600 dark:text-red-400 mr-2 text-lg"></i>
           <div class="flex-1">
-            <p class="text-sm font-medium text-red-800 dark:text-red-300">{{ error }}</p>
+            <p class="text-sm font-medium text-red-800 dark:text-red-300">{{ errorMessage }}</p>
             <ul v-if="fieldErrors.length" class="mt-1 text-xs text-red-700 dark:text-red-400 list-disc list-inside">
               <li v-for="(err, index) in fieldErrors" :key="index">
                 {{ err.message }}
@@ -226,7 +226,7 @@ export default {
     });
 
     const isLoading = ref(false);
-    const error = ref('');
+    const errorMessage = ref('');
     const fieldErrors = ref([]);
     const successMessage = ref('');
     const registrationStatus = ref(''); // 'active' or 'inactive'
@@ -241,7 +241,7 @@ export default {
       'w-full flex justify-center items-center py-2.5 px-4 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors';
 
     const clearErrors = () => {
-      error.value = '';
+      errorMessage.value = '';
       fieldErrors.value = [];
     };
 
@@ -276,7 +276,7 @@ export default {
 
     const validatePasswords = () => {
       if (formData.password !== formData.confirmPassword) {
-        error.value = t('message.auth.password_mismatch');
+        errorMessage.value = t('message.auth.password_mismatch');
         fieldErrors.value = [
           { field: 'password', message: t('message.auth.password_mismatch_password_hint') },
           { field: 'confirmPassword', message: t('message.auth.password_mismatch_confirm_hint') }
@@ -318,7 +318,7 @@ export default {
           // Form will be reset when modal closes
         } else {
           // Handle unsuccessful registration
-          error.value = data.error || t('message.auth.registration_failed');
+          errorMessage.value = data.error || t('message.auth.registration_failed');
           if (Array.isArray(data.errors)) {
             fieldErrors.value = data.errors;
           }
@@ -326,14 +326,14 @@ export default {
       } catch (err) {
         const respData = err?.response?.data;
         if (respData) {
-          error.value = respData.error || t('message.auth.registration_failed');
+          errorMessage.value = respData.error || t('message.auth.registration_failed');
           if (Array.isArray(respData.errors)) {
             fieldErrors.value = respData.errors;
           }
         } else if (err?.request) {
-          error.value = t('message.auth.connection_error');
+          errorMessage.value = t('message.auth.connection_error');
         } else {
-          error.value = t('message.auth.unexpected_error');
+          errorMessage.value = t('message.auth.unexpected_error');
         }
       } finally {
         isLoading.value = false;
@@ -353,7 +353,7 @@ export default {
     return {
       formData,
       isLoading,
-      error,
+      errorMessage,
       fieldErrors,
       successMessage,
       registrationStatus,

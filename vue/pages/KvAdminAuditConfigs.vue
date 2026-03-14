@@ -48,10 +48,10 @@
         </template>
       </PageHeroSection>
 
-      <div v-if="error" class="p-8 text-center rounded-[28px] border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+      <div v-if="errorMessage" class="p-8 text-center rounded-[28px] border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
         <i class="bi bi-exclamation-triangle-fill text-4xl text-rose-500 mb-3"></i>
         <h3 class="text-lg font-bold text-slate-900 dark:text-white">Error</h3>
-        <p class="text-slate-500 mt-2">{{ error }}</p>
+        <p class="text-slate-500 mt-2">{{ errorMessage }}</p>
       </div>
 
       <div v-else class="flex flex-col gap-6">
@@ -212,7 +212,7 @@ export default {
       alerts: true,
       compliance: true
     });
-    const error = ref(null);
+    const errorMessage = ref(null);
     const isToggling = ref({});
 
     const auditData = ref({
@@ -226,7 +226,7 @@ export default {
     const loadData = async () => {
       if (!isSuperAdmin.value) return;
       loadingState.value = { features: true, retention: true, performance: true, alerts: true, compliance: true };
-      error.value = null;
+      errorMessage.value = null;
       try {
         // Fetch sequentially to avoid rate limits
         const featuresReq = await apiClient.get(API_ENDPOINTS.KV_ADMIN_AUDIT_CONFIGS_FEATURES, { headers: { Authorization: `Bearer ${authStore.token}` } }).catch((err) => {
@@ -269,7 +269,7 @@ export default {
           markUnauthenticated();
           openLoginModal();
         } else {
-          error.value = err.message || 'Failed to load configs';
+          errorMessage.value = err.message || 'Failed to load configs';
         }
       } finally {
         loadingState.value = { features: false, retention: false, performance: false, alerts: false, compliance: false };
@@ -319,7 +319,7 @@ export default {
     });
 
     return {
-      showLoginRequired, isSuperAdmin, loadingState, error, auditData, openLoginModal, loadData,
+      showLoginRequired, isSuperAdmin, loadingState, errorMessage, auditData, openLoginModal, loadData,
       toggleFeature, isToggling, formatFeatureName, formatValue, formatValueUnit
     };
   }

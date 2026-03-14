@@ -55,7 +55,7 @@
               <input type="checkbox" v-model="cleanForm.dryRun" class="rounded accent-rose-500">
               <span class="text-sm font-medium">Dry Run (Do not delete)</span>
             </label>
-            <ActionTextButton tone="rose" :disabled="loading" :loading="loading" @click="runClean">Run Clean</ActionTextButton>
+            <ActionTextButton tone="rose" :disabled="isLoading" :loading="isLoading" @click="runClean">Run Clean</ActionTextButton>
           </div>
         </div>
 
@@ -81,7 +81,7 @@
               <input type="checkbox" v-model="pruneForm.dryRun" class="rounded accent-amber-500">
               <span class="text-sm font-medium">Dry Run</span>
             </label>
-            <ActionTextButton tone="amber" :disabled="loading" :loading="loading" @click="runPrune">Run Prune</ActionTextButton>
+            <ActionTextButton tone="amber" :disabled="isLoading" :loading="isLoading" @click="runPrune">Run Prune</ActionTextButton>
           </div>
         </div>
         
@@ -124,14 +124,14 @@ export default {
       modalStore
     });
     const isSuperAdmin = computed(() => authStore.user?.role?.toLowerCase() === 'super_admin');
-    const loading = ref(false);
+    const isLoading = ref(false);
     const result = ref(null);
 
     const cleanForm = ref({ prefix: 'rate_limit:', dryRun: true });
     const pruneForm = ref({ prefix: 'rate_limit:', start: '', end: '', dryRun: true });
 
     const runClean = async () => {
-      loading.value = true;
+      isLoading.value = true;
       result.value = null;
       try {
         const res = await apiClient.post(API_ENDPOINTS.KV_ADMIN_RATE_LIMITS_CLEAN, cleanForm.value, {
@@ -143,12 +143,12 @@ export default {
         toastStore.add('Clean operation failed', 'error');
         result.value = err.response?.data || err.message;
       } finally {
-        loading.value = false;
+        isLoading.value = false;
       }
     };
 
     const runPrune = async () => {
-      loading.value = true;
+      isLoading.value = true;
       result.value = null;
       try {
         const payload = {
@@ -165,7 +165,7 @@ export default {
         toastStore.add('Prune operation failed', 'error');
         result.value = err.response?.data || err.message;
       } finally {
-        loading.value = false;
+        isLoading.value = false;
       }
     };
 
@@ -183,7 +183,7 @@ export default {
     });
 
     return {
-      showLoginRequired, isSuperAdmin, loading, result,
+      showLoginRequired, isSuperAdmin, isLoading, result,
       cleanForm, pruneForm, openLoginModal, runClean, runPrune
     };
   }
