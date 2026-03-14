@@ -39,7 +39,7 @@
 
       <template #right>
         <div class="grid gap-4">
-          <template v-if="loading">
+          <template v-if="isLoading">
             <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm animate-pulse">
               <div class="h-3 w-28 rounded bg-slate-200 dark:bg-slate-700/50"></div>
               <div class="mt-3 flex items-center justify-between">
@@ -159,8 +159,8 @@
 
       <div ref="tableTopRef" class="rounded-[28px] border border-slate-200/70 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xl overflow-hidden">
         <AsyncStateSection
-          :loading="loading"
-          :error="error"
+          :loading="isLoading"
+          :error="errorMessage"
           :is-empty="filteredIncidents.length === 0"
           :empty-title="tf('message.security_incidents.no_data', 'No incidents found.')"
         >
@@ -174,7 +174,7 @@
             <div class="p-8 text-center">
               <i class="bi bi-exclamation-triangle-fill text-4xl text-rose-500 mb-3"></i>
               <h3 class="text-lg font-bold text-slate-900 dark:text-white">
-                {{ $t('message.errors.failed_to_load', { item: $t('message.security_incidents.title'), message: error }) }}
+                {{ $t('message.errors.failed_to_load', { item: $t('message.security_incidents.title'), message: errorMessage }) }}
               </h3>
               <ActionTextButton
                 class="mt-4"
@@ -253,7 +253,7 @@
           :page-size="pagination.limit || 20"
           :page-size-options="[10, 20, 50]"
           :show-page-size="true"
-          :loading="loading"
+          :loading="isLoading"
           @change="goToPage"
           @change-size="handlePageSizeChange"
         />
@@ -332,7 +332,7 @@ export default {
     const { t, tf } = useI18nFallback();
     const mainStore = useMainStore();
     const securityStore = useSecurityIncidentStore();
-    const { incidents, loading, error, pagination } = storeToRefs(securityStore);
+    const { incidents, loading: isLoading, error: errorMessage, pagination } = storeToRefs(securityStore);
     const incidentModal = useModalState({ initialMode: 'view', initialValue: null });
     const showModal = incidentModal.isOpen;
     const selectedIncident = incidentModal.value;
@@ -485,8 +485,8 @@ export default {
       tf,
       incidents,
       filteredIncidents,
-      loading,
-      error,
+      isLoading,
+      errorMessage,
       pagination,
       search,
       severityFilter,

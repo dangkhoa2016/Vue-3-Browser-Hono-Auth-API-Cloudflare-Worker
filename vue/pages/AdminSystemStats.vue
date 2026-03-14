@@ -38,8 +38,8 @@
               <ActionTextButton
                 variant="soft"
                 shape="full"
-                :icon="loading ? 'bi bi-arrow-clockwise animate-spin' : 'bi bi-arrow-clockwise'"
-                :disabled="loading"
+                :icon="isLoading ? 'bi bi-arrow-clockwise animate-spin' : 'bi bi-arrow-clockwise'"
+                :disabled="isLoading"
                 @click="refresh"
               >
                 {{ $t('message.refresh') }}
@@ -59,7 +59,7 @@
               icon-class="bi bi-people text-2xl text-indigo-500"
               card-class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm relative overflow-hidden"
             >
-              <div v-if="loading" class="absolute inset-0 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm z-10 flex flex-col justify-center px-5">
+              <div v-if="isLoading" class="absolute inset-0 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm z-10 flex flex-col justify-center px-5">
                 <div class="h-3 w-24 rounded bg-slate-200 dark:bg-slate-700 animate-pulse mb-4"></div>
                 <div class="flex justify-between items-center">
                   <div class="h-6 w-16 rounded bg-slate-200 dark:bg-slate-700 animate-pulse"></div>
@@ -75,7 +75,7 @@
               icon-class="bi bi-person-check text-2xl text-emerald-500"
               card-class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm relative overflow-hidden"
             >
-              <div v-if="loading" class="absolute inset-0 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm z-10 flex flex-col justify-center px-5">
+              <div v-if="isLoading" class="absolute inset-0 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm z-10 flex flex-col justify-center px-5">
                 <div class="h-3 w-24 rounded bg-slate-200 dark:bg-slate-700 animate-pulse mb-4"></div>
                 <div class="flex justify-between items-center">
                   <div class="h-6 w-16 rounded bg-slate-200 dark:bg-slate-700 animate-pulse"></div>
@@ -118,8 +118,8 @@
 
       <section v-else class="space-y-6">
         <AsyncStateSection
-          :loading="loading"
-          :error="error"
+          :loading="isLoading"
+          :error="errorMessage"
           :is-empty="!hasData"
           :empty-title="$t('message.system_stats_page.empty_title')"
           :empty-message="$t('message.system_stats_page.empty_message')"
@@ -391,7 +391,7 @@ export default {
     const auditStatsError = ref(null);
     const auditDays = ref(7);
 
-    const { statsData, loading, error, lastUpdated } = storeToRefs(systemStatsStore);
+    const { statsData, loading: isLoading, error: errorMessage, lastUpdated } = storeToRefs(systemStatsStore);
 
     const isAuthenticated = computed(() => authStore.isAuthenticated);
     const role = computed(() => String(authStore.user?.role || '').toLowerCase());
@@ -538,8 +538,8 @@ export default {
     });
 
     return {
-      loading,
-      error,
+      isLoading,
+      errorMessage,
       heroSectionClass,
       auditScopeBadgeClass,
       isAdmin,

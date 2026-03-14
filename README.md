@@ -32,12 +32,12 @@ This project is a Vue 3 web application that provides an admin interface for aut
 - [Hono](https://hono.dev/)
 
 ## Getting Started
-1. Install necessary dependencies (if using a package manager).
-2. Open `index.html` with Live Server or a static server to view the demo.
+1. No build step is required (browser-only project).
+2. Open `index.html` with Live Server or any static server to run the app.
 3. Configure API endpoints and authentication as needed.
 
 ## i18n Tools (EN/VI Supported)
-Use the CLI tools in `tools/` to validate locale consistency and translation key usage.
+The app runtime is browser-only. Node.js is only needed optionally for CLI quality scripts in `tools/` (not for building/running the UI).
 
 ```bash
 # Audit locale consistency
@@ -58,6 +58,8 @@ node tools/i18n.js usage --locale=vi
 # Run both checks (CI-friendly)
 node tools/i18n.js check
 ```
+
+Optional CI (GitHub Actions only) is available at `.github/workflows/i18n-check.yml` and runs `node tools/i18n.js check` on push/PR when i18n-related files change. This is separate from local browser runtime.
 
 ## Contribution
 This is a sample admin project. You can fork and develop additional features or improve the project structure.
