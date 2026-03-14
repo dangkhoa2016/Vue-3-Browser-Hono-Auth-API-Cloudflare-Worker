@@ -2,10 +2,10 @@
   <div class="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
     <Navbar />
     <main class="container mx-auto px-4 py-8">
-      <router-view v-slot="{ Component }">
+      <router-view v-slot="{ Component, route }">
         <transition name="fade" mode="out-in">
-          <keep-alive>
-            <component :is="Component" />
+          <keep-alive :include="keepAliveRouteNames">
+            <component :is="Component" :key="route.name || route.fullPath" />
           </keep-alive>
         </transition>
       </router-view>
@@ -26,7 +26,8 @@
 <script>
 import Navbar from '/vue/components/Navbar.vue';
 import ToastNotification from '/vue/components/ToastNotification.vue';
-import { ref, onMounted, onUnmounted, watch } from 'vue';
+import { computed, ref, onMounted, onUnmounted, watch } from 'vue';
+import { useRouter } from 'vue-router';
 import { useMainStore } from '/assets/js/stores/mainStore.js';
 import { setupMock } from '/assets/js/api.js';
 
@@ -37,6 +38,7 @@ export default {
   },
   setup() {
     const store = useMainStore();
+    const router = useRouter();
     
     // Initialize theme
     store.initTheme();
@@ -51,6 +53,12 @@ export default {
 
     const showBackToTop = ref(false);
     const backToTopButtonClass = 'fixed bottom-8 right-8 p-3 rounded-full shadow-lg bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-300 z-50 transform translate-y-20 opacity-0';
+    const keepAliveRouteNames = computed(() => {
+      return router
+        .getRoutes()
+        .filter((route) => route.meta?.keepAlive && typeof route.name === 'string')
+        .map((route) => route.name);
+    });
 
     const handleScroll = () => {
       showBackToTop.value = window.scrollY > 300;
@@ -71,6 +79,7 @@ export default {
     return {
       showBackToTop,
       backToTopButtonClass,
+      keepAliveRouteNames,
       scrollToTop,
     };
   }

@@ -61,5 +61,19 @@ node tools/i18n.js check
 
 Optional CI (GitHub Actions only) is available at `.github/workflows/i18n-check.yml` and runs `node tools/i18n.js check` on push/PR when i18n-related files change. This is separate from local browser runtime.
 
+## Phase 4 Quality Guard (Optional)
+
+```bash
+# Check Vue file size guardrails
+node tools/vue-file-size-check.cjs
+
+# Custom limits
+node tools/vue-file-size-check.cjs --page-limit=600 --component-limit=450
+```
+
+- Default limits: pages <= 600 lines, components <= 450 lines.
+- CI workflow: `.github/workflows/vue-quality-check.yml` (currently `--warn-only` for gradual migration).
+- Architecture boundaries: `documents/FRONTEND_ARCHITECTURE_BOUNDARIES.md`.
+
 ## Contribution
 This is a sample admin project. You can fork and develop additional features or improve the project structure.
