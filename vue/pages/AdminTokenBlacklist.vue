@@ -9,7 +9,7 @@
       v-if="showLoginRequired"
       tone="red"
       :title="$t('message.auth.login_required')"
-      :message="$t('message.token_blacklist.access_denied.login_required') || 'You need to log in to access the token blacklist.'"
+      :message="tf('message.token_blacklist.access_denied.login_required', 'You need to log in to access the token blacklist.')"
       :button-text="$t('message.auth.login')"
       @action="openLoginModal"
     />
@@ -17,8 +17,8 @@
     <!-- Super Admin Required Section -->
     <section v-else-if="!isSuperAdmin" class="bg-red-50/80 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-3xl p-8 text-center shadow-sm">
       <i class="bi bi-exclamation-triangle-fill text-5xl text-red-600 dark:text-red-400 mb-4"></i>
-      <h3 class="text-xl font-bold text-red-900 dark:text-red-100 mb-2">{{ $t('message.token_blacklist.access_denied.title') || 'Access Denied' }}</h3>
-      <p class="text-red-700 dark:text-red-300">{{ $t('message.token_blacklist.access_denied.message') || 'Only Super Admins can access the Token Blacklist.' }}</p>
+      <h3 class="text-xl font-bold text-red-900 dark:text-red-100 mb-2">{{ tf('message.token_blacklist.access_denied.title', 'Access Denied') }}</h3>
+      <p class="text-red-700 dark:text-red-300">{{ tf('message.token_blacklist.access_denied.message', 'Only Super Admins can access the Token Blacklist.') }}</p>
     </section>
 
     <template v-else>
@@ -28,13 +28,13 @@
         <div class="relative grid gap-6 lg:grid-cols-[1.3fr_0.7fr] lg:items-center">
           <div>
             <div class="inline-flex items-center gap-2 rounded-full bg-red-900/10 text-red-800 dark:bg-red-400/10 dark:text-red-200 px-3 py-1 text-xs font-semibold tracking-[0.2em] uppercase mb-4 shadow-sm border border-red-200/50 dark:border-red-800/50">
-              <i class="bi bi-ban"></i> {{ $t('message.token_blacklist.security') || 'SECURITY' }}
+              <i class="bi bi-ban"></i> {{ tf('message.token_blacklist.security', 'SECURITY') }}
             </div>
             <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white leading-tight tracking-tight mb-4">
-              {{ $t('message.token_blacklist.title') || 'Token Blacklist' }}
+              {{ tf('message.token_blacklist.title', 'Token Blacklist') }}
             </h1>
             <p class="text-slate-500 dark:text-slate-400 text-lg leading-relaxed max-w-2xl">
-              {{ $t('message.token_blacklist.subtitle') || 'Manage revoked access tokens to immediately disable compromised accounts and secure the system.' }}
+              {{ tf('message.token_blacklist.subtitle', 'Manage revoked access tokens to immediately disable compromised accounts and secure the system.') }}
             </p>
           </div>
           <div class="flex flex-wrap items-center lg:justify-end gap-3 z-10 w-full sm:w-auto mt-4 lg:mt-0">
@@ -55,7 +55,7 @@
               class="w-full sm:w-auto"
               @click="openAddTokenModal"
             >
-              {{ $t('message.token_blacklist.add_token') || 'Add Token' }}
+              {{ tf('message.token_blacklist.add_token', 'Add Token') }}
             </ActionTextButton>
           </div>
         </div>
@@ -71,7 +71,7 @@
             type="text"
             v-model="searchQuery"
             @input="handleSearch"
-            :placeholder="$t('message.token_blacklist.search_placeholder') || 'Search by JTI or Reason...'"
+            :placeholder="tf('message.token_blacklist.search_placeholder', 'Search by JTI or Reason...')"
             class="block w-full pl-10 pr-3 py-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl leading-5 flex-1 focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:border-red-500 transition-all duration-200 text-slate-900 dark:text-slate-100 placeholder-slate-400 sm:text-sm shadow-sm"
           />
         </div>
@@ -83,14 +83,14 @@
           <div class="absolute inset-0 rounded-full border-4 border-slate-100 dark:border-slate-800"></div>
           <div class="absolute inset-0 rounded-full border-4 border-red-500 border-t-transparent animate-spin"></div>
         </div>
-        <p class="text-slate-500 dark:text-slate-400 font-medium animate-pulse">{{ $t('message.common.loading_data') || 'Loading data...' }}</p>
+        <p class="text-slate-500 dark:text-slate-400 font-medium animate-pulse">{{ tf('message.common.loading_data', 'Loading data...') }}</p>
       </div>
 
       <div v-else-if="error" class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-3xl p-8 text-center shadow-sm">
          <i class="bi bi-exclamation-octagon text-4xl text-red-500 mb-3"></i>
          <p class="text-red-700 dark:text-red-400 font-medium">{{ error }}</p>
          <ActionTextButton icon="bi bi-arrow-clockwise" tone="red" size="sm" shape="pill" class="mt-4" @click="fetchTokens">
-           {{ $t('message.common.retry') || 'Retry' }}
+           {{ tf('message.common.retry', 'Retry') }}
          </ActionTextButton>
       </div>
 
@@ -98,8 +98,8 @@
         <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-slate-100 dark:bg-slate-800 mb-4 shadow-inner">
           <i class="bi bi-shield-check text-4xl text-slate-400 dark:text-slate-500"></i>
         </div>
-        <h3 class="text-xl font-bold text-slate-900 dark:text-slate-100 mb-2">{{ $t('message.token_blacklist.no_tokens_title') || 'No Blacklisted Tokens' }}</h3>
-        <p class="text-slate-500 dark:text-slate-400">{{ $t('message.token_blacklist.no_tokens_desc') || 'There are currently no security threats detected requiring revoked tokens.' }}</p>
+        <h3 class="text-xl font-bold text-slate-900 dark:text-slate-100 mb-2">{{ tf('message.token_blacklist.no_tokens_title', 'No Blacklisted Tokens') }}</h3>
+        <p class="text-slate-500 dark:text-slate-400">{{ tf('message.token_blacklist.no_tokens_desc', 'There are currently no security threats detected requiring revoked tokens.') }}</p>
       </div>
 
       <div v-else class="bg-white dark:bg-slate-900 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden relative z-10 transition-colors duration-300">
@@ -107,13 +107,13 @@
           <table class="min-w-[800px] w-full divide-y divide-slate-200 dark:divide-slate-800 transition-colors duration-300 table-fixed">
             <thead class="bg-slate-50/50 dark:bg-slate-800/50">
               <tr>
-                <th scope="col" class="px-5 py-3.5 text-left text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider w-12">{{ $t('message.token_blacklist.table.id') || 'ID' }}</th>
-                <th scope="col" class="px-5 py-3.5 text-left text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider w-56">{{ $t('message.token_blacklist.table.jti') || 'JTI' }}</th>
-                <th scope="col" class="px-5 py-3.5 text-left text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider w-24">{{ $t('message.token_blacklist.table.userId') || 'User ID' }}</th>
-                <th scope="col" class="px-5 py-3.5 text-left text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider w-40">{{ $t('message.token_blacklist.table.reason') || 'Reason' }}</th>
-                <th scope="col" class="px-5 py-3.5 text-left text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider w-36">{{ $t('message.token_blacklist.table.expiresAt') || 'Expires At' }}</th>
-                <th scope="col" class="px-5 py-3.5 text-left text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider w-36">{{ $t('message.token_blacklist.table.createdAt') || 'Created At' }}</th>
-                <th scope="col" class="px-5 py-3.5 text-right text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider w-24">{{ $t('message.token_blacklist.table.actions') || 'Actions' }}</th>
+                <th scope="col" class="px-5 py-3.5 text-left text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider w-12">{{ tf('message.token_blacklist.table.id', 'ID') }}</th>
+                <th scope="col" class="px-5 py-3.5 text-left text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider w-56">{{ tf('message.token_blacklist.table.jti', 'JTI') }}</th>
+                <th scope="col" class="px-5 py-3.5 text-left text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider w-24">{{ tf('message.token_blacklist.table.userId', 'User ID') }}</th>
+                <th scope="col" class="px-5 py-3.5 text-left text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider w-40">{{ tf('message.token_blacklist.table.reason', 'Reason') }}</th>
+                <th scope="col" class="px-5 py-3.5 text-left text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider w-36">{{ tf('message.token_blacklist.table.expiresAt', 'Expires At') }}</th>
+                <th scope="col" class="px-5 py-3.5 text-left text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider w-36">{{ tf('message.token_blacklist.table.createdAt', 'Created At') }}</th>
+                <th scope="col" class="px-5 py-3.5 text-right text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider w-24">{{ tf('message.token_blacklist.table.actions', 'Actions') }}</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-slate-100 dark:divide-slate-800/50 bg-white dark:bg-slate-900 transition-colors duration-300">
@@ -128,7 +128,7 @@
                 </td>
                 <td class="px-5 py-3 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400 font-medium">
                   <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300 border border-red-200 dark:border-red-800/30">
-                    {{ item.reason || $t('message.token_blacklist.table.manual') || 'MANUAL' }}
+                    {{ item.reason || tf('message.token_blacklist.table.manual', 'MANUAL') }}
                   </span>
                 </td>
                 <td class="px-5 py-3 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400">{{ formatDate(item.expires_at) }}</td>
@@ -161,43 +161,43 @@
     </template>
 
     <!-- Add Token Modal -->
-    <ModalWindow :show="showAddModal" :title="$t('message.token_blacklist.add_modal.title') || 'Add To Blacklist'" @close="closeAddTokenModal">
+    <ModalWindow :show="showAddModal" :title="tf('message.token_blacklist.add_modal.title', 'Add To Blacklist')" @close="closeAddTokenModal">
       <div class="p-6">
         <form @submit.prevent="submitAddToken">
           <fieldset :disabled="isSubmitting">
             <div class="space-y-4">
             <div>
-              <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{{ $t('message.token_blacklist.add_modal.jti_label') || 'JTI (Token ID) *' }}</label>
+              <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{{ tf('message.token_blacklist.add_modal.jti_label', 'JTI (Token ID) *') }}</label>
               <input type="text" v-model="addForm.jti" required
                 class="w-full px-3 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 text-slate-900 dark:text-slate-100 font-mono text-sm"
-                :placeholder="$t('message.token_blacklist.add_modal.jti_placeholder') || 'e.g. 550e8400-e29b-41d4-a716-446655440000'">
+                :placeholder="tf('message.token_blacklist.add_modal.jti_placeholder', 'e.g. 550e8400-e29b-41d4-a716-446655440000')">
             </div>
             
             <div>
-              <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{{ $t('message.token_blacklist.add_modal.user_id_label') || 'User ID (Optional)' }}</label>
+              <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{{ tf('message.token_blacklist.add_modal.user_id_label', 'User ID (Optional)') }}</label>
               <input type="number" v-model="addForm.userId"
                 class="w-full px-3 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 text-slate-900 dark:text-slate-100"
-                :placeholder="$t('message.token_blacklist.add_modal.user_id_placeholder') || 'e.g. 42'">
+                :placeholder="tf('message.token_blacklist.add_modal.user_id_placeholder', 'e.g. 42')">
             </div>
             
             <div>
-              <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{{ $t('message.token_blacklist.add_modal.reason_label') || 'Reason *' }}</label>
+              <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{{ tf('message.token_blacklist.add_modal.reason_label', 'Reason *') }}</label>
               <select v-model="addForm.reason" required
                 class="w-full px-3 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 text-slate-900 dark:text-slate-100">
-                <option value="ADMIN_SECURITY_ACTION">{{ $t('message.token_blacklist.add_modal.reasons.admin_security') || 'Administrator Security Action' }}</option>
-                <option value="USER_LOGOUT">{{ $t('message.token_blacklist.add_modal.reasons.user_logout') || 'User Logout' }}</option>
-                <option value="PASSWORD_RESET">{{ $t('message.token_blacklist.add_modal.reasons.password_reset') || 'Password Reset' }}</option>
-                <option value="COMPROMISED_TOKEN">{{ $t('message.token_blacklist.add_modal.reasons.compromised') || 'Compromised Token' }}</option>
-                <option value="USER_SUSPENDED">{{ $t('message.token_blacklist.add_modal.reasons.suspended') || 'User Suspended' }}</option>
-                <option value="OTHER">{{ $t('message.token_blacklist.add_modal.reasons.other') || 'Other' }}</option>
+                <option value="ADMIN_SECURITY_ACTION">{{ tf('message.token_blacklist.add_modal.reasons.admin_security', 'Administrator Security Action') }}</option>
+                <option value="USER_LOGOUT">{{ tf('message.token_blacklist.add_modal.reasons.user_logout', 'User Logout') }}</option>
+                <option value="PASSWORD_RESET">{{ tf('message.token_blacklist.add_modal.reasons.password_reset', 'Password Reset') }}</option>
+                <option value="COMPROMISED_TOKEN">{{ tf('message.token_blacklist.add_modal.reasons.compromised', 'Compromised Token') }}</option>
+                <option value="USER_SUSPENDED">{{ tf('message.token_blacklist.add_modal.reasons.suspended', 'User Suspended') }}</option>
+                <option value="OTHER">{{ tf('message.token_blacklist.add_modal.reasons.other', 'Other') }}</option>
               </select>
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{{ $t('message.token_blacklist.add_modal.expires_label') || 'Expiration Date (Optional)' }}</label>
+              <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">{{ tf('message.token_blacklist.add_modal.expires_label', 'Expiration Date (Optional)') }}</label>
               <input type="datetime-local" v-model="addForm.expiresAt"
                 class="w-full px-3 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 text-slate-900 dark:text-slate-100">
-              <p class="text-xs text-slate-500 mt-1">{{ $t('message.token_blacklist.add_modal.expires_hint') || 'If not set, defaults to 24 hours from now.' }}</p>
+              <p class="text-xs text-slate-500 mt-1">{{ tf('message.token_blacklist.add_modal.expires_hint', 'If not set, defaults to 24 hours from now.') }}</p>
             </div>
             
             <div v-if="addError" class="p-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg text-sm text-red-600 dark:text-red-400">
@@ -207,11 +207,11 @@
           
           <div class="mt-6 flex justify-end gap-3">
             <ActionTextButton tone="slate" size="md" @click="closeAddTokenModal" type="button">
-              {{ $t('message.common.cancel') || 'Cancel' }}
+              {{ tf('message.common.cancel', 'Cancel') }}
             </ActionTextButton>
             <ActionTextButton tone="red" size="md" type="submit" icon="bi bi-shield-lock" :disabled="isSubmitting" :class="{ 'opacity-50 cursor-not-allowed': isSubmitting }">
               <span v-if="isSubmitting" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-              {{ $t('message.token_blacklist.add_modal.submit') || 'Add to Blacklist' }}
+              {{ tf('message.token_blacklist.add_modal.submit', 'Add to Blacklist') }}
             </ActionTextButton>
           </div>
           </fieldset>
@@ -222,9 +222,9 @@
     <!-- Delete Confirm Modal -->
     <ConfirmDeleteModal
       :show="showDeleteModal"
-      :title="$t('message.token_blacklist.delete_modal.title') || 'Remove Token from Blacklist?'"
-      :message="$t('message.token_blacklist.delete_modal.message') || 'Are you sure you want to remove this token from the blacklist? The token might become valid again if it hasn\'t expired naturally.'"
-      :confirm-label="$t('message.token_blacklist.delete_modal.remove') || 'Remove'"
+      :title="tf('message.token_blacklist.delete_modal.title', 'Remove Token from Blacklist?')"
+      :message="tf('message.token_blacklist.delete_modal.message', 'Are you sure you want to remove this token from the blacklist? The token might become valid again if it hasn\'t expired naturally.')"
+      :confirm-label="tf('message.token_blacklist.delete_modal.remove', 'Remove')"
       :loading="isDeleting"
       @confirm="executeDeleteToken"
       @cancel="closeDeleteTokenModal"
@@ -234,7 +234,6 @@
 
 <script>
 import { ref, computed, onMounted, watch } from 'vue';
-import { useI18n } from 'vue-i18n';
 import { useMainStore } from '/assets/js/stores/mainStore.js';
 import { useAuthStore } from '/assets/js/stores/authStore.js';
 import { useModalStore } from '/assets/js/stores/modalStore.js';
@@ -249,6 +248,7 @@ import LoginRequiredPrompt from '../components/LoginRequiredPrompt.vue';
 import { useModalState } from '../composables/useModalState.js';
 import { useDebouncedFilters } from '../composables/useDebouncedFilters.js';
 import { useAuthGate } from '../composables/useAuthGate.js';
+import { useI18nFallback } from '../composables/useI18nFallback.js';
 
 export default {
   components: {
@@ -260,7 +260,7 @@ export default {
     LoginRequiredPrompt
   },
   setup() {
-    const { t } = useI18n();
+    const { tf } = useI18nFallback();
     const mainStore = useMainStore();
     const authStore = useAuthStore();
     const modalStore = useModalStore();
@@ -418,6 +418,7 @@ export default {
       isDeleting,
       closeAddTokenModal,
       closeDeleteTokenModal,
+      tf,
       
       fetchTokens,
       changePage,

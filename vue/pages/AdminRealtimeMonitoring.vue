@@ -3,9 +3,9 @@
     <LoginRequiredPrompt
       v-if="showLoginRequired"
       tone="blue"
-      :title="$t('message.audit.login_required') || $t('message.auth.login_required')"
-      :message="$t('message.audit.login_required_message') || $t('message.auth.login_required_message')"
-      :button-text="$t('message.auth.login') || 'Login'"
+      :title="tf(['message.audit.login_required', 'message.auth.login_required'], 'Login required')"
+      :message="tf(['message.audit.login_required_message', 'message.auth.login_required_message'], 'Please login to continue.')"
+      :button-text="tf('message.auth.login', 'Login')"
       @action="openLoginModal"
     />
 
@@ -19,13 +19,13 @@
           <div>
             <div class="inline-flex items-center gap-2 rounded-full bg-violet-900/10 text-violet-800 dark:bg-violet-400/10 dark:text-violet-200 px-3 py-1 text-xs font-semibold tracking-[0.2em]">
               <span class="w-2 h-2 rounded-full bg-violet-500"></span>
-              {{ $t('message.realtime_monitoring.badge') || 'Realtime Monitoring' }}
+              {{ tf('message.realtime_monitoring.badge', 'Realtime Monitoring') }}
             </div>
             <h1 class="mt-4 text-3xl md:text-4xl font-black text-slate-900 dark:text-white">
-              {{ $t('message.navbar.realtime_monitoring') || 'Realtime Monitoring' }}
+              {{ tf('message.navbar.realtime_monitoring', 'Realtime Monitoring') }}
             </h1>
             <p class="mt-2 text-slate-600 dark:text-slate-300 max-w-2xl">
-              {{ $t('message.realtime_monitoring.subtitle') || 'Real-time analytics dashboard from audit, user behavior, and security activity.' }}
+              {{ tf('message.realtime_monitoring.subtitle', 'Real-time analytics dashboard from audit, user behavior, and security activity.') }}
             </p>
             <p class="mt-2 text-xs uppercase tracking-[0.2em] text-slate-400">{{ formatDate(dataTimestamp) }}</p>
 
@@ -37,7 +37,7 @@
                 :disabled="loading"
                 @click="refresh"
               >
-                {{ $t('message.refresh') || 'Refresh' }}
+                  {{ tf('message.refresh', 'Refresh') }}
               </ActionTextButton>
 
               <ActionTextButton
@@ -47,7 +47,7 @@
                 :disabled="actionLoading"
                 @click="exportDashboard"
               >
-                {{ $t('message.realtime_monitoring.export') || 'Export' }}
+                  {{ tf('message.realtime_monitoring.export', 'Export') }}
               </ActionTextButton>
 
               <ActionTextButton
@@ -58,7 +58,7 @@
                 :disabled="actionLoading"
                 @click="startMonitoring"
               >
-                {{ $t('message.realtime_monitoring.start') || 'Start' }}
+                {{ tf('message.realtime_monitoring.start', 'Start') }}
               </ActionTextButton>
 
               <ActionTextButton
@@ -69,7 +69,7 @@
                 :disabled="actionLoading"
                 @click="stopMonitoring"
               >
-                {{ $t('message.realtime_monitoring.stop') || 'Stop' }}
+                {{ tf('message.realtime_monitoring.stop', 'Stop') }}
               </ActionTextButton>
 
               <ActionTextButton
@@ -79,7 +79,7 @@
                 :disabled="actionLoading"
                 @click="analyzeThreats"
               >
-                {{ $t('message.realtime_monitoring.analyze') || 'Analyze Last 1h' }}
+                {{ tf('message.realtime_monitoring.analyze', 'Analyze Last 1h') }}
               </ActionTextButton>
 
               <ActionTextButton
@@ -89,7 +89,7 @@
                 :disabled="actionLoading"
                 @click="simulateEvent"
               >
-                {{ $t('message.realtime_monitoring.simulate') || 'Simulate Event' }}
+                {{ tf('message.realtime_monitoring.simulate', 'Simulate Event') }}
               </ActionTextButton>
             </div>
           </div>
@@ -375,6 +375,7 @@ import ActionTextButton from '/vue/components/ActionTextButton.vue';
 import LoginRequiredPrompt from '/vue/components/LoginRequiredPrompt.vue';
 import PageHeroSection from '/vue/components/PageHeroSection.vue';
 import { useAuthGate } from '../composables/useAuthGate.js';
+import { useI18nFallback } from '../composables/useI18nFallback.js';
 
 export default {
   name: 'AdminRealtimeMonitoring',
@@ -384,6 +385,7 @@ export default {
     PageHeroSection
   },
   setup() {
+    const { tf } = useI18nFallback();
     const monitoringStore = useRealtimeMonitoringStore();
     const authStore = useAuthStore();
     const modalStore = useModalStore();
@@ -568,6 +570,7 @@ export default {
       latestAnalysis,
       latestSimulation,
       heroSectionClass,
+      tf,
       dataTimestamp,
       showLoginRequired,
       isMonitoringActive,
