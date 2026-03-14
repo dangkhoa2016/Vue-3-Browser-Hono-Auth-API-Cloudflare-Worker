@@ -3,13 +3,11 @@ import { useI18n } from 'vue-i18n';
 import { useAuthStore } from '/assets/js/stores/authStore.js';
 import { useModalStore } from '/assets/js/stores/modalStore.js';
 import { useToastStore } from '/assets/js/stores/toastStore.js';
-import { apiClient, API_ENDPOINTS } from '/assets/js/api.js';
+import { useProfileStore } from '/assets/js/stores/profileStore.js';
 import { useAuthGate } from '/vue/composables/useAuthGate.js';
 
 export function useProfilePage() {
-  const profile = ref(null);
-  const loadingProfile = ref(true);
-  const errorMessage = ref(null);
+  const { storeToRefs } = Pinia;
   const { locale, t } = useI18n({ useScope: 'global' });
   const isEditing = ref(false);
   const isSavingProfile = ref(false);
@@ -44,6 +42,8 @@ export function useProfilePage() {
   const authStore = useAuthStore();
   const modalStore = useModalStore();
   const toastStore = useToastStore();
+  const profileStore = useProfileStore();
+  const { profile, loadingProfile, errorMessage } = storeToRefs(profileStore);
 
   const normalizeText = (value) => String(value || '').trim();
 
@@ -114,6 +114,7 @@ export function useProfilePage() {
   };
 
   const resetProfileSessionState = () => {
+    profileStore.resetProfile();
     resetEditingState();
   };
 
@@ -181,25 +182,10 @@ export function useProfilePage() {
         email: normalizeText(editForm.value.email)
       };
 
-      const response = await apiClient.put(API_ENDPOINTS.PROFILE, payload, {
-        headers: {
-          Authorization: `Bearer ${authStore.token}`
-        }
-      });
-
-      if (!response.data?.success) {
-        throw new Error(response.data?.error || t('message.errors.something_went_wrong'));
+      const saveResult = await profileStore.saveProfile(authStore.token, payload);
+      if (!saveResult.success) {
+        throw new Error(saveResult.error || t('message.errors.something_went_wrong'));
       }
-
-      const updatedProfile = response.data.data || {};
-
-      profile.value = {
-        ...profile.value,
-        ...updatedProfile,
-        full_name: updatedProfile.full_name || payload.full_name,
-        email: updatedProfile.email || profile.value.email,
-        new_email: Object.prototype.hasOwnProperty.call(updatedProfile, 'new_email') ? updatedProfile.new_email : profile.value.new_email
-      };
 
       if (authStore.user) {
         authStore.user = {
@@ -212,7 +198,7 @@ export function useProfilePage() {
       }
 
       isEditing.value = false;
-      const serverMessage = response?.data?.message;
+      const serverMessage = saveResult?.message;
       toastStore.success(serverMessage || t('message.profile.update_success'));
     } catch (err) {
       const message = extractErrorMessage(err, t('message.errors.something_went_wrong'));
@@ -236,24 +222,10 @@ export function useProfilePage() {
     isClearingPendingEmail.value = true;
 
     try {
-      const response = await apiClient.delete(API_ENDPOINTS.CLEAR_PENDING_EMAIL, {
-        headers: {
-          Authorization: `Bearer ${authStore.token}`
-        }
-      });
-
-      if (!response.data?.success) {
-        throw new Error(response.data?.error || t('message.errors.something_went_wrong'));
+      const clearResult = await profileStore.clearPendingEmail(authStore.token);
+      if (!clearResult.success) {
+        throw new Error(clearResult.error || t('message.errors.something_went_wrong'));
       }
-
-      const updatedProfile = response.data.data || {};
-
-      profile.value = {
-        ...profile.value,
-        ...updatedProfile,
-        new_email: Object.prototype.hasOwnProperty.call(updatedProfile, 'new_email') ? updatedProfile.new_email : null,
-        emailVerificationPending: false
-      };
 
       if (authStore.user) {
         authStore.user = {
@@ -263,7 +235,7 @@ export function useProfilePage() {
         localStorage.setItem('user', JSON.stringify(authStore.user));
       }
 
-      const serverMessage = response?.data?.message;
+      const serverMessage = clearResult?.message;
       toastStore.success(serverMessage || t('message.profile.pending_email_cleared'));
     } catch (err) {
       const message = extractErrorMessage(err, t('message.profile.clear_pending_email_failed'));
@@ -296,21 +268,17 @@ export function useProfilePage() {
     isSavingPassword.value = true;
 
     try {
-      const response = await apiClient.put(API_ENDPOINTS.CHANGE_PASSWORD, {
+      const passwordResult = await profileStore.changePassword(authStore.token, {
         currentPassword,
         newPassword,
         confirmPassword
-      }, {
-        headers: {
-          Authorization: `Bearer ${authStore.token}`
-        }
       });
 
-      if (!response.data?.success) {
-        throw new Error(response.data?.error || t('message.errors.something_went_wrong'));
+      if (!passwordResult.success) {
+        throw new Error(passwordResult.error || t('message.errors.something_went_wrong'));
       }
 
-      const serverMessage = response?.data?.message;
+      const serverMessage = passwordResult?.message;
       toastStore.success(serverMessage || t('message.profile.password_change_success'));
       cancelChangingPassword();
     } catch (err) {
@@ -328,28 +296,23 @@ export function useProfilePage() {
   };
 
   const fetchProfileData = async () => {
+    const fetchResult = await profileStore.fetchProfile(authStore.token);
+
+    if (fetchResult.success) {
+      syncEditFormWithProfile();
+      return;
+    }
+
+    const responseStatus = fetchResult.responseStatus;
+    const responseData = fetchResult.responseData || {};
+    const errorValue = fetchResult.error;
+
     try {
-      loadingProfile.value = true;
-      errorMessage.value = null;
-
-      const response = await apiClient.get(API_ENDPOINTS.PROFILE, {
-        headers: {
-          Authorization: `Bearer ${authStore.token}`
-        }
-      });
-
-      if (response.data.success) {
-        profile.value = response.data.data;
-        syncEditFormWithProfile();
-      } else {
-        throw new Error(response.data.error || 'Failed to load profile');
-      }
-    } catch (err) {
       if (
-        err?.response?.status === 401 &&
+        responseStatus === 401 &&
         (
-          err?.response?.data?.error === 'Invalid or malformed authentication token' ||
-          err?.response?.data?.message === 'Invalid or malformed authentication token'
+          responseData?.error === 'Invalid or malformed authentication token' ||
+          responseData?.message === 'Invalid or malformed authentication token'
         )
       ) {
         errorMessage.value = t('message.auth.relogin_required_reason', 'Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.');
@@ -357,16 +320,15 @@ export function useProfilePage() {
         markUnauthenticated();
         openLoginModal();
       } else {
-        errorMessage.value = err.response?.data?.error || err.message || 'Failed to load profile';
-        if (err.response?.status === 401) {
+        errorMessage.value = errorValue || 'Failed to load profile';
+        if (responseStatus === 401) {
           authStore.logout();
           markUnauthenticated();
           openLoginModal();
         }
       }
-      console.error('Failed to load profile:', err);
-    } finally {
-      loadingProfile.value = false;
+      console.error('Failed to load profile:', fetchResult);
+    } catch (_error) {
     }
   };
 

@@ -132,6 +132,7 @@ const {
   openJsonModal,
   closeJsonModal
 } = usePublicEndpointPage({
+  cacheKey: 'public-health',
   endpointPath: API_ENDPOINTS.PUBLIC_HEALTH,
   loadErrorKey: 'message.public_endpoints.health.load_error'
 });
