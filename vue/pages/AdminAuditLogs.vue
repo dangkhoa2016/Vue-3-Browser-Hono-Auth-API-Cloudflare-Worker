@@ -438,6 +438,12 @@
 </template>
 
 <script>
+export default {
+  name: 'AdminAuditLogs'
+};
+</script>
+
+<script setup>
 import ModalWindow from '/vue/components/ModalWindow.vue';
 import PaginationControls from '/vue/components/PaginationControls.vue';
 import ActionIconButton from '/vue/components/ActionIconButton.vue';
@@ -446,20 +452,37 @@ import LoginRequiredPrompt from '/vue/components/LoginRequiredPrompt.vue';
 import PageHeroSection from '/vue/components/PageHeroSection.vue';
 import { useAdminAuditLogsPage } from '/vue/composables/useAdminAuditLogsPage.js';
 
-export default {
-  name: 'AdminAuditLogs',
-  components: {
-    ModalWindow,
-    PaginationControls,
-    ActionIconButton,
-    ActionTextButton,
-    LoginRequiredPrompt,
-    PageHeroSection
-  },
-  setup() {
-    return useAdminAuditLogsPage();
-  }
-};
+const {
+  auditStore,
+  formatDate,
+  formatDetails,
+  applyFilters,
+  clearFilters,
+  onExport,
+  goToPage,
+  handlePageSizeChange,
+  showModal,
+  selectedLog,
+  totalLogCount,
+  successCount,
+  issueCount,
+  openLog,
+  closeLog,
+  copySelectedLog,
+  showLoginRequired,
+  openLoginModal,
+  badgeColor,
+  avatarInitial,
+  actorDisplay,
+  actorRoleBadgeClass,
+  heroSectionClass,
+  filtersPanelClass,
+  filterInputClass,
+  filterSelectClass,
+  actorAvatarClass,
+  tf,
+  tableTopRef
+} = useAdminAuditLogsPage();
 </script>
 
 <style scoped>

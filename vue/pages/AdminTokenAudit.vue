@@ -371,6 +371,12 @@
 </template>
 
 <script>
+export default {
+  name: 'AdminTokenAudit'
+}
+</script>
+
+<script setup>
 import ActionIconButton from '../components/ActionIconButton.vue';
 import ActionTextButton from '../components/ActionTextButton.vue';
 import PaginationControls from '../components/PaginationControls.vue';
@@ -379,20 +385,52 @@ import ModalWindow from '../components/ModalWindow.vue';
 import LoginRequiredPrompt from '../components/LoginRequiredPrompt.vue';
 import { useAdminTokenAuditPage } from '/vue/composables/useAdminTokenAuditPage.js';
 
-export default {
-  name: 'AdminTokenAudit',
-  components: {
-    ActionIconButton,
-    ActionTextButton,
-    PaginationControls,
-    ConfirmDeleteModal,
-    ModalWindow,
-    LoginRequiredPrompt
-  },
-  setup() {
-    return useAdminTokenAuditPage();
-  }
-}
+const {
+  tableRowClass,
+  checkboxCellClass,
+  actionCellClass,
+  userCellClass,
+  ipCellClass,
+  statusCellClass,
+  dateCellClass,
+  actionsCellClass,
+
+  items,
+  isLoading,
+  errorMessage,
+  searchQuery,
+  pagination,
+  showLoginRequired,
+  isSuperAdmin,
+  showDetailModal,
+  closeDetailModal,
+  currentLog,
+  isFetchingLog,
+  showDeleteModal,
+  showBulkDeleteModal,
+  closeDeleteModal,
+  closeBulkDeleteModal,
+  isDeleting,
+  tf,
+  selectedItems,
+  isAllSelected,
+
+  fetchLogs,
+  changePage,
+  handleSearch,
+  clearSearch,
+  clearSelection,
+  formatDate,
+  formatMetadata,
+  getActionTailwindClass,
+  openLoginModal,
+  viewLogDetails,
+  confirmDeleteLog,
+  confirmBulkDelete,
+  executeDeleteLog,
+  executeBulkDelete,
+  toggleSelectAll
+} = useAdminTokenAuditPage();
 </script>
 
 <style scoped>

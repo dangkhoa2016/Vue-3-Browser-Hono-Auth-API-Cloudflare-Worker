@@ -298,6 +298,12 @@
 </template>
 
 <script>
+export default {
+  name: 'AdminUsers'
+};
+</script>
+
+<script setup>
 import UserModal from '../components/UserModal.vue';
 import ConfirmDeleteModal from '../components/ConfirmDeleteModal.vue';
 import RoleChangeModal from '../components/RoleChangeModal.vue';
@@ -310,22 +316,70 @@ import AsyncStateSection from '../components/AsyncStateSection.vue';
 import StatCard from '../components/StatCard.vue';
 import { useAdminUsersPage } from '/vue/composables/useAdminUsersPage.js';
 
-export default {
-  name: 'AdminUsers',
-  components: {
-    UserModal,
-    ConfirmDeleteModal,
-    RoleChangeModal,
-    PaginationControls,
-    ActionIconButton,
-    ActionTextButton,
-    LoginRequiredPrompt,
-    PageHeroSection,
-    AsyncStateSection,
-    StatCard
-  },
-  setup() {
-    return useAdminUsersPage();
-  }
-};
+const {
+  t,
+  tf,
+  authStore,
+  showLoginRequired,
+  error,
+  loading,
+  isAdmin,
+  isSuperAdmin,
+  search,
+  roleFilter,
+  statusFilter,
+  useServerFilter,
+  heroSectionClass,
+  searchInputClass,
+  serverFilterLabelClass,
+  tableRowClass,
+  actionsCellClass,
+  idCellClass,
+  nameCellClass,
+  emailCellClass,
+  roleCellClass,
+  statusCellClass,
+  createdAtCellClass,
+  updatedAtCellClass,
+  roleOptions,
+  users,
+  pagination,
+  showDataSkeleton,
+  filteredUsers,
+  activeCount,
+  inactiveCount,
+  openLoginModal,
+  reload,
+  goToPage,
+  handlePageSizeChange,
+  formatDate,
+  formatRole,
+  formatStatus,
+  roleBadgeClass,
+  statusBadgeClass,
+  isCurrentUser,
+  showModal,
+  modalMode,
+  userForm,
+  formError,
+  isSubmitting,
+  openCreateModal,
+  openEditModal,
+  closeModal,
+  handleSaveUser,
+  showRoleModal,
+  selectedRoleUser,
+  selectedRoleValue,
+  roleChangeOptions,
+  isChangingRole,
+  tableTopRef,
+  openRoleModal,
+  closeRoleModal,
+  submitRoleChange,
+  showConfirm,
+  isDeleting,
+  performDelete,
+  cancelDelete,
+  confirmDelete
+} = useAdminUsersPage();
 </script>
