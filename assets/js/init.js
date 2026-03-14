@@ -1,13 +1,17 @@
 const { createApp } = Vue;
 const { loadModule } = window['vue3-sfc-loader'];
 import * as I18nModule from '/assets/js/i18n.js';
+import * as AppServices from '/assets/js/appServices.js';
 const { loadLanguageAsync, detectBrowserLanguage } = I18nModule;
+const { setSfcOptions, setAppServices } = AppServices;
 
 const options = {
   moduleCache: {
     vue: Vue,
     'vue-i18n': VueI18n,
     '/assets/js/i18n.js': I18nModule,
+    // appServices must be in cache from the start so AsyncLoader.vue can import it via sfc-loader
+    '/assets/js/appServices.js': AppServices,
   },
   async getFile(url) {
     const res = await fetch(url);
@@ -34,12 +38,21 @@ const options = {
   }
 };
 
-window.vueSfcOptions = options;
+// Register sfc-loader options via appServices so all modules can access via getSfcOptions().
+// Must be called before initMainApp() because router.js uses getSfcOptions() at module load time.
+setSfcOptions(options);
 
 // Main App Logic
 async function initMainApp() {
   const { createPinia } = Pinia;
-  
+
+  // Populate module cache BEFORE importing router.js.
+  // router.js uses a top-level await to load AsyncLoader.vue via loadModule(),
+  // so the cache must have vue-router/pinia/axios entries ready at that point.
+  options.moduleCache['vue-router'] = VueRouter;
+  options.moduleCache['pinia'] = Pinia;
+  options.moduleCache['axios'] = window.axios;
+
   // Load modules dynamically
   const routerModule = await import('/assets/js/router.js');
   const apiModule = await import('/assets/js/api.js');
@@ -48,10 +61,7 @@ async function initMainApp() {
   const { router } = routerModule;
   const { setupMock } = apiModule;
 
-  // Update module cache so sfc-loader uses the same instances
-  options.moduleCache['vue-router'] = VueRouter;
-  options.moduleCache['pinia'] = Pinia;
-  options.moduleCache['axios'] = window.axios;
+  // Register remaining module instances so sfc-loader uses the same singletons
   options.moduleCache['/assets/js/router.js'] = routerModule;
   options.moduleCache['/assets/js/api.js'] = apiModule;
   options.moduleCache['/assets/js/stores/authStore.js'] = authStoreModule;
@@ -65,15 +75,24 @@ async function initMainApp() {
     app.use(router);
     app.use(window.i18nInstance);
 
-    // Make core stores globally available for direct script access (e.g. from axios interceptors)
     const { useAuthStore } = authStoreModule;
     const { useModalStore } = modalStoreModule;
     const toastStoreModule = await import('/assets/js/stores/toastStore.js');
     options.moduleCache['/assets/js/stores/toastStore.js'] = toastStoreModule;
-    
-    window.authStore = useAuthStore(pinia);
-    window.modalStore = useModalStore(pinia);
-    window.toastStore = toastStoreModule.useToastStore(pinia);
+
+    // Register store instances via appServices (replaces window.authStore/modalStore/toastStore).
+    // Must be called before app.mount() so post-mount component code can safely call getAuthStore() etc.
+    setAppServices({
+      authStore: useAuthStore(pinia),
+      modalStore: useModalStore(pinia),
+      toastStore: toastStoreModule.useToastStore(pinia),
+    });
+
+    // Catch unhandled Vue component errors globally so they don't silently disappear
+    app.config.errorHandler = (err, _instance, info) => {
+      console.error('[Vue] Unhandled error in', info, err);
+      AppServices.getToastStore()?.error?.('An unexpected error occurred.');
+    };
 
     // Default to mock API
     setupMock(true);

@@ -1,6 +1,7 @@
 const { defineStore } = Pinia;
 import { apiClient, API_ENDPOINTS } from '../api.js';
 import { i18n } from '../i18n.js';
+import { getToastStore, getModalStore } from '../appServices.js';
 
 // Pinia auth store
 export const useAuthStore = defineStore('auth', {
@@ -14,6 +15,7 @@ export const useAuthStore = defineStore('auth', {
     isRefreshing: false,
     requiresReauth: false,
     reauthNoticeShown: false,
+    initialized: false,
   }),
 
   // Getters
@@ -73,8 +75,8 @@ export const useAuthStore = defineStore('auth', {
       this.reauthNoticeShown = true;
 
       try {
-        const toastStore = window.toastStore;
-        if(toastStore) {
+        const toastStore = getToastStore();
+        if (toastStore) {
           const message = i18n.global.t(
             'message.auth.relogin_required_reason',
             'Your session has expired or is invalid. Please login again to continue.'
@@ -82,7 +84,7 @@ export const useAuthStore = defineStore('auth', {
           const title = i18n.global.t('message.auth.login_required', 'Login Required');
           toastStore.warning(message, 7000, title);
         } else {
-            console.warn("window.toastStore is undefined");
+          console.warn('[AuthStore] toastStore not yet available via appServices');
         }
       } catch (error) {
         console.warn('[AuthStore] Could not show re-login toast:', error);
@@ -96,11 +98,11 @@ export const useAuthStore = defineStore('auth', {
       await this.notifySessionExpired();
 
       try {
-        const modalStore = window.modalStore;
+        const modalStore = getModalStore();
         if (modalStore) {
           modalStore.openLogin();
         } else {
-           console.warn("window.modalStore is undefined");
+          console.warn('[AuthStore] modalStore not yet available via appServices');
         }
       } catch (error) {
         console.warn('[AuthStore] Could not open login modal:', error);
@@ -190,6 +192,8 @@ export const useAuthStore = defineStore('auth', {
 
     // Initialize from localStorage
     init() {
+      if (this.initialized) return;
+      this.initialized = true;
       try {
         const savedUser = localStorage.getItem('user');
         const savedToken = localStorage.getItem('token');

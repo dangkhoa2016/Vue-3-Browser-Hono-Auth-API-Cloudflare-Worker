@@ -78,4 +78,4 @@ const variantClass = computed(() => {
 const emitClick = () => {
   if (!props.disabled) emit('click');
 };
-};
+</script>
