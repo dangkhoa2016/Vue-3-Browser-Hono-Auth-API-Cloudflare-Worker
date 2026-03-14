@@ -127,6 +127,7 @@ const {
   openJsonModal,
   closeJsonModal
 } = usePublicEndpointPage({
+  cacheKey: 'public-version',
   endpointPath: API_ENDPOINTS.PUBLIC_VERSION,
   loadErrorKey: 'message.public_endpoints.version.load_error'
 });

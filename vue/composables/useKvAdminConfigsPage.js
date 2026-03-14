@@ -4,6 +4,7 @@ import { useAuthStore } from '/assets/js/stores/authStore.js';
 import { useModalStore } from '/assets/js/stores/modalStore.js';
 import { useMainStore } from '/assets/js/stores/mainStore.js';
 import { useToastStore } from '/assets/js/stores/toastStore.js';
+import { useKvAdminConfigsStore } from '/assets/js/stores/kvAdminConfigsStore.js';
 import { useAuthGate } from '/vue/composables/useAuthGate.js';
 import { useModalState } from '/vue/composables/useModalState.js';
 import { useDebouncedFilters } from '/vue/composables/useDebouncedFilters.js';
@@ -15,16 +16,13 @@ export function useKvAdminConfigsPage() {
   const authStore = useAuthStore();
   const modalStore = useModalStore();
   const mainStore = useMainStore();
+  const kvAdminConfigsStore = useKvAdminConfigsStore();
+  const { storeToRefs } = Pinia;
+  const { isLoading, errorMessage, rows, allowedKeys, allowedCount, lastUpdated } = storeToRefs(kvAdminConfigsStore);
 
-  const isLoading = ref(false);
-  const errorMessage = ref(null);
   const search = ref('');
   const debouncedSearch = ref('');
   const showOverridesOnly = ref(false);
-  const rows = ref([]);
-  const allowedKeys = ref([]);
-  const allowedCount = ref(0);
-  const lastUpdated = ref(null);
   const copiedKey = ref(null);
   const copiedValue = ref(null);
   const editorModal = useModalState({ initialOpen: false, initialMode: 'add' });
@@ -98,50 +96,7 @@ export function useKvAdminConfigsPage() {
   });
 
   const resetKvState = () => {
-    rows.value = [];
-    allowedCount.value = 0;
-  };
-
-  const formatValue = (value) => {
-    if (value === undefined) return '-';
-    if (value === null) return 'null';
-    if (typeof value === 'string') return value;
-    if (typeof value === 'number' || typeof value === 'boolean') return String(value);
-    try {
-      return JSON.stringify(value);
-    } catch (error) {
-      return String(value);
-    }
-  };
-
-  const buildRows = ({ configs = {}, defaults = {}, allowedKeys: allowedKeyList = [] } = {}) => {
-    const configKeys = Object.keys(configs || {});
-    const defaultKeys = Object.keys(defaults || {});
-    const baseKeys = allowedKeyList && allowedKeyList.length
-      ? allowedKeyList
-      : Array.from(new Set([...configKeys, ...defaultKeys])).sort();
-
-    allowedKeys.value = [...baseKeys];
-    allowedCount.value = baseKeys.length;
-
-    rows.value = baseKeys.map((key) => {
-      const hasOverride = Object.prototype.hasOwnProperty.call(configs, key);
-      const value = hasOverride ? configs[key] : defaults[key];
-      const defaultValue = defaults[key];
-      const valueLabel = formatValue(value);
-      const defaultLabel = formatValue(defaultValue);
-      const isOverride = hasOverride && valueLabel !== defaultLabel;
-
-      return {
-        key,
-        value,
-        defaultValue,
-        valueLabel,
-        defaultLabel,
-        source: hasOverride ? 'kv' : (defaultValue !== undefined ? 'default' : 'unknown'),
-        isOverride
-      };
-    });
+    kvAdminConfigsStore.resetState();
   };
 
   const loadConfigs = async () => {
@@ -149,48 +104,20 @@ export function useKvAdminConfigsPage() {
       return;
     }
 
-    isLoading.value = true;
-    errorMessage.value = null;
+    const loadResult = await kvAdminConfigsStore.loadConfigs({
+      token: authStore.token,
+      mockApi: mainStore.mockApi
+    });
 
-    try {
-      let payload;
-
-      if (mainStore.mockApi) {
-        const res = await fetch('/assets/data/kv-admin/configs.json', { cache: 'no-store' });
-        if (!res.ok) {
-          throw new Error(res.statusText || 'Failed to load KV configs');
-        }
-        payload = await res.json();
-      } else {
-        const response = await apiClient.get(API_ENDPOINTS.KV_ADMIN_CONFIGS, {
-          headers: {
-            Authorization: `Bearer ${authStore.token}`
-          }
-        });
-        payload = response.data;
-      }
-
-      if (!payload || payload.success === false) {
-        const message = payload && (payload.error || payload.message);
-        throw new Error(message || 'Failed to load KV configs');
-      }
-
-      const data = payload.data || payload;
-      buildRows({
-        configs: data.configs || {},
-        defaults: data.defaults || {},
-        allowedKeys: Array.isArray(data.allowedKeys) ? data.allowedKeys : []
-      });
-      lastUpdated.value = new Date().toISOString();
-    } catch (err) {
-      const status = err.response?.status;
+    if (!loadResult.success) {
+      const status = loadResult.status;
       if (status === 401 || status === 403) {
         authStore.logout();
         markUnauthenticated();
       }
-      errorMessage.value = (err && err.message) || t('message.kv_admin_page.error_loading');
-    } finally {
-      isLoading.value = false;
+      if (!errorMessage.value) {
+        errorMessage.value = t('message.kv_admin_page.error_loading');
+      }
     }
   };
 
@@ -273,14 +200,7 @@ export function useKvAdminConfigsPage() {
   };
 
   const hydrateAllowedKeys = (data) => {
-    if (!data || typeof data !== 'object') return;
-    const nextAllowed = Array.isArray(data.allowedKeys) ? data.allowedKeys : [];
-    const configKeys = Object.keys(data.configs || {});
-    const defaultKeys = Object.keys(data.defaults || {});
-    const merged = Array.from(new Set([...allowedKeys.value, ...nextAllowed, ...configKeys, ...defaultKeys]));
-    if (merged.length > 0) {
-      allowedKeys.value = merged.sort((first, second) => first.localeCompare(second));
-    }
+    kvAdminConfigsStore.hydrateAllowedKeys(data);
   };
 
   const ensureBulkKeyOptionsLoaded = async () => {
@@ -431,33 +351,6 @@ export function useKvAdminConfigsPage() {
     return message.includes('token') || message.includes('re-login') || message.includes('reauth');
   };
 
-  const applyLocalUpsert = (key, value) => {
-    const existingIndex = rows.value.findIndex((row) => row.key === key);
-    const defaultValue = existingIndex >= 0 ? rows.value[existingIndex].defaultValue : undefined;
-    const valueLabel = formatValue(value);
-    const defaultLabel = formatValue(defaultValue);
-    const isOverride = valueLabel !== defaultLabel;
-    const source = isOverride ? 'kv' : (defaultValue !== undefined ? 'default' : 'unknown');
-    const nextRow = {
-      key,
-      value,
-      defaultValue,
-      valueLabel,
-      defaultLabel,
-      source,
-      isOverride
-    };
-
-    if (existingIndex >= 0) {
-      const next = [...rows.value];
-      next[existingIndex] = nextRow;
-      rows.value = next;
-    } else {
-      rows.value = [nextRow, ...rows.value];
-      allowedCount.value += 1;
-    }
-  };
-
   const saveConfig = async () => {
     editorError.value = '';
     const key = editorKey.value.trim();
@@ -479,7 +372,7 @@ export function useKvAdminConfigsPage() {
     try {
       let response;
       if (mainStore.mockApi) {
-        applyLocalUpsert(key, payloadValue);
+        kvAdminConfigsStore.applyLocalUpsert(key, payloadValue);
         response = { success: true, message: editorMode.value === 'add' ? t('message.kv_admin_page.add_success') : t('message.kv_admin_page.edit_success') };
       } else {
         const endpoint = API_ENDPOINTS.KV_ADMIN_CONFIGS_SPECIFIC.replace(':key', encodeURIComponent(key));
@@ -488,7 +381,7 @@ export function useKvAdminConfigsPage() {
         });
         response = apiResponse.data;
         if (response.success) {
-          applyLocalUpsert(key, payloadValue);
+          kvAdminConfigsStore.applyLocalUpsert(key, payloadValue);
         } else {
           throw new Error(response.error || 'Unknown error');
         }
@@ -530,10 +423,9 @@ export function useKvAdminConfigsPage() {
 
       if (response.success) {
         if (response.data && response.data.defaultValue !== undefined) {
-          applyLocalUpsert(deleteKey.value, response.data.defaultValue);
+          kvAdminConfigsStore.applyLocalUpsert(deleteKey.value, response.data.defaultValue);
         } else {
-          rows.value = rows.value.filter((row) => row.key !== deleteKey.value);
-          allowedCount.value = Math.max(0, allowedCount.value - 1);
+          kvAdminConfigsStore.removeLocalKey(deleteKey.value);
         }
       } else {
         throw new Error(response.error || 'Unknown error');
@@ -633,7 +525,7 @@ export function useKvAdminConfigsPage() {
 
       requestConfigs.forEach((configItem) => {
         if (!failedKeys.has(configItem.key)) {
-          applyLocalUpsert(configItem.key, configItem.value);
+          kvAdminConfigsStore.applyLocalUpsert(configItem.key, configItem.value);
         }
       });
 
