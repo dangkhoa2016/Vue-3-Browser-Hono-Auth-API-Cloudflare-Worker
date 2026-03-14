@@ -38,8 +38,8 @@
               <ActionTextButton
                 variant="soft"
                 shape="full"
-                :icon="loading ? 'bi bi-arrow-clockwise animate-spin' : 'bi bi-arrow-clockwise'"
-                :disabled="loading"
+                :icon="isLoading ? 'bi bi-arrow-clockwise animate-spin' : 'bi bi-arrow-clockwise'"
+                :disabled="isLoading"
                 @click="refresh"
               >
                 {{ $t('message.refresh') }}
@@ -54,7 +54,7 @@
         <template #right>
           <div class="grid grid-cols-2 gap-4">
             <!-- Skeleton for Stats Cards -->
-            <template v-if="loading">
+            <template v-if="isLoading">
               <div v-for="i in 4" :key="i" class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm animate-pulse">
                 <div class="h-3 w-24 bg-slate-200 dark:bg-slate-700/50 rounded mb-4"></div>
                 <div class="flex items-center justify-between">
@@ -107,8 +107,8 @@
 
       <section v-else class="space-y-6">
         <AsyncStateSection
-          :loading="loading"
-          :error="error"
+          :loading="isLoading"
+          :error="errorMessage"
           :is-empty="!hasData"
           :empty-title="$t('message.system_health.empty_title')"
           :empty-message="$t('message.system_health.empty_message')"
@@ -384,7 +384,7 @@ export default {
     const mainStore = useMainStore();
     const heroSectionClass = 'relative overflow-hidden rounded-[32px] border border-slate-200/70 dark:border-slate-800 bg-gradient-to-br from-white via-emerald-50/40 to-cyan-50/40 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 p-8 shadow-[0_24px_80px_-60px_rgba(15,23,42,0.8)]';
 
-    const { healthData, loading, error, lastUpdated } = storeToRefs(systemHealthStore);
+    const { healthData, loading: isLoading, error: errorMessage, lastUpdated } = storeToRefs(systemHealthStore);
 
     const isAuthenticated = computed(() => authStore.isAuthenticated);
     const role = computed(() => String(authStore.user?.role || '').toLowerCase());
@@ -570,8 +570,8 @@ export default {
     });
 
     return {
-      loading,
-      error,
+      isLoading,
+      errorMessage,
       heroSectionClass,
       isAdmin,
       showLoginRequired,

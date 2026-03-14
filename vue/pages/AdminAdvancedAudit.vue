@@ -54,7 +54,7 @@
           <div v-show="activeTab === 'analytics'">
             <AdvancedAuditAnalyticsTab 
               :data="analyticsData" 
-              :loading="loading" 
+              :is-loading="isLoading" 
               @refresh="refreshData" 
             />
           </div>
@@ -63,9 +63,9 @@
           <div v-show="activeTab === 'compliance'">
             <AdvancedAuditComplianceTab 
               :data="complianceData" 
-              :loading="loading" 
+              :is-loading="isLoading" 
               @refresh="refreshData" 
-              @requestPdf="handleRequestPdf"
+              @request-pdf="handleRequestPdf"
             />
           </div>
 
@@ -73,11 +73,11 @@
           <div v-show="activeTab === 'archival'">
             <AdvancedAuditArchivalTab 
               :data="archivalData" 
-              :loading="loading" 
+              :is-loading="isLoading" 
               @refresh="refreshData" 
-              @runArchival="handleRunArchival"
-              @restoreArchive="handleRestoreArchive"
-              @setPolicy="handleSetPolicy"
+              @run-archival="handleRunArchival"
+              @restore-archive="handleRestoreArchive"
+              @set-policy="handleSetPolicy"
             />
           </div>
 
@@ -133,8 +133,8 @@ export default {
     const complianceData = computed(() => auditStore.compliance);
     const archivalData = computed(() => auditStore.archival);
     
-    const localLoading = ref(false);
-    const loading = computed(() => auditStore.loading || localLoading.value);
+    const isLocalLoading = ref(false);
+    const isLoading = computed(() => auditStore.loading || isLocalLoading.value);
     
     const loadTabData = async (tab) => {
       if (tab === 'analytics' && !analyticsData.value) {
@@ -182,7 +182,7 @@ export default {
     });
 
     const refreshData = async () => {
-      localLoading.value = true;
+      isLocalLoading.value = true;
       try {
         const minLoadingTime = new Promise(resolve => setTimeout(resolve, 600));
         let fetchPromise;
@@ -193,7 +193,7 @@ export default {
         
         await Promise.all([fetchPromise, minLoadingTime]);
       } finally {
-        localLoading.value = false;
+        isLocalLoading.value = false;
       }
     };
 
@@ -262,7 +262,7 @@ export default {
       handleRequestPdf,
       handleSetPolicy,
       handleRestoreArchive,
-      loading,
+      isLoading,
       analyticsData,
       complianceData,
       archivalData

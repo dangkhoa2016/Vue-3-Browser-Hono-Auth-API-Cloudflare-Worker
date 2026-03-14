@@ -9,16 +9,16 @@
         </div>
       </div>
       <div class="flex items-center gap-3">
-    <button @click="$emit('refresh')" :disabled="loading || loadingExtras" class="inline-flex items-center gap-2 px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 text-sm font-medium transition-all disabled:opacity-50">
-          <i class="bi bi-arrow-clockwise" :class="{'animate-spin': loading}"></i> <span class="hidden sm:inline">{{ $t('message.advanced_audit.common.reload') }}</span>
+    <button @click="$emit('refresh')" :disabled="isLoading || isExtrasLoading" class="inline-flex items-center gap-2 px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 text-sm font-medium transition-all disabled:opacity-50">
+          <i class="bi bi-arrow-clockwise" :class="{'animate-spin': isLoading}"></i> <span class="hidden sm:inline">{{ $t('message.advanced_audit.common.reload') }}</span>
         </button>
-        <button @click="$emit('requestPdf')" :disabled="loading" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl text-sm font-bold transition-colors shadow-lg shadow-indigo-200 dark:shadow-none inline-flex items-center gap-2 disabled:opacity-50">
+        <button @click="$emit('request-pdf')" :disabled="isLoading" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl text-sm font-bold transition-colors shadow-lg shadow-indigo-200 dark:shadow-none inline-flex items-center gap-2 disabled:opacity-50">
           <i class="bi bi-file-earmark-pdf"></i>{{ $t('message.advanced_audit.compliance.request_full_pdf') }}</button>
       </div>
     </div>
     
     <!-- Top Level Skeleton (Initial load) -->
-    <div v-show="loading && !data" class="animate-pulse space-y-4 mt-6 transition-all">
+    <div v-show="isLoading && !data" class="animate-pulse space-y-4 mt-6 transition-all">
       <div class="h-20 bg-slate-200 dark:bg-slate-700/50 rounded-2xl w-full"></div>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div class="h-64 bg-slate-200 dark:bg-slate-700/50 rounded-2xl"></div>
@@ -27,7 +27,7 @@
     </div>
     
     <!-- Top Level Skeleton (Reloading) -->
-    <div v-show="loading && data" class="animate-pulse space-y-4 mt-6">
+    <div v-show="isLoading && data" class="animate-pulse space-y-4 mt-6">
       <div class="h-20 bg-slate-100 dark:bg-slate-800/80 rounded-2xl w-full border border-slate-200/50 dark:border-slate-700/50"></div>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div class="h-64 bg-slate-100 dark:bg-slate-800/80 rounded-2xl border border-slate-200/50 dark:border-slate-700/50"></div>
@@ -36,7 +36,7 @@
     </div>
     
     <!-- Main Compliance Top Data -->
-    <div v-if="data" v-show="!loading" class="mt-8 space-y-6">
+    <div v-if="data" v-show="!isLoading" class="mt-8 space-y-6">
       <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center p-4 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-200 dark:border-slate-700">
          <div class="flex-1">
             <span class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1 block">{{ $t('message.advanced_audit.compliance.current_report_status') }}</span>
@@ -133,19 +133,19 @@
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
           <h3 class="text-lg font-bold text-slate-800 dark:text-slate-200">{{ $t('message.advanced_audit.compliance.configurations') }}</h3>
           <div class="flex gap-2">
-            <button @click="loadMgmtData" :disabled="loadingExtras" class="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700 rounded-xl font-bold text-sm transition-colors disabled:opacity-50">
-              <i class="bi" :class="loadingExtras ? 'bi-arrow-repeat animate-spin' : 'bi-gear'"></i>{{ $t('message.advanced_audit.compliance.inspect_policy') }}</button>
-            <button @click="runMgmtAction" :disabled="loadingExtras" class="inline-flex items-center gap-2 px-4 py-2 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 dark:bg-indigo-500/10 dark:text-indigo-400 dark:hover:bg-indigo-500/20 rounded-xl font-bold text-sm transition-colors disabled:opacity-50">
-              <i class="bi" :class="loadingExtras ? 'bi-arrow-repeat animate-spin' : 'bi-play-fill'"></i>{{ $t('message.advanced_audit.compliance.enforce_policy') }}</button>
+            <button @click="loadMgmtData" :disabled="isExtrasLoading" class="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700 rounded-xl font-bold text-sm transition-colors disabled:opacity-50">
+              <i class="bi" :class="isExtrasLoading ? 'bi-arrow-repeat animate-spin' : 'bi-gear'"></i>{{ $t('message.advanced_audit.compliance.inspect_policy') }}</button>
+            <button @click="runMgmtAction" :disabled="isExtrasLoading" class="inline-flex items-center gap-2 px-4 py-2 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 dark:bg-indigo-500/10 dark:text-indigo-400 dark:hover:bg-indigo-500/20 rounded-xl font-bold text-sm transition-colors disabled:opacity-50">
+              <i class="bi" :class="isExtrasLoading ? 'bi-arrow-repeat animate-spin' : 'bi-play-fill'"></i>{{ $t('message.advanced_audit.compliance.enforce_policy') }}</button>
           </div>
         </div>
 
         <!-- First Load Skeleton -->
-        <div v-show="loadingExtras && !mgmtData" class="h-32 bg-slate-100 dark:bg-slate-800/50 rounded-xl animate-pulse"></div>
+        <div v-show="isExtrasLoading && !mgmtData" class="h-32 bg-slate-100 dark:bg-slate-800/50 rounded-xl animate-pulse"></div>
         <!-- Reload Skeleton -->
-        <div v-show="loadingExtras && mgmtData" class="h-40 bg-slate-100 dark:bg-slate-800/50 rounded-xl animate-pulse border border-slate-200/50 dark:border-slate-700/50 mb-4"></div>
+        <div v-show="isExtrasLoading && mgmtData" class="h-40 bg-slate-100 dark:bg-slate-800/50 rounded-xl animate-pulse border border-slate-200/50 dark:border-slate-700/50 mb-4"></div>
         
-        <div v-if="mgmtData && !mgmtData.error" v-show="!loadingExtras" class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl p-6 transition-all">
+        <div v-if="mgmtData && !mgmtData.error" v-show="!isExtrasLoading" class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl p-6 transition-all">
           
           <!-- Inspect Policy View -->
           <div v-if="mgmtViewMode === 'inspect'">
@@ -232,7 +232,7 @@
         </div>
 
         <!-- Error State -->
-        <div v-else-if="mgmtData?.error" v-show="!loadingExtras" class="bg-rose-50 dark:bg-rose-900/20 p-4 rounded-xl border border-rose-100 dark:border-rose-900/50 flex items-center gap-3">
+          <div v-else-if="mgmtData?.error" v-show="!isExtrasLoading" class="bg-rose-50 dark:bg-rose-900/20 p-4 rounded-xl border border-rose-100 dark:border-rose-900/50 flex items-center gap-3">
            <i class="bi bi-exclamation-triangle-fill text-rose-500"></i>
            <div class="text-sm font-medium text-rose-700 dark:text-rose-400">Failed to process: {{ mgmtData.error }}</div>
         </div>
@@ -252,20 +252,20 @@ export default {
       type: Object,
       default: null
     },
-    loading: {
+    isLoading: {
       type: Boolean,
       default: false
     }
   },
-  emits: ['refresh', 'requestPdf'],
+  emits: ['refresh', 'request-pdf'],
   setup(props, { emit }) {
     const store = useAdvancedAuditStore();
-    const loadingExtras = ref(false);
+    const isExtrasLoading = ref(false);
     const mgmtData = ref(null);
     const mgmtViewMode = ref(null);
 
     const loadMgmtData = async () => {
-      loadingExtras.value = true;
+      isExtrasLoading.value = true;
       mgmtViewMode.value = 'inspect';
       try {
         const res = await store.fetchComplianceManagement(true);
@@ -273,12 +273,12 @@ export default {
       } catch (err) {
         mgmtData.value = { error: err.message };
       } finally {
-        loadingExtras.value = false;
+        isExtrasLoading.value = false;
       }
     };
 
     const runMgmtAction = async () => {
-      loadingExtras.value = true;
+      isExtrasLoading.value = true;
       mgmtViewMode.value = 'enforce';
       try {
         const res = await store.manageCompliance({ action: 'evaluate', framework: 'soc2' }, true);
@@ -286,12 +286,12 @@ export default {
       } catch (err) {
         mgmtData.value = { error: err.message };
       } finally {
-        loadingExtras.value = false;
+        isExtrasLoading.value = false;
       }
     };
 
     return {
-      loadingExtras,
+      isExtrasLoading,
       mgmtData,
       mgmtViewMode,
       loadMgmtData,

@@ -38,7 +38,7 @@
                 variant="soft"
                 icon="bi bi-arrow-clockwise"
                 shape="full"
-                :disabled="loading"
+                :disabled="isLoading"
                 @click="refresh"
               >
                 {{ $t('message.refresh') }}
@@ -122,10 +122,10 @@
       </section>
 
       <section v-else class="space-y-6">
-        <div v-if="error" class="rounded-[28px] border border-rose-200 dark:border-rose-800 bg-rose-50 dark:bg-rose-900/20 p-6 text-rose-700 dark:text-rose-300">
+        <div v-if="errorMessage" class="rounded-[28px] border border-rose-200 dark:border-rose-800 bg-rose-50 dark:bg-rose-900/20 p-6 text-rose-700 dark:text-rose-300">
           <div class="flex items-center gap-2">
             <i class="bi bi-exclamation-triangle-fill"></i>
-            <span>{{ error }}</span>
+            <span>{{ errorMessage }}</span>
           </div>
         </div>
 
@@ -244,8 +244,8 @@ export default {
     const modalStore = useModalStore();
     const mainStore = useMainStore();
 
-    const loading = ref(false);
-    const error = ref(null);
+    const isLoading = ref(false);
+    const errorMessage = ref(null);
     const heroSectionClass = 'relative overflow-hidden rounded-[32px] border border-slate-200/70 dark:border-slate-800 bg-gradient-to-br from-white via-indigo-50/40 to-emerald-50/40 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 p-8 shadow-[0_24px_80px_-60px_rgba(15,23,42,0.8)]';
     const quickActionCardClass = 'group rounded-2xl border border-slate-200/70 dark:border-slate-700 p-4 bg-slate-50/70 dark:bg-slate-800/50 hover:border-indigo-300 dark:hover:border-indigo-600 hover:shadow-md transition';
     const currentStep = ref('');
@@ -441,14 +441,14 @@ export default {
 
     const refresh = async () => {
       if (!isAuthenticated.value || !isAdmin.value) return;
-      if (loading.value) {
+      if (isLoading.value) {
         queuedRefresh.value = true;
         return;
       }
 
-      loading.value = true;
+      isLoading.value = true;
       showProgressPanel.value = true;
-      error.value = null;
+      errorMessage.value = null;
       hasLoaded.value = {
         stats: false,
         health: false,
@@ -502,11 +502,11 @@ export default {
         const firstMessage = String(firstError?.message || '').trim();
         const fallback = t('message.errors.unknown_error');
         const suffix = failed.length > 1 ? ` (+${failed.length - 1})` : '';
-        error.value = `${firstMessage || fallback}${suffix}`;
+        errorMessage.value = `${firstMessage || fallback}${suffix}`;
         console.warn('[AdminDashboard] Sequential refresh failed:', failed);
       }
 
-      loading.value = false;
+      isLoading.value = false;
       currentStep.value = '';
       currentStepIndex.value = 0;
       totalSteps.value = 0;
@@ -552,8 +552,8 @@ export default {
     });
 
     return {
-      loading,
-      error,
+      isLoading,
+      errorMessage,
       heroSectionClass,
       quickActionCardClass,
       isAdmin,
