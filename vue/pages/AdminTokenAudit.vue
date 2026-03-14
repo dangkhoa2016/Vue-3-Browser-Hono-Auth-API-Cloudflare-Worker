@@ -42,9 +42,9 @@
             <ActionTextButton
               variant="soft"
               shape="full"
-              :icon="loading ? 'bi bi-arrow-clockwise animate-spin' : 'bi bi-arrow-clockwise'"
+              :icon="isLoading ? 'bi bi-arrow-clockwise animate-spin' : 'bi bi-arrow-clockwise'"
               :title="tf('message.common.retry_title', 'Reload')"
-              :disabled="loading"
+              :disabled="isLoading"
               class="w-full sm:w-auto justify-center whitespace-nowrap"
               @click="fetchLogs"
             >
@@ -102,7 +102,7 @@
       </section>
 
       <!-- Main Content Area -->
-      <div v-if="loading && items.length === 0" class="flex flex-col items-center justify-center p-12 bg-white/50 dark:bg-slate-900/50 rounded-3xl border border-slate-200/60 dark:border-slate-800/60 backdrop-blur-sm shadow-sm">
+      <div v-if="isLoading && items.length === 0" class="flex flex-col items-center justify-center p-12 bg-white/50 dark:bg-slate-900/50 rounded-3xl border border-slate-200/60 dark:border-slate-800/60 backdrop-blur-sm shadow-sm">
         <div class="relative w-16 h-16 mb-4">
           <div class="absolute inset-0 rounded-full border-4 border-slate-100 dark:border-slate-800"></div>
           <div class="absolute inset-0 rounded-full border-4 border-indigo-500 border-t-transparent animate-spin"></div>
@@ -110,9 +110,9 @@
         <p class="text-slate-500 dark:text-slate-400 font-medium animate-pulse">{{ tf('message.common.loading_data', 'Loading data...') }}</p>
       </div>
 
-      <div v-else-if="error" class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-3xl p-8 text-center shadow-sm">
+      <div v-else-if="errorMessage" class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-3xl p-8 text-center shadow-sm">
          <i class="bi bi-exclamation-octagon text-4xl text-red-500 mb-3"></i>
-         <p class="text-red-700 dark:text-red-400 font-medium">{{ error }}</p>
+        <p class="text-red-700 dark:text-red-400 font-medium">{{ errorMessage }}</p>
          <ActionTextButton icon="bi bi-arrow-clockwise" tone="red" size="sm" shape="pill" class="mt-4" @click="fetchLogs">
            {{ tf('message.common.retry', 'Retry') }}
          </ActionTextButton>
@@ -194,13 +194,13 @@
         
         <!-- Pagination -->
         <div class="px-5 py-4 border-t border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30">
-          <PaginationControls :current-page="pagination.page || 1" :total-pages="pagination.totalPages || 1" :loading="loading" @change="changePage" />
+          <PaginationControls :current-page="pagination.page || 1" :total-pages="pagination.totalPages || 1" :loading="isLoading" @change="changePage" />
         </div>
       </div>
     </template>
 
     <!-- Details Modal -->
-    <ModalWindow :show="showDetailModal" :title="tf('message.token_audit.detail_modal.title', 'Audit Log Details')" panelClass="!max-w-4xl !p-0 !overflow-hidden flex flex-col token-audit-detail-modal" @close="closeDetailModal">
+    <ModalWindow :show="showDetailModal" :title="tf('message.token_audit.detail_modal.title', 'Audit Log Details')" panel-class="!max-w-4xl !p-0 !overflow-hidden flex flex-col token-audit-detail-modal" @close="closeDetailModal">
       <div v-if="isFetchingLog" class="p-0 flex flex-col h-full">
         <div class="bg-gradient-to-r from-slate-100 to-slate-50 dark:from-slate-800 dark:to-slate-800/50 px-6 py-5 border-b border-slate-200 dark:border-slate-800 animate-pulse shrink-0">
           <div class="flex items-center justify-between mb-2 pr-8">
@@ -408,8 +408,8 @@ export default {
 
     // Data state mapped from store
     const items = computed(() => auditStore.items);
-    const loading = computed(() => auditStore.loading);
-    const error = computed(() => auditStore.error);
+    const isLoading = computed(() => auditStore.loading);
+    const errorMessage = computed(() => auditStore.error);
     const pagination = computed(() => auditStore.pagination);
     
     // Details
@@ -609,8 +609,8 @@ export default {
       actionsCellClass,
       
       items,
-      loading,
-      error,
+      isLoading,
+      errorMessage,
       searchQuery,
       pagination,
       showLoginRequired,

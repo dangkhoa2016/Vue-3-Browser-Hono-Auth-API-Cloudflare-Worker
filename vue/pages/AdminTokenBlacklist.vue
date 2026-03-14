@@ -44,8 +44,8 @@
               size="md"
               :title="$t('message.common.refresh')"
               @click="fetchTokens"
-              :class="{ 'animate-spin': loading }"
-              :disabled="loading"
+                :class="{ 'animate-spin': isLoading }"
+                :disabled="isLoading"
             />
             <ActionTextButton
               icon="bi bi-plus-lg"
@@ -78,7 +78,7 @@
       </section>
 
       <!-- Main Content Area -->
-      <div v-if="loading && items.length === 0" class="flex flex-col items-center justify-center p-12 bg-white/50 dark:bg-slate-900/50 rounded-3xl border border-slate-200/60 dark:border-slate-800/60 backdrop-blur-sm shadow-sm">
+      <div v-if="isLoading && items.length === 0" class="flex flex-col items-center justify-center p-12 bg-white/50 dark:bg-slate-900/50 rounded-3xl border border-slate-200/60 dark:border-slate-800/60 backdrop-blur-sm shadow-sm">
         <div class="relative w-16 h-16 mb-4">
           <div class="absolute inset-0 rounded-full border-4 border-slate-100 dark:border-slate-800"></div>
           <div class="absolute inset-0 rounded-full border-4 border-red-500 border-t-transparent animate-spin"></div>
@@ -86,9 +86,9 @@
         <p class="text-slate-500 dark:text-slate-400 font-medium animate-pulse">{{ tf('message.common.loading_data', 'Loading data...') }}</p>
       </div>
 
-      <div v-else-if="error" class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-3xl p-8 text-center shadow-sm">
+      <div v-else-if="errorMessage" class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-3xl p-8 text-center shadow-sm">
          <i class="bi bi-exclamation-octagon text-4xl text-red-500 mb-3"></i>
-         <p class="text-red-700 dark:text-red-400 font-medium">{{ error }}</p>
+        <p class="text-red-700 dark:text-red-400 font-medium">{{ errorMessage }}</p>
          <ActionTextButton icon="bi bi-arrow-clockwise" tone="red" size="sm" shape="pill" class="mt-4" @click="fetchTokens">
            {{ tf('message.common.retry', 'Retry') }}
          </ActionTextButton>
@@ -153,7 +153,7 @@
           <PaginationControls
             :current-page="pagination.page"
             :total-pages="pagination.totalPages || 1"
-            :loading="loading"
+            :loading="isLoading"
             @change="changePage"
           />
         </div>
@@ -268,8 +268,8 @@ export default {
 
     // Data state mapped from store
     const items = computed(() => blacklistStore.items);
-    const loading = computed(() => blacklistStore.loading);
-    const error = computed(() => blacklistStore.error);
+    const isLoading = computed(() => blacklistStore.loading);
+    const errorMessage = computed(() => blacklistStore.error);
     const pagination = computed(() => blacklistStore.pagination);
     
     // Local state for UI
@@ -404,8 +404,8 @@ export default {
 
     return {
       items,
-      loading,
-      error,
+      isLoading,
+      errorMessage,
       searchQuery,
       pagination,
       showLoginRequired,
