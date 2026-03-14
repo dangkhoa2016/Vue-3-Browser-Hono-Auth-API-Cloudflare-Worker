@@ -2,6 +2,7 @@ const { axios } = window;
 const MockAdapter = window.AxiosMockAdapter;
 import { i18n } from './i18n.js';
 import { sleep } from './helper.js';
+import { getAuthStore } from './appServices.js';
 
 // API Configuration Constants
 const API_CONFIG = {
@@ -262,10 +263,10 @@ apiClient.interceptors.request.use(async (config) => {
   // Set Accept-Language header for backend detection
   config.headers['Accept-Language'] = lang;
 
-  // Dynamically import auth store once for request auth guards
+  // Get auth store via appServices (avoids window.authStore global)
   let authStore = null;
   try {
-    authStore = window.authStore;
+    authStore = getAuthStore();
   } catch (error) {
     console.warn('[API] Error loading auth store in request interceptor:', error);
   }
@@ -337,8 +338,8 @@ apiClient.interceptors.response.use(undefined, async (err) => {
         console.log('[API] Got 401, attempting to refresh token...');
         
         try {
-          // Access authStore from window globally to avoid circular dependency
-          const authStore = window.authStore;
+          // Get auth store via appServices
+          const authStore = getAuthStore();
 
           // Check if we have a refresh token
           if (authStore && authStore.refreshToken && !authStore.isRefreshTokenExpired) {
