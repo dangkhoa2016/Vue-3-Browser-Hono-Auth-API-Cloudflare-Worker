@@ -1,0 +1,31 @@
+name: vue-quality-check
+
+on:
+  pull_request:
+    paths:
+      - 'vue/**'
+      - 'assets/js/router.js'
+      - 'tools/vue-file-size-check.cjs'
+      - '.github/workflows/vue-quality-check.yml'
+  push:
+    branches: [ main, master ]
+    paths:
+      - 'vue/**'
+      - 'assets/js/router.js'
+      - 'tools/vue-file-size-check.cjs'
+      - '.github/workflows/vue-quality-check.yml'
+
+jobs:
+  vue-file-size-guard:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Check Vue file size limits (warn-only baseline)
+        run: node tools/vue-file-size-check.cjs --warn-only
