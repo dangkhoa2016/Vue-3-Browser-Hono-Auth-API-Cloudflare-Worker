@@ -114,56 +114,30 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref, watch } from 'vue';
-import { useI18n } from 'vue-i18n';
-import { apiClient, API_ENDPOINTS } from '/assets/js/api.js';
-import { useMainStore } from '/assets/js/stores/mainStore.js';
+import { computed } from 'vue';
+import { API_ENDPOINTS } from '/assets/js/api.js';
 import ActionTextButton from '/vue/components/ActionTextButton.vue';
 import ModalWindow from '/vue/components/ModalWindow.vue';
-import { useModalState } from '../composables/useModalState.js';
+import { usePublicEndpointPage } from '/vue/composables/usePublicEndpointPage.js';
 
-const { t } = useI18n({ useScope: 'global' });
-const mainStore = useMainStore();
-const isLoading = ref(false);
-const errorMessage = ref('');
-const payload = ref(null);
-const jsonModal = useModalState({ initialMode: 'json' });
-const showJsonModal = jsonModal.isOpen;
+const {
+  isLoading,
+  errorMessage,
+  payload,
+  showJsonModal,
+  endpointData,
+  endpointMessage,
+  formattedPayload,
+  loadData,
+  openJsonModal,
+  closeJsonModal
+} = usePublicEndpointPage({
+  endpointPath: API_ENDPOINTS.PUBLIC_HEALTH,
+  loadErrorKey: 'message.public_endpoints.health.load_error'
+});
 
-const endpointData = computed(() => payload.value?.data || {});
-const endpointMessage = computed(() => payload.value?.message || endpointData.value?.message || '—');
 const healthStatus = computed(() => String(endpointData.value?.status || 'unknown'));
 const isHealthy = computed(() => ['ok', 'healthy', 'running'].includes(healthStatus.value.toLowerCase()));
 const healthTextClass = computed(() => (isHealthy.value ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'));
 const healthDotClass = computed(() => (isHealthy.value ? 'bg-emerald-500' : 'bg-rose-500'));
-const formattedPayload = computed(() => JSON.stringify(payload.value ?? {}, null, 2));
-
-const loadData = async () => {
-  try {
-    isLoading.value = true;
-    errorMessage.value = '';
-    const response = await apiClient.get(API_ENDPOINTS.PUBLIC_HEALTH);
-    payload.value = response.data;
-  } catch (err) {
-    errorMessage.value = err?.response?.data?.error || err?.message || t('message.public_endpoints.health.load_error');
-  } finally {
-    isLoading.value = false;
-  }
-};
-
-const openJsonModal = () => {
-  if (!payload.value) return;
-  jsonModal.open(null, 'json');
-};
-
-const closeJsonModal = () => {
-  jsonModal.close({ reset: true });
-};
-
-watch(() => mainStore.mockApi, async (value, oldValue) => {
-  if (value === oldValue) return;
-  await loadData();
-});
-
-onMounted(loadData);
 </script>
