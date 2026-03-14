@@ -1,6 +1,7 @@
 import { reactive, ref, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { sleep } from '/assets/js/helper.js';
+import { safeFetch, safeImport, loadStyle, loadJs } from '/assets/js/utils/loaderUtils.js';
 
 export default {
   setup() {
@@ -10,62 +11,6 @@ export default {
     const stageCurrentItem = reactive({});
     const completed = ref(false);
     const hasError = ref(false);
-
-    // Helper functions
-    const formatItemLabel = (stageLabel, itemLabel) => stageLabel ? `${stageLabel}: ${itemLabel}` : itemLabel;
-
-    const safeFetch = async (url, stageLabel) => {
-      currentAction.value = t('message.loader.loading', { stage: stageLabel || '', item: url });
-      try {
-        const res = await fetch(url);
-        if (!res.ok) {
-          const msg = res.status === 404 ? t('message.errors.not_found') : (res.statusText || t('message.errors.something_went_wrong'));
-          throw new Error(msg);
-        }
-        return res;
-      } catch (e) {
-        throw new Error(t('message.errors.failed_to_load', { item: url, message: e.message }));
-      }
-    };
-
-    const safeImport = async (item, stageLabel) => {
-      currentAction.value = t('message.loader.loading', { stage: stageLabel || '', item: item.label });
-      try {
-        return await import(item.url);
-      } catch (e) {
-        let msg = e.message;
-        try {
-          const res = await fetch(item.url);
-          if (!res.ok) {
-            msg = res.status === 404 ? t('message.errors.not_found') : t('message.errors.something_went_wrong');
-          }
-        } catch (_) {
-          msg = t('message.errors.network_error');
-        }
-        throw new Error(t('message.errors.failed_to_load', { item: item.url, message: msg }));
-      }
-    };
-
-    const loadStyle = (item, stageLabel) => {
-      currentAction.value = t('message.loader.loading', { stage: stageLabel || '', item: item.label });
-      return new Promise((resolve, reject) => {
-        const link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = item.url;
-        link.onload = resolve;
-        link.onerror = async () => {
-          let msg = t('message.errors.network_error');
-          try {
-            const res = await fetch(item.url);
-            if (!res.ok) {
-              msg = res.status === 404 ? t('message.errors.not_found') : (res.statusText || t('message.errors.something_went_wrong'));
-            }
-          } catch (_) { }
-          reject(new Error(t('message.errors.failed_to_load', { item: item.url, message: msg })));
-        };
-        document.head.appendChild(link);
-      });
-    };
 
     const runStageWithItems = async (stage) => {
       const totalItems = stage.items.length || 1;
@@ -84,7 +29,7 @@ export default {
           await stage.loader(item, stageLabel);
         }
         progress[stage.id] = Math.min(100, progress[stage.id] + step);
-        await sleep(100);
+        // // await sleep(100); // delay removed // delay removed
       }
 
       stageCurrentItem[stage.id] = '';
@@ -99,7 +44,7 @@ export default {
         id: 'assets',
         label: t('message.loader.assets') || 'Assets',
         loader: async (item) => {
-          await loadStyle(item, t('message.loader.assets'));
+          await loadStyle({ t, currentAction }, item, t('message.loader.assets'));
         },
         items: [
           { label: t('message.loader.items.nprogress_css'), url: 'https://unpkg.com/nprogress@0.2.0/nprogress.css' },
@@ -111,7 +56,7 @@ export default {
         id: 'libraries',
         label: t('message.loader.libraries') || 'Libraries',
         loader: async (item) => {
-          await loadJs(item, t('message.loader.libraries'));
+          await loadJs({ t, currentAction }, item, t('message.loader.libraries'));
         },
         items: [
           { 
@@ -156,7 +101,7 @@ export default {
         id: 'components',
         label: t('message.loader.components') || 'Components',
         loader: async (item) => {
-          await safeFetch(item.url, t('message.loader.components'));
+          await safeFetch({ t, currentAction }, item.url, t('message.loader.components'));
         },
         items: [
           { label: t('message.loader.items.app_vue'), url: '/vue/App.vue' }
@@ -166,7 +111,7 @@ export default {
         id: 'store',
         label: t('message.loader.store') || 'Store',
         loader: async (item) => {
-          await safeImport(item, t('message.loader.store'));
+          await safeImport({ t, currentAction }, item, t('message.loader.store'));
         },
         items: [
           { label: t('message.loader.items.main_store'), url: '/assets/js/stores/mainStore.js' }
@@ -199,7 +144,7 @@ export default {
             label: t('message.loader.finalizing'),
             run: async () => {
               currentAction.value = t('message.loader.finalizing') + '...';
-              await sleep(1500);
+              // // await sleep(1500); // delay removed // delay removed
             }
           }
         ]
@@ -261,7 +206,7 @@ export default {
           if (hasError.value) break; // Double check to ensure we stop
           currentStage.value = stage.label;
           await stage.action();
-          await sleep(200); // Delay between stages
+          // await sleep(200); // removed
         }
       } catch (e) {
         console.log('Error during loading stages:', e);
@@ -273,61 +218,6 @@ export default {
 
       if (!hasError.value)
         finishLoadApp();
-    };
-
-    const loadJs = async (item, stageLabel) => {
-      // Direct load without pre-fetch check to avoid CORS issues with some CDNs
-      return new Promise((resolve, reject) => {
-        const script = document.createElement('script');
-        script.src = item.url;
-        if (item.crossOrigin) script.crossOrigin = item.crossOrigin;
-
-        const errorHandler = (event) => {
-          // Relaxed check to catch errors during this specific script load time if filename matches or is ambiguous
-          const isTargetScript = event.filename === item.url || (event.filename === '' && event.message === 'Script error.');
-          
-          if (isTargetScript) {
-            cleanup();
-            // If it is a generic Script Error, it means we couldn't get details (likely CORS).
-            // If we have details (because crossOrigin was set), use them.
-            const errorMsg = event.message === 'Script error.' 
-              ? t('message.errors.script_execution_failed', { message: 'Script error (CORS/Execution mismatch)' }) 
-              : t('message.errors.script_execution_failed', { message: `${formatItemLabel(stageLabel, item.label)} -> ${event.message}` });
-            
-            reject(new Error(errorMsg));
-          }
-        };
-
-        const cleanup = () => {
-          window.removeEventListener('error', errorHandler);
-          script.onload = null;
-          script.onerror = null;
-        };
-
-        window.addEventListener('error', errorHandler);
-
-        script.onload = () => {
-          cleanup();
-          resolve();
-        };
-
-        script.onerror = async () => {
-          cleanup();
-          const name = item.label || item.url;
-          let msg = t('message.errors.network_error');
-          try {
-            const res = await fetch(item.url);
-            if (!res.ok) {
-              msg = res.status === 404 ? t('message.errors.not_found') : (res.statusText || t('message.errors.something_went_wrong'));
-            }
-          } catch (_) {
-            console.log('Failed to fetch script for error details:', _);
-          }
-          reject(new Error(t('message.errors.failed_to_load', { item: name, message: msg })));
-        };
-
-        document.head.appendChild(script);
-      });
     };
 
     const retryLoading = () => {

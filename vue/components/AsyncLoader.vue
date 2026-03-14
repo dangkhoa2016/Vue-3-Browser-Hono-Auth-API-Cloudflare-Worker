@@ -25,7 +25,7 @@
           </div>
 
           <h2 class="text-2xl font-black text-slate-800 dark:text-slate-100 mb-4 tracking-tight">
-            {{ error.message && (error.message.includes('404') || error.message.includes('Failed to fetch') || error.message.includes('Not Found')) ? $t('message.loader.component_not_found') : $t('message.page_load_error.title') }}
+            {{ isNotFoundError ? $t('message.loader.component_not_found') : $t('message.page_load_error.title') }}
           </h2>
 
           <p class="text-slate-600 dark:text-slate-200/80 text-lg mb-8 leading-relaxed max-w-sm mx-auto">
@@ -68,8 +68,7 @@
 </template>
 
 <script setup>
-import { shallowRef, onMounted, onUnmounted, onActivated, onErrorCaptured } from 'vue';
-import { sleep } from '/assets/js/helper.js';
+import { shallowRef, onMounted, onUnmounted, onActivated, onErrorCaptured, computed } from 'vue';
 import { getSfcOptions } from '/assets/js/appServices.js';
 
 const props = defineProps({
@@ -80,6 +79,28 @@ const resolvedComponent = shallowRef(null);
 const error = shallowRef(null);
 const isLoading = shallowRef(false);
 let isMounted = true;
+
+/**
+ * Checks if the error is related to component not found
+ * @type {import('vue').ComputedRef<boolean>}
+ */
+const isNotFoundError = computed(() => {
+  if (!error.value) return false;
+  if (error.value.code === 'MODULE_NOT_FOUND' || error.value.status === 404) return true;
+  const msg = error.value.message || '';
+  return msg.includes('404') || msg.includes('Failed to fetch') || msg.includes('Not Found');
+});
+
+/**
+ * Checks if the error is related to component not found
+ * @type {import('vue').ComputedRef<boolean>}
+ */
+const isNotFoundError = computed(() => {
+  if (!error.value) return false;
+  if (error.value.code === 'MODULE_NOT_FOUND' || error.value.status === 404) return true;
+  const msg = error.value.message || '';
+  return msg.includes('404') || msg.includes('Failed to fetch') || msg.includes('Not Found');
+});
 
 onErrorCaptured((err) => {
   // If the error is an API error (AxiosError, 401, etc) bubbling from a child component's
@@ -106,10 +127,11 @@ onUnmounted(() => {
 });
 
 const fetchComponent = async () => {
+  console.time(`[AsyncLoader] Load ${props.path}`);
   if (isLoading.value) return;
   isLoading.value = true;
   error.value = null;
-  await sleep(250);
+  // removed artificial delay
 
   if (window.NProgress) window.NProgress.start();
 
@@ -125,6 +147,7 @@ const fetchComponent = async () => {
       const component = await loadModule(props.path, sfcOptions);
       if (!isMounted) { isLoading.value = false; return; }
 
+      console.timeEnd(`[AsyncLoader] Load ${props.path}`);
       resolvedComponent.value = component;
       if (window.NProgress) window.NProgress.done();
       isLoading.value = false;
@@ -136,7 +159,8 @@ const fetchComponent = async () => {
         delete sfcOptions.moduleCache[props.path];
       }
 
-      console.warn(`Attempt ${i + 1} failed to load ${props.path}:`, err);
+      console.timeEnd(`[AsyncLoader] Load ${props.path}`);
+      console.warn(`[AsyncLoader] Attempt ${i + 1} failed to load ${props.path}:`, err);
       if (i < retryCount - 1) {
         await new Promise(resolve => setTimeout(resolve, retryDelay));
       } else {
