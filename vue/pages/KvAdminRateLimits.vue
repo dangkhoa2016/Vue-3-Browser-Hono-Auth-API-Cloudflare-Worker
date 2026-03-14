@@ -99,82 +99,20 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue';
-import { useI18n } from 'vue-i18n';
-import { apiClient, API_ENDPOINTS } from '/assets/js/api.js';
-import { useAuthStore } from '/assets/js/stores/authStore.js';
-import { useModalStore } from '/assets/js/stores/modalStore.js';
-import { useToastStore } from '/assets/js/stores/toastStore.js';
 import ActionTextButton from '/vue/components/ActionTextButton.vue';
 import LoginRequiredPrompt from '/vue/components/LoginRequiredPrompt.vue';
 import PageHeroSection from '/vue/components/PageHeroSection.vue';
-import { useAuthGate } from '../composables/useAuthGate.js';
+import { useKvAdminRateLimitsPage } from '/vue/composables/useKvAdminRateLimitsPage.js';
 
-const { t } = useI18n();
-const authStore = useAuthStore();
-const modalStore = useModalStore();
-const toastStore = useToastStore();
-
-const { showLoginRequired, openLoginModal, ensureAuthenticated, handleAuthStateChange } = useAuthGate({
-  authStore,
-  modalStore
-});
-const isSuperAdmin = computed(() => authStore.user?.role?.toLowerCase() === 'super_admin');
-const isLoading = ref(false);
-const result = ref(null);
-
-const cleanForm = ref({ prefix: 'rate_limit:', dryRun: true });
-const pruneForm = ref({ prefix: 'rate_limit:', start: '', end: '', dryRun: true });
-
-const runClean = async () => {
-  isLoading.value = true;
-  result.value = null;
-  try {
-    const res = await apiClient.post(API_ENDPOINTS.KV_ADMIN_RATE_LIMITS_CLEAN, cleanForm.value, {
-      headers: { Authorization: `Bearer ${authStore.token}` }
-    });
-    result.value = res.data;
-    toastStore.add('Clean operation completed', 'success');
-  } catch (err) {
-    toastStore.add('Clean operation failed', 'error');
-    result.value = err.response?.data || err.message;
-  } finally {
-    isLoading.value = false;
-  }
-};
-
-const runPrune = async () => {
-  isLoading.value = true;
-  result.value = null;
-  try {
-    const payload = {
-      ...pruneForm.value,
-      start: new Date(pruneForm.value.start).getTime(),
-      end: new Date(pruneForm.value.end).getTime()
-    };
-    const res = await apiClient.post(API_ENDPOINTS.KV_ADMIN_RATE_LIMITS_PRUNE_TIME, payload, {
-      headers: { Authorization: `Bearer ${authStore.token}` }
-    });
-    result.value = res.data;
-    toastStore.add('Prune operation completed', 'success');
-  } catch (err) {
-    toastStore.add('Prune operation failed', 'error');
-    result.value = err.response?.data || err.message;
-  } finally {
-    isLoading.value = false;
-  }
-};
-
-onMounted(() => {
-  ensureAuthenticated({ checkSessionFlag: true, openModal: false });
-
-  const now = new Date();
-  const past = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-  pruneForm.value.start = past.toISOString().slice(0, 16);
-  pruneForm.value.end = now.toISOString().slice(0, 16);
-});
-
-watch(() => authStore.isAuthenticated, async (val) => {
-  await handleAuthStateChange(val);
-});
+const {
+  showLoginRequired,
+  openLoginModal,
+  isSuperAdmin,
+  isLoading,
+  result,
+  cleanForm,
+  pruneForm,
+  runClean,
+  runPrune
+} = useKvAdminRateLimitsPage();
 </script>
