@@ -61,18 +61,24 @@ node tools/i18n.js check
 
 CI (tùy chọn, chỉ dành cho GitHub Actions) có sẵn tại `.github/workflows/i18n-check.yml`, chạy `node tools/i18n.js check` trên push/PR khi có thay đổi file i18n. Điều này không liên quan tới runtime local trên browser.
 
-## Guard chất lượng Phase 4 (tùy chọn)
+## Guard chất lượng
 
 ```bash
 # Kiểm tra giới hạn kích thước file Vue
 node tools/vue-file-size-check.cjs
+
+# Kiểm tra custom lint cho Vue
+node tools/vue-custom-lint.cjs
+
+# Kiểm tra độ phủ script-setup (mặc định đồng bộ CI)
+node tools/vue-script-setup-coverage.cjs
 
 # Tùy chỉnh giới hạn
 node tools/vue-file-size-check.cjs --page-limit=600 --component-limit=450
 ```
 
 - Mặc định: pages <= 600 dòng, components <= 450 dòng.
-- Workflow CI: `.github/workflows/vue-quality-check.yml` (hiện chạy `--warn-only` trong giai đoạn migrate dần).
+- Workflow CI: `.github/workflows/vue-quality-check.yml` (chế độ strict, fail khi vi phạm).
 - Tài liệu boundary kiến trúc: `documents/FRONTEND_ARCHITECTURE_BOUNDARIES.vi.md`.
 
 ## Đóng góp
