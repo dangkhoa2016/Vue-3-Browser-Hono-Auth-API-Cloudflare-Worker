@@ -47,14 +47,14 @@
         </template>
         <template #right>
           <div class="flex items-center gap-3">
-            <ActionTextButton tone="slate" icon="bi bi-arrow-clockwise" :loading="loading" @click="fetchComparison">
+            <ActionTextButton tone="slate" icon="bi bi-arrow-clockwise" :loading="isLoading" @click="fetchComparison">
               {{ tf('message.kv_admin_page.reload', 'Reload') }}
             </ActionTextButton>
           </div>
         </template>
 
         <!-- Summary Stats (Loaded State) -->
-        <div v-if="!loading && summary.total" class="relative mt-8 p-4 rounded-2xl bg-white/60 dark:bg-slate-800/60 border border-slate-200/50 dark:border-slate-700/50 backdrop-blur-sm flex flex-wrap gap-4 items-center">
+        <div v-if="!isLoading && summary.total" class="relative mt-8 p-4 rounded-2xl bg-white/60 dark:bg-slate-800/60 border border-slate-200/50 dark:border-slate-700/50 backdrop-blur-sm flex flex-wrap gap-4 items-center">
              <button @click="sourceFilter = 'all'" :class="['flex flex-col px-4 border-r border-slate-200 dark:border-slate-700 hover:opacity-80 transition cursor-pointer', sourceFilter === 'all' ? 'bg-slate-100 dark:bg-slate-700 rounded-lg py-1' : 'py-1']">
                <span class="text-xs text-slate-500 dark:text-slate-400 font-medium uppercase tracking-wider">{{ tf('message.kv_admin_page.stats_total', 'Total') }}</span>
                <span class="text-xl font-bold text-slate-800 dark:text-slate-200">{{ summary.total }}</span>
@@ -118,14 +118,14 @@
 
       <!-- Main Data Table -->
       <div class="bg-white dark:bg-slate-900 rounded-[28px] border border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden">
-        <div v-if="loading" class="p-12 text-center text-slate-500 dark:text-slate-400">
+        <div v-if="isLoading" class="p-12 text-center text-slate-500 dark:text-slate-400">
            <i class="bi bi-arrow-repeat animate-spin text-4xl text-indigo-400 dark:text-indigo-600 mb-4 block"></i>
           <p>{{ tf('message.kv_admin_page.env_comparison.loading', 'Loading comparison data...') }}</p>
         </div>
         
-        <div v-else-if="error" class="p-12 text-center text-rose-500">
+        <div v-else-if="errorMessage" class="p-12 text-center text-rose-500">
            <i class="bi bi-exclamation-triangle text-4xl mb-4 block"></i>
-           <p>{{ error }}</p>
+          <p>{{ errorMessage }}</p>
         </div>
 
         <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6 p-4 lg:p-6 bg-slate-50/50 dark:bg-slate-900/50">
@@ -190,8 +190,8 @@ export default {
     const mainStore = useMainStore();
 
     const isSuperAdmin = computed(() => authStore.user?.role?.toLowerCase() === 'super_admin');
-    const loading = ref(false);
-    const error = ref(null);
+    const isLoading = ref(false);
+    const errorMessage = ref(null);
     const comparison = ref({});
     const summary = ref({});
     const search = ref('');
@@ -250,8 +250,8 @@ export default {
 
     const fetchComparison = async () => {
       if (!isSuperAdmin.value) return;
-      loading.value = true;
-      error.value = null;
+      isLoading.value = true;
+      errorMessage.value = null;
       try {
         const res = await apiClient.get('/api/kv-admin/configs/env-comparison', {
           headers: { Authorization: `Bearer ${authStore.token}` }
@@ -267,14 +267,14 @@ export default {
         if (err.response?.status === 401 || err.response?.status === 403 || err?.code === 'REAUTH_REQUIRED') {
           authStore.logout();
           markUnauthenticated();
-          error.value = 'Session expired';
+          errorMessage.value = 'Session expired';
           openLoginModal();
         } else {
-          error.value = err.response?.data?.error || err.message || t('message.kv_admin_page.env_comparison.error_load_failed') || 'Error loading data';
+          errorMessage.value = err.response?.data?.error || err.message || t('message.kv_admin_page.env_comparison.error_load_failed') || 'Error loading data';
           toastStore.add(t('message.kv_admin_page.env_comparison.error_load_failed') || 'Failed to load environment comparison', 'error');
         }
       } finally {
-        loading.value = false;
+        isLoading.value = false;
       }
     };
 
@@ -291,7 +291,7 @@ export default {
     });
 
     return {
-      showLoginRequired, isSuperAdmin, loading, error, 
+      showLoginRequired, isSuperAdmin, isLoading, errorMessage,
       comparison, summary, search, sourceFilter, filteredKeys,
       openLoginModal, formatValue, sourceBadgeClass: getKvEnvSourceBadgeClass, fetchComparison, tf
     };
