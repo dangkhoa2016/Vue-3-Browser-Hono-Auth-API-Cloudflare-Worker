@@ -15,13 +15,13 @@
         <div>
           <div class="inline-flex items-center gap-2 rounded-full bg-rose-900/10 text-rose-800 dark:bg-rose-400/10 dark:text-rose-200 px-3 py-1 text-xs font-semibold tracking-[0.2em]">
             <span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
-            {{ $t('message.security_incidents.badge') || 'Threat Monitoring' }}
+            {{ tf('message.security_incidents.badge', 'Threat Monitoring') }}
           </div>
           <h1 class="mt-4 text-3xl md:text-4xl font-black text-slate-900 dark:text-white">
-            {{ $t('message.security_incidents.title') || 'Security Incidents' }}
+            {{ tf('message.security_incidents.title', 'Security Incidents') }}
           </h1>
           <p class="mt-2 text-slate-600 dark:text-slate-300 max-w-2xl">
-            {{ $t('message.security_incidents.subtitle') || 'Monitor and review detected security incidents.' }}
+            {{ tf('message.security_incidents.subtitle', 'Monitor and review detected security incidents.') }}
           </p>
           <div class="mt-6 flex flex-wrap items-center gap-3">
             <ActionTextButton
@@ -31,7 +31,7 @@
               :title="$t('message.common.retry_title')"
               @click="refresh"
             >
-              {{ $t('message.refresh') || 'Refresh' }}
+              {{ tf('message.refresh', 'Refresh') }}
             </ActionTextButton>
           </div>
         </div>
@@ -162,7 +162,7 @@
           :loading="loading"
           :error="error"
           :is-empty="filteredIncidents.length === 0"
-          :empty-title="$t('message.security_incidents.no_data') || 'No incidents found.'"
+          :empty-title="tf('message.security_incidents.no_data', 'No incidents found.')"
         >
           <template #loading>
             <div class="p-6 space-y-4 animate-pulse">
@@ -183,7 +183,7 @@
                 icon="bi bi-arrow-clockwise"
                 @click="refresh"
               >
-                {{ $t('message.common.retry') || 'Retry' }}
+                {{ tf('message.common.retry', 'Retry') }}
               </ActionTextButton>
             </div>
           </template>
@@ -192,10 +192,10 @@
             <table class="max-[992px]:mt-4 mt-0 min-w-full text-sm max-[992px]:block">
               <thead class="bg-slate-50 dark:bg-slate-800/70 text-slate-500 dark:text-slate-400 uppercase tracking-wider max-[992px]:hidden">
                 <tr>
-                  <th class="px-6 py-3 text-center">{{ $t('message.security_incidents.actions') || 'Actions' }}</th>
-                  <th class="px-6 py-3 text-left">{{ $t('message.security_incidents.incident') || 'Incident' }}</th>
-                  <th class="px-6 py-3 text-left">{{ $t('message.security_incidents.severity_status') || 'Severity / Status' }}</th>
-                  <th class="px-6 py-3 text-left">{{ $t('message.security_incidents.when_by') || 'When / By' }}</th>
+                  <th class="px-6 py-3 text-center">{{ tf('message.security_incidents.actions', 'Actions') }}</th>
+                  <th class="px-6 py-3 text-left">{{ tf('message.security_incidents.incident', 'Incident') }}</th>
+                  <th class="px-6 py-3 text-left">{{ tf('message.security_incidents.severity_status', 'Severity / Status') }}</th>
+                  <th class="px-6 py-3 text-left">{{ tf('message.security_incidents.when_by', 'When / By') }}</th>
                 </tr>
               </thead>
               <tbody class="max-[992px]:block max-[992px]:px-4">
@@ -204,18 +204,18 @@
                   :key="incident.id"
                   :class="tableRowClass"
                 >
-                  <td :class="actionsCellClass" :data-label="$t('message.security_incidents.actions') || 'Actions'">
+                  <td :class="actionsCellClass" :data-label="tf('message.security_incidents.actions', 'Actions')">
                     <div class="flex items-center justify-center gap-2">
                       <ActionIconButton
                         @click="openIncident(incident)"
                         icon="bi bi-eye-fill"
                         tone="indigo"
-                        :title="$t('message.security_incidents.view_details') || 'View'"
-                        :aria-label="$t('message.security_incidents.view_details') || 'View'"
+                        :title="tf('message.security_incidents.view_details', 'View')"
+                        :aria-label="tf('message.security_incidents.view_details', 'View')"
                       />
                     </div>
                   </td>
-                  <td :class="incidentCellClass" :data-label="$t('message.security_incidents.incident') || 'Incident'">
+                  <td :class="incidentCellClass" :data-label="tf('message.security_incidents.incident', 'Incident')">
                     <div class="space-y-2 max-[992px]:text-right">
                       <div class="font-semibold">#{{ incident.id }} · {{ incident.title }}</div>
                       <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold" :class="typeBadgeClass(incident.type)">
@@ -223,7 +223,7 @@
                       </span>
                     </div>
                   </td>
-                  <td :class="severityStatusCellClass" :data-label="$t('message.security_incidents.severity_status') || 'Severity / Status'">
+                  <td :class="severityStatusCellClass" :data-label="tf('message.security_incidents.severity_status', 'Severity / Status')">
                     <div class="flex flex-wrap gap-2 max-[992px]:justify-end">
                       <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold" :class="severityBadgeClass(incident.severity)">
                         {{ incident.severity }}
@@ -233,7 +233,7 @@
                       </span>
                     </div>
                   </td>
-                  <td :class="whenByCellClass" :data-label="$t('message.security_incidents.when_by') || 'When / By'">
+                  <td :class="whenByCellClass" :data-label="tf('message.security_incidents.when_by', 'When / By')">
                     <div class="space-y-1 max-[992px]:text-right">
                       <div>{{ formatDate(incident.detected_at) }}</div>
                       <div class="font-semibold text-slate-700 dark:text-slate-200">{{ incident.created_by }}</div>
@@ -261,7 +261,7 @@
     </section>
 
     <!-- Incident Details Modal -->
-    <ModalWindow :show="showModal" :title="$t('message.security_incidents.details') || 'Incident Details'" @close="closeIncident" :panelClass="'max-w-3xl sm:max-w-4xl w-full'">
+    <ModalWindow :show="showModal" :title="tf('message.security_incidents.details', 'Incident Details')" @close="closeIncident" :panelClass="'max-w-3xl sm:max-w-4xl w-full'">
       <div v-if="selectedIncident" class="space-y-4">
         <div class="flex flex-col gap-2">
           <div class="font-bold text-lg">{{ selectedIncident.title }}</div>
@@ -269,32 +269,32 @@
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <div class="font-semibold">{{$t('message.security_incidents.type') || 'Type'}}:</div>
+            <div class="font-semibold">{{ tf('message.security_incidents.type', 'Type') }}:</div>
             <div>{{ selectedIncident.type }}</div>
           </div>
           <div>
-            <div class="font-semibold">{{$t('message.security_incidents.severity') || 'Severity'}}:</div>
+            <div class="font-semibold">{{ tf('message.security_incidents.severity', 'Severity') }}:</div>
             <div>{{ selectedIncident.severity }}</div>
           </div>
           <div>
-            <div class="font-semibold">{{$t('message.security_incidents.status') || 'Status'}}:</div>
+            <div class="font-semibold">{{ tf('message.security_incidents.status', 'Status') }}:</div>
             <div>{{ selectedIncident.status }}</div>
           </div>
           <div>
-            <div class="font-semibold">{{$t('message.security_incidents.detected_at') || 'Detected At'}}:</div>
+            <div class="font-semibold">{{ tf('message.security_incidents.detected_at', 'Detected At') }}:</div>
             <div>{{ formatDate(selectedIncident.detected_at) }}</div>
           </div>
           <div>
-            <div class="font-semibold">{{$t('message.security_incidents.created_by') || 'Created By'}}:</div>
+            <div class="font-semibold">{{ tf('message.security_incidents.created_by', 'Created By') }}:</div>
             <div>{{ selectedIncident.created_by }}</div>
           </div>
         </div>
         <div v-if="selectedIncident.metadata" class="mt-4">
-          <div class="font-semibold mb-1">{{$t('message.security_incidents.metadata') || 'Metadata'}}:</div>
+          <div class="font-semibold mb-1">{{ tf('message.security_incidents.metadata', 'Metadata') }}:</div>
           <pre class="bg-slate-100 dark:bg-slate-800 rounded-lg p-3 text-xs overflow-x-auto">{{ JSON.stringify(selectedIncident.metadata, null, 2) }}</pre>
         </div>
         <div v-if="selectedIncident.tags && selectedIncident.tags.length" class="mt-2">
-          <div class="font-semibold mb-1">{{$t('message.security_incidents.tags') || 'Tags'}}:</div>
+          <div class="font-semibold mb-1">{{ tf('message.security_incidents.tags', 'Tags') }}:</div>
           <div class="flex flex-wrap gap-2">
             <span v-for="tag in selectedIncident.tags" :key="tag" class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-slate-200 text-slate-700 dark:bg-slate-700 dark:text-slate-200">{{ tag }}</span>
           </div>
@@ -307,7 +307,6 @@
 <script>
 import { computed, ref, onMounted, watch } from 'vue';
 const { storeToRefs } = Pinia;
-import { useI18n } from 'vue-i18n';
 import { useSecurityIncidentStore } from '/assets/js/stores/securityIncidentStore.js';
 import { useMainStore } from '/assets/js/stores/mainStore.js';
 import ModalWindow from '/vue/components/ModalWindow.vue';
@@ -319,6 +318,7 @@ import PageHeroSection from '/vue/components/PageHeroSection.vue';
 import StatCard from '/vue/components/StatCard.vue';
 import { useDebouncedFilters } from '/vue/composables/useDebouncedFilters.js';
 import { useModalState } from '/vue/composables/useModalState.js';
+import { useI18nFallback } from '/vue/composables/useI18nFallback.js';
 import {
   getSecurityIncidentTypeBadgeClass,
   getSecurityIncidentSeverityBadgeClass,
@@ -329,7 +329,7 @@ export default {
   name: 'AdminSecurityIncidents',
   components: { ModalWindow, PaginationControls, ActionIconButton, ActionTextButton, AsyncStateSection, PageHeroSection, StatCard },
   setup() {
-    const { t } = useI18n({ useScope: 'global' });
+    const { t, tf } = useI18nFallback();
     const mainStore = useMainStore();
     const securityStore = useSecurityIncidentStore();
     const { incidents, loading, error, pagination } = storeToRefs(securityStore);
@@ -482,6 +482,7 @@ export default {
 
     return {
       t,
+      tf,
       incidents,
       filteredIncidents,
       loading,

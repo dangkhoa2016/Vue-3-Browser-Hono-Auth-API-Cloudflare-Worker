@@ -127,8 +127,8 @@
                 icon="bi bi-x-lg"
                 tone="indigo"
                 class="absolute right-2 top-1/2 -translate-y-1/2"
-                :title="$t('message.common.clear') || 'Clear'"
-                :aria-label="$t('message.common.clear') || 'Clear'"
+                :title="tf('message.common.clear', 'Clear')"
+                :aria-label="tf('message.common.clear', 'Clear')"
                 @click="clearSearch"
               />
             </div>
@@ -304,8 +304,8 @@
             <ActionIconButton
               icon="bi bi-x-lg"
               tone="indigo"
-              :title="$t('message.common.close') || 'Close'"
-              :aria-label="$t('message.common.close') || 'Close'"
+              :title="tf('message.common.close', 'Close')"
+              :aria-label="tf('message.common.close', 'Close')"
               @click="closeEditor"
             />
           </div>
@@ -362,8 +362,8 @@
             <ActionIconButton
               icon="bi bi-x-lg"
               tone="indigo"
-              :title="$t('message.common.close') || 'Close'"
-              :aria-label="$t('message.common.close') || 'Close'"
+              :title="tf('message.common.close', 'Close')"
+              :aria-label="tf('message.common.close', 'Close')"
               @click="closeBulkModal"
             />
           </div>
@@ -471,7 +471,7 @@
               shape="full"
               @click="closeDelete"
             >
-              {{ $t('message.kv_admin_page.cancel') || 'Cancel' }}
+              {{ tf('message.kv_admin_page.cancel', 'Cancel') }}
             </ActionTextButton>
             <ActionTextButton
               tone="rose"
@@ -480,7 +480,7 @@
               :disabled="isDeleting"
               @click="confirmDelete"
             >
-              {{ $t('message.kv_admin_page.delete_action') || 'Delete' }}
+              {{ tf('message.kv_admin_page.delete_action', 'Delete') }}
             </ActionTextButton>
           </div>
         </div>
@@ -492,7 +492,6 @@
 
 <script>
 import { computed, nextTick, onMounted, ref, watch } from 'vue';
-import { useI18n } from 'vue-i18n';
 import { apiClient, API_ENDPOINTS } from '/assets/js/api.js';
 import { useAuthStore } from '/assets/js/stores/authStore.js';
 import { useModalStore } from '/assets/js/stores/modalStore.js';
@@ -505,13 +504,14 @@ import PageHeroSection from '/vue/components/PageHeroSection.vue';
 import { useAuthGate } from '/vue/composables/useAuthGate.js';
 import { useModalState } from '/vue/composables/useModalState.js';
 import { useDebouncedFilters } from '/vue/composables/useDebouncedFilters.js';
+import { useI18nFallback } from '/vue/composables/useI18nFallback.js';
 import { getKvSourceBadgeClass } from '/vue/composables/useUiClassMap.js';
 
 export default {
   name: 'KvAdminConfigs',
   components: { ActionTextButton, ActionIconButton, LoginRequiredPrompt, PageHeroSection },
   setup() {
-    const { t } = useI18n({ useScope: 'global' });
+    const { t, tf } = useI18nFallback();
     const authStore = useAuthStore();
     const modalStore = useModalStore();
     const mainStore = useMainStore();
@@ -1231,6 +1231,7 @@ export default {
     return {
       showLoginRequired,
       isSuperAdmin,
+      tf,
       loading,
       error,
       search,

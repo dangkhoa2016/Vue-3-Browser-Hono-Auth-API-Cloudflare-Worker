@@ -25,7 +25,7 @@
           <div>
             <div class="inline-flex items-center gap-2 rounded-full bg-teal-900/10 text-teal-800 dark:bg-teal-400/10 dark:text-teal-200 px-3 py-1 text-xs font-semibold tracking-[0.2em]">
               <span class="w-2 h-2 rounded-full bg-teal-500 animate-pulse"></span>
-              {{ $t('message.admin_users.badge') || 'Account Administration' }}
+              {{ tf('message.admin_users.badge', 'Account Administration') }}
             </div>
             <h1 class="mt-4 text-3xl md:text-4xl font-black text-slate-900 dark:text-white">
               {{ $t('message.admin_users.title') }}
@@ -104,8 +104,8 @@
                 icon="bi bi-x-lg"
                 tone="indigo"
                 class="absolute right-2 top-1/2 -translate-y-1/2"
-                :title="$t('message.common.clear') || 'Clear'"
-                :aria-label="$t('message.common.clear') || 'Clear'"
+                :title="tf('message.common.clear', 'Clear')"
+                :aria-label="tf('message.common.clear', 'Clear')"
                 @click="search = ''; $refs.searchInput && $refs.searchInput.focus()"
               />
             </div>
@@ -216,15 +216,15 @@
                           @click="openEditModal(userItem)"
                           icon="bi bi-pencil-fill"
                           tone="indigo"
-                          :title="$t('message.common.edit') || 'Edit'"
-                          :aria-label="$t('message.common.edit') || 'Edit'"
+                          :title="tf('message.common.edit', 'Edit')"
+                          :aria-label="tf('message.common.edit', 'Edit')"
                         />
                         <ActionIconButton
                           @click="confirmDelete(userItem)"
                           icon="bi bi-trash-fill"
                           tone="rose"
-                          :title="$t('message.common.delete') || 'Delete'"
-                          :aria-label="$t('message.common.delete') || 'Delete'"
+                          :title="tf('message.common.delete', 'Delete')"
+                          :aria-label="tf('message.common.delete', 'Delete')"
                         />
                       </div>
                     </td>
@@ -299,7 +299,6 @@
 
 <script>
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
-import { useI18n } from 'vue-i18n';
 import { useAuthStore } from '/assets/js/stores/authStore.js';
 import { useMainStore } from '/assets/js/stores/mainStore.js';
 import { useModalStore } from '/assets/js/stores/modalStore.js';
@@ -318,6 +317,7 @@ import StatCard from '../components/StatCard.vue';
 import { useAuthGate } from '/vue/composables/useAuthGate.js';
 import { useDebouncedFilters } from '/vue/composables/useDebouncedFilters.js';
 import { useModalState } from '/vue/composables/useModalState.js';
+import { useI18nFallback } from '/vue/composables/useI18nFallback.js';
 import { getUserRoleBadgeClass, getUserStatusBadgeClass } from '/vue/composables/useUiClassMap.js';
 
 export default {
@@ -335,7 +335,7 @@ export default {
     StatCard
   },
   setup() {
-    const { t } = useI18n({ useScope: 'global' });
+    const { t, tf } = useI18nFallback();
     const authStore = useAuthStore();
     const mainStore = useMainStore();
     const modalStore = useModalStore();
@@ -784,6 +784,7 @@ export default {
 
     return {
       t,
+      tf,
       authStore,
       showLoginRequired,
       error,
