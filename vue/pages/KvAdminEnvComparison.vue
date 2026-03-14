@@ -166,123 +166,28 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue';
-import { apiClient, API_ENDPOINTS } from '/assets/js/api.js';
-import { useAuthStore } from '/assets/js/stores/authStore.js';
-import { useModalStore } from '/assets/js/stores/modalStore.js';
-import { useToastStore } from '/assets/js/stores/toastStore.js';
-import { useMainStore } from '/assets/js/stores/mainStore.js';
 import ActionTextButton from '/vue/components/ActionTextButton.vue';
 import LoginRequiredPrompt from '/vue/components/LoginRequiredPrompt.vue';
 import PageHeroSection from '/vue/components/PageHeroSection.vue';
-import { useAuthGate } from '../composables/useAuthGate.js';
-import { useI18nFallback } from '../composables/useI18nFallback.js';
+import { useKvAdminEnvComparisonPage } from '/vue/composables/useKvAdminEnvComparisonPage.js';
 import { getKvEnvSourceBadgeClass } from '/vue/composables/useUiClassMap.js';
 
-const { t, tf } = useI18nFallback();
-const authStore = useAuthStore();
-const modalStore = useModalStore();
-const toastStore = useToastStore();
-const mainStore = useMainStore();
-
-const isSuperAdmin = computed(() => authStore.user?.role?.toLowerCase() === 'super_admin');
-const isLoading = ref(false);
-const errorMessage = ref(null);
-const comparison = ref({});
-const summary = ref({});
-const search = ref('');
-const sourceFilter = ref('all');
-
-const { showLoginRequired, openLoginModal, ensureAuthenticated, handleAuthStateChange, markUnauthenticated } = useAuthGate({
-  authStore,
-  modalStore,
-  onAuthenticated: async () => {
-    if (isSuperAdmin.value) {
-      await fetchComparison();
-    }
-  }
-});
-
-const checkAuthAndLoad = async () => {
-  const ok = await ensureAuthenticated({ checkSessionFlag: true, openModal: false });
-  if (ok && isSuperAdmin.value) {
-    await fetchComparison();
-  }
-};
-
-const formatValue = (val) => {
-  if (val === null || val === undefined) return t('message.kv_admin_page.env_comparison.value_none') || '- none -';
-  if (typeof val === 'object') return JSON.stringify(val);
-  if (val === '') return t('message.kv_admin_page.env_comparison.value_empty_string') || '"" (Empty string)';
-  return String(val);
-};
-
-const filteredKeys = computed(() => {
-  let keys = Object.keys(comparison.value);
-
-  if (sourceFilter.value !== 'all') {
-    keys = keys.filter(k => comparison.value[k].source === sourceFilter.value);
-  }
-
-  if (search.value) {
-    const term = search.value.toLowerCase();
-    keys = keys.filter(k => {
-      if (k.toLowerCase().includes(term)) return true;
-
-      const item = comparison.value[k];
-      const kvStr = typeof item.kv === 'object' && item.kv !== null ? JSON.stringify(item.kv) : String(item.kv ?? '');
-      const envStr = typeof item.env === 'object' && item.env !== null ? JSON.stringify(item.env) : String(item.env ?? '');
-
-      if (kvStr.toLowerCase().includes(term)) return true;
-      if (envStr.toLowerCase().includes(term)) return true;
-
-      return false;
-    });
-  }
-  return keys.sort();
-});
-
-const fetchComparison = async () => {
-  if (!isSuperAdmin.value) return;
-  isLoading.value = true;
-  errorMessage.value = null;
-  try {
-    const res = await apiClient.get('/api/kv-admin/configs/env-comparison', {
-      headers: { Authorization: `Bearer ${authStore.token}` }
-    });
-
-    if (res.data.success) {
-      comparison.value = res.data.data.comparison;
-      summary.value = res.data.data.summary;
-    } else {
-      throw new Error(res.data.error || 'Failed to fetch comparison');
-    }
-  } catch (err) {
-    if (err.response?.status === 401 || err.response?.status === 403 || err?.code === 'REAUTH_REQUIRED') {
-      authStore.logout();
-      markUnauthenticated();
-      errorMessage.value = 'Session expired';
-      openLoginModal();
-    } else {
-      errorMessage.value = err.response?.data?.error || err.message || t('message.kv_admin_page.env_comparison.error_load_failed') || 'Error loading data';
-      toastStore.add(t('message.kv_admin_page.env_comparison.error_load_failed') || 'Failed to load environment comparison', 'error');
-    }
-  } finally {
-    isLoading.value = false;
-  }
-};
-
-onMounted(checkAuthAndLoad);
-
-watch(() => authStore.isAuthenticated, async (val) => {
-  await handleAuthStateChange(val);
-});
-
-watch(() => mainStore.mockApi, async (value, oldValue) => {
-  if (value === oldValue) return;
-  if (!authStore.isAuthenticated || !isSuperAdmin.value) return;
-  await fetchComparison();
-});
+const {
+  t,
+  tf,
+  showLoginRequired,
+  openLoginModal,
+  isSuperAdmin,
+  isLoading,
+  errorMessage,
+  comparison,
+  summary,
+  search,
+  sourceFilter,
+  filteredKeys,
+  fetchComparison,
+  formatValue
+} = useKvAdminEnvComparisonPage();
 
 const sourceBadgeClass = getKvEnvSourceBadgeClass;
 </script>
