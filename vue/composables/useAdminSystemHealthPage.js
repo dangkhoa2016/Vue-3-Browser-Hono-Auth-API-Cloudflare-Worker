@@ -2,6 +2,7 @@ import { computed, onActivated, onMounted, watch } from 'vue';
 const { storeToRefs } = Pinia;
 import { i18n } from '/assets/js/i18n.js';
 import { useSystemHealthStore } from '/assets/js/stores/systemHealthStore.js';
+import { useSystemStatsStore } from '/assets/js/stores/systemStatsStore.js';
 import { useAuthStore } from '/assets/js/stores/authStore.js';
 import { useModalStore } from '/assets/js/stores/modalStore.js';
 import { useMainStore } from '/assets/js/stores/mainStore.js';
@@ -10,12 +11,27 @@ import { getHealthTextClass, getHealthCheckBadgeClass, getBooleanHealthTextClass
 
 export function useAdminSystemHealthPage() {
   const systemHealthStore = useSystemHealthStore();
+  const systemStatsStore = useSystemStatsStore();
   const authStore = useAuthStore();
   const modalStore = useModalStore();
   const mainStore = useMainStore();
   const heroSectionClass = 'relative overflow-hidden rounded-[32px] border border-slate-200/70 dark:border-slate-800 bg-gradient-to-br from-white via-emerald-50/40 to-cyan-50/40 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 p-8 shadow-[0_24px_80px_-60px_rgba(15,23,42,0.8)]';
 
-  const { healthData, loading: isLoading, error: errorMessage, lastUpdated } = storeToRefs(systemHealthStore);
+  const {
+    healthData,
+    loading: healthLoading,
+    error: healthError,
+    lastUpdated: healthLastUpdated
+  } = storeToRefs(systemHealthStore);
+  const {
+    statsData,
+    loading: statsLoading,
+    error: statsError,
+    lastUpdated: statsLastUpdated
+  } = storeToRefs(systemStatsStore);
+
+  const isLoading = computed(() => Boolean(healthLoading.value || statsLoading.value));
+  const errorMessage = computed(() => healthError.value || statsError.value || null);
 
   const isAuthenticated = computed(() => authStore.isAuthenticated);
   const role = computed(() => String(authStore.user?.role || '').toLowerCase());
@@ -88,19 +104,29 @@ export function useAdminSystemHealthPage() {
     ) || 0
   }));
 
-  const stats = computed(() => ({
-    totalUsers: Number(healthData.value?.system?.statistics?.totalUsers) || 0,
-    activeUsers: Number(healthData.value?.system?.statistics?.activeUsers) || 0,
-    inactiveUsers: Number(healthData.value?.system?.statistics?.inactiveUsers) || 0,
-    suspendedUsers: Number(healthData.value?.system?.statistics?.suspendedUsers) || 0,
-    recentRegistrations: Number(healthData.value?.system?.statistics?.recentRegistrations) || 0
-  }));
+  const stats = computed(() => {
+    const storeStats = statsData.value || {};
+    const healthStats = healthData.value?.system?.statistics || {};
 
-  const roleCounts = computed(() => ({
-    super_admin: Number(healthData.value?.system?.statistics?.usersByRole?.super_admin) || 0,
-    admin: Number(healthData.value?.system?.statistics?.usersByRole?.admin) || 0,
-    user: Number(healthData.value?.system?.statistics?.usersByRole?.user) || 0
-  }));
+    return {
+      totalUsers: Number(storeStats.totalUsers ?? healthStats.totalUsers) || 0,
+      activeUsers: Number(storeStats.activeUsers ?? healthStats.activeUsers) || 0,
+      inactiveUsers: Number(storeStats.inactiveUsers ?? healthStats.inactiveUsers) || 0,
+      suspendedUsers: Number(storeStats.suspendedUsers ?? healthStats.suspendedUsers) || 0,
+      recentRegistrations: Number(storeStats.recentRegistrations ?? healthStats.recentRegistrations) || 0
+    };
+  });
+
+  const roleCounts = computed(() => {
+    const storeUsersByRole = statsData.value?.usersByRole || {};
+    const healthUsersByRole = healthData.value?.system?.statistics?.usersByRole || {};
+
+    return {
+      super_admin: Number(storeUsersByRole.super_admin ?? healthUsersByRole.super_admin) || 0,
+      admin: Number(storeUsersByRole.admin ?? healthUsersByRole.admin) || 0,
+      user: Number(storeUsersByRole.user ?? healthUsersByRole.user) || 0
+    };
+  });
 
   const performance = computed(() => ({
     responseTime: String(
@@ -143,8 +169,10 @@ export function useAdminSystemHealthPage() {
     role: String(healthData.value?.metadata?.checkedBy?.role || '-')
   }));
 
-  const lastUpdatedLabel = computed(() => healthData.value?.timestamp || lastUpdated.value);
-  const hasData = computed(() => Boolean(healthData.value));
+  const lastUpdatedLabel = computed(() => {
+    return healthData.value?.timestamp || healthLastUpdated.value || statsLastUpdated.value;
+  });
+  const hasData = computed(() => Boolean(healthData.value || statsData.value));
 
   const formatDate = (value) => {
     if (!value) return '-';
@@ -167,12 +195,18 @@ export function useAdminSystemHealthPage() {
 
   const refresh = async () => {
     if (!isAuthenticated.value || !isAdmin.value) return;
-    await systemHealthStore.fetchSystemHealth();
+    await Promise.allSettled([
+      systemHealthStore.fetchSystemHealth(),
+      systemStatsStore.fetchSystemStats()
+    ]);
   };
 
   const loadInitial = async () => {
     if (!isAuthenticated.value || !isAdmin.value) return;
-    await systemHealthStore.fetchSystemHealth();
+    await Promise.allSettled([
+      systemHealthStore.fetchSystemHealth(),
+      systemStatsStore.fetchSystemStats()
+    ]);
   };
 
   const { showLoginRequired, openLoginModal, ensureAuthenticated, handleAuthStateChange } = useAuthGate({
