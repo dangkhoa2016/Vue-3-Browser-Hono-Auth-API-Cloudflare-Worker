@@ -3,9 +3,9 @@
     <LoginRequiredPrompt
       v-if="showLoginRequired"
       tone="blue"
-      :title="$t?.('message.auth.login_required') || 'Login Required'"
-      :message="$t?.('message.auth.login_required_message') || 'Please login with administrator privileges to view advanced audit features.'"
-      :button-text="$t?.('message.auth.login') || 'Login'"
+      :title="$t('message.auth.login_required')"
+      :message="$t('message.auth.login_required_message')"
+      :button-text="$t('message.auth.login')"
       @action="openLoginModal"
     />
 
