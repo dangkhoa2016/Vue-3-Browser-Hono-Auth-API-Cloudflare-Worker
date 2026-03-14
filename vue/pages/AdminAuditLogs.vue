@@ -438,21 +438,13 @@
 </template>
 
 <script>
-import { onMounted, watch, ref, computed } from 'vue';
-import { useAuditStore } from '/assets/js/stores/auditStore.js';
-import { useMainStore } from '/assets/js/stores/mainStore.js';
-import { useAuthStore } from '/assets/js/stores/authStore.js';
-import { useModalStore } from '/assets/js/stores/modalStore.js';
-import { useToastStore } from '/assets/js/stores/toastStore.js';
 import ModalWindow from '/vue/components/ModalWindow.vue';
 import PaginationControls from '/vue/components/PaginationControls.vue';
 import ActionIconButton from '/vue/components/ActionIconButton.vue';
 import ActionTextButton from '/vue/components/ActionTextButton.vue';
 import LoginRequiredPrompt from '/vue/components/LoginRequiredPrompt.vue';
 import PageHeroSection from '/vue/components/PageHeroSection.vue';
-import { useAuthGate } from '/vue/composables/useAuthGate.js';
-import { useI18nFallback } from '/vue/composables/useI18nFallback.js';
-import { useModalState } from '/vue/composables/useModalState.js';
+import { useAdminAuditLogsPage } from '/vue/composables/useAdminAuditLogsPage.js';
 
 export default {
   name: 'AdminAuditLogs',
@@ -465,404 +457,52 @@ export default {
     PageHeroSection
   },
   setup() {
-    const auditStore = useAuditStore();
-    const toastStore = useToastStore();
-
-    const logDetailModal = useModalState({
-      initialMode: 'view',
-      initialValue: null
-    });
-    const showModal = logDetailModal.isOpen;
-    const selectedLog = logDetailModal.value;
-    const tableTopRef = ref(null);
-
-    const heroSectionClass =
-      'relative overflow-hidden rounded-[32px] border border-slate-200/70 dark:border-slate-800 bg-gradient-to-br from-white via-cyan-50/40 to-teal-50/40 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 p-8 shadow-[0_24px_80px_-60px_rgba(15,23,42,0.8)]';
-    const filtersPanelClass =
-      'bg-gradient-to-r from-slate-50/80 to-slate-100/80 dark:from-slate-800/80 dark:to-slate-700/80 rounded-2xl p-6 mb-6 border border-slate-200/60 dark:border-slate-700/60 shadow-sm space-y-5';
-    const filterInputClass =
-      'w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-200/80 dark:border-slate-600 bg-white dark:bg-slate-800 text-sm text-slate-700 dark:text-slate-200 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition';
-    const filterSelectClass =
-      'w-full px-3 py-2.5 rounded-xl border border-slate-200/80 dark:border-slate-600 bg-white dark:bg-slate-800 text-sm text-slate-700 dark:text-slate-200 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition';
-    const actorAvatarClass =
-      'w-10 h-10 rounded-full bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-700 flex items-center justify-center text-sm font-semibold text-slate-800 dark:text-slate-100';
-    const actorRoleBadgeBaseClass = 'inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold whitespace-nowrap';
-
-    const totalLogCount = computed(() => auditStore.error ? 0 : (Number(auditStore.pagination.total) || auditStore.logs.length || 0));
-    const successCount = computed(() => auditStore.error ? 0 : (auditStore.logs || []).filter((log) => (log.status || '').toUpperCase() === 'SUCCESS').length);
-    const issueCount = computed(() => auditStore.error ? 0 : (auditStore.logs || []).filter((log) => {
-      const status = (log.status || '').toUpperCase();
-      return status === 'FAILED' || status === 'UNAUTHORIZED';
-    }).length);
-
-    const formatDate = (d) => {
-      if (!d) return '';
-      const dt = new Date(d);
-      return dt.toLocaleString();
-    };
-
-    const formatDetails = (obj) => {
-      try {
-        if (!obj) return '';
-        if (typeof obj === 'string') return obj;
-        return JSON.stringify(obj, null, 2);
-      } catch (e) {
-        return String(obj);
-      }
-    };
-
-    const avatarInitial = (log) => {
-      if (!log) return 'U'; // U for Unknown or User
-
-      const normalize = (val) => {
-        if (val == null) return '';
-        if (typeof val === 'object') {
-          if (val.name) return String(val.name);
-          if (val.email) return String(val.email);
-          return '';
-        }
-        return String(val);
-      };
-
-      // Prioritized, minimal candidates based on response.json: name, email local-part, user, id
-      const candidates = [
-        log.actor_name,
-        log.actor_email,
-        log.user_email,
-        log.actor_id,
-        log.id
-      ];
-
-      for (const c of candidates) {
-        const s = normalize(c).trim();
-        if (!s) continue;
-        const token = s.includes('@') ? s.split('@')[0] : s.split(/\s+/)[0];
-        const match = token.match(/[A-Za-z0-9]/);
-        if (match) return match[0].toUpperCase();
-      }
-
-      return 'U';
-    };
-
-    const actorDisplay = (log) => {
-      if (!log) return '-';
-      if (log.actor_name) return log.actor_name;
-      if (log.actor_email) {
-        try {
-          const local = String(log.actor_email).split('@')[0];
-          return local || log.actor_email;
-        } catch (e) {
-          return log.actor_email;
-        }
-      }
-      if (log.user_email) {
-        try {
-          const local = String(log.user_email).split('@')[0];
-          return local || log.user_email;
-        } catch (e) {
-          return log.user_email;
-        }
-      }
-      if (log.actor_id) return `#${log.actor_id}`;
-      return '-';
-    };
-
-    const actorRoleBadgeClass = (role) => {
-      const normalized = (role || '').toString().toLowerCase();
-      if (normalized === 'super_admin') {
-        return `${actorRoleBadgeBaseClass} bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300`;
-      }
-      if (normalized === 'admin') {
-        return `${actorRoleBadgeBaseClass} bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-300`;
-      }
-      return `${actorRoleBadgeBaseClass} bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-200`;
-    };
-
-    const mainStore = useMainStore();
-    const { t, tf } = useI18nFallback();
-    const authStore = useAuthStore();
-    const modalStore = useModalStore();
-
-    const {
-      showLoginRequired,
-      openLoginModal,
-      ensureAuthenticated,
-      handleAuthStateChange
-    } = useAuthGate({
-      authStore,
-      modalStore,
-      sessionAuthFlagKey: 'authRequired',
-      onAuthenticated: async () => {
-        await auditStore.fetchLogs();
-      },
-      onModalSuccess: async () => {
-        await auditStore.fetchLogs();
-      }
-    });
-
-    watch(() => mainStore.mockApi, async (value, oldValue) => {
-      if (value === oldValue) return;
-      if (!authStore.isAuthenticated || showLoginRequired.value) return;
-      // Only refetch when value actually changes
-      auditStore.fetchLogs();
-    });
-
-
-    const onExport = async (format = 'csv') => {
-      try {
-        await auditStore.export(format);
-        showToast('Export started', 'success');
-      } catch (err) {
-        console.error('Export failed', err);
-        showToast('Export failed', 'error');
-      }
-    };
-
-    const applyFilters = () => {
-      auditStore.filters.page = 1;
-      auditStore.fetchLogs();
-    };
-
-    const clearFilters = () => {
-      auditStore.filters.search = '';
-      auditStore.filters.action = '';
-      auditStore.filters.actorId = '';
-      auditStore.filters.targetType = '';
-      auditStore.filters.actorRole = '';
-      auditStore.filters.startDate = '';
-      auditStore.filters.endDate = '';
-      auditStore.filters.page = 1;
-      auditStore.fetchLogs();
-    };
-
-    const scrollToTableTop = () => {
-      if (tableTopRef.value && typeof tableTopRef.value.scrollIntoView === 'function') {
-        const rect = tableTopRef.value.getBoundingClientRect();
-        const y = Math.max(0, window.scrollY + rect.top - 100);
-        window.scrollTo({ top: y, behavior: 'smooth' });
-      }
-    };
-
-    const goToPage = async (page) => {
-      const totalPages = Number(auditStore.pagination.totalPages) || 1;
-      const nextPage = Math.min(Math.max(1, Number(page) || 1), totalPages);
-      if (nextPage === (Number(auditStore.filters.page) || 1)) return;
-      auditStore.filters.page = nextPage;
-      await auditStore.fetchLogs();
-      scrollToTableTop();
-    };
-
-    const handlePageSizeChange = async (limit) => {
-      const nextLimit = Math.max(1, Number.parseInt(limit, 10) || 20);
-      const currentLimit = Math.max(1, Number.parseInt(auditStore.filters.limit, 10) || 20);
-      if (nextLimit === currentLimit) return;
-
-      auditStore.filters.limit = nextLimit;
-      auditStore.filters.page = 1;
-      await auditStore.fetchLogs();
-      scrollToTableTop();
-    };
-
-    const showToast = (message, type = 'info') => {
-      toastStore.add(message, type);
-    };
-
-    const copySelectedLog = async () => {
-      try {
-        const json = JSON.stringify(selectedLog.value || {}, null, 2);
-        await navigator.clipboard.writeText(json);
-        showToast(tf('message.audit.copied', 'Copied to clipboard'), 'success');
-      } catch (err) {
-        console.error('Copy failed', err);
-        showToast(tf('message.errors.network_error', 'Copy failed'), 'error');
-      }
-    };
-
-    const badgeColor = (action) => {
-      const a = (action || '').toString().toLowerCase();
-      if (['create', 'update'].includes(a)) return 'bg-emerald-100 text-emerald-800 dark:bg-emerald-800/30 dark:text-emerald-200';
-      if (['delete'].includes(a)) return 'bg-rose-100 text-rose-800 dark:bg-rose-800/30 dark:text-rose-200';
-      if (['login', 'logout'].includes(a)) return 'bg-sky-100 text-sky-800 dark:bg-sky-800/30 dark:text-sky-200';
-      if (['export'].includes(a)) return 'bg-amber-100 text-amber-800 dark:bg-amber-800/30 dark:text-amber-200';
-      return 'bg-slate-100 text-slate-800 dark:bg-slate-800/30 dark:text-slate-200';
-    };
-
-    const openLog = (log) => {
-      logDetailModal.open(log, 'view');
-    };
-
-    const closeLog = () => {
-      logDetailModal.close({ reset: true });
-    };
-
-    onMounted(async () => {
-      const ok = await ensureAuthenticated({ checkSessionFlag: true, openModal: true });
-      if (!ok) return;
-      if (auditStore.fetchStats) {
-        auditStore.fetchStats().catch(() => {});
-      }
-    });
-
-    // React to auth changes
-    watch(
-      () => authStore.isAuthenticated,
-      async (isAuthenticated) => {
-        await handleAuthStateChange(isAuthenticated);
-      }
-    );
-
-    return {
-      auditStore,
-      formatDate,
-      formatDetails,
-      applyFilters,
-      clearFilters,
-      onExport,
-      goToPage,
-      handlePageSizeChange,
-      showModal,
-      selectedLog,
-      totalLogCount,
-      successCount,
-      issueCount,
-      openLog,
-      closeLog,
-      copySelectedLog,
-      showLoginRequired,
-      openLoginModal,
-      badgeColor,
-      avatarInitial,
-      actorDisplay,
-      actorRoleBadgeClass,
-      heroSectionClass,
-      filtersPanelClass,
-      filterInputClass,
-      filterSelectClass,
-      actorAvatarClass,
-      tf,
-      tableTopRef
-    };
+    return useAdminAuditLogsPage();
   }
 };
 </script>
 
 <style scoped>
-
-/* Table */
-.audit-table {
-  min-width: 100%;
-  font-size: 0.875rem; /* text-sm */
-  line-height: 1.25rem;
-}
-@media (max-width: 992px) {
-  .audit-table {
-    display: block;
-  }
-}
-
-/* Thead */
-.audit-thead {
-  background-color: rgb(248, 250, 252); /* bg-slate-50 */
-  color: rgb(100, 116, 139); /* text-slate-500 */
-  text-transform: uppercase;
-  letter-spacing: 0.05em; /* tracking-wider */
-}
-
-.dark .audit-thead {
-  background-color: rgba(30, 41, 59, 0.7); /* dark:bg-slate-800/70 */
-  color: rgb(148, 163, 184); /* dark:text-slate-400 */
-}
-@media (max-width: 992px) {
-  .audit-thead {
-    display: none;
-  }
-}
-
-/* Tbody */
-.audit-tbody {
-  margin-top: 0.75rem; /* mt-3 */
-}
-@media (max-width: 992px) {
-  .audit-tbody {
-    display: block;
-  }
-}
-
-/* Row (tr) */
-.audit-row {
-  border-top: 1px solid #f1f5f9; /* border-slate-100 */
-  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-}
-.dark .audit-row {
-  border-color: #1e293b; /* dark:border-slate-800 */
-}
-.audit-row:hover {
-  background-color: rgba(248, 250, 252, 0.7); /* hover:bg-slate-50/70 */
-}
-.dark .audit-row:hover {
-  background-color: rgba(30, 41, 59, 0.6); /* dark:hover:bg-slate-800/60 */
-}
-@media (max-width: 992px) {
-  .audit-row {
-    display: block;
-    border: 1px solid rgba(226, 232, 240, 0.7); /* border-slate-200/70 */
-    border-radius: 1rem; /* rounded-2xl */
-    padding: 0.25rem; /* p-1 */
-    margin-bottom: 1rem; /* mb-4 */
-    background-color: rgba(255, 255, 255, 0.9); /* bg-white/90 */
-  }
-  .dark .audit-row {
-    border-color: #334155; /* dark:border-slate-700 */
-    background-color: #0f172a; /* dark:bg-slate-900 */
-  }
-}
-
-/* Cell Common */
+.audit-table { min-width: 100%; font-size: 0.875rem; line-height: 1.25rem; }
+.audit-thead { background-color: rgb(248, 250, 252); color: rgb(100, 116, 139); text-transform: uppercase; letter-spacing: 0.05em; }
+.dark .audit-thead { background-color: rgba(30, 41, 59, 0.7); color: rgb(148, 163, 184); }
+.audit-tbody { margin-top: 0.75rem; }
+.audit-row { border-top: 1px solid #f1f5f9; transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1); }
+.dark .audit-row { border-color: #1e293b; }
+.audit-row:hover { background-color: rgba(248, 250, 252, 0.7); }
+.dark .audit-row:hover { background-color: rgba(30, 41, 59, 0.6); }
 .audit-cell-actor,
 .audit-cell-when,
 .audit-cell-action,
 .audit-cell-target,
 .audit-cell-details,
 .audit-cell-view {
-  padding-left: 1.5rem; /* px-6 */
-  padding-right: 1.5rem; /* px-6 */
-  padding-top: 1rem; /* py-4 */
-  padding-bottom: 1rem; /* py-4 */
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 }
+.audit-cell-when { color: #64748b; }
+.dark .audit-cell-when { color: #94a3b8; }
+.audit-cell-target { color: #334155; }
+.dark .audit-cell-target { color: #e2e8f0; }
+.audit-cell-details { color: #64748b; }
+.dark .audit-cell-details { color: #cbd5e1; }
+.audit-cell-view { text-align: center; }
 
-/* Cell Specific Styles */
-.audit-cell-when {
-  color: #64748b; /* text-slate-500 */
-}
-.dark .audit-cell-when {
-  color: #94a3b8; /* dark:text-slate-400 */
-}
-
-.audit-cell-target {
-  color: #334155; /* text-slate-700 */
-}
-.dark .audit-cell-target {
-  color: #e2e8f0; /* dark:text-slate-200 */
-}
-
-.audit-cell-details {
-  color: #64748b; /* text-slate-500 */
-}
-.dark .audit-cell-details {
-  color: #cbd5e1; /* dark:text-slate-300 */
-}
-@media (min-width: 768px) {
-  .audit-cell-details {
-    max-width: 480px; /* md:max-w-[480px] */
-  }
-}
-
-.audit-cell-view {
-  text-align: center;
-}
-
-/* Responsive Cell Styles (max-width: 992px) */
 @media (max-width: 992px) {
+  .audit-table,
+  .audit-tbody,
+  .audit-row { display: block; }
+  .audit-thead { display: none; }
+  .audit-row {
+    border: 1px solid rgba(226, 232, 240, 0.7);
+    border-radius: 1rem;
+    padding: 0.25rem;
+    margin-bottom: 1rem;
+    background-color: rgba(255, 255, 255, 0.9);
+  }
+  .dark .audit-row { border-color: #334155; background-color: #0f172a; }
   .audit-cell-actor,
   .audit-cell-when,
   .audit-cell-action,
@@ -872,13 +512,11 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-left: 1rem; /* px-4 */
-    padding-right: 1rem; /* px-4 */
-    padding-top: 0.625rem; /* py-2.5 */
-    padding-bottom: 0.625rem; /* py-2.5 */
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 0.625rem;
+    padding-bottom: 0.625rem;
   }
-
-  /* Label pseudo-element */
   .audit-cell-actor::before,
   .audit-cell-when::before,
   .audit-cell-action::before,
@@ -889,43 +527,29 @@ export default {
     font-size: 11px;
     text-transform: uppercase;
     letter-spacing: 0.2em;
-    color: #64748b; /* text-slate-500 */
-    padding-right: 0.75rem; /* pr-3 */
+    color: #64748b;
+    padding-right: 0.75rem;
   }
-  
   .dark .audit-cell-actor::before,
   .dark .audit-cell-when::before,
   .dark .audit-cell-action::before,
   .dark .audit-cell-target::before,
   .dark .audit-cell-details::before,
-  .dark .audit-cell-view::before {
-    color: #94a3b8; /* dark:text-slate-400 */
-  }
-
-  /* Borders between rows on mobile */
+  .dark .audit-cell-view::before { color: #94a3b8; }
   .audit-cell-view,
   .audit-cell-actor,
   .audit-cell-when,
-  .audit-cell-target {
-    border-bottom: 1px solid #e2e8f0; /* border-b */
-  }
+  .audit-cell-target { border-bottom: 1px solid #e2e8f0; }
   .dark .audit-cell-view,
   .dark .audit-cell-actor,
   .dark .audit-cell-when,
-  .dark .audit-cell-target {
-    border-color: #334155; /* dark:border-slate-700 */
-  }
+  .dark .audit-cell-target { border-color: #334155; }
+  .audit-cell-details { display: block; width: 100%; max-width: none; }
+  .audit-cell-details::before { display: block; margin-bottom: 0.5rem; }
+}
 
-  /* Details specific mobile */
-  .audit-cell-details {
-    display: block;
-    width: 100%;
-    max-width: none;
-  }
-  .audit-cell-details::before {
-    display: block;
-    margin-bottom: 0.5rem; /* mb-2 */
-  }
+@media (min-width: 768px) {
+  .audit-cell-details { max-width: 480px; }
 }
 </style>
 
