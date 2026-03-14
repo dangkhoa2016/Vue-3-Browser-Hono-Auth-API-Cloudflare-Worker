@@ -62,51 +62,41 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'RoleChangeModal',
-  props: {
-    show: {
-      type: Boolean,
-      default: false
-    },
-    user: {
-      type: Object,
-      default: null
-    },
-    roleValue: {
-      type: String,
-      default: 'user'
-    },
-    roleOptions: {
-      type: Array,
-      default: () => []
-    },
-    loading: {
-      type: Boolean,
-      default: false
-    }
+<script setup>
+defineProps({
+  show: {
+    type: Boolean,
+    default: false
   },
-  emits: ['close', 'save', 'update:role-value'],
-  setup() {
-    const roleSelectClass =
-      'w-full pl-11 pr-10 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 focus:bg-white dark:focus:bg-slate-800 transition-all outline-none appearance-none';
-    const cancelButtonClass =
-      'px-5 py-2.5 text-sm font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors focus:outline-none focus:ring-2 focus:ring-slate-200 dark:focus:ring-slate-700';
-    const saveButtonClass =
-      'px-5 py-2.5 text-sm font-bold text-white bg-teal-600 hover:bg-teal-700 rounded-xl shadow-lg shadow-teal-500/20 hover:shadow-teal-500/30 transition-all disabled:opacity-70 disabled:cursor-not-allowed flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900';
-
-    const formatRole = (role) => {
-      if (!role) return '-';
-      return String(role).replace('_', ' ').toUpperCase();
-    };
-
-    return {
-      formatRole,
-      roleSelectClass,
-      cancelButtonClass,
-      saveButtonClass
-    };
+  user: {
+    type: Object,
+    default: null
+  },
+  roleValue: {
+    type: String,
+    default: 'user'
+  },
+  roleOptions: {
+    type: Array,
+    default: () => []
+  },
+  loading: {
+    type: Boolean,
+    default: false
   }
+});
+
+defineEmits(['close', 'save', 'update:role-value']);
+
+const roleSelectClass =
+  'w-full pl-11 pr-10 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 focus:bg-white dark:focus:bg-slate-800 transition-all outline-none appearance-none';
+const cancelButtonClass =
+  'px-5 py-2.5 text-sm font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors focus:outline-none focus:ring-2 focus:ring-slate-200 dark:focus:ring-slate-700';
+const saveButtonClass =
+  'px-5 py-2.5 text-sm font-bold text-white bg-teal-600 hover:bg-teal-700 rounded-xl shadow-lg shadow-teal-500/20 hover:shadow-teal-500/30 transition-all disabled:opacity-70 disabled:cursor-not-allowed flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900';
+
+const formatRole = (role) => {
+  if (!role) return '-';
+  return String(role).replace('_', ' ').toUpperCase();
 };
 </script>
