@@ -29,3 +29,9 @@ jobs:
 
       - name: Check Vue file size limits (warn-only baseline)
         run: node tools/vue-file-size-check.cjs --warn-only
+
+      - name: Run Vue custom lint rules (warn-only baseline)
+        run: node tools/vue-custom-lint.cjs --warn-only
+
+      - name: Track script-setup migration coverage (warn-only baseline)
+        run: node tools/vue-script-setup-coverage.cjs --warn-only --pages-threshold=30 --components-threshold=10 --global-threshold=20

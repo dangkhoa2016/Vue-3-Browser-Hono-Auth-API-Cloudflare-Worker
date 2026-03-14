@@ -34,31 +34,19 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { useRouter } from 'vue-router';
 import ActionTextButton from '/vue/components/ActionTextButton.vue';
 
-export default {
-  name: 'NotFound',
-  components: {
-    ActionTextButton
-  },
-  setup() {
-    const router = useRouter();
+const router = useRouter();
 
-    const goBack = () => {
-      if (window.history.length > 1) {
-        router.back();
-      } else {
-        router.push('/');
-      }
-    };
-
-    return {
-      goBack,
-    };
+const goBack = () => {
+  if (window.history.length > 1) {
+    router.back();
+  } else {
+    router.push('/');
   }
-}
+};
 </script>
 
 <style scoped>

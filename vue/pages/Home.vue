@@ -88,23 +88,13 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import ActionTextButton from '/vue/components/ActionTextButton.vue';
 
-export default {
-  name: 'Home',
-  components: {
-    ActionTextButton
-  },
-  data() {
-    return {
-      homeBadgeClass:
-        'inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 backdrop-blur-md text-sm font-medium text-blue-600 dark:text-blue-300 shadow-lg hover:scale-105 transition-transform cursor-default',
-      techCardClass:
-        'flex flex-col items-center gap-3 p-4 rounded-xl bg-white/50 dark:bg-gray-800/50 hover:bg-white dark:hover:bg-gray-800 transition-colors backdrop-blur-sm border border-transparent hover:border-gray-200 dark:hover:border-gray-700 group'
-    };
-  }
-};
+const homeBadgeClass =
+  'inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 backdrop-blur-md text-sm font-medium text-blue-600 dark:text-blue-300 shadow-lg hover:scale-105 transition-transform cursor-default';
+const techCardClass =
+  'flex flex-col items-center gap-3 p-4 rounded-xl bg-white/50 dark:bg-gray-800/50 hover:bg-white dark:hover:bg-gray-800 transition-colors backdrop-blur-sm border border-transparent hover:border-gray-200 dark:hover:border-gray-700 group';
 </script>
 
 <style scoped>
