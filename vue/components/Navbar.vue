@@ -270,22 +270,77 @@
   </nav>
 </template>
 
-<script>
+<script setup>
 import LoginModal from './LoginModal.vue';
 import RegisterModal from './RegisterModal.vue';
 import ConfirmModal from './ConfirmModal.vue';
 import { useNavbar } from '/vue/composables/useNavbar.js';
 
-export default {
-  components: {
-    LoginModal,
-    RegisterModal,
-    ConfirmModal
-  },
-  setup() {
-    return useNavbar();
-  }
-}
+const {
+  store,
+  menuItems,
+  showLanguageDropdown,
+  showMobileMenu,
+  showLogoutConfirm,
+  showAboutDropdown,
+  showMobileAboutMenu,
+  showAdminDropdown,
+  showMobileAdminMenu,
+  showLoginModal,
+  showRegisterModal,
+  languageDropdownRef,
+  aboutDropdownRef,
+  adminDropdownRef,
+  currentLanguage,
+  languages,
+  isAuthenticated,
+  isAdmin,
+  isSuperAdmin,
+  isAdminRouteActive,
+  isAboutRouteActive,
+  aboutMenuItems,
+  user,
+  adminMenuItems,
+  getTopMenuClass,
+  getDropdownItemClass,
+  getMobilePrimaryClass,
+  getMobileGroupClass,
+  getMobileSubLinkClass,
+  desktopProfileLinkClass,
+  desktopLogoutButtonClass,
+  desktopLoginButtonClass,
+  desktopRegisterButtonClass,
+  languageToggleButtonClass,
+  iconCircleButtonClass,
+  mobileMenuButtonClass,
+  mobileProfileButtonClass,
+  mobileLogoutButtonClass,
+  mobileLoginButtonClass,
+  mobileRegisterButtonClass,
+  mobileApiToggleBaseClass,
+  getLanguageOptionClass,
+  getDesktopApiToggleClass,
+  getMobileApiToggleClass,
+  toggleLanguageDropdown,
+  toggleMobileMenu,
+  toggleMobileAboutMenu,
+  toggleMobileAdminMenu,
+  changeLanguage,
+  openAboutDropdown,
+  closeAboutDropdown,
+  toggleAboutDropdown,
+  openAdminDropdown,
+  closeAdminDropdown,
+  toggleAdminDropdown,
+  handleLoginSuccess,
+  handleLogout,
+  confirmLogout,
+  openLoginModal,
+  openRegisterModal,
+  closeModals,
+  switchToRegister,
+  switchToLogin
+} = useNavbar();
 </script>
 
 <style scoped>

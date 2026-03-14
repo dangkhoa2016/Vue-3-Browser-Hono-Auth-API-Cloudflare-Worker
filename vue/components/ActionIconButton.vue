@@ -12,59 +12,51 @@
   </button>
 </template>
 
-<script>
+<script setup>
 import { computed } from 'vue';
 
-export default {
-  name: 'ActionIconButton',
-  props: {
-    icon: {
-      type: String,
-      required: true
-    },
-    title: {
-      type: String,
-      default: ''
-    },
-    ariaLabel: {
-      type: String,
-      default: ''
-    },
-    tone: {
-      type: String,
-      default: 'indigo'
-    },
-    disabled: {
-      type: Boolean,
-      default: false
-    }
+const props = defineProps({
+  icon: {
+    type: String,
+    required: true
   },
-  emits: ['click'],
-  setup(props, { emit }) {
-    const toneClass = computed(() => {
-      switch (props.tone) {
-        case 'amber':
-          return 'hover:text-amber-600 dark:hover:text-amber-400';
-        case 'rose':
-          return 'hover:text-rose-600 dark:hover:text-rose-400';
-        case 'emerald':
-          return 'hover:text-emerald-600 dark:hover:text-emerald-400';
-        case 'indigo':
-        default:
-          return 'hover:text-indigo-600 dark:hover:text-indigo-400';
-      }
-    });
+  title: {
+    type: String,
+    default: ''
+  },
+  ariaLabel: {
+    type: String,
+    default: ''
+  },
+  tone: {
+    type: String,
+    default: 'indigo'
+  },
+  disabled: {
+    type: Boolean,
+    default: false
+  }
+});
 
-    const handleClick = () => {
-      if (!props.disabled) {
-        emit('click');
-      }
-    };
+const emit = defineEmits(['click']);
 
-    return {
-      toneClass,
-      handleClick
-    };
+const toneClass = computed(() => {
+  switch (props.tone) {
+    case 'amber':
+      return 'hover:text-amber-600 dark:hover:text-amber-400';
+    case 'rose':
+      return 'hover:text-rose-600 dark:hover:text-rose-400';
+    case 'emerald':
+      return 'hover:text-emerald-600 dark:hover:text-emerald-400';
+    case 'indigo':
+    default:
+      return 'hover:text-indigo-600 dark:hover:text-indigo-400';
+  }
+});
+
+const handleClick = () => {
+  if (!props.disabled) {
+    emit('click');
   }
 };
 </script>

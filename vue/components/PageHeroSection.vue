@@ -14,26 +14,23 @@
   </section>
 </template>
 
-<script>
-export default {
-  name: 'PageHeroSection',
-  props: {
-    sectionClass: {
-      type: String,
-      required: true
-    },
-    topBlobClass: {
-      type: String,
-      default: ''
-    },
-    bottomBlobClass: {
-      type: String,
-      default: ''
-    },
-    contentClass: {
-      type: String,
-      default: 'relative grid gap-6 lg:grid-cols-[1.2fr_0.8fr] lg:items-center'
-    }
+<script setup>
+defineProps({
+  sectionClass: {
+    type: String,
+    required: true
+  },
+  topBlobClass: {
+    type: String,
+    default: ''
+  },
+  bottomBlobClass: {
+    type: String,
+    default: ''
+  },
+  contentClass: {
+    type: String,
+    default: 'relative grid gap-6 lg:grid-cols-[1.2fr_0.8fr] lg:items-center'
   }
-};
+});
 </script>

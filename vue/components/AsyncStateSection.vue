@@ -21,40 +21,39 @@
   <slot v-else></slot>
 </template>
 
-<script>
-export default {
-  name: 'AsyncStateSection',
-  props: {
-    loading: {
-      type: Boolean,
-      default: false
-    },
-    error: {
-      type: [String, Object],
-      default: null
-    },
-    isEmpty: {
-      type: Boolean,
-      default: false
-    },
-    emptyTitle: {
-      type: String,
-      default: ''
-    },
-    emptyMessage: {
-      type: String,
-      default: ''
-    }
+<script setup>
+import { computed } from 'vue';
+
+const props = defineProps({
+  loading: {
+    type: Boolean,
+    default: false
   },
-  computed: {
-    hasError() {
-      return this.error !== null && this.error !== undefined && String(this.error).trim() !== '';
-    },
-    errorMessage() {
-      if (typeof this.error === 'string') return this.error;
-      if (this.error && typeof this.error === 'object' && this.error.message) return String(this.error.message);
-      return '';
-    }
+  error: {
+    type: [String, Object],
+    default: null
+  },
+  isEmpty: {
+    type: Boolean,
+    default: false
+  },
+  emptyTitle: {
+    type: String,
+    default: ''
+  },
+  emptyMessage: {
+    type: String,
+    default: ''
   }
-};
+});
+
+const hasError = computed(() => {
+  return props.error !== null && props.error !== undefined && String(props.error).trim() !== '';
+});
+
+const errorMessage = computed(() => {
+  if (typeof props.error === 'string') return props.error;
+  if (props.error && typeof props.error === 'object' && props.error.message) return String(props.error.message);
+  return '';
+});
 </script>

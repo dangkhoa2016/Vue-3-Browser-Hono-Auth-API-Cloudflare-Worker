@@ -347,27 +347,45 @@
 </template>
 
 <script>
+export default {
+  name: 'AdvancedAuditArchivalTab'
+}
+</script>
+
+<script setup>
+import { toRefs } from 'vue';
 import ModalWindow from './ModalWindow.vue';
 import { useAdvancedAuditArchivalTab } from '/vue/composables/useAdvancedAuditArchivalTab.js';
 
-export default {
-  name: 'AdvancedAuditArchivalTab',
-  components: {
-    ModalWindow
+const props = defineProps({
+  data: {
+    type: Object,
+    default: null
   },
-  props: {
-    data: {
-      type: Object,
-      default: null
-    },
-    isLoading: {
-      type: Boolean,
-      default: false
-    }
-  },
-  emits: ['refresh', 'run-archival', 'restore-archive', 'set-policy'],
-  setup(props, { emit }) {
-    return useAdvancedAuditArchivalTab(emit);
+  isLoading: {
+    type: Boolean,
+    default: false
   }
-}
+});
+
+const emit = defineEmits(['refresh', 'run-archival', 'restore-archive', 'set-policy']);
+
+const { data, isLoading } = toRefs(props);
+
+const {
+  isExtrasLoading,
+  extendedData,
+  loadArchivePolicies,
+  manageRetention,
+  showRunModal,
+  runForm,
+  showRestoreModal,
+  restoreForm,
+  executeRunArchival,
+  executeRestoreProcess,
+  showSetPolicyModal,
+  policyForm,
+  openSetPolicyModal,
+  executeSetPolicy
+} = useAdvancedAuditArchivalTab(emit);
 </script>

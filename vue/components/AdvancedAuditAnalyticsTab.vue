@@ -292,58 +292,46 @@
     </div>
 </template>
 
-<script>
+<script setup>
 import { ref } from 'vue';
 import { useAdvancedAuditStore } from '/assets/js/stores/advancedAuditStore.js';
 
-export default {
-  name: 'AdvancedAuditAnalyticsTab',
-  props: {
-    data: {
-      type: Object,
-      default: null
-    },
-    isLoading: {
-      type: Boolean,
-      default: false
-    }
+defineProps({
+  data: {
+    type: Object,
+    default: null
   },
-  emits: ['refresh'],
-  setup(props, { emit }) {
-    const store = useAdvancedAuditStore();
-    const isExtrasLoading = ref(false);
-    const isExtendedDataReady = ref(false);
-    
-    const detailedSecurity = ref(null);
-    const middlewareStats = ref(null);
-
-    const loadExtendedMetrics = async () => {
-      isExtrasLoading.value = true;
-      try {
-        const [secRes, mwRes] = await Promise.all([
-          store.fetchSecurityAnalytics('7d', true, true).catch(e => ({ error: e.message })),
-          store.fetchMiddlewareStats(true).catch(e => ({ error: e.message }))
-        ]);
-        
-        // Unwrap `.data` property from Axios responses since JSON responses have their own `{ data: ... }` structure.
-        detailedSecurity.value = secRes.error ? secRes : (secRes.data || secRes);
-        middlewareStats.value = mwRes.error ? mwRes : (mwRes.data || mwRes);
-        
-        isExtendedDataReady.value = true;
-      } catch (err) {
-        console.error('Failed to load extras', err);
-      } finally {
-        isExtrasLoading.value = false;
-      }
-    };
-
-    return {
-      isExtrasLoading,
-      isExtendedDataReady,
-      detailedSecurity,
-      middlewareStats,
-      loadExtendedMetrics
-    };
+  isLoading: {
+    type: Boolean,
+    default: false
   }
-}
+});
+
+defineEmits(['refresh']);
+
+const store = useAdvancedAuditStore();
+const isExtrasLoading = ref(false);
+const isExtendedDataReady = ref(false);
+
+const detailedSecurity = ref(null);
+const middlewareStats = ref(null);
+
+const loadExtendedMetrics = async () => {
+  isExtrasLoading.value = true;
+  try {
+    const [secRes, mwRes] = await Promise.all([
+      store.fetchSecurityAnalytics('7d', true, true).catch(e => ({ error: e.message })),
+      store.fetchMiddlewareStats(true).catch(e => ({ error: e.message }))
+    ]);
+
+    detailedSecurity.value = secRes.error ? secRes : (secRes.data || secRes);
+    middlewareStats.value = mwRes.error ? mwRes : (mwRes.data || mwRes);
+
+    isExtendedDataReady.value = true;
+  } catch (err) {
+    console.error('Failed to load extras', err);
+  } finally {
+    isExtrasLoading.value = false;
+  }
+};
 </script>

@@ -241,62 +241,51 @@
     </div>
 </template>
 
-<script>
+<script setup>
 import { ref } from 'vue';
 import { useAdvancedAuditStore } from '/assets/js/stores/advancedAuditStore.js';
 
-export default {
-  name: 'AdvancedAuditComplianceTab',
-  props: {
-    data: {
-      type: Object,
-      default: null
-    },
-    isLoading: {
-      type: Boolean,
-      default: false
-    }
+defineProps({
+  data: {
+    type: Object,
+    default: null
   },
-  emits: ['refresh', 'request-pdf'],
-  setup(props, { emit }) {
-    const store = useAdvancedAuditStore();
-    const isExtrasLoading = ref(false);
-    const mgmtData = ref(null);
-    const mgmtViewMode = ref(null);
-
-    const loadMgmtData = async () => {
-      isExtrasLoading.value = true;
-      mgmtViewMode.value = 'inspect';
-      try {
-        const res = await store.fetchComplianceManagement(true);
-        mgmtData.value = res;
-      } catch (err) {
-        mgmtData.value = { error: err.message };
-      } finally {
-        isExtrasLoading.value = false;
-      }
-    };
-
-    const runMgmtAction = async () => {
-      isExtrasLoading.value = true;
-      mgmtViewMode.value = 'enforce';
-      try {
-        const res = await store.manageCompliance({ action: 'evaluate', framework: 'soc2' }, true);
-        mgmtData.value = res;
-      } catch (err) {
-        mgmtData.value = { error: err.message };
-      } finally {
-        isExtrasLoading.value = false;
-      }
-    };
-
-    return {
-      isExtrasLoading,
-      mgmtData,
-      mgmtViewMode,
-      loadMgmtData,
-      runMgmtAction
-    };
+  isLoading: {
+    type: Boolean,
+    default: false
   }
-}
+});
+
+defineEmits(['refresh', 'request-pdf']);
+
+const store = useAdvancedAuditStore();
+const isExtrasLoading = ref(false);
+const mgmtData = ref(null);
+const mgmtViewMode = ref(null);
+
+const loadMgmtData = async () => {
+  isExtrasLoading.value = true;
+  mgmtViewMode.value = 'inspect';
+  try {
+    const res = await store.fetchComplianceManagement(true);
+    mgmtData.value = res;
+  } catch (err) {
+    mgmtData.value = { error: err.message };
+  } finally {
+    isExtrasLoading.value = false;
+  }
+};
+
+const runMgmtAction = async () => {
+  isExtrasLoading.value = true;
+  mgmtViewMode.value = 'enforce';
+  try {
+    const res = await store.manageCompliance({ action: 'evaluate', framework: 'soc2' }, true);
+    mgmtData.value = res;
+  } catch (err) {
+    mgmtData.value = { error: err.message };
+  } finally {
+    isExtrasLoading.value = false;
+  }
+};
 </script>
