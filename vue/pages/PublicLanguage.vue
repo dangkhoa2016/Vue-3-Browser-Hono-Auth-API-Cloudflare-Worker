@@ -114,55 +114,38 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref, watch } from 'vue';
+import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { apiClient, API_ENDPOINTS } from '/assets/js/api.js';
+import { API_ENDPOINTS } from '/assets/js/api.js';
 import { SUPPORTED_LANGUAGES, loadLanguageAsync } from '/assets/js/i18n.js';
-import { useMainStore } from '/assets/js/stores/mainStore.js';
 import ActionTextButton from '/vue/components/ActionTextButton.vue';
 import ModalWindow from '/vue/components/ModalWindow.vue';
-import { useModalState } from '../composables/useModalState.js';
+import { usePublicEndpointPage } from '/vue/composables/usePublicEndpointPage.js';
 
-const { t, locale } = useI18n({ useScope: 'global' });
-const mainStore = useMainStore();
-const isLoading = ref(false);
-const errorMessage = ref('');
-const payload = ref(null);
-const jsonModal = useModalState({ initialMode: 'json' });
-const showJsonModal = jsonModal.isOpen;
+const { locale } = useI18n({ useScope: 'global' });
+const {
+  isLoading,
+  errorMessage,
+  payload,
+  showJsonModal,
+  endpointData,
+  endpointMessage,
+  formattedPayload,
+  loadData,
+  openJsonModal,
+  closeJsonModal
+} = usePublicEndpointPage({
+  endpointPath: API_ENDPOINTS.PUBLIC_LANGUAGE,
+  loadErrorKey: 'message.public_endpoints.language.load_error'
+});
+
 const currentLanguage = computed(() => locale.value);
 const supportedLanguageCodeSet = new Set(SUPPORTED_LANGUAGES.map((item) => item.code));
-
-const endpointData = computed(() => payload.value?.data || {});
-const endpointMessage = computed(() => payload.value?.message || endpointData.value?.message || '—');
 const supportedLanguages = computed(() =>
   Array.isArray(endpointData.value?.supported_languages) ? endpointData.value.supported_languages : []
 );
 const endpointPath = API_ENDPOINTS.PUBLIC_LANGUAGE;
-const formattedPayload = computed(() => JSON.stringify(payload.value ?? {}, null, 2));
 const normalizeLanguageCode = (langCode) => String(langCode || '').trim().toLowerCase();
-
-const loadData = async () => {
-  try {
-    isLoading.value = true;
-    errorMessage.value = '';
-    const response = await apiClient.get(endpointPath);
-    payload.value = response.data;
-  } catch (err) {
-    errorMessage.value = err?.response?.data?.error || err?.message || t('message.public_endpoints.language.load_error');
-  } finally {
-    isLoading.value = false;
-  }
-};
-
-const openJsonModal = () => {
-  if (!payload.value) return;
-  jsonModal.open(null, 'json');
-};
-
-const closeJsonModal = () => {
-  jsonModal.close({ reset: true });
-};
 
 const changeLanguage = async (langCode) => {
   const normalizedCode = normalizeLanguageCode(langCode);
@@ -172,11 +155,4 @@ const changeLanguage = async (langCode) => {
   await loadLanguageAsync(normalizedCode);
   await loadData();
 };
-
-watch(() => mainStore.mockApi, async (value, oldValue) => {
-  if (value === oldValue) return;
-  await loadData();
-});
-
-onMounted(loadData);
 </script>

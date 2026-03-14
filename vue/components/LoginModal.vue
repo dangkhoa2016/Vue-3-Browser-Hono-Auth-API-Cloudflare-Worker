@@ -114,9 +114,8 @@
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue';
-import { apiClient } from '../../assets/js/api.js';
 import ModalWindow from './ModalWindow.vue';
+import { useLoginModalForm } from '/vue/composables/useLoginModalForm.js';
 
 defineProps({
   show: {
@@ -132,72 +131,13 @@ const loginInputClass =
 const submitButtonClass =
   'w-full flex justify-center items-center py-2.5 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-blue-600';
 
-const formData = reactive({
-  email: '',
-  password: '',
-  remember: false
-});
-
-const isLoading = ref(false);
-const errorMessage = ref('');
-const fieldErrors = ref([]);
-
-const clearErrors = () => {
-  errorMessage.value = '';
-  fieldErrors.value = [];
-};
-
-const hasFieldError = (fieldName) => {
-  return fieldErrors.value.some(err => err.field === fieldName);
-};
-
-const handleLogin = async () => {
-  clearErrors();
-  isLoading.value = true;
-
-  try {
-    const response = await apiClient.post('/api/auth/login', {
-      email: formData.email.trim(),
-      password: formData.password,
-      remember: formData.remember
-    });
-
-    if (response.data.success) {
-      emit('login-success', response.data);
-
-      formData.email = '';
-      formData.password = '';
-      formData.remember = false;
-
-      emit('close');
-    } else {
-      errorMessage.value = response.data.error || 'Login failed';
-      if (response.data.errors) {
-        fieldErrors.value = response.data.errors;
-      }
-    }
-  } catch (err) {
-    if (err.response) {
-      const data = err.response.data;
-      errorMessage.value = data.error || 'Login failed';
-
-      if (data.errors && Array.isArray(data.errors)) {
-        fieldErrors.value = data.errors;
-      }
-    } else if (err.request) {
-      errorMessage.value = 'Cannot connect to server. Please try again later.';
-    } else {
-      errorMessage.value = 'An unexpected error occurred. Please try again.';
-    }
-  } finally {
-    isLoading.value = false;
-  }
-};
-
-const handleClose = () => {
-  if (!isLoading.value) {
-    clearErrors();
-    emit('close');
-  }
-};
+const {
+  formData,
+  isLoading,
+  errorMessage,
+  fieldErrors,
+  hasFieldError,
+  handleLogin,
+  handleClose
+} = useLoginModalForm(emit);
 </script>

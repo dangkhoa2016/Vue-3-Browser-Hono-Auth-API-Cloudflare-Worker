@@ -198,10 +198,9 @@
 </template>
 
 <script setup>
-import { reactive, ref, watch, nextTick } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { apiClient, API_ENDPOINTS } from '../../assets/js/api.js';
 import ModalWindow from './ModalWindow.vue';
+import { useRegisterModalForm } from '/vue/composables/useRegisterModalForm.js';
 
 const props = defineProps({
   show: {
@@ -213,20 +212,6 @@ const props = defineProps({
 const emit = defineEmits(['close', 'switch-to-login', 'register-success']);
 const { t } = useI18n();
 
-const formData = reactive({
-  fullName: '',
-  email: '',
-  password: '',
-  confirmPassword: '',
-  acceptTerms: false
-});
-
-const isLoading = ref(false);
-const errorMessage = ref('');
-const fieldErrors = ref([]);
-const successMessage = ref('');
-const registrationStatus = ref('');
-
 const registerInputClass =
   'w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed';
 const registerSubmitButtonClass =
@@ -235,106 +220,16 @@ const goToLoginButtonClass =
   'w-full flex justify-center items-center py-2.5 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors';
 const inactiveCloseButtonClass =
   'w-full flex justify-center items-center py-2.5 px-4 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors';
-
-const clearErrors = () => {
-  errorMessage.value = '';
-  fieldErrors.value = [];
-};
-
-const clearSuccess = () => {
-  successMessage.value = '';
-  registrationStatus.value = '';
-};
-
-const resetForm = () => {
-  formData.fullName = '';
-  formData.email = '';
-  formData.password = '';
-  formData.confirmPassword = '';
-  formData.acceptTerms = false;
-  clearErrors();
-  clearSuccess();
-};
-
-watch(() => props.show, (newValue) => {
-  if (newValue) {
-    nextTick(() => {
-      resetForm();
-    });
-  }
-});
-
-const hasFieldError = (fieldName) => {
-  return fieldErrors.value.some(err => err.field === fieldName);
-};
-
-const validatePasswords = () => {
-  if (formData.password !== formData.confirmPassword) {
-    errorMessage.value = t('message.auth.password_mismatch');
-    fieldErrors.value = [
-      { field: 'password', message: t('message.auth.password_mismatch_password_hint') },
-      { field: 'confirmPassword', message: t('message.auth.password_mismatch_confirm_hint') }
-    ];
-    return false;
-  }
-  return true;
-};
-
-const handleRegister = async () => {
-  clearErrors();
-  clearSuccess();
-
-  if (!validatePasswords()) {
-    return;
-  }
-
-  isLoading.value = true;
-
-  try {
-    const response = await apiClient.post(API_ENDPOINTS.REGISTER, {
-      full_name: formData.fullName.trim(),
-      email: formData.email.trim(),
-      password: formData.password
-    });
-
-    const data = response?.data || {};
-
-    if (data.success) {
-      const userData = data.data || {};
-      registrationStatus.value = userData.status || '';
-      successMessage.value = data.message || '';
-
-      emit('register-success', data);
-    } else {
-      errorMessage.value = data.error || t('message.auth.registration_failed');
-      if (Array.isArray(data.errors)) {
-        fieldErrors.value = data.errors;
-      }
-    }
-  } catch (err) {
-    const respData = err?.response?.data;
-    if (respData) {
-      errorMessage.value = respData.error || t('message.auth.registration_failed');
-      if (Array.isArray(respData.errors)) {
-        fieldErrors.value = respData.errors;
-      }
-    } else if (err?.request) {
-      errorMessage.value = t('message.auth.connection_error');
-    } else {
-      errorMessage.value = t('message.auth.unexpected_error');
-    }
-  } finally {
-    isLoading.value = false;
-  }
-};
-
-const handleGoToLogin = () => {
-  emit('switch-to-login');
-};
-
-const handleClose = () => {
-  if (!isLoading.value) {
-    emit('close');
-  }
-};
+const {
+  formData,
+  isLoading,
+  errorMessage,
+  fieldErrors,
+  successMessage,
+  registrationStatus,
+  hasFieldError,
+  handleRegister,
+  handleGoToLogin,
+  handleClose
+} = useRegisterModalForm(props, emit, t);
 </script>

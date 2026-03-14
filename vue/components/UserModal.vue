@@ -148,8 +148,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
-import { useI18n } from 'vue-i18n';
+import { useUserModalForm } from '/vue/composables/useUserModalForm.js';
 
 const props = defineProps({
   show: {
@@ -176,15 +175,6 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['close', 'save']);
-const { t } = useI18n({ useScope: 'global' });
-
-const getInitialState = () => ({
-  full_name: '',
-  email: '',
-  password: '',
-  role: 'user',
-  status: 'active'
-});
 
 const textInputClass =
   'w-full pl-11 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 focus:bg-white dark:focus:bg-slate-800 transition-all outline-none';
@@ -197,23 +187,5 @@ const cancelButtonClass =
 const submitButtonClass =
   'px-5 py-2.5 text-sm font-bold text-white bg-teal-600 hover:bg-teal-700 rounded-xl shadow-lg shadow-teal-500/20 hover:shadow-teal-500/30 transition-all disabled:opacity-70 disabled:cursor-not-allowed flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900';
 
-const formData = ref(getInitialState());
-
-watch(() => props.show, (newVal) => {
-  if (newVal) {
-    if (props.mode === 'edit') {
-      formData.value = {
-        ...getInitialState(),
-        ...props.initialData,
-        password: ''
-      };
-    } else {
-      formData.value = getInitialState();
-    }
-  }
-});
-
-const handleSubmit = () => {
-  emit('save', formData.value);
-};
+const { formData, handleSubmit } = useUserModalForm(props, emit);
 </script>
