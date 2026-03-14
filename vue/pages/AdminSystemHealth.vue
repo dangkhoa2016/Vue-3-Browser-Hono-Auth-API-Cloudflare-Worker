@@ -360,17 +360,49 @@
 </template>
 
 <script>
+export default {
+  name: 'AdminSystemHealth'
+};
+</script>
+
+<script setup>
 import ActionTextButton from '/vue/components/ActionTextButton.vue';
 import LoginRequiredPrompt from '/vue/components/LoginRequiredPrompt.vue';
 import PageHeroSection from '/vue/components/PageHeroSection.vue';
 import AsyncStateSection from '/vue/components/AsyncStateSection.vue';
 import { useAdminSystemHealthPage } from '../composables/useAdminSystemHealthPage.js';
 
-export default {
-  name: 'AdminSystemHealth',
-  components: { ActionTextButton, LoginRequiredPrompt, PageHeroSection, AsyncStateSection },
-  setup() {
-    return useAdminSystemHealthPage();
-  }
-};
+const {
+  isLoading,
+  errorMessage,
+  heroSectionClass,
+  isAdmin,
+  showLoginRequired,
+  statusDotClass,
+  statusText,
+  statusTextClass,
+  responseTime,
+  environment,
+  healthChecks,
+  databaseInfo,
+  dbPerformance,
+  dbUsers,
+  databaseStructure,
+  databaseConnectedText,
+  databaseConnectedClass,
+  sqliteVersion,
+  stats,
+  roleCounts,
+  performance,
+  security,
+  metadata,
+  checkedBy,
+  hasData,
+  lastUpdatedLabel,
+  formatDate,
+  healthStatusText,
+  healthCheckStatusClass,
+  refresh,
+  openLoginModal
+} = useAdminSystemHealthPage();
 </script>

@@ -380,18 +380,48 @@
 </template>
 
 <script>
+export default {
+  name: 'Profile'
+}
+</script>
+
+<script setup>
 import ActionTextButton from '/vue/components/ActionTextButton.vue';
 import LoginRequiredPrompt from '/vue/components/LoginRequiredPrompt.vue';
 import { useProfilePage } from '/vue/composables/useProfilePage.js';
 
-export default {
-  name: 'Profile',
-  components: {
-    ActionTextButton,
-    LoginRequiredPrompt
-  },
-  setup() {
-    return useProfilePage();
-  }
-}
+const {
+  profile,
+  loadingProfile,
+  errorMessage,
+  showLoginRequired,
+  isEditing,
+  isSavingProfile,
+  isClearingPendingEmail,
+  isChangingPassword,
+  isSavingPassword,
+  profileHeaderCardClass,
+  profileHeaderAvatarClass,
+  profileEditInputClass,
+  profilePasswordInputClass,
+  statsCardClass,
+  statsUserIdCardClass,
+  statsAccessLevelCardClass,
+  editForm,
+  passwordForm,
+  canSubmitProfile,
+  canSubmitPassword,
+  formatDate,
+  getRoleBadgeColor,
+  getRoleIcon,
+  openLoginModal,
+  loadProfile,
+  startEditingProfile,
+  cancelEditingProfile,
+  startChangingPassword,
+  cancelChangingPassword,
+  saveProfile,
+  clearPendingEmail,
+  changePassword
+} = useProfilePage();
 </script>
