@@ -497,7 +497,8 @@ export default {
       error_message: '오류 메시지',
       full_payload: '전체 페이로드',
       copy_json: 'JSON 복사',
-      copied: '클립보드에 복사됨'
+      copied: '클립보드에 복사됨',
+      copy_failed: '로그 세부 정보를 복사하지 못했습니다'
     },
     loader: {
       app: '앱',

@@ -497,7 +497,8 @@ export default {
       error_message: 'Lỗi',
       full_payload: 'Toàn bộ nội dung',
       copy_json: 'Sao chép JSON',
-      copied: 'Đã sao chép'
+      copied: 'Đã sao chép',
+      copy_failed: 'Không thể sao chép chi tiết log'
     },
     loader: {
       app: 'Ứng dụng',

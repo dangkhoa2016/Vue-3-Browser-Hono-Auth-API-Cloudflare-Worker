@@ -497,7 +497,8 @@ export default {
       error_message: 'Error Message',
       full_payload: 'Full Payload',
       copy_json: 'Copy JSON',
-      copied: 'Copied to clipboard'
+      copied: 'Copied to clipboard',
+      copy_failed: 'Failed to copy log details'
     },
     loader: {
       app: 'App',
