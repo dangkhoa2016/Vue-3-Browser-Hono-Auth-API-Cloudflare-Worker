@@ -36,6 +36,29 @@ Dự án này là một ứng dụng web Vue 3 cung cấp giao diện quản tr�
 2. Mở `index.html` bằng Live Server hoặc máy chủ tĩnh để xem demo.
 3. Cấu hình endpoint API và xác thực nếu cần.
 
+## Công cụ i18n (hỗ trợ EN/VI)
+Sử dụng CLI trong `tools/` để kiểm tra tính nhất quán locale và key dịch thuật đang dùng trong source.
+
+```bash
+# Audit tính nhất quán locale
+node tools/i18n.js audit
+
+# Usage check (quét key trong source so với locale)
+node tools/i18n.js usage
+node tools/i18n.js usage --detail
+node tools/i18n.js usage --export
+
+# Chọn ngôn ngữ hiển thị cho CLI
+node tools/i18n.js usage --lang=en
+node tools/i18n.js usage --lang=vi
+
+# Chỉ kiểm tra một locale
+node tools/i18n.js usage --locale=vi
+
+# Chạy cả hai bước kiểm tra (phù hợp CI)
+node tools/i18n.js check
+```
+
 ## Đóng góp
 Đây là dự án mẫu cho admin, bạn có thể fork và phát triển thêm các tính năng hoặc cải tiến cấu trúc dự án.
 
