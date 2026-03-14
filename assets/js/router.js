@@ -179,7 +179,7 @@ const routes = [
     path: '/profile',
     name: 'Profile',
     component: load('/vue/pages/Profile.vue'),
-    meta: { requiresAuth: true }
+    meta: { requiresAuth: true, keepAlive: true }
   },
   {
     path: '/api-info',
@@ -206,19 +206,19 @@ const routes = [
     path: '/admin/dashboard',
     name: 'AdminDashboard',
     component: load('/vue/pages/AdminDashboard.vue'),
-    meta: { requiresAuth: true }
+    meta: { requiresAuth: true, keepAlive: true }
   },
   {
     path: '/admin/users',
     name: 'AdminUsers',
     component: load('/vue/pages/AdminUsers.vue'),
-    meta: { requiresAuth: true }
+    meta: { requiresAuth: true, keepAlive: true }
   },
   {
     path: '/admin/audit-logs',
     name: 'AdminAuditLogs',
     component: load('/vue/pages/AdminAuditLogs.vue'),
-    meta: { requiresAuth: true }
+    meta: { requiresAuth: true, keepAlive: true }
   },
   {
     path: '/admin/advanced-audit',
@@ -230,7 +230,7 @@ const routes = [
     path: '/admin/security-incidents',
     name: 'AdminSecurityIncidents',
     component: load('/vue/pages/AdminSecurityIncidents.vue'),
-    meta: { requiresAuth: true }
+    meta: { requiresAuth: true, keepAlive: true }
   },
   {
     path: '/admin/monitoring',
@@ -254,7 +254,7 @@ const routes = [
     path: '/admin/kv',
     name: 'KvAdminConfigs',
     component: load('/vue/pages/KvAdminConfigs.vue'),
-    meta: { requiresAuth: true }
+    meta: { requiresAuth: true, keepAlive: true }
   },
   {
     path: '/admin/kv/audit',
