@@ -150,7 +150,7 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { ref, computed, onMounted, onActivated, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { apiClient, API_ENDPOINTS } from '/assets/js/api.js';
@@ -162,143 +162,119 @@ import ActionIconButton from '/vue/components/ActionIconButton.vue';
 import LoginRequiredPrompt from '/vue/components/LoginRequiredPrompt.vue';
 import { useAuthGate } from '../composables/useAuthGate.js';
 
-export default {
-  name: 'ApiExplorer',
-  components: {
-    ActionTextButton,
-    ActionIconButton,
-    LoginRequiredPrompt
-  },
-  setup() {
-    const apiInfo = ref(null);
-    const isLoading = ref(true);
-    const errorMessage = ref(null);
-    const collapsed = ref({});
+const apiInfo = ref(null);
+const isLoading = ref(true);
+const errorMessage = ref(null);
+const collapsed = ref({});
 
-    const mainStore = useMainStore();
-    const authStore = useAuthStore();
-    const modalStore = useModalStore();
-    const { t, locale } = useI18n({ useScope: 'global' });
+const mainStore = useMainStore();
+const authStore = useAuthStore();
+const modalStore = useModalStore();
+const { t, locale } = useI18n({ useScope: 'global' });
 
-    authStore.init();
+authStore.init();
 
-    const { showLoginRequired, openLoginModal, ensureAuthenticated, handleAuthStateChange, markUnauthenticated } = useAuthGate({
-      authStore,
-      modalStore,
-      onAuthenticated: async () => {
-        await loadApiInfo();
+const { showLoginRequired, openLoginModal, ensureAuthenticated, handleAuthStateChange, markUnauthenticated } = useAuthGate({
+  authStore,
+  modalStore,
+  onAuthenticated: async () => {
+    await loadApiInfo();
+  }
+});
+
+const loadApiInfo = async () => {
+  try {
+    isLoading.value = true;
+    errorMessage.value = null;
+
+    const isAuth = await ensureAuthenticated({ checkSessionFlag: true, openModal: true });
+    if (!isAuth) {
+      isLoading.value = false;
+      return;
+    }
+
+    const response = await apiClient.get(API_ENDPOINTS.API_INFO, {
+      headers: {
+        Authorization: `Bearer ${authStore.token}`
       }
     });
 
-    const loadApiInfo = async () => {
-      try {
-        isLoading.value = true;
-        errorMessage.value = null;
+    apiInfo.value = response.data;
+    showLoginRequired.value = false;
+  } catch (err) {
+    const status = err.response?.status;
+    const message = err.response?.data?.error || err.message || t('message.api_explorer.error_loading');
+    errorMessage.value = message;
 
-        const isAuth = await ensureAuthenticated({ checkSessionFlag: true, openModal: true });
-        if (!isAuth) {
-          isLoading.value = false;
-          return;
-        }
-
-        const response = await apiClient.get(API_ENDPOINTS.API_INFO, {
-          headers: {
-            Authorization: `Bearer ${authStore.token}`
-          }
-        });
-
-        apiInfo.value = response.data;
-        showLoginRequired.value = false;
-      } catch (err) {
-        const status = err.response?.status;
-        const message = err.response?.data?.error || err.message || t('message.api_explorer.error_loading');
-        errorMessage.value = message;
-
-        if (status === 401) {
-          authStore.logout();
-          markUnauthenticated();
-          openLoginModal();
-        }
-      } finally {
-        isLoading.value = false;
-      }
-    };
-
-    const endpointCategories = computed(() => {
-      if (!apiInfo.value?.endpoints) return [];
-      return Object.entries(apiInfo.value.endpoints).map(([name, routes]) => {
-        const routeEntries = Object.entries(routes || {}).map(([key, description]) => ({
-          key,
-          description,
-          method: key.split(' ')[0] || '',
-          path: key.split(' ').slice(1).join(' ') || ''
-        }));
-        return {
-          name,
-          routes: routeEntries,
-          countLabel: t('message.api_explorer.endpoint_count', { count: routeEntries.length })
-        };
-      });
-    });
-
-    const endpointCountLabel = computed(() => {
-      const total = endpointCategories.value.reduce((sum, cat) => sum + cat.routes.length, 0);
-      return t('message.api_explorer.endpoint_count', { count: total });
-    });
-
-    watch(endpointCategories, (cats) => {
-      const next = {};
-      cats.forEach((c) => {
-        next[c.name] = collapsed.value[c.name] || false;
-      });
-      collapsed.value = next;
-    }, { immediate: true });
-
-    const toggleCategory = (name) => {
-      collapsed.value = {
-        ...collapsed.value,
-        [name]: !collapsed.value[name]
-      };
-    };
-
-    watch([() => mainStore.mockApi, locale], () => {
-      if (!mainStore.mockApi) {
-        loadApiInfo();
-      }
-    });
-
-    // Watch for authentication changes
-    watch(
-      () => authStore.isAuthenticated,
-      async (isAuthenticated) => {
-        if (isAuthenticated === false) {
-          apiInfo.value = null;
-          errorMessage.value = null;
-        }
-        await handleAuthStateChange(isAuthenticated);
-      },
-      { immediate: false }
-    );
-
-    onMounted(loadApiInfo);
-    onActivated(() => {
-      loadApiInfo();
-    });
-
-    return {
-      apiInfo,
-      isLoading,
-      errorMessage,
-      showLoginRequired,
-      endpointCategories,
-      endpointCountLabel,
-      openLoginModal,
-      loadApiInfo,
-      collapsed,
-      toggleCategory
-    };
+    if (status === 401) {
+      authStore.logout();
+      markUnauthenticated();
+      openLoginModal();
+    }
+  } finally {
+    isLoading.value = false;
   }
 };
+
+const endpointCategories = computed(() => {
+  if (!apiInfo.value?.endpoints) return [];
+  return Object.entries(apiInfo.value.endpoints).map(([name, routes]) => {
+    const routeEntries = Object.entries(routes || {}).map(([key, description]) => ({
+      key,
+      description,
+      method: key.split(' ')[0] || '',
+      path: key.split(' ').slice(1).join(' ') || ''
+    }));
+    return {
+      name,
+      routes: routeEntries,
+      countLabel: t('message.api_explorer.endpoint_count', { count: routeEntries.length })
+    };
+  });
+});
+
+const endpointCountLabel = computed(() => {
+  const total = endpointCategories.value.reduce((sum, cat) => sum + cat.routes.length, 0);
+  return t('message.api_explorer.endpoint_count', { count: total });
+});
+
+watch(endpointCategories, (cats) => {
+  const next = {};
+  cats.forEach((c) => {
+    next[c.name] = collapsed.value[c.name] || false;
+  });
+  collapsed.value = next;
+}, { immediate: true });
+
+const toggleCategory = (name) => {
+  collapsed.value = {
+    ...collapsed.value,
+    [name]: !collapsed.value[name]
+  };
+};
+
+watch([() => mainStore.mockApi, locale], () => {
+  if (!mainStore.mockApi) {
+    loadApiInfo();
+  }
+});
+
+watch(
+  () => authStore.isAuthenticated,
+  async (isAuthenticated) => {
+    if (isAuthenticated === false) {
+      apiInfo.value = null;
+      errorMessage.value = null;
+    }
+    await handleAuthStateChange(isAuthenticated);
+  },
+  { immediate: false }
+);
+
+onMounted(loadApiInfo);
+onActivated(() => {
+  loadApiInfo();
+});
 </script>
 
 <style scoped>
