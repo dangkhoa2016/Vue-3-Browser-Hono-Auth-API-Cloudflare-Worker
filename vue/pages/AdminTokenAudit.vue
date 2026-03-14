@@ -10,7 +10,7 @@
       tone="blue"
       button-tone="indigo"
       :title="$t('message.auth.login_required')"
-      :message="$t('message.token_audit.access_denied.login_required') || 'You need to log in to access the token audit logs.'"
+      :message="tf('message.token_audit.access_denied.login_required', 'You need to log in to access the token audit logs.')"
       :button-text="$t('message.auth.login')"
       @action="openLoginModal"
     />
@@ -18,8 +18,8 @@
     <!-- Super Admin Required Section -->
     <section v-else-if="!isSuperAdmin" class="bg-indigo-50/80 dark:bg-indigo-900/20 border border-indigo-200 dark:border-indigo-800 rounded-3xl p-8 text-center shadow-sm">
       <i class="bi bi-exclamation-triangle-fill text-5xl text-indigo-600 dark:text-indigo-400 mb-4"></i>
-      <h3 class="text-xl font-bold text-indigo-900 dark:text-indigo-100 mb-2">{{ $t('message.token_audit.access_denied.title') || 'Access Denied' }}</h3>
-      <p class="text-indigo-700 dark:text-indigo-300">{{ $t('message.token_audit.access_denied.message') || 'Only Super Admins can access the Token Audit Logs.' }}</p>
+      <h3 class="text-xl font-bold text-indigo-900 dark:text-indigo-100 mb-2">{{ tf('message.token_audit.access_denied.title', 'Access Denied') }}</h3>
+      <p class="text-indigo-700 dark:text-indigo-300">{{ tf('message.token_audit.access_denied.message', 'Only Super Admins can access the Token Audit Logs.') }}</p>
     </section>
 
     <template v-else>
@@ -29,13 +29,13 @@
         <div class="relative grid gap-6 lg:grid-cols-[1.3fr_0.7fr] lg:items-center">
           <div>
             <div class="inline-flex items-center gap-2 rounded-full bg-indigo-900/10 text-indigo-800 dark:bg-indigo-400/10 dark:text-indigo-200 px-3 py-1 text-xs font-semibold tracking-[0.2em] uppercase mb-4 shadow-sm border border-indigo-200/50 dark:border-indigo-800/50">
-              <i class="bi bi-list-columns-reverse"></i> {{ $t('message.token_audit.security') || 'AUDIT TRAIL' }}
+              <i class="bi bi-list-columns-reverse"></i> {{ tf('message.token_audit.security', 'AUDIT TRAIL') }}
             </div>
             <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white leading-tight tracking-tight mb-4">
-              {{ $t('message.token_audit.title') || 'Token Audit Logs' }}
+              {{ tf('message.token_audit.title', 'Token Audit Logs') }}
             </h1>
             <p class="text-slate-500 dark:text-slate-400 text-lg leading-relaxed max-w-2xl">
-              {{ $t('message.token_audit.subtitle') || 'Review system-wide token activities including logins, logouts, token refreshes, and suspicious activities.' }}
+              {{ tf('message.token_audit.subtitle', 'Review system-wide token activities including logins, logouts, token refreshes, and suspicious activities.') }}
             </p>
           </div>
           <div class="flex flex-col sm:flex-row items-stretch lg:items-center lg:justify-end gap-3 z-10 w-full lg:w-auto mt-4 lg:mt-0">
@@ -43,12 +43,12 @@
               variant="soft"
               shape="full"
               :icon="loading ? 'bi bi-arrow-clockwise animate-spin' : 'bi bi-arrow-clockwise'"
-              :title="$t('message.common.retry_title') || 'Reload'"
+              :title="tf('message.common.retry_title', 'Reload')"
               :disabled="loading"
               class="w-full sm:w-auto justify-center whitespace-nowrap"
               @click="fetchLogs"
             >
-              {{ $t('message.common.reload') || 'Reload' }}
+              {{ tf('message.common.reload', 'Reload') }}
             </ActionTextButton>
           </div>
         </div>
@@ -64,7 +64,7 @@
             type="text"
             v-model="searchQuery"
             @input="handleSearch"
-            :placeholder="$t('message.token_audit.search_placeholder') || 'Search by Email, JTI, User ID or Action...'"
+            :placeholder="tf('message.token_audit.search_placeholder', 'Search by Email, JTI, User ID or Action...')"
             class="block w-full pl-10 pr-10 py-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl leading-5 flex-1 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all duration-200 text-slate-900 dark:text-slate-100 placeholder-slate-400 sm:text-sm shadow-sm"
           />
           <button 
@@ -85,7 +85,7 @@
             class="w-full sm:flex-1 justify-center whitespace-nowrap"
             @click="clearSelection"
           >
-            {{ $t('message.common.clear') || 'Clear' }}
+            {{ tf('message.common.clear', 'Clear') }}
           </ActionTextButton>
           <ActionTextButton
             v-if="selectedItems.length > 0"
@@ -96,7 +96,7 @@
             class="w-full sm:flex-1 justify-center whitespace-nowrap"
             @click="confirmBulkDelete"
           >
-            {{ $t('message.token_audit.delete_selected') || 'Delete Selected' }}
+            {{ tf('message.token_audit.delete_selected', 'Delete Selected') }}
           </ActionTextButton>
         </div>
       </section>
@@ -107,14 +107,14 @@
           <div class="absolute inset-0 rounded-full border-4 border-slate-100 dark:border-slate-800"></div>
           <div class="absolute inset-0 rounded-full border-4 border-indigo-500 border-t-transparent animate-spin"></div>
         </div>
-        <p class="text-slate-500 dark:text-slate-400 font-medium animate-pulse">{{ $t('message.common.loading_data') || 'Loading data...' }}</p>
+        <p class="text-slate-500 dark:text-slate-400 font-medium animate-pulse">{{ tf('message.common.loading_data', 'Loading data...') }}</p>
       </div>
 
       <div v-else-if="error" class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-3xl p-8 text-center shadow-sm">
          <i class="bi bi-exclamation-octagon text-4xl text-red-500 mb-3"></i>
          <p class="text-red-700 dark:text-red-400 font-medium">{{ error }}</p>
          <ActionTextButton icon="bi bi-arrow-clockwise" tone="red" size="sm" shape="pill" class="mt-4" @click="fetchLogs">
-           {{ $t('message.common.retry') || 'Retry' }}
+           {{ tf('message.common.retry', 'Retry') }}
          </ActionTextButton>
       </div>
 
@@ -122,8 +122,8 @@
         <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-slate-100 dark:bg-slate-800 mb-4 shadow-inner">
           <i class="bi bi-list-check text-4xl text-slate-400 dark:text-slate-500"></i>
         </div>
-        <h3 class="text-xl font-bold text-slate-900 dark:text-slate-100 mb-2">{{ $t('message.token_audit.no_logs_title') || 'No Audit Logs Found' }}</h3>
-        <p class="text-slate-500 dark:text-slate-400">{{ $t('message.token_audit.no_logs_desc') || 'There are currently no records indicating recent token activity matching your criteria.' }}</p>
+        <h3 class="text-xl font-bold text-slate-900 dark:text-slate-100 mb-2">{{ tf('message.token_audit.no_logs_title', 'No Audit Logs Found') }}</h3>
+        <p class="text-slate-500 dark:text-slate-400">{{ tf('message.token_audit.no_logs_desc', 'There are currently no records indicating recent token activity matching your criteria.') }}</p>
       </div>
 
       <div v-else class="bg-white dark:bg-slate-900 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden relative z-10 transition-colors duration-300">
@@ -134,55 +134,55 @@
                 <th scope="col" class="px-5 py-3.5 text-left text-xs font-semibold w-12">
                   <input type="checkbox" :checked="isAllSelected" @change="toggleSelectAll" class="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500">
                 </th>
-                <th scope="col" class="px-5 py-3.5 text-left text-xs font-semibold">{{ $t('message.token_audit.table.action') || 'Action' }}</th>
-                <th scope="col" class="px-5 py-3.5 text-left text-xs font-semibold">{{ $t('message.token_audit.table.user') || 'User' }}</th>
-                <th scope="col" class="px-5 py-3.5 text-left text-xs font-semibold">{{ $t('message.token_audit.table.ip_address') || 'IP Address' }}</th>
-                <th scope="col" class="px-5 py-3.5 text-left text-xs font-semibold">{{ $t('message.token_audit.table.status') || 'Status' }}</th>
-                <th scope="col" class="px-5 py-3.5 text-left text-xs font-semibold">{{ $t('message.token_audit.table.created_at') || 'Timestamp' }}</th>
-                <th scope="col" class="px-5 py-3.5 text-right text-xs font-semibold">{{ $t('message.token_audit.table.actions') || 'Actions' }}</th>
+                <th scope="col" class="px-5 py-3.5 text-left text-xs font-semibold">{{ tf('message.token_audit.table.action', 'Action') }}</th>
+                <th scope="col" class="px-5 py-3.5 text-left text-xs font-semibold">{{ tf('message.token_audit.table.user', 'User') }}</th>
+                <th scope="col" class="px-5 py-3.5 text-left text-xs font-semibold">{{ tf('message.token_audit.table.ip_address', 'IP Address') }}</th>
+                <th scope="col" class="px-5 py-3.5 text-left text-xs font-semibold">{{ tf('message.token_audit.table.status', 'Status') }}</th>
+                <th scope="col" class="px-5 py-3.5 text-left text-xs font-semibold">{{ tf('message.token_audit.table.created_at', 'Timestamp') }}</th>
+                <th scope="col" class="px-5 py-3.5 text-right text-xs font-semibold">{{ tf('message.token_audit.table.actions', 'Actions') }}</th>
               </tr>
             </thead>
             <tbody class="max-[992px]:block max-[992px]:px-4">
               <tr v-for="item in items" :key="item.id" :class="tableRowClass">
-                <td :class="checkboxCellClass" :data-label="$t('message.common.select') || 'Select'">
+                <td :class="checkboxCellClass" :data-label="tf('message.common.select', 'Select')">
                   <input type="checkbox" :value="item.id" v-model="selectedItems" class="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500">
                 </td>
-                <td :class="actionCellClass" :data-label="$t('message.token_audit.table.action') || 'Action'">
+                <td :class="actionCellClass" :data-label="tf('message.token_audit.table.action', 'Action')">
                   <span :class="getActionTailwindClass(item.action)">
                     {{ item.action }}
                   </span>
                 </td>
-                <td :class="userCellClass" :data-label="$t('message.token_audit.table.user') || 'User'">
+                <td :class="userCellClass" :data-label="tf('message.token_audit.table.user', 'User')">
                   <div v-if="item.user_email" class="flex flex-col max-[992px]:items-end">
                     <span class="font-medium truncate" :title="item.user_email">{{ item.user_email }}</span>
                     <span class="text-xs text-slate-500 dark:text-slate-400">ID: {{ item.user_id }}</span>
                   </div>
                   <span v-else class="text-slate-400 dark:text-slate-500">#{{ item.user_id || 'N/A' }}</span>
                 </td>
-                <td :class="ipCellClass" :data-label="$t('message.token_audit.table.ip_address') || 'IP Address'">{{ item.ip_address || '-' }}</td>
-                <td :class="statusCellClass" :data-label="$t('message.token_audit.table.status') || 'Status'">
+                <td :class="ipCellClass" :data-label="tf('message.token_audit.table.ip_address', 'IP Address')">{{ item.ip_address || '-' }}</td>
+                <td :class="statusCellClass" :data-label="tf('message.token_audit.table.status', 'Status')">
                   <span v-if="item.success === 1 || item.success === true" class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/30">
-                    <i class="bi bi-check2-circle mr-1"></i> {{ $t('message.token_audit.table.status_success') || 'Success' }}
+                    <i class="bi bi-check2-circle mr-1"></i> {{ tf('message.token_audit.table.status_success', 'Success') }}
                   </span>
                   <span v-else class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-rose-100 text-rose-800 dark:bg-rose-900/30 dark:text-rose-300 border border-rose-200 dark:border-rose-800/30" :title="item.error_message">
-                    <i class="bi bi-x-circle mr-1"></i> {{ $t('message.token_audit.table.status_failure') || 'Failed' }}
+                    <i class="bi bi-x-circle mr-1"></i> {{ tf('message.token_audit.table.status_failure', 'Failed') }}
                   </span>
                 </td>
-                <td :class="dateCellClass" :data-label="$t('message.token_audit.table.created_at') || 'Timestamp'">{{ formatDate(item.created_at) }}</td>
-                <td :class="actionsCellClass" :data-label="$t('message.token_audit.table.actions') || 'Actions'">
+                <td :class="dateCellClass" :data-label="tf('message.token_audit.table.created_at', 'Timestamp')">{{ formatDate(item.created_at) }}</td>
+                <td :class="actionsCellClass" :data-label="tf('message.token_audit.table.actions', 'Actions')">
                   <div class="flex items-center justify-end gap-2 max-[992px]:opacity-100 opacity-50 group-hover:opacity-100 transition-opacity">
                     <ActionIconButton
                       icon="bi bi-eye"
                       tone="indigo"
                       size="sm"
-                      :tooltip="$t('message.common.view') || 'View Details'"
+                      :tooltip="tf('message.common.view', 'View Details')"
                       @click="viewLogDetails(item.id)"
                     />
                     <ActionIconButton
                       icon="bi bi-trash3"
                       tone="red"
                       size="sm"
-                      :tooltip="$t('message.common.delete') || 'Delete'"
+                      :tooltip="tf('message.common.delete', 'Delete')"
                       @click="confirmDeleteLog(item.id)"
                     />
                   </div>
@@ -200,7 +200,7 @@
     </template>
 
     <!-- Details Modal -->
-    <ModalWindow :show="showDetailModal" :title="$t('message.token_audit.detail_modal.title') || 'Audit Log Details'" panelClass="!max-w-4xl !p-0 !overflow-hidden flex flex-col token-audit-detail-modal" @close="closeDetailModal">
+    <ModalWindow :show="showDetailModal" :title="tf('message.token_audit.detail_modal.title', 'Audit Log Details')" panelClass="!max-w-4xl !p-0 !overflow-hidden flex flex-col token-audit-detail-modal" @close="closeDetailModal">
       <div v-if="isFetchingLog" class="p-0 flex flex-col h-full">
         <div class="bg-gradient-to-r from-slate-100 to-slate-50 dark:from-slate-800 dark:to-slate-800/50 px-6 py-5 border-b border-slate-200 dark:border-slate-800 animate-pulse shrink-0">
           <div class="flex items-center justify-between mb-2 pr-8">
@@ -256,10 +256,10 @@
             </div>
             
             <span v-if="currentLog.success === 1 || currentLog.success === true" class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-semibold bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/50 shadow-sm">
-               <i class="bi bi-check-circle-fill mr-1.5"></i> {{ $t('message.token_audit.table.status_success') || 'Success' }}
+              <i class="bi bi-check-circle-fill mr-1.5"></i> {{ tf('message.token_audit.table.status_success', 'Success') }}
             </span>
             <span v-else class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-semibold bg-rose-100 text-rose-800 dark:bg-rose-900/40 dark:text-rose-300 border border-rose-200 dark:border-rose-800/50 shadow-sm">
-               <i class="bi bi-exclamation-triangle-fill mr-1.5"></i> {{ $t('message.token_audit.table.status_failure') || 'Failed' }}
+              <i class="bi bi-exclamation-triangle-fill mr-1.5"></i> {{ tf('message.token_audit.table.status_failure', 'Failed') }}
             </span>
           </div>
         </div>
@@ -268,7 +268,7 @@
           <div v-if="currentLog.error_message" class="bg-rose-50/80 dark:bg-rose-900/20 p-4 rounded-2xl border border-rose-200 dark:border-rose-800/50 shadow-sm flex gap-3 items-start">
             <i class="bi bi-x-circle-fill text-rose-500 mt-0.5"></i>
             <div>
-              <p class="text-sm font-semibold text-rose-800 dark:text-rose-300 mb-1">{{ $t('message.token_audit.detail_modal.error_message') || 'Error Message' }}</p>
+              <p class="text-sm font-semibold text-rose-800 dark:text-rose-300 mb-1">{{ tf('message.token_audit.detail_modal.error_message', 'Error Message') }}</p>
               <p class="text-sm text-rose-600 dark:text-rose-400 leading-relaxed">{{ currentLog.error_message }}</p>
             </div>
           </div>
@@ -349,9 +349,9 @@
     <!-- Delete Confirm Modal -->
     <ConfirmDeleteModal
       :show="showDeleteModal"
-      :title="$t('message.token_audit.delete_modal.title') || 'Delete Audit Log?'"
-      :message="$t('message.token_audit.delete_modal.message') || 'Are you sure you want to delete this token audit log? This action cannot be undone and will remove the record permanently.'"
-      :confirm-label="$t('message.common.delete') || 'Delete'"
+      :title="tf('message.token_audit.delete_modal.title', 'Delete Audit Log?')"
+      :message="tf('message.token_audit.delete_modal.message', 'Are you sure you want to delete this token audit log? This action cannot be undone and will remove the record permanently.')"
+      :confirm-label="tf('message.common.delete', 'Delete')"
       :loading="isDeleting"
       @confirm="executeDeleteLog"
       @cancel="closeDeleteModal"
@@ -360,9 +360,9 @@
     <!-- Bulk Delete Confirm Modal -->
     <ConfirmDeleteModal
       :show="showBulkDeleteModal"
-      :title="$t('message.token_audit.bulk_delete_modal.title') || 'Delete Multiple Logs?'"
-      :message="($t('message.token_audit.bulk_delete_modal.message') || 'Are you sure you want to delete the selected audit logs? This action cannot be undone.') + ` (${selectedItems.length} selected)`"
-      :confirm-label="$t('message.token_audit.delete_selected') || 'Delete Selected'"
+      :title="tf('message.token_audit.bulk_delete_modal.title', 'Delete Multiple Logs?')"
+      :message="tf('message.token_audit.bulk_delete_modal.message', 'Are you sure you want to delete the selected audit logs? This action cannot be undone.') + ` (${selectedItems.length} selected)`"
+      :confirm-label="tf('message.token_audit.delete_selected', 'Delete Selected')"
       :loading="isDeleting"
       @confirm="executeBulkDelete"
       @cancel="closeBulkDeleteModal"
@@ -372,7 +372,6 @@
 
 <script>
 import { ref, computed, onMounted, watch } from 'vue';
-import { useI18n } from 'vue-i18n';
 import { useMainStore } from '/assets/js/stores/mainStore.js';
 import { useAuthStore } from '/assets/js/stores/authStore.js';
 import { useModalStore } from '/assets/js/stores/modalStore.js';
@@ -387,6 +386,7 @@ import LoginRequiredPrompt from '../components/LoginRequiredPrompt.vue';
 import { useDebouncedFilters } from '/vue/composables/useDebouncedFilters.js';
 import { useModalState } from '/vue/composables/useModalState.js';
 import { useAuthGate } from '/vue/composables/useAuthGate.js';
+import { useI18nFallback } from '/vue/composables/useI18nFallback.js';
 import { getTokenAuditActionClass } from '/vue/composables/useUiClassMap.js';
 
 export default {
@@ -400,7 +400,7 @@ export default {
     LoginRequiredPrompt
   },
   setup() {
-    const { t } = useI18n();
+    const { tf } = useI18nFallback();
     const mainStore = useMainStore();
     const authStore = useAuthStore();
     const modalStore = useModalStore();
@@ -624,6 +624,7 @@ export default {
       closeDeleteModal,
       closeBulkDeleteModal,
       isDeleting,
+      tf,
       selectedItems,
       isAllSelected,
       

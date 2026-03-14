@@ -6,7 +6,7 @@
         class="inline-flex w-full lg:w-auto items-center justify-center lg:justify-start gap-2"
       >
         <span class="text-xs text-slate-500 dark:text-slate-400">
-          {{ $t('message.audit.items_per_page') || 'Items per page' }}
+          {{ $t('message.audit.items_per_page', 'Items per page') }}
         </span>
         <select
           :value="pageSize"
@@ -33,10 +33,10 @@
           @click="emitChange(currentPage - 1)"
           :disabled="isFirstPage || loading"
           :class="navButtonClass"
-          :aria-label="$t('message.prev') || 'Prev'"
+          :aria-label="$t('message.prev', 'Prev')"
         >
           <i class="bi bi-chevron-left"></i>
-          <span class="hidden sm:inline">{{ $t('message.prev') || 'Prev' }}</span>
+          <span class="hidden sm:inline">{{ $t('message.prev', 'Prev') }}</span>
         </button>
 
         <button
@@ -53,9 +53,9 @@
           @click="emitChange(currentPage + 1)"
           :disabled="isLastPage || loading"
           :class="navButtonClass"
-          :aria-label="$t('message.next') || 'Next'"
+          :aria-label="$t('message.next', 'Next')"
         >
-          <span class="hidden sm:inline">{{ $t('message.next') || 'Next' }}</span>
+          <span class="hidden sm:inline">{{ $t('message.next', 'Next') }}</span>
           <i class="bi bi-chevron-right"></i>
         </button>
 

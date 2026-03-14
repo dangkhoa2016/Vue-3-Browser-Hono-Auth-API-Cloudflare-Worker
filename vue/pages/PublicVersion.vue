@@ -24,7 +24,7 @@
             :disabled="loading"
             @click="loadData"
           >
-            {{ $t('message.refresh') || 'Refresh' }}
+            {{ $t('message.refresh', 'Refresh') }}
           </ActionTextButton>
           <ActionTextButton
             variant="soft"

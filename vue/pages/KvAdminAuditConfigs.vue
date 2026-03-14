@@ -32,7 +32,7 @@
           <div>
             <div class="inline-flex items-center gap-2 rounded-full bg-blue-900/10 text-blue-800 dark:bg-blue-400/10 dark:text-blue-200 px-3 py-1 text-xs font-semibold tracking-[0.2em]">
               <span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
-              {{ $t('message.navbar.kv_admin_audit') || 'KV ADMIN AUDIT' }}
+              {{ $t('message.navbar.kv_admin_audit', 'KV ADMIN AUDIT') }}
             </div>
             <h1 class="mt-4 text-3xl font-black text-slate-900 dark:text-white">Audit System Configs</h1>
             <p class="mt-2 text-slate-600 dark:text-slate-300">Manage retention, performance, alerts, and feature flags.</p>
@@ -42,7 +42,7 @@
         <template #right>
           <div>
             <ActionTextButton variant="soft" shape="full" icon="bi bi-arrow-clockwise" @click="loadData">
-              {{ $t('message.kv_admin_page.reload') || 'Reload' }}
+              {{ $t('message.kv_admin_page.reload', 'Reload') }}
             </ActionTextButton>
           </div>
         </template>
