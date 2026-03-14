@@ -51,8 +51,6 @@ export const API_ENDPOINTS = {
   KV_ADMIN_RATE_LIMITS_SEED: '/api/kv-admin/rate-limits/seed',
   KV_ADMIN_RATE_LIMITS_PRUNE_TIME: '/api/kv-admin/rate-limits/prune-time',
   KV_ADMIN_RATE_LIMITS_BATCH_DELETE: '/api/kv-admin/rate-limits/batch-delete',
-  // Validation regex cho thay đổi trạng thái Configs Toggle Mock API
-  KV_ADMIN_FEATURES_TOGGLE_SUCCESS: '/assets/data/kv-admin/features/toggle/succeed/response.json',
   // Audit endpoints
   AUDIT_LOGS: '/api/audit/logs',
   AUDIT_STATS: '/api/audit/stats',
@@ -227,6 +225,18 @@ export const DATA_PATHS = {
   // Audit data
   AUDIT_LOGS_SUCCESS: '/assets/data/audit/logs/succeed/response.json',
   AUDIT_STATS_SUCCESS: '/assets/data/audit/stats/succeed/response.json',
+  // Advanced Audit data
+  ADVANCED_AUDIT_ANALYTICS_SUCCESS: '/assets/data/advanced-audit/analytics/succeed/response.json',
+  ADVANCED_AUDIT_COMPLIANCE_SUCCESS: '/assets/data/advanced-audit/compliance/succeed/response.json',
+  ADVANCED_AUDIT_COMPLIANCE_ENFORCE_SUCCESS: '/assets/data/advanced-audit/compliance/enforce-policy/succeed/response.json',
+  ADVANCED_AUDIT_COMPLIANCE_REPORT_SUCCESS: '/assets/data/advanced-audit/compliance/report/succeed/response.json',
+  ADVANCED_AUDIT_ANALYTICS_SECURITY_SUCCESS: '/assets/data/advanced-audit/analytics/security/succeed/response.json',
+  ADVANCED_AUDIT_MIDDLEWARE_STATS_SUCCESS: '/assets/data/advanced-audit/analytics/middleware/stats/succeed/response.json',
+  ADVANCED_AUDIT_ARCHIVAL_RUN_SUCCESS: '/assets/data/advanced-audit/archival/run/succeed/response.json',
+  ADVANCED_AUDIT_ARCHIVAL_RESTORE_FAIL: '/assets/data/advanced-audit/archival/restore/fail/validate.json',
+  ADVANCED_AUDIT_ARCHIVAL_STATS_SUCCESS: '/assets/data/advanced-audit/archival/stats/succeed/response.json',
+  ADVANCED_AUDIT_ARCHIVE_SUCCESS: '/assets/data/advanced-audit/archival/succeed/response.json',
+  ADVANCED_AUDIT_RETENTION_SUCCESS: '/assets/data/advanced-audit/rention/succeed/response.json',
   // Security incident data
   SECURITY_INCIDENTS: '/assets/data/security-incident/succeed/response.json',
   // Realtime monitoring data
@@ -1142,7 +1152,7 @@ export const setupMock = (enable) => {
       // Advanced Audit mocks
       mock.onGet(MOCK_PATTERNS.ADVANCED_AUDIT_ANALYTICS).reply(async () => {
         try {
-          const data = await loadJson('/assets/data/advanced-audit/analytics/succeed/response.json');
+          const data = await loadJson(DATA_PATHS.ADVANCED_AUDIT_ANALYTICS_SUCCESS);
           return [200, data];
         } catch {
           return [500, { success: false, error: 'Mock fail' }];
@@ -1151,7 +1161,7 @@ export const setupMock = (enable) => {
 
       mock.onGet(MOCK_PATTERNS.ADVANCED_AUDIT_COMPLIANCE_MANAGEMENT).reply(async () => {
         try {
-          const data = await loadJson('/assets/data/advanced-audit/compliance/succeed/response.json');
+          const data = await loadJson(DATA_PATHS.ADVANCED_AUDIT_COMPLIANCE_SUCCESS);
           return [200, data];
         } catch {
           return [500, { success: false, error: 'Mock fail' }];
@@ -1160,7 +1170,7 @@ export const setupMock = (enable) => {
 
       mock.onPost(MOCK_PATTERNS.ADVANCED_AUDIT_COMPLIANCE_MANAGEMENT).reply(async () => {
         try {
-          const data = await loadJson('/assets/data/advanced-audit/compliance/enforce-policy/succeed/response.json');
+          const data = await loadJson(DATA_PATHS.ADVANCED_AUDIT_COMPLIANCE_ENFORCE_SUCCESS);
           return [200, data];
         } catch {
           return [500, { success: false, error: 'Mock fail' }];
@@ -1169,7 +1179,7 @@ export const setupMock = (enable) => {
 
       mock.onGet(MOCK_PATTERNS.ADVANCED_AUDIT_COMPLIANCE).reply(async () => {
         try {
-          const data = await loadJson('/assets/data/advanced-audit/compliance/report/succeed/response.json');
+          const data = await loadJson(DATA_PATHS.ADVANCED_AUDIT_COMPLIANCE_REPORT_SUCCESS);
           return [200, data];
         } catch {
           return [500, { success: false, error: 'Mock fail' }];
@@ -1178,7 +1188,7 @@ export const setupMock = (enable) => {
 
       mock.onGet(MOCK_PATTERNS.ADVANCED_AUDIT_ANALYTICS_SECURITY).reply(async () => {
         try {
-          const data = await loadJson('/assets/data/advanced-audit/analytics/security/succeed/response.json');
+          const data = await loadJson(DATA_PATHS.ADVANCED_AUDIT_ANALYTICS_SECURITY_SUCCESS);
           return [200, data];
         } catch {
           return [500, { success: false, error: 'Mock fail' }];
@@ -1187,56 +1197,20 @@ export const setupMock = (enable) => {
 
       mock.onGet(MOCK_PATTERNS.ADVANCED_AUDIT_MIDDLEWARE_STATS).reply(async () => {
         try {
-          const data = await loadJson('/assets/data/advanced-audit/analytics/middleware/stats/succeed/response.json');
+          const data = await loadJson(DATA_PATHS.ADVANCED_AUDIT_MIDDLEWARE_STATS_SUCCESS);
           return [200, data];
         } catch {
           return [500, { success: false, error: 'Mock fail' }];
         }
       });
 
-      mock.onGet(MOCK_PATTERNS.ADVANCED_AUDIT_ANALYTICS_SECURITY).reply(async () => {
-        try {
-          const data = await loadJson('/assets/data/advanced-audit/analytics/security/succeed/response.json');
-          return [200, data];
-        } catch {
-          return [500, { success: false, error: 'Mock fail' }];
-        }
-      });
+      mock.onPost(MOCK_PATTERNS.ADVANCED_AUDIT_ARCHIVAL_RUN).reply(async () => { const data = await loadJson(DATA_PATHS.ADVANCED_AUDIT_ARCHIVAL_RUN_SUCCESS); return [200, data]; });
 
-      mock.onGet(MOCK_PATTERNS.ADVANCED_AUDIT_MIDDLEWARE_STATS).reply(async () => {
-        try {
-          const data = await loadJson('/assets/data/advanced-audit/analytics/middleware/stats/succeed/response.json');
-          return [200, data];
-        } catch {
-          return [500, { success: false, error: 'Mock fail' }];
-        }
-      });
-
-      mock.onGet(MOCK_PATTERNS.ADVANCED_AUDIT_ANALYTICS_SECURITY).reply(async () => {
-        try {
-          const data = await loadJson('/assets/data/advanced-audit/analytics/security/succeed/response.json');
-          return [200, data];
-        } catch {
-          return [500, { success: false, error: 'Mock fail' }];
-        }
-      });
-
-      mock.onGet(MOCK_PATTERNS.ADVANCED_AUDIT_MIDDLEWARE_STATS).reply(async () => {
-        try {
-          const data = await loadJson('/assets/data/advanced-audit/analytics/middleware/stats/succeed/response.json');
-          return [200, data];
-        } catch {
-          return [500, { success: false, error: 'Mock fail' }];
-        }
-      });
-
-      mock.onPost(MOCK_PATTERNS.ADVANCED_AUDIT_ARCHIVAL_RUN).reply(async () => { const data = await loadJson("/assets/data/advanced-audit/archival/run/succeed/response.json"); return [200, data]; });
-
-      mock.onPost(MOCK_PATTERNS.ADVANCED_AUDIT_ARCHIVAL_RESTORE).reply(async () => { const data = await loadJson("/assets/data/advanced-audit/archival/restore/fail/validate.json"); return [400, data]; });
+      mock.onPost(MOCK_PATTERNS.ADVANCED_AUDIT_ARCHIVAL_RESTORE).reply(async () => { const data = await loadJson(DATA_PATHS.ADVANCED_AUDIT_ARCHIVAL_RESTORE_FAIL); return [400, data]; });
 
       mock.onGet(MOCK_PATTERNS.ADVANCED_AUDIT_ARCHIVAL).reply(async () => {
         try {
-          const data = await loadJson('/assets/data/advanced-audit/archival/stats/succeed/response.json');
+          const data = await loadJson(DATA_PATHS.ADVANCED_AUDIT_ARCHIVAL_STATS_SUCCESS);
           return [200, data];
         } catch {
           return [500, { success: false, error: 'Mock fail' }];
@@ -1245,7 +1219,7 @@ export const setupMock = (enable) => {
 
       mock.onGet(MOCK_PATTERNS.ADVANCED_AUDIT_ARCHIVE).reply(async () => {
         try {
-          const data = await loadJson('/assets/data/advanced-audit/archival/succeed/response.json');
+          const data = await loadJson(DATA_PATHS.ADVANCED_AUDIT_ARCHIVE_SUCCESS);
           return [200, data];
         } catch {
           return [500, { success: false, error: 'Mock fail' }];
@@ -1263,7 +1237,7 @@ export const setupMock = (enable) => {
 
       mock.onPost(MOCK_PATTERNS.ADVANCED_AUDIT_RETENTION).reply(async () => {
         try {
-          const data = await loadJson('/assets/data/advanced-audit/rention/succeed/response.json');
+          const data = await loadJson(DATA_PATHS.ADVANCED_AUDIT_RETENTION_SUCCESS);
           return [200, data];
         } catch {
           return [500, { success: false, error: 'Mock fail' }];
