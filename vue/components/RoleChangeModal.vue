@@ -28,7 +28,7 @@
             <select
               :value="roleValue"
               :disabled="loading"
-              @change="$emit('update:roleValue', $event.target.value)"
+              @change="$emit('update:role-value', $event.target.value)"
               :class="roleSelectClass"
             >
               <option v-for="role in roleOptions" :key="role" :value="role">
@@ -87,7 +87,7 @@ export default {
       default: false
     }
   },
-  emits: ['close', 'save', 'update:roleValue'],
+  emits: ['close', 'save', 'update:role-value'],
   setup() {
     const roleSelectClass =
       'w-full pl-11 pr-10 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 focus:bg-white dark:focus:bg-slate-800 transition-all outline-none appearance-none';

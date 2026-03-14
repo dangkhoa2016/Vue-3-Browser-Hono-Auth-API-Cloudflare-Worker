@@ -13,11 +13,11 @@
     <!-- Form -->
     <form @submit.prevent="handleLogin" class="space-y-4">
       <!-- Error Alert -->
-      <div v-if="error" class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-3">
+      <div v-if="errorMessage" class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-3">
         <div class="flex items-center">
           <i class="bi bi-exclamation-triangle-fill text-red-600 dark:text-red-400 mr-2 text-lg"></i>
           <div class="flex-1">
-            <p class="text-sm font-medium text-red-800 dark:text-red-300">{{ error }}</p>
+            <p class="text-sm font-medium text-red-800 dark:text-red-300">{{ errorMessage }}</p>
             <ul v-if="fieldErrors.length" class="mt-1 text-xs text-red-700 dark:text-red-400 list-disc list-inside">
               <li v-for="(err, index) in fieldErrors" :key="index">
                 <strong>{{ err.field }}:</strong> {{ err.message }}
@@ -142,11 +142,11 @@ export default {
     });
 
     const isLoading = ref(false);
-    const error = ref('');
+    const errorMessage = ref('');
     const fieldErrors = ref([]);
 
     const clearErrors = () => {
-      error.value = '';
+      errorMessage.value = '';
       fieldErrors.value = [];
     };
 
@@ -176,7 +176,7 @@ export default {
           emit('close');
         } else {
           // Handle unsuccessful login
-          error.value = response.data.error || 'Login failed';
+          errorMessage.value = response.data.error || 'Login failed';
           if (response.data.errors) {
             fieldErrors.value = response.data.errors;
           }
@@ -184,15 +184,15 @@ export default {
       } catch (err) {
         if (err.response) {
           const data = err.response.data;
-          error.value = data.error || 'Login failed';
+          errorMessage.value = data.error || 'Login failed';
           
           if (data.errors && Array.isArray(data.errors)) {
             fieldErrors.value = data.errors;
           }
         } else if (err.request) {
-          error.value = 'Cannot connect to server. Please try again later.';
+          errorMessage.value = 'Cannot connect to server. Please try again later.';
         } else {
-          error.value = 'An unexpected error occurred. Please try again.';
+          errorMessage.value = 'An unexpected error occurred. Please try again.';
         }
       } finally {
         isLoading.value = false;
@@ -209,7 +209,7 @@ export default {
     return {
       formData,
       isLoading,
-      error,
+      errorMessage,
       fieldErrors,
       loginInputClass,
       submitButtonClass,

@@ -1,7 +1,7 @@
 <template>
   <div class="max-w-6xl mx-auto space-y-8 py-6">
     <!-- Loading State -->
-    <div v-if="loading" class="space-y-4 animate-pulse">
+    <div v-if="isLoading" class="space-y-4 animate-pulse">
       <div class="h-12 bg-gray-200 dark:bg-gray-700 rounded-xl"></div>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div class="h-36 bg-gray-200 dark:bg-gray-700 rounded-2xl"></div>
@@ -20,10 +20,10 @@
     />
 
     <!-- Error State -->
-    <div v-else-if="error" class="bg-red-50 dark:bg-red-900/20 border-2 border-red-200 dark:border-red-800 rounded-2xl p-8 text-center">
+    <div v-else-if="errorMessage" class="bg-red-50 dark:bg-red-900/20 border-2 border-red-200 dark:border-red-800 rounded-2xl p-8 text-center">
       <i class="bi bi-exclamation-triangle-fill text-5xl text-red-600 dark:text-red-400 mb-4"></i>
       <h3 class="text-xl font-bold text-red-900 dark:text-red-100 mb-2">{{ $t('message.api_explorer.error_loading') }}</h3>
-      <p class="text-red-700 dark:text-red-300 mb-4">{{ error }}</p>
+      <p class="text-red-700 dark:text-red-300 mb-4">{{ errorMessage }}</p>
       <ActionTextButton
         icon="bi bi-arrow-clockwise"
         tone="rose"
@@ -171,8 +171,8 @@ export default {
   },
   setup() {
     const apiInfo = ref(null);
-    const loading = ref(true);
-    const error = ref(null);
+    const isLoading = ref(true);
+    const errorMessage = ref(null);
     const collapsed = ref({});
 
     const mainStore = useMainStore();
@@ -192,12 +192,12 @@ export default {
 
     const loadApiInfo = async () => {
       try {
-        loading.value = true;
-        error.value = null;
+        isLoading.value = true;
+        errorMessage.value = null;
 
         const isAuth = await ensureAuthenticated({ checkSessionFlag: true, openModal: true });
         if (!isAuth) {
-          loading.value = false;
+          isLoading.value = false;
           return;
         }
 
@@ -212,7 +212,7 @@ export default {
       } catch (err) {
         const status = err.response?.status;
         const message = err.response?.data?.error || err.message || t('message.api_explorer.error_loading');
-        error.value = message;
+        errorMessage.value = message;
 
         if (status === 401) {
           authStore.logout();
@@ -220,7 +220,7 @@ export default {
           openLoginModal();
         }
       } finally {
-        loading.value = false;
+        isLoading.value = false;
       }
     };
 
@@ -273,7 +273,7 @@ export default {
       async (isAuthenticated) => {
         if (isAuthenticated === false) {
           apiInfo.value = null;
-          error.value = null;
+          errorMessage.value = null;
         }
         await handleAuthStateChange(isAuthenticated);
       },
@@ -287,8 +287,8 @@ export default {
 
     return {
       apiInfo,
-      loading,
-      error,
+      isLoading,
+      errorMessage,
       showLoginRequired,
       endpointCategories,
       endpointCountLabel,

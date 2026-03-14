@@ -353,7 +353,7 @@
 
     <!-- Log Details Modal -->
 
-    <ModalWindow :show="showModal" :title="tf('message.audit.log_details', 'Log Details')" @close="closeLog" :panelClass="'max-w-3xl sm:max-w-4xl w-full'">
+    <ModalWindow :show="showModal" :title="tf('message.audit.log_details', 'Log Details')" @close="closeLog" :panel-class="'max-w-3xl sm:max-w-4xl w-full'">
       <div class="space-y-4 modal-detail-body">
         <!-- Header: Action, Date, ID, Actions -->
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">

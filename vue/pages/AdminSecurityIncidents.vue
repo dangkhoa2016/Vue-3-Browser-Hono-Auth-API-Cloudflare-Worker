@@ -261,7 +261,7 @@
     </section>
 
     <!-- Incident Details Modal -->
-    <ModalWindow :show="showModal" :title="tf('message.security_incidents.details', 'Incident Details')" @close="closeIncident" :panelClass="'max-w-3xl sm:max-w-4xl w-full'">
+    <ModalWindow :show="showModal" :title="tf('message.security_incidents.details', 'Incident Details')" @close="closeIncident" :panel-class="'max-w-3xl sm:max-w-4xl w-full'">
       <div v-if="selectedIncident" class="space-y-4">
         <div class="flex flex-col gap-2">
           <div class="font-bold text-lg">{{ selectedIncident.title }}</div>

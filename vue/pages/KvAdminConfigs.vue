@@ -49,7 +49,7 @@
 
         <template #right>
           <div class="grid gap-4">
-            <template v-if="loading">
+            <template v-if="isLoading">
               <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm animate-pulse">
                 <div class="h-3 w-24 rounded bg-slate-200 dark:bg-slate-700/50"></div>
                 <div class="mt-3 flex items-center justify-between">
@@ -177,14 +177,14 @@
             </span>
           </div>
 
-          <div v-if="loading" class="p-6 space-y-4 animate-pulse">
+          <div v-if="isLoading" class="p-6 space-y-4 animate-pulse">
             <div v-for="row in 6" :key="row" class="h-12 rounded-xl bg-slate-100 dark:bg-slate-800"></div>
           </div>
 
-          <div v-else-if="error" class="p-8 text-center">
+          <div v-else-if="errorMessage" class="p-8 text-center">
             <i class="bi bi-exclamation-triangle-fill text-4xl text-rose-500 mb-3"></i>
             <h3 class="text-lg font-bold text-slate-900 dark:text-white">{{ $t('message.kv_admin_page.error_loading') }}</h3>
-            <p class="text-slate-500 dark:text-slate-400 mt-2">{{ error }}</p>
+            <p class="text-slate-500 dark:text-slate-400 mt-2">{{ errorMessage }}</p>
             <ActionTextButton
               class="mt-4"
               tone="rose"
@@ -516,8 +516,8 @@ export default {
     const modalStore = useModalStore();
     const mainStore = useMainStore();
 
-    const loading = ref(false);
-    const error = ref(null);
+    const isLoading = ref(false);
+    const errorMessage = ref(null);
     const search = ref('');
     const debouncedSearch = ref('');
     const showOverridesOnly = ref(false);
@@ -637,8 +637,8 @@ export default {
         return;
       }
 
-      loading.value = true;
-      error.value = null;
+      isLoading.value = true;
+      errorMessage.value = null;
 
       try {
         let payload;
@@ -676,9 +676,9 @@ export default {
           authStore.logout();
           markUnauthenticated();
         }
-        error.value = (err && err.message) || t('message.kv_admin_page.error_loading');
+        errorMessage.value = (err && err.message) || t('message.kv_admin_page.error_loading');
       } finally {
-        loading.value = false;
+        isLoading.value = false;
       }
     };
 
@@ -1232,8 +1232,8 @@ export default {
       showLoginRequired,
       isSuperAdmin,
       tf,
-      loading,
-      error,
+      isLoading,
+      errorMessage,
       search,
       showOverridesOnly,
       heroSectionClass,
