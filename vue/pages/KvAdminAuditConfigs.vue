@@ -167,6 +167,54 @@
             </div>
           </div>
         </div>
+
+        <!-- Realtime Settings -->
+        <div class="rounded-[28px] border border-slate-200/70 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-xl space-y-4">
+          <h2 class="text-xl font-bold border-b border-slate-100 dark:border-slate-800 pb-3"><i class="bi bi-activity text-blue-500 mr-2"></i> Realtime Settings</h2>
+          
+          <div v-if="loadingState.realtime" class="grid grid-cols-2 gap-4 animate-pulse">
+            <div v-for="i in 4" :key="i" class="p-4 rounded-2xl bg-blue-50/50 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-900/30">
+              <div class="h-3 w-20 bg-blue-200 dark:bg-blue-800/50 rounded mb-2"></div>
+              <div class="h-5 w-16 bg-blue-200 dark:bg-blue-800/50 rounded"></div>
+            </div>
+          </div>
+          
+          <div v-else class="grid grid-cols-2 gap-4">
+            <div v-for="(val, key) in auditData.realtime" :key="key" class="p-4 rounded-2xl bg-blue-50/50 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-900/30">
+              <span class="text-xs uppercase tracking-wider text-blue-600 dark:text-blue-400 block mb-1 shrink-0 whitespace-nowrap overflow-hidden text-ellipsis">{{ formatFeatureName(key) }}</span>
+              <span class="font-mono text-lg text-slate-800 dark:text-slate-200 font-bold whitespace-normal break-words">
+                <span v-if="typeof val === 'boolean'" :class="val ? 'text-emerald-500' : 'text-slate-400'">
+                  <i :class="val ? 'bi bi-check-circle-fill' : 'bi bi-x-circle-fill'"></i> {{ val ? 'Enabled' : 'Disabled' }}
+                </span>
+                <span v-else>{{ formatValueUnit(key, val) }}</span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Export Settings -->
+        <div class="rounded-[28px] border border-slate-200/70 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-xl space-y-4">
+          <h2 class="text-xl font-bold border-b border-slate-100 dark:border-slate-800 pb-3"><i class="bi bi-download text-teal-500 mr-2"></i> Export Settings</h2>
+          
+          <div v-if="loadingState.export" class="grid grid-cols-2 gap-4 animate-pulse">
+            <div v-for="i in 4" :key="i" class="p-4 rounded-2xl bg-teal-50/50 dark:bg-teal-900/10 border border-teal-100 dark:border-teal-900/30">
+              <div class="h-3 w-20 bg-teal-200 dark:bg-teal-800/50 rounded mb-2"></div>
+              <div class="h-5 w-16 bg-teal-200 dark:bg-teal-800/50 rounded"></div>
+            </div>
+          </div>
+          
+          <div v-else class="grid grid-cols-2 gap-4">
+            <div v-for="(val, key) in auditData.export" :key="key" class="p-4 rounded-2xl bg-teal-50/50 dark:bg-teal-900/10 border border-teal-100 dark:border-teal-900/30">
+              <span class="text-xs uppercase tracking-wider text-teal-600 dark:text-teal-400 block mb-1 shrink-0 whitespace-nowrap overflow-hidden text-ellipsis">{{ formatFeatureName(key) }}</span>
+              <span class="font-mono text-lg text-slate-800 dark:text-slate-200 font-bold whitespace-normal break-words">
+                <span v-if="typeof val === 'boolean'" :class="val ? 'text-emerald-500' : 'text-slate-400'">
+                  <i :class="val ? 'bi bi-check-circle-fill' : 'bi bi-x-circle-fill'"></i> {{ val ? 'Enabled' : 'Disabled' }}
+                </span>
+                <span v-else>{{ formatValueUnit(key, val) }}</span>
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
     </template>
   </div>
