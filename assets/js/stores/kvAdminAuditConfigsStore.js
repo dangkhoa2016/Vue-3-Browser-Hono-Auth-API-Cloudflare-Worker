@@ -6,7 +6,9 @@ const createInitialLoadingState = () => ({
   retention: true,
   performance: true,
   alerts: true,
-  compliance: true
+  compliance: true,
+  realtime: true,
+  export: true
 });
 
 const createCompletedLoadingState = () => ({
@@ -14,7 +16,9 @@ const createCompletedLoadingState = () => ({
   retention: false,
   performance: false,
   alerts: false,
-  compliance: false
+  compliance: false,
+  realtime: false,
+  export: false
 });
 
 const createInitialAuditData = () => ({
@@ -22,7 +26,9 @@ const createInitialAuditData = () => ({
   retention: {},
   performance: {},
   alerts: {},
-  compliance: {}
+  compliance: {},
+  realtime: {},
+  export: {}
 });
 
 const createSafeSectionFallback = () => ({ data: { data: {} } });
@@ -86,6 +92,21 @@ export const useKvAdminAuditConfigsStore = defineStore('kvAdminAuditConfigs', {
         });
         this.auditData.compliance = complianceReq?.data?.data || {};
         this.loadingState.compliance = false;
+
+        const realtimeReq = await apiClient.get(API_ENDPOINTS.KV_ADMIN_AUDIT_CONFIGS_REALTIME, authHeader).catch((error) => {
+          if (error?.response?.status === 401 || error?.response?.status === 403 || error?.code === 'REAUTH_REQUIRED') throw error;
+          return createSafeSectionFallback();
+        });
+        this.auditData.realtime = realtimeReq?.data?.data || {};
+        this.loadingState.realtime = false;
+
+        const exportReq = await apiClient.get(API_ENDPOINTS.KV_ADMIN_AUDIT_CONFIGS_EXPORT, authHeader).catch((error) => {
+          if (error?.response?.status === 401 || error?.response?.status === 403 || error?.code === 'REAUTH_REQUIRED') throw error;
+          return createSafeSectionFallback();
+        });
+        this.auditData.export = exportReq?.data?.data || {};
+        this.loadingState.export = false;
+
         this.lastUpdated = new Date().toISOString();
 
         return {
