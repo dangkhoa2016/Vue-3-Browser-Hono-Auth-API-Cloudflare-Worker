@@ -4,6 +4,7 @@ import { useAuthStore } from '/assets/js/stores/authStore.js';
 import { useModalStore } from '/assets/js/stores/modalStore.js';
 import { useToastStore } from '/assets/js/stores/toastStore.js';
 import { useProfileStore } from '/assets/js/stores/profileStore.js';
+import { useMainStore } from '/assets/js/stores/mainStore.js';
 import { useAuthGate } from '/vue/composables/useAuthGate.js';
 
 export function useProfilePage() {
@@ -43,6 +44,7 @@ export function useProfilePage() {
   const modalStore = useModalStore();
   const toastStore = useToastStore();
   const profileStore = useProfileStore();
+  const mainStore = useMainStore();
   const { profile, loadingProfile, errorMessage } = storeToRefs(profileStore);
 
   const normalizeText = (value) => String(value || '').trim();
@@ -378,6 +380,15 @@ export function useProfilePage() {
       }
     },
     { immediate: false }
+  );
+
+  watch(
+    () => mainStore.mockApi,
+    async () => {
+      if (authStore.isAuthenticated) {
+        await fetchProfileData();
+      }
+    }
   );
 
   onMounted(async () => {

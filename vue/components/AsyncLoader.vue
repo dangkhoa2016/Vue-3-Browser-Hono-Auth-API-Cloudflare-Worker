@@ -91,17 +91,6 @@ const isNotFoundError = computed(() => {
   return msg.includes('404') || msg.includes('Failed to fetch') || msg.includes('Not Found');
 });
 
-/**
- * Checks if the error is related to component not found
- * @type {import('vue').ComputedRef<boolean>}
- */
-const isNotFoundError = computed(() => {
-  if (!error.value) return false;
-  if (error.value.code === 'MODULE_NOT_FOUND' || error.value.status === 404) return true;
-  const msg = error.value.message || '';
-  return msg.includes('404') || msg.includes('Failed to fetch') || msg.includes('Not Found');
-});
-
 onErrorCaptured((err) => {
   // If the error is an API error (AxiosError, 401, etc) bubbling from a child component's
   // lifecycle/watch, let the component handle it locally rather than blowing up the whole view.
