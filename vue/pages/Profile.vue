@@ -412,7 +412,6 @@ const {
   canSubmitProfile,
   canSubmitPassword,
   formatDate,
-  getRoleBadgeColor,
   getRoleIcon,
   openLoginModal,
   loadProfile,
