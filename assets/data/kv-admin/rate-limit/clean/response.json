@@ -1,0 +1,16 @@
+{
+  "success": true,
+  "data": {
+    "prefix": "test:seed:seed:0:",
+    "dryRun": false,
+    "deletedCount": 5,
+    "affectedKeys": [
+      "test:seed:seed:0:1773876483667",
+      "test:seed:seed:0:1773878703644",
+      "test:seed:seed:0:1773880443379",
+      "test:seed:seed:0:1773880986773",
+      "test:seed:seed:0:1773902720646"
+    ]
+  },
+  "message": "Rate limit cleaned: 5 keys deleted (prefix: test:seed:seed:0:)"
+}

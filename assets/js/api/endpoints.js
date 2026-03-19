@@ -48,6 +48,7 @@ export const API_ENDPOINTS = {
   KV_ADMIN_AUDIT_CONFIGS_EXPORT: '/api/kv-admin/audit/configs/export',
   KV_ADMIN_AUDIT_CONFIGS_TOGGLE: '/api/kv-admin/audit/configs/feature/:feature/toggle',
   // KV Admin - Rate Limits
+  KV_ADMIN_RATE_LIMITS_LIST: '/api/kv-admin/rate-limits',
   KV_ADMIN_RATE_LIMITS_CLEAN: '/api/kv-admin/rate-limits/clean',
   KV_ADMIN_RATE_LIMITS_SEED: '/api/kv-admin/rate-limits/seed',
   KV_ADMIN_RATE_LIMITS_PRUNE_TIME: '/api/kv-admin/rate-limits/prune-time',
