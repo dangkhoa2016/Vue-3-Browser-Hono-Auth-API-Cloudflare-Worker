@@ -19,7 +19,11 @@ export const useKvAdminRateLimitsStore = defineStore('kvAdminRateLimits', {
     result: null,
     errorMessage: null,
     cleanForm: createInitialCleanForm(),
-    pruneForm: createInitialPruneForm()
+    pruneForm: createInitialPruneForm(),
+    rateLimitsList: [],
+    listComplete: true,
+    listCursor: null,
+    listPrefix: 'rate_limit:'
   }),
 
   actions: {
@@ -39,6 +43,49 @@ export const useKvAdminRateLimitsStore = defineStore('kvAdminRateLimits', {
       this.errorMessage = null;
     },
 
+    async loadRateLimits(token, { reset = true } = {}) {
+      if (reset) {
+        this.listCursor = null;
+        this.rateLimitsList = [];
+      }
+      this.isLoading = true;
+      this.errorMessage = null;
+
+      try {
+        const params = { limit: 50 };
+        if (this.listPrefix) params.prefix = this.listPrefix;
+        if (this.listCursor) params.cursor = this.listCursor;
+        
+        const response = await apiClient.get(API_ENDPOINTS.KV_ADMIN_RATE_LIMITS_LIST, {
+          headers: { Authorization: `Bearer ${token}` },
+          params
+        });
+
+        if (response.data?.success) {
+          const result = response.data.data;
+          this.rateLimitsList = reset ? result.keys : [...this.rateLimitsList, ...result.keys];
+          this.listComplete = result.list_complete;
+          this.listCursor = result.cursor;
+          return { 
+            success: true, 
+            message: response.data.message 
+          };
+        } else {
+          throw new Error('Failed to load rate limits list');
+        }
+      } catch (error) {
+        this.errorMessage = error?.response?.data?.error || error?.message || 'Failed to load rate limits';
+        return {
+          success: false,
+          error: this.errorMessage,
+          status: error?.response?.status,
+          code: error?.code
+        };
+      } finally {
+        this.isLoading = false;
+      }
+    },
+
     async runClean(token) {
       this.isLoading = true;
       this.result = null;
@@ -52,7 +99,8 @@ export const useKvAdminRateLimitsStore = defineStore('kvAdminRateLimits', {
 
         return {
           success: true,
-          data: response.data
+          data: response.data,
+          message: response.data?.message
         };
       } catch (error) {
         this.result = error?.response?.data || error?.message;
@@ -89,7 +137,8 @@ export const useKvAdminRateLimitsStore = defineStore('kvAdminRateLimits', {
 
         return {
           success: true,
-          data: response.data
+          data: response.data,
+          message: response.data?.message
         };
       } catch (error) {
         this.result = error?.response?.data || error?.message;

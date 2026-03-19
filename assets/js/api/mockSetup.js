@@ -1152,10 +1152,13 @@ export const initializeKVAdminMock = (mockAdapter) => {
   mockAdapter.onPost(MOCK_PATTERNS.KV_ADMIN_AUDIT_CONFIGS_TOGGLE).reply(async () => {
     return [200, await loadJson(DATA_PATHS.KV_ADMIN_FEATURES_TOGGLE_SUCCESS)];
   });
-  mockAdapter.onPost(MOCK_PATTERNS.KV_ADMIN_RATE_LIMITS_CLEAN).reply(200, {
-    success: true, data: { dryRun: true, deletedCount: 5, prefix: "test:" }
+  mockAdapter.onPost(MOCK_PATTERNS.KV_ADMIN_RATE_LIMITS_CLEAN).reply(async () => {
+    return [200, await loadJson(DATA_PATHS.KV_ADMIN_RATE_LIMITS_CLEAN_SUCCESS)];
   });
-  mockAdapter.onPost(MOCK_PATTERNS.KV_ADMIN_RATE_LIMITS_PRUNE_TIME).reply(200, {
-    success: true, data: { dryRun: true, deletedCount: 12 }
+  mockAdapter.onGet(MOCK_PATTERNS.KV_ADMIN_RATE_LIMITS_LIST).reply(async () => {
+    return [200, await loadJson(DATA_PATHS.KV_ADMIN_RATE_LIMITS_LIST_SUCCESS)];
+  });
+  mockAdapter.onPost(MOCK_PATTERNS.KV_ADMIN_RATE_LIMITS_PRUNE_TIME).reply(async () => {
+    return [200, await loadJson(DATA_PATHS.KV_ADMIN_RATE_LIMITS_PRUNE_SUCCESS)];
   });
 };

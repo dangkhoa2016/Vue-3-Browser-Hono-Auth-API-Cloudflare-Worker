@@ -37,6 +37,9 @@ export const DATA_PATHS = {
   TOKEN_AUDIT_DELETE_SUCCESS: '/assets/data/token-audit/delete/succeed/response.json',
   TOKEN_AUDIT_BULK_DELETE_SUCCESS: '/assets/data/token-audit/bulk-delete/succeed/response.json',
   // KV Admin Toggle data
+  KV_ADMIN_RATE_LIMITS_CLEAN_SUCCESS: '/assets/data/kv-admin/rate-limit/clean/response.json',
+  KV_ADMIN_RATE_LIMITS_LIST_SUCCESS: '/assets/data/kv-admin/rate-limit/succeed/response.json',
+  KV_ADMIN_RATE_LIMITS_PRUNE_SUCCESS: '/assets/data/kv-admin/rate-limit/prune/response.json',
   KV_ADMIN_FEATURES_TOGGLE_SUCCESS: '/assets/data/kv-admin/features/toggle/succeed/response.json',
   KV_ADMIN_FEATURES: '/assets/data/kv-admin/features/response.json',
   KV_ADMIN_BATCH_SUCCESS: '/assets/data/kv-admin/batch/succeed/response.json',
@@ -112,6 +115,7 @@ export const MOCK_PATTERNS = {
   KV_ADMIN_AUDIT_CONFIGS_COMPLIANCE: new RegExp(`${API_ENDPOINTS.KV_ADMIN_AUDIT_CONFIGS_COMPLIANCE.replace(/\//g, '\\/')}($|\\?)`),
   KV_ADMIN_AUDIT_CONFIGS_TOGGLE: new RegExp(`${API_ENDPOINTS.KV_ADMIN_AUDIT_CONFIGS.replace(/\//g, '\\/')}\\/feature\\/[^/]+\\/toggle($|\\?)`),
   
+  KV_ADMIN_RATE_LIMITS_LIST: new RegExp(`${API_ENDPOINTS.KV_ADMIN_RATE_LIMITS_LIST.replace(/\//g, '\\/')}($|\\?)`),
   KV_ADMIN_RATE_LIMITS_CLEAN: new RegExp(`${API_ENDPOINTS.KV_ADMIN_RATE_LIMITS_CLEAN.replace(/\//g, '\\/')}($|\\?)`),
   KV_ADMIN_RATE_LIMITS_SEED: new RegExp(`${API_ENDPOINTS.KV_ADMIN_RATE_LIMITS_SEED.replace(/\//g, '\\/')}($|\\?)`),
   KV_ADMIN_RATE_LIMITS_PRUNE_TIME: new RegExp(`${API_ENDPOINTS.KV_ADMIN_RATE_LIMITS_PRUNE_TIME.replace(/\//g, '\\/')}($|\\?)`),
