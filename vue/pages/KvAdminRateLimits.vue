@@ -93,6 +93,63 @@
           </div>
           <pre class="overflow-x-auto text-sm max-h-[400px]">{{ JSON.stringify(result, null, 2) }}</pre>
         </div>
+
+        <!-- Rate Limits List -->
+        <div class="lg:col-span-2 bg-white dark:bg-slate-900 rounded-[28px] border border-slate-200 dark:border-slate-800 p-6 shadow-xl space-y-4">
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-100 dark:border-slate-800 pb-4">
+            <h2 class="text-xl font-bold"><i class="bi bi-list-ul mr-2 text-cyan-500"></i> Rate Limit Keys</h2>
+            <div class="flex items-center gap-3">
+              <input v-model="listPrefix" @keyup.enter="fetchRateLimits(true, true)" type="text" class="px-4 py-2 text-sm border rounded-xl dark:bg-slate-800 dark:border-slate-700 w-48" placeholder="Prefix (e.g. rate_limit:)" />
+              <ActionTextButton tone="cyan" size="sm" :disabled="isLoading" @click="fetchRateLimits(true, true)">
+                <i class="bi bi-arrow-clockwise mr-1"></i> Refresh
+              </ActionTextButton>
+            </div>
+          </div>
+          
+          <div v-if="isLoading && rateLimitsList.length === 0" class="py-12 text-center text-slate-500 flex flex-col items-center gap-3">
+            <div class="w-8 h-8 rounded-full border-2 border-cyan-500 border-t-transparent animate-spin"></div>
+            Loading rate limits...
+          </div>
+          
+          <div v-else-if="rateLimitsList.length === 0" class="py-12 text-center text-slate-500">
+            <i class="bi bi-inbox text-4xl mb-2 opacity-50"></i>
+            <p>No rate limit keys found for the specified prefix.</p>
+          </div>
+          
+          <div v-else class="space-y-4">
+            <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700">
+              <table class="w-full text-left text-sm">
+                <thead class="bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+                  <tr>
+                    <th class="px-4 py-3 font-semibold">Key Name</th>
+                    <th class="px-4 py-3 font-semibold">Value</th>
+                    <th class="px-4 py-3 font-semibold w-40">Expiration</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
+                  <tr v-for="key in rateLimitsList" :key="key.name" class="hover:bg-slate-50/50 dark:hover:bg-slate-800/50">
+                    <td class="px-4 py-3 font-mono text-xs text-sky-600 dark:text-sky-400 break-all">{{ key.name }}</td>
+                    <td class="px-4 py-3">
+                      <pre class="text-xs bg-slate-100 dark:bg-slate-950 p-2 rounded max-h-32 overflow-y-auto max-w-sm ml-0 break-words whitespace-pre-wrap">{{ JSON.stringify(key.value, null, 2) }}</pre>
+                    </td>
+                    <td class="px-4 py-3 text-xs text-slate-500">
+                      {{ key.expiration ? new Date(key.expiration * 1000).toLocaleString() : 'N/A' }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            
+            <div v-if="!listComplete" class="text-center pt-4">
+              <ActionTextButton variant="soft" tone="cyan" :disabled="isLoading" @click="loadMoreRateLimits">
+                {{ isLoading ? 'Loading...' : 'Load More' }}
+              </ActionTextButton>
+            </div>
+            <div v-else class="text-center text-xs text-slate-400 pt-2">
+              Showing all {{ rateLimitsList.length }} keys
+            </div>
+          </div>
+        </div>
       </div>
     </template>
   </div>
@@ -112,6 +169,12 @@ const {
   result,
   cleanForm,
   pruneForm,
+  rateLimitsList,
+  listComplete,
+  listCursor,
+  listPrefix,
+  fetchRateLimits,
+  loadMoreRateLimits,
   runClean,
   runPrune
 } = useKvAdminRateLimitsPage();

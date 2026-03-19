@@ -1,0 +1,28 @@
+{
+  "success": true,
+  "data": {
+    "prefix": "test:seed:seed:1",
+    "range": {
+      "start": "2026-03-12T00:35:00.000Z",
+      "end": "2026-03-19T00:35:00.000Z"
+    },
+    "dryRun": true,
+    "checkedCount": 5,
+    "deletedCount": 3,
+    "affectedKeys": [
+      {
+        "key": "test:seed:seed:1:1773876483670",
+        "timestamp": 1773876483670
+      },
+      {
+        "key": "test:seed:seed:1:1773878703648",
+        "timestamp": 1773878703648
+      },
+      {
+        "key": "test:seed:seed:1:1773880443382",
+        "timestamp": 1773880443382
+      }
+    ]
+  },
+  "message": "Rate limit prune dry run: 3 keys would be deleted (prefix: test:seed:seed:1)"
+}
