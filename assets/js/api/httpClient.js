@@ -3,6 +3,68 @@ import { i18n } from '../i18n.js';
 import { getAuthStore } from '../appServices.js';
 import { API_ENDPOINTS, API_CONFIG, HTTP_STATUS } from './endpoints.js';
 
+const API_REQUEST_TIMEOUT_KEY = 'api-request-timeout-ms';
+
+export function normalizeApiBaseUrl(value) {
+  const rawValue = String(value || '').trim();
+  const fallback = String(API_CONFIG.DEFAULT_BASE_URL || API_CONFIG.BASE_URL || '').trim();
+  const candidate = rawValue || fallback;
+  const parsedUrl = new URL(candidate);
+
+  if (!['http:', 'https:'].includes(parsedUrl.protocol)) {
+    throw new Error('Invalid API endpoint protocol');
+  }
+
+  if (parsedUrl.username || parsedUrl.password) {
+    throw new Error('Invalid API endpoint credentials');
+  }
+
+  if (parsedUrl.search || parsedUrl.hash) {
+    throw new Error('Invalid API endpoint suffix');
+  }
+
+  if (parsedUrl.pathname && parsedUrl.pathname !== '/' && parsedUrl.pathname !== '') {
+    throw new Error('Invalid API endpoint path');
+  }
+
+  return parsedUrl.origin;
+}
+
+export function normalizeApiRequestTimeout(value, fallback = API_CONFIG.DEFAULT_TIMEOUT) {
+  const parsed = Number.parseInt(value, 10);
+  const fallbackValue = Number.parseInt(fallback, 10);
+  const normalizedFallback = Number.isFinite(fallbackValue) && fallbackValue >= 1000
+    ? fallbackValue
+    : 15000;
+
+  if (!Number.isFinite(parsed)) {
+    return normalizedFallback;
+  }
+
+  return Math.min(120000, Math.max(1000, parsed));
+}
+
+const resolveInitialBaseUrl = () => {
+  try {
+    return normalizeApiBaseUrl(localStorage.getItem('api-base-url'));
+  } catch (_error) {
+    return normalizeApiBaseUrl(API_CONFIG.DEFAULT_BASE_URL || API_CONFIG.BASE_URL);
+  }
+};
+
+const resolveInitialTimeout = () => normalizeApiRequestTimeout(
+  localStorage.getItem(API_REQUEST_TIMEOUT_KEY),
+  API_CONFIG.DEFAULT_TIMEOUT
+);
+
+const resolveRuntimeBaseUrl = () => {
+  try {
+    return normalizeApiBaseUrl(localStorage.getItem('api-base-url'));
+  } catch (_error) {
+    return normalizeApiBaseUrl(API_CONFIG.BASE_URL || API_CONFIG.DEFAULT_BASE_URL);
+  }
+};
+
 /**
  * Shared Axios HTTP Client instance with retry and interceptor logic.
  * @type {import('axios').AxiosInstance}
@@ -12,13 +74,33 @@ import { API_ENDPOINTS, API_CONFIG, HTTP_STATUS } from './endpoints.js';
  * @type {import('axios').AxiosInstance}
  */
 export const apiClient = axios.create({
-  baseURL: API_CONFIG.BASE_URL,
+  baseURL: resolveInitialBaseUrl(),
+  timeout: resolveInitialTimeout(),
   retry: API_CONFIG.RETRY_COUNT,
   retryDelay: API_CONFIG.RETRY_DELAY,
 });
 
+API_CONFIG.BASE_URL = apiClient.defaults.baseURL;
+
+export function setApiClientBaseUrl(nextBaseUrl) {
+  const normalized = normalizeApiBaseUrl(nextBaseUrl);
+  apiClient.defaults.baseURL = normalized;
+  API_CONFIG.BASE_URL = normalized;
+}
+
+export function setApiClientTimeout(nextTimeout) {
+  apiClient.defaults.timeout = normalizeApiRequestTimeout(nextTimeout, API_CONFIG.DEFAULT_TIMEOUT);
+}
+
 // Add request interceptor to inject current language and handle token refresh
 apiClient.interceptors.request.use(async (config) => {
+  // Re-sync baseURL on each request so runtime endpoint changes apply immediately.
+  if (config && config.url && !/^https?:\/\//i.test(config.url)) {
+    config.baseURL = resolveRuntimeBaseUrl();
+    apiClient.defaults.baseURL = config.baseURL;
+    API_CONFIG.BASE_URL = config.baseURL;
+  }
+
   // Language injection
   let lang = 'en'; // Default fallback
 

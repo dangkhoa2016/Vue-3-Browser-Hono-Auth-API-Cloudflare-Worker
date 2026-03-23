@@ -1,16 +1,20 @@
 import { onMounted, watch, ref, computed } from 'vue';
+import { DEFAULT_ADMIN_PAGE_SIZE, resolveAdminPageSize } from '/assets/js/constants/pagination.js';
 import { useAuditStore } from '/assets/js/stores/auditStore.js';
 import { useMainStore } from '/assets/js/stores/mainStore.js';
 import { useAuthStore } from '/assets/js/stores/authStore.js';
 import { useModalStore } from '/assets/js/stores/modalStore.js';
 import { useToastStore } from '/assets/js/stores/toastStore.js';
 import { useAuthGate } from '/vue/composables/useAuthGate.js';
+import { useDateTimeFormatter } from '/vue/composables/useDateTimeFormatter.js';
 import { useI18nFallback } from '/vue/composables/useI18nFallback.js';
 import { useModalState } from '/vue/composables/useModalState.js';
 
 export function useAdminAuditLogsPage() {
   const auditStore = useAuditStore();
   const toastStore = useToastStore();
+  const { formatDateTime } = useDateTimeFormatter();
+  const mainStore = useMainStore();
 
   const logDetailModal = useModalState({
     initialMode: 'view',
@@ -31,6 +35,7 @@ export function useAdminAuditLogsPage() {
   const actorAvatarClass =
     'w-10 h-10 rounded-full bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-700 flex items-center justify-center text-sm font-semibold text-slate-800 dark:text-slate-100';
   const actorRoleBadgeBaseClass = 'inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold whitespace-nowrap';
+  const preferredPageSize = computed(() => resolveAdminPageSize(mainStore.adminPageSize, DEFAULT_ADMIN_PAGE_SIZE));
 
   const totalLogCount = computed(() => auditStore.error ? 0 : (Number(auditStore.pagination.total) || auditStore.logs.length || 0));
   const successCount = computed(() => auditStore.error ? 0 : (auditStore.logs || []).filter((log) => (log.status || '').toUpperCase() === 'SUCCESS').length);
@@ -40,9 +45,7 @@ export function useAdminAuditLogsPage() {
   }).length);
 
   const formatDate = (d) => {
-    if (!d) return '';
-    const dt = new Date(d);
-    return dt.toLocaleString();
+    return formatDateTime(d, '');
   };
 
   const formatDetails = (obj) => {
@@ -121,7 +124,6 @@ export function useAdminAuditLogsPage() {
     return `${actorRoleBadgeBaseClass} bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-200`;
   };
 
-  const mainStore = useMainStore();
   const { tf } = useI18nFallback();
   const authStore = useAuthStore();
   const modalStore = useModalStore();
@@ -198,8 +200,8 @@ export function useAdminAuditLogsPage() {
   };
 
   const handlePageSizeChange = async (limit) => {
-    const nextLimit = Math.max(1, Number.parseInt(limit, 10) || 20);
-    const currentLimit = Math.max(1, Number.parseInt(auditStore.filters.limit, 10) || 20);
+    const nextLimit = resolveAdminPageSize(limit, preferredPageSize.value);
+    const currentLimit = resolveAdminPageSize(auditStore.filters.limit, preferredPageSize.value);
     if (nextLimit === currentLimit) return;
 
     auditStore.filters.limit = nextLimit;

@@ -40,8 +40,8 @@ export default {
     const store = useMainStore();
     const router = useRouter();
     
-    // Initialize theme
-    store.initTheme();
+    // Initialize persisted browser preferences
+    store.initPreferences();
     
     // Initial mock setup
     setupMock(store.mockApi);

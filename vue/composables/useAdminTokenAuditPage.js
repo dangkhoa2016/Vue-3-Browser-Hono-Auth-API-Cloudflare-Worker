@@ -3,6 +3,8 @@ import { useMainStore } from '/assets/js/stores/mainStore.js';
 import { useAuthStore } from '/assets/js/stores/authStore.js';
 import { useModalStore } from '/assets/js/stores/modalStore.js';
 import { useTokenAuditStore } from '/assets/js/stores/tokenAuditStore.js';
+import { DEFAULT_ADMIN_PAGE_SIZE, resolveAdminPageSize } from '/assets/js/constants/pagination.js';
+import { useDateTimeFormatter } from '/vue/composables/useDateTimeFormatter.js';
 import { useDebouncedFilters } from '/vue/composables/useDebouncedFilters.js';
 import { useModalState } from '/vue/composables/useModalState.js';
 import { useAuthGate } from '/vue/composables/useAuthGate.js';
@@ -15,6 +17,7 @@ export function useAdminTokenAuditPage() {
   const authStore = useAuthStore();
   const modalStore = useModalStore();
   const auditStore = useTokenAuditStore();
+  const { formatDateTime } = useDateTimeFormatter();
 
   const items = computed(() => auditStore.items);
   const isLoading = computed(() => auditStore.loading);
@@ -27,7 +30,9 @@ export function useAdminTokenAuditPage() {
 
   const searchQuery = ref('');
   const selectedItems = ref([]);
-  const { runDebounced, clearDebounce } = useDebouncedFilters(300);
+  const preferredPageSize = computed(() => resolveAdminPageSize(mainStore.adminPageSize, DEFAULT_ADMIN_PAGE_SIZE));
+  const preferredSearchDebounce = computed(() => Math.max(0, Number.parseInt(mainStore.adminSearchDebounceMs, 10) || 300));
+  const { runDebounced, clearDebounce } = useDebouncedFilters();
 
   const detailModal = useModalState({ initialMode: 'detail', initialValue: null });
   const showDetailModal = detailModal.isOpen;
@@ -60,16 +65,7 @@ export function useAdminTokenAuditPage() {
   const actionsCellClass = `px-5 py-3 whitespace-nowrap text-right text-sm font-medium ${mobileDataLabelBaseClass}`;
 
   const formatDate = (dateString) => {
-    if (!dateString) return '-';
-    try {
-      const date = new Date(dateString);
-      return new Intl.DateTimeFormat(undefined, {
-        year: 'numeric', month: 'short', day: 'numeric',
-        hour: '2-digit', minute: '2-digit', second: '2-digit'
-      }).format(date);
-    } catch (e) {
-      return dateString;
-    }
+    return formatDateTime(dateString, '-');
   };
 
   const formatMetadata = (metadata) => {
@@ -84,13 +80,16 @@ export function useAdminTokenAuditPage() {
     }
   };
 
-  const fetchLogs = async (page = 1) => {
+  const fetchLogs = async (
+    page = 1,
+    limit = resolveAdminPageSize(pagination.value?.limit, preferredPageSize.value)
+  ) => {
     if (!authStore.isAuthenticated || !isSuperAdmin.value) return;
 
     selectedItems.value = [];
     await auditStore.fetchLogs({
       page,
-      limit: pagination.value.limit,
+      limit,
       search: searchQuery.value
     });
   };
@@ -119,7 +118,7 @@ export function useAdminTokenAuditPage() {
   const handleSearch = () => {
     runDebounced('admin-token-audit-search', async () => {
       await fetchLogs(1);
-    });
+    }, preferredSearchDebounce.value);
   };
 
   const clearSearch = () => {

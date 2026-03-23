@@ -78,7 +78,49 @@ const props = defineProps({
 const resolvedComponent = shallowRef(null);
 const error = shallowRef(null);
 const isLoading = shallowRef(false);
+const reloadNonce = shallowRef(0);
 let isMounted = true;
+
+const buildReloadPath = () => {
+  if (!reloadNonce.value) {
+    return props.path;
+  }
+
+  const separator = props.path.includes('?') ? '&' : '?';
+  return `${props.path}${separator}__reload=${reloadNonce.value}`;
+};
+
+const clearModuleCacheEntries = (sfcOptions) => {
+  if (!sfcOptions?.moduleCache) {
+    return;
+  }
+
+  const removablePrefixes = [
+    '/vue/',
+    '/assets/js/i18n.js',
+    '/assets/js/locales/'
+  ];
+
+  Object.keys(sfcOptions.moduleCache).forEach((key) => {
+    if (removablePrefixes.some((prefix) => key.startsWith(prefix))) {
+      delete sfcOptions.moduleCache[key];
+    }
+  });
+};
+
+const clearLoaderCaches = async () => {
+  const sfcOptions = getSfcOptions();
+  clearModuleCacheEntries(sfcOptions);
+
+  const cacheName = sfcOptions?.cacheName;
+  if (cacheName && window.caches) {
+    try {
+      await caches.delete(cacheName);
+    } catch (cacheError) {
+      console.warn(`[AsyncLoader] Failed clearing cache ${cacheName}:`, cacheError);
+    }
+  }
+};
 
 /**
  * Checks if the error is related to component not found
@@ -104,9 +146,7 @@ onErrorCaptured((err) => {
   resolvedComponent.value = null;
 
   const sfcOptions = getSfcOptions();
-  if (sfcOptions?.moduleCache?.[props.path]) {
-    delete sfcOptions.moduleCache[props.path];
-  }
+  clearModuleCacheEntries(sfcOptions);
 
   return false;
 });
@@ -116,7 +156,8 @@ onUnmounted(() => {
 });
 
 const fetchComponent = async () => {
-  console.time(`[AsyncLoader] Load ${props.path}`);
+  const loadPath = buildReloadPath();
+  console.time(`[AsyncLoader] Load ${loadPath}`);
   if (isLoading.value) return;
   isLoading.value = true;
   error.value = null;
@@ -133,10 +174,10 @@ const fetchComponent = async () => {
     if (!isMounted) { isLoading.value = false; return; }
     try {
       const { loadModule } = window['vue3-sfc-loader'];
-      const component = await loadModule(props.path, sfcOptions);
+      const component = await loadModule(loadPath, sfcOptions);
       if (!isMounted) { isLoading.value = false; return; }
 
-      console.timeEnd(`[AsyncLoader] Load ${props.path}`);
+      console.timeEnd(`[AsyncLoader] Load ${loadPath}`);
       resolvedComponent.value = component;
       if (window.NProgress) window.NProgress.done();
       isLoading.value = false;
@@ -144,12 +185,10 @@ const fetchComponent = async () => {
     } catch (err) {
       if (!isMounted) { isLoading.value = false; return; }
 
-      if (sfcOptions?.moduleCache?.[props.path]) {
-        delete sfcOptions.moduleCache[props.path];
-      }
+      clearModuleCacheEntries(sfcOptions);
 
-      console.timeEnd(`[AsyncLoader] Load ${props.path}`);
-      console.warn(`[AsyncLoader] Attempt ${i + 1} failed to load ${props.path}:`, err);
+      console.timeEnd(`[AsyncLoader] Load ${loadPath}`);
+      console.warn(`[AsyncLoader] Attempt ${i + 1} failed to load ${loadPath}:`, err);
       if (i < retryCount - 1) {
         await new Promise(resolve => setTimeout(resolve, retryDelay));
       } else {
@@ -165,11 +204,9 @@ const fetchComponent = async () => {
 onMounted(fetchComponent);
 onActivated(() => { if (error.value) fetchComponent(); });
 
-const retry = () => {
-  const sfcOptions = getSfcOptions();
-  if (sfcOptions?.moduleCache?.[props.path]) {
-    delete sfcOptions.moduleCache[props.path];
-  }
-  fetchComponent();
+const retry = async () => {
+  reloadNonce.value = Date.now();
+  await clearLoaderCaches();
+  await fetchComponent();
 };
 </script>

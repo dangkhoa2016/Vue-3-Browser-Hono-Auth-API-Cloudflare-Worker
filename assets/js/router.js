@@ -23,6 +23,12 @@ const routes = [
     meta: { requiresAuth: true, keepAlive: true }
   },
   {
+    path: '/settings',
+    name: 'Settings',
+    component: load('/vue/pages/Settings.vue'),
+    meta: { keepAlive: true }
+  },
+  {
     path: '/api-info',
     name: 'ApiExplorer',
     component: load('/vue/pages/ApiExplorer.vue'),

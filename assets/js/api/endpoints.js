@@ -1,5 +1,9 @@
+const DEFAULT_API_BASE_URL = 'http://localhost:8788/';
+
 export const API_CONFIG = {
-  BASE_URL: 'http://localhost:8788/',
+  DEFAULT_BASE_URL: DEFAULT_API_BASE_URL,
+  BASE_URL: DEFAULT_API_BASE_URL,
+  DEFAULT_TIMEOUT: 15000,
   RETRY_COUNT: 2,
   RETRY_DELAY: 1000,
 };
@@ -83,6 +87,7 @@ export const API_ENDPOINTS = {
   REALTIME_MONITORING_ANALYZE: '/api/realtime-monitoring/monitoring/analyze',
   REALTIME_MONITORING_SIMULATE: '/api/realtime-monitoring/monitoring/simulate',
   REALTIME_MONITORING_ALERTS_STATUS: '/api/realtime-monitoring/alerts/status',
+  REALTIME_MONITORING_ALERTS_CONFIGURE: '/api/realtime-monitoring/alerts/configure',
   REALTIME_MONITORING_ALERTS_HISTORY: '/api/realtime-monitoring/alerts/history',
   REALTIME_MONITORING_DASHBOARD_OVERVIEW: '/api/realtime-monitoring/dashboard/overview',
   REALTIME_MONITORING_DASHBOARD_REALTIME: '/api/realtime-monitoring/dashboard/realtime',

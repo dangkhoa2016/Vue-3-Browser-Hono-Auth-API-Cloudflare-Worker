@@ -29,21 +29,35 @@
         
         <!-- Tabs Nav -->
         <div class="border-b border-slate-200 dark:border-slate-700 mb-8">
-          <nav class="-mb-px flex space-x-8 overflow-x-auto" aria-label="Tabs">
-            <button 
-              v-for="tab in tabs" 
-              :key="tab.id"
-              @click="activeTab = tab.id"
-              :class="[
-                activeTab === tab.id
-                  ? 'border-indigo-500 text-indigo-600 dark:text-indigo-400 dark:border-indigo-400'
-                  : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300 dark:text-slate-400 dark:hover:text-slate-300 dark:hover:border-slate-600',
-                'whitespace-nowrap py-4 px-1 border-b-2 font-bold text-sm transition-all duration-200'
-              ]"
+          <nav class="-mb-px flex gap-6 overflow-x-auto" aria-label="Tabs">
+            <div
+              v-for="tab in tabs"
+              :key="tab.key"
+              class="flex items-center gap-2"
             >
-              <i :class="['bi', tab.icon, 'mr-2']"></i>
-              {{ tab.name }}
-            </button>
+              <button
+                type="button"
+                @click="selectTab(tab.key)"
+                :class="[
+                  activeTab === tab.key
+                    ? 'border-indigo-500 text-indigo-600 dark:text-indigo-400 dark:border-indigo-400'
+                    : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300 dark:text-slate-400 dark:hover:text-slate-300 dark:hover:border-slate-600',
+                  'whitespace-nowrap py-4 px-1 border-b-2 font-bold text-sm transition-all duration-200'
+                ]"
+              >
+                <i :class="['bi', tab.icon, 'mr-2']"></i>
+                {{ tab.name }}
+              </button>
+              <button
+                type="button"
+                class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:text-slate-900 dark:border-slate-700 dark:text-slate-300 dark:hover:text-white"
+                :title="`${tf('message.settings.copy_link', 'Copy link')}: ${tab.name}`"
+                :aria-label="`${tf('message.settings.copy_link', 'Copy link')}: ${tab.name}`"
+                @click="copyCurrentTabLink(tab.key)"
+              >
+                <i :class="copiedTabKey === tab.key ? 'bi bi-clipboard-check' : 'bi bi-link-45deg'"></i>
+              </button>
+            </div>
           </nav>
         </div>
 
@@ -98,9 +112,11 @@ import { useAdvancedAuditStore } from '/assets/js/stores/advancedAuditStore.js';
 import { useMainStore } from '/assets/js/stores/mainStore.js';
 import { useModalStore } from '/assets/js/stores/modalStore.js';
 import { useToastStore } from '/assets/js/stores/toastStore.js';
-import { useI18n } from 'vue-i18n';
+import { useDeepLinkedTabs } from '/vue/composables/useDeepLinkedTabs.js';
 import { useAuthGate } from '../composables/useAuthGate.js';
-const { t } = useI18n();
+import { useI18nFallback } from '/vue/composables/useI18nFallback.js';
+
+const { tf } = useI18nFallback({ useScope: 'global' });
 const authStore = useAuthStore();
 const auditStore = useAdvancedAuditStore();
 const mainStore = useMainStore();
@@ -109,13 +125,22 @@ const toastStore = useToastStore();
 
 const isAuthenticated = computed(() => authStore.isAuthenticated);
 
-const tabs = [
-  { id: 'analytics', name: t('message.advanced_audit.tabs.analytics') || 'Analytics', icon: 'bi-graph-up' },
-  { id: 'compliance', name: t('message.advanced_audit.tabs.compliance') || 'Compliance', icon: 'bi-shield-check' },
-  { id: 'archival', name: t('message.advanced_audit.tabs.archival') || 'Archival & Retention', icon: 'bi-archive' }
-];
+const tabs = computed(() => [
+  { key: 'analytics', name: tf('message.advanced_audit.tabs.analytics', 'Analytics'), icon: 'bi-graph-up' },
+  { key: 'compliance', name: tf('message.advanced_audit.tabs.compliance', 'Compliance'), icon: 'bi-shield-check' },
+  { key: 'archival', name: tf('message.advanced_audit.tabs.archival', 'Archival & Retention'), icon: 'bi-archive' }
+]);
 
-const activeTab = ref('analytics');
+const {
+  activeTab,
+  copiedTabKey,
+  copyTabLink,
+  selectTab
+} = useDeepLinkedTabs({
+  routeName: 'AdminAdvancedAudit',
+  tabs,
+  initialTab: 'analytics'
+});
 
 const analyticsData = computed(() => auditStore.analytics);
 const complianceData = computed(() => auditStore.compliance);
@@ -181,6 +206,21 @@ const refreshData = async () => {
     await Promise.all([fetchPromise, minLoadingTime]);
   } finally {
     isLocalLoading.value = false;
+  }
+};
+
+const copyCurrentTabLink = async (tabKey) => {
+  try {
+    const copied = await copyTabLink(tabKey);
+    if (!copied) {
+      return;
+    }
+
+    const label = tabs.value.find((tab) => tab.key === tabKey)?.name || tabKey;
+    toastStore.success(`${tf('message.settings.copy_link_success', 'Link copied')}: ${label}`);
+  } catch (error) {
+    console.warn('Copy advanced audit tab link failed:', error);
+    toastStore.error(tf('message.settings.copy_link_failed', 'Failed to copy link'));
   }
 };
 

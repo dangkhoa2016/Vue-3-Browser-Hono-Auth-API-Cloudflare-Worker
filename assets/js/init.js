@@ -5,7 +5,10 @@ import * as AppServices from '/assets/js/appServices.js';
 const { loadLanguageAsync, detectBrowserLanguage } = I18nModule;
 const { setSfcOptions, setAppServices } = AppServices;
 
+const SFC_CACHE_NAME = 'vue-sfc-cache-v2';
+
 const options = {
+  cacheName: SFC_CACHE_NAME,
   moduleCache: {
     vue: Vue,
     'vue-i18n': VueI18n,
@@ -14,24 +17,26 @@ const options = {
     '/assets/js/appServices.js': AppServices,
   },
   async getFile(url) {
-    // Optimization: Use Cache API to prevent redundant fetching of SFC components
-    const CACHE_NAME = 'vue-sfc-cache-v1';
     let cache, cachedRes;
 
     const isDevMode = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    const resolvedUrl = new URL(url, window.location.href);
+    const bypassCache = resolvedUrl.searchParams.has('__reload');
 
-    if (window.caches && !isDevMode) {
-      cache = await caches.open(CACHE_NAME);
+    if (window.caches && !isDevMode && !bypassCache) {
+      cache = await caches.open(SFC_CACHE_NAME);
       cachedRes = await cache.match(url);
     }
 
-    // Fallback to fetch if not cached or dev mode
-    const res = cachedRes || await fetch(url);
+    // Fallback to fetch if not cached, dev mode, or explicit reload.
+    const res = cachedRes || await fetch(url, {
+      cache: isDevMode || bypassCache ? 'no-store' : 'default'
+    });
     if (!res.ok)
       throw Object.assign(new Error(res.status + ' ' + res.statusText + ' ' + url), { res });
 
     // Store successful response to Cache (needs clone() to be read later)
-    if (cache && !cachedRes) {
+    if (cache && !cachedRes && !bypassCache) {
       cache.put(url, res.clone());
     }
 

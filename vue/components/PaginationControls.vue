@@ -79,6 +79,8 @@
 
 <script setup>
 import { computed } from 'vue';
+import { DEFAULT_ADMIN_PAGE_SIZE, DEFAULT_ADMIN_PAGE_SIZE_OPTIONS } from '/assets/js/constants/pagination.js';
+import { useMainStore } from '/assets/js/stores/mainStore.js';
 
 const props = defineProps({
   currentPage: {
@@ -99,11 +101,11 @@ const props = defineProps({
   },
   pageSize: {
     type: Number,
-    default: 20
+    default: DEFAULT_ADMIN_PAGE_SIZE
   },
   pageSizeOptions: {
     type: Array,
-    default: () => [10, 20, 50]
+    default: () => [...DEFAULT_ADMIN_PAGE_SIZE_OPTIONS]
   },
   showPageSize: {
     type: Boolean,
@@ -112,6 +114,7 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['change', 'change-size']);
+const mainStore = useMainStore();
 
 const navButtonClass =
   'inline-flex items-center gap-1 px-2 sm:px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed transition shrink-0';
@@ -153,11 +156,10 @@ const visiblePages = computed(() => {
 });
 
 const normalizedPageSizeOptions = computed(() => {
-  const options = Array.isArray(props.pageSizeOptions) ? props.pageSizeOptions : [10, 20, 50];
-  const normalized = options
-    .map((value) => Number.parseInt(value, 10))
-    .filter((value) => Number.isFinite(value) && value > 0);
-  return normalized.length ? normalized : [10, 20, 50];
+    const preferredSize = resolveAdminPageSize(mainStore.adminPageSize, DEFAULT_ADMIN_PAGE_SIZE);
+    const currentSize = resolveAdminPageSize(props.pageSize, preferredSize);
+    const options = Array.isArray(props.pageSizeOptions) ? props.pageSizeOptions : DEFAULT_ADMIN_PAGE_SIZE_OPTIONS;
+    return buildAdminPageSizeOptions(options, preferredSize, currentSize);
 });
 
 const paginationInfo = computed(() => {
@@ -179,7 +181,8 @@ const emitSizeChange = (value) => {
   const nextSize = Number.parseInt(value, 10);
   if (!Number.isFinite(nextSize) || nextSize <= 0) return;
 
-  const currentSize = Number.parseInt(props.pageSize, 10) || 20;
+  const currentSize = Number.parseInt(props.pageSize, 10) || Number.parseInt(mainStore.adminPageSize, 10) || DEFAULT_ADMIN_PAGE_SIZE;
+    const currentSize = resolveAdminPageSize(props.pageSize, resolveAdminPageSize(mainStore.adminPageSize, DEFAULT_ADMIN_PAGE_SIZE));
   if (nextSize === currentSize) return;
 
   emit('change-size', nextSize);

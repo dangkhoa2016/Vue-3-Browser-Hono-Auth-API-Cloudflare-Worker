@@ -45,6 +45,10 @@ export function useProfilePage() {
   const toastStore = useToastStore();
   const profileStore = useProfileStore();
   const mainStore = useMainStore();
+  const isAdmin = computed(() => {
+    const role = String(authStore.user?.role || '').toLowerCase();
+    return role === 'admin' || role === 'super_admin';
+  });
   const { profile, loadingProfile, errorMessage } = storeToRefs(profileStore);
 
   const normalizeText = (value) => String(value || '').trim();
@@ -451,6 +455,7 @@ export function useProfilePage() {
     formatDate,
     getRoleBadgeColor,
     getRoleIcon,
+    isAdmin,
     openLoginModal,
     loadProfile,
     startEditingProfile,

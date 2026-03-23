@@ -1,7 +1,17 @@
 const { defineStore } = Pinia;
+import { DEFAULT_ADMIN_PAGE_SIZE } from '../constants/pagination.js';
 import { apiClient, API_ENDPOINTS, DATA_PATHS } from '../api.js';
 import { useMainStore } from './mainStore.js';
 import { i18n } from '../i18n.js';
+
+const getDefaultAdminLimit = () => {
+  try {
+    const mainStore = useMainStore();
+      return resolveAdminPageSize(mainStore.adminPageSize, DEFAULT_ADMIN_PAGE_SIZE);
+  } catch (error) {
+    return DEFAULT_ADMIN_PAGE_SIZE;
+  }
+};
 
 export const useSecurityIncidentStore = defineStore('securityIncidents', {
   state: () => ({
@@ -9,7 +19,7 @@ export const useSecurityIncidentStore = defineStore('securityIncidents', {
     pagination: {
       total: 0,
       page: 1,
-      limit: 20,
+      limit: getDefaultAdminLimit(),
       totalPages: 1
     },
     loading: false,
@@ -20,7 +30,7 @@ export const useSecurityIncidentStore = defineStore('securityIncidents', {
   actions: {
     async fetchIncidents({
       page = 1,
-      limit = 20,
+      limit,
       search = '',
       severity = 'all',
       status = 'all',
@@ -31,7 +41,10 @@ export const useSecurityIncidentStore = defineStore('securityIncidents', {
       try {
         const mainStore = useMainStore();
         let responseData;
-        const params = { page, limit };
+        const safeLimit = Number.isFinite(Number(limit)) && Number(limit) > 0
+          ? Number(limit)
+          : getDefaultAdminLimit();
+        const params = { page, limit: safeLimit };
         if (useServerFilter) {
           const searchValue = String(search || '').trim();
           if (searchValue) {
@@ -96,7 +109,6 @@ export const useSecurityIncidentStore = defineStore('securityIncidents', {
         // Pagination logic for mock
         if (mainStore.mockApi) {
           const total = incidents.length;
-          const safeLimit = typeof limit === 'number' && limit > 0 ? limit : 20;
           const totalPages = Math.max(1, Math.ceil(total / safeLimit));
           const safePage = Math.min(Math.max(page, 1), totalPages);
           const startIndex = (safePage - 1) * safeLimit;
@@ -126,7 +138,7 @@ export const useSecurityIncidentStore = defineStore('securityIncidents', {
             : page;
           const limitValue = Number.isFinite(limitFromApi) && limitFromApi > 0
             ? limitFromApi
-            : limit;
+            : safeLimit;
           const totalPages = Number.isFinite(totalPagesFromApi) && totalPagesFromApi > 0
             ? totalPagesFromApi
             : Math.max(1, Math.ceil(total / limitValue));
@@ -148,7 +160,7 @@ export const useSecurityIncidentStore = defineStore('securityIncidents', {
     },
 
     async reload() {
-      await this.fetchIncidents({ page: this.pagination.page, limit: this.pagination.limit });
+      await this.fetchIncidents({ page: this.pagination.page, limit: this.pagination.limit || getDefaultAdminLimit() });
     }
   }
 });

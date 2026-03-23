@@ -340,7 +340,7 @@
         <PaginationControls
           :current-page="auditStore.pagination.page || 1"
           :total-pages="auditStore.pagination.totalPages || 1"
-          :page-size="auditStore.pagination.limit || 20"
+          :page-size="auditStore.pagination.limit"
           :page-size-options="[10, 20, 50]"
           :show-page-size="true"
           :loading="auditStore.loading"

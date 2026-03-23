@@ -1,4 +1,4 @@
 export { API_ENDPOINTS, API_CONFIG, HTTP_STATUS, buildAdminUserRoleEndpoint } from './api/endpoints.js';
 export { DATA_PATHS } from './api/mockData.js';
-export { apiClient } from './api/httpClient.js';
+export { apiClient, normalizeApiBaseUrl, normalizeApiRequestTimeout, setApiClientTimeout } from './api/httpClient.js';
 export { setupMock } from './api/mockSetup.js';

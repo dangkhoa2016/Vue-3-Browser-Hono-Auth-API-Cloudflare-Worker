@@ -1,4 +1,5 @@
 const { defineStore } = Pinia;
+import { DEFAULT_ADMIN_PAGE_SIZE } from '../constants/pagination.js';
 import { apiClient, API_ENDPOINTS } from '../api.js';
 import { i18n } from '../i18n.js';
 
@@ -19,7 +20,7 @@ export const useRealtimeMonitoringStore = defineStore('realtimeMonitoring', {
     alertsStatus: null,
     alertsHistory: {
       alerts: [],
-      pagination: { page: 1, limit: 20, total: 0, totalPages: 1 }
+      pagination: { page: 1, limit: DEFAULT_ADMIN_PAGE_SIZE, total: 0, totalPages: 1 }
     },
     timeline: { points: [] },
     health: null,
