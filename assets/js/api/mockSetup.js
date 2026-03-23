@@ -1,4 +1,5 @@
 import { apiClient } from './httpClient.js';
+import { DEFAULT_ADMIN_PAGE_SIZE } from '../constants/pagination.js';
 import { API_ENDPOINTS, HTTP_STATUS } from './endpoints.js';
 import { DATA_PATHS, MOCK_CONFIG, MOCK_PATTERNS } from './mockData.js';
 import { sleep } from '../helper.js';
@@ -22,6 +23,18 @@ export const setupMock = (enable) => {
       mock = new MockAdapter(apiClient, { delayResponse: MOCK_CONFIG.DELAY_RESPONSE });
       let mockMonitoringActive = false;
       let mockPendingEmail = null;
+      let mockAlertConfiguration = {
+        thresholds: {
+          failedLogins: 5,
+          suspiciousActivity: 10,
+          highRiskActions: 3
+        },
+        settings: {
+          emailNotifications: true,
+          cooldownMinutes: 15,
+          autoResolveLowSeverity: false
+        }
+      };
 
       const parseBody = (config) => {
         if (!config || typeof config.data === 'undefined' || config.data === null) {
@@ -66,7 +79,7 @@ export const setupMock = (enable) => {
               : (payload.threats?.resolvedThreatsCount || 0)
           },
           alertsStatusData: payload.alertsStatus || {},
-          alertsHistoryData: payload.alertsHistory || { alerts: [], pagination: { page: 1, limit: 20, total: 0, totalPages: 1 } },
+          alertsHistoryData: payload.alertsHistory || { alerts: [], pagination: { page: 1, limit: DEFAULT_ADMIN_PAGE_SIZE, total: 0, totalPages: 1 } },
           timelineData: payload.timeline || { points: [] },
           healthData: payload.health || { status: 'healthy' }
         };
@@ -679,7 +692,7 @@ export const setupMock = (enable) => {
           const data = await loadJson(DATA_PATHS.AUDIT_LOGS_SUCCESS);
           const params = config.params || {};
           const page = Number.parseInt(params.page, 10) || data.data?.pagination?.page || 1;
-          const limit = Number.parseInt(params.limit, 10) || data.data?.pagination?.limit || data.data?.logs?.length || 20;
+          const limit = Number.parseInt(params.limit, 10) || data.data?.pagination?.limit || data.data?.logs?.length || DEFAULT_ADMIN_PAGE_SIZE;
 
           if (data.data && data.data.pagination) {
             const total = data.data.pagination.total || (data.data.logs && data.data.logs.length) || 0;
@@ -953,9 +966,58 @@ export const setupMock = (enable) => {
       mock.onGet(MOCK_PATTERNS.REALTIME_MONITORING_ALERTS_STATUS).reply(async () => {
         try {
           const { alertsStatusData } = await getRealtimePayload();
-          return [200, { success: true, data: alertsStatusData, message: 'Alert status loaded' }];
+          return [200, {
+            success: true,
+            data: {
+              activeAlerts: Number(alertsStatusData?.activeAlerts) || 2,
+              totalRules: Number(alertsStatusData?.totalRules) || 6,
+              enabledRules: Number(alertsStatusData?.enabledRules) || 4,
+              ...(alertsStatusData && typeof alertsStatusData === 'object' ? alertsStatusData : {}),
+              thresholds: {
+                ...(alertsStatusData?.thresholds || {}),
+                ...mockAlertConfiguration.thresholds
+              },
+              settings: {
+                ...(alertsStatusData?.settings || {}),
+                ...mockAlertConfiguration.settings
+              }
+            },
+            message: 'Alert status loaded'
+          }];
         } catch (error) {
           console.error('[Mock API] Alerts status handler error:', error);
+          const message = (error && error.message) || 'Internal server error';
+          return [500, { success: false, error: message }];
+        }
+      });
+
+      mock.onPost(MOCK_PATTERNS.REALTIME_MONITORING_ALERTS_CONFIGURE).reply(async (config) => {
+        try {
+          const body = parseBody(config);
+          mockAlertConfiguration = {
+            thresholds: {
+              ...(mockAlertConfiguration.thresholds || {}),
+              ...((body?.thresholds && typeof body.thresholds === 'object') ? body.thresholds : {})
+            },
+            settings: {
+              ...(mockAlertConfiguration.settings || {}),
+              ...((body?.settings && typeof body.settings === 'object') ? body.settings : {})
+            }
+          };
+
+          return [200, {
+            success: true,
+            data: {
+              activeAlerts: 2,
+              totalRules: 6,
+              enabledRules: 4,
+              thresholds: mockAlertConfiguration.thresholds,
+              settings: mockAlertConfiguration.settings
+            },
+            message: 'Alert configuration updated'
+          }];
+        } catch (error) {
+          console.error('[Mock API] Alerts configure handler error:', error);
           const message = (error && error.message) || 'Internal server error';
           return [500, { success: false, error: message }];
         }

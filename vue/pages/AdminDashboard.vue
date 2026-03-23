@@ -361,6 +361,16 @@ const progressItems = computed(() => {
 
 const quickActions = computed(() => [
   {
+    name: t('message.navbar.settings', 'Settings'),
+    path: '/settings',
+    icon: 'bi bi-sliders2-vertical',
+    meta: isAdmin.value
+      ? (role.value === 'super_admin'
+        ? t('message.settings.super_admin_note_title', 'System controls are role-gated')
+        : t('message.settings.workspace_title', 'Browser Preferences'))
+      : '...'
+  },
+  {
     name: t('message.navbar.system_stats'),
     path: '/admin/stats',
     icon: 'bi bi-graph-up',
@@ -453,7 +463,7 @@ const refresh = async () => {
     { key: 'stats', run: () => systemStatsStore.fetchSystemStats() },
     { key: 'health', run: () => systemHealthStore.fetchSystemHealth() },
     { key: 'audit', run: () => auditStore.fetchLogs() },
-    { key: 'incidents', run: () => securityIncidentStore.fetchIncidents({ page: 1, limit: 20 }) },
+    { key: 'incidents', run: () => securityIncidentStore.fetchIncidents({ page: 1 }) },
     { key: 'realtime', run: () => realtimeStore.fetchDashboardData() }
   ];
   const minStepDurationMs = 280;

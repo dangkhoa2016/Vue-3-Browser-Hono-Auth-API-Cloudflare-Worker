@@ -4,7 +4,9 @@ import { useMainStore } from '/assets/js/stores/mainStore.js';
 import { useModalStore } from '/assets/js/stores/modalStore.js';
 import { useUserStore } from '/assets/js/stores/userStore.js';
 import { useToastStore } from '/assets/js/stores/toastStore.js';
+import { DEFAULT_ADMIN_PAGE_SIZE, resolveAdminPageSize } from '/assets/js/constants/pagination.js';
 import { useAuthGate } from '/vue/composables/useAuthGate.js';
+import { useDateTimeFormatter } from '/vue/composables/useDateTimeFormatter.js';
 import { useDebouncedFilters } from '/vue/composables/useDebouncedFilters.js';
 import { useModalState } from '/vue/composables/useModalState.js';
 import { useI18nFallback } from '/vue/composables/useI18nFallback.js';
@@ -17,6 +19,7 @@ export function useAdminUsersPage() {
   const modalStore = useModalStore();
   const userStore = useUserStore();
   const toastStore = useToastStore();
+  const { formatDateTime } = useDateTimeFormatter();
   const search = ref('');
   const roleFilter = ref('all');
   const statusFilter = ref('all');
@@ -121,6 +124,8 @@ export function useAdminUsersPage() {
   const error = computed(() => userStore.error);
   const users = computed(() => userStore.users);
   const pagination = computed(() => userStore.pagination);
+  const preferredPageSize = computed(() => resolveAdminPageSize(mainStore.adminPageSize, DEFAULT_ADMIN_PAGE_SIZE));
+  const preferredSearchDebounce = computed(() => Math.max(0, Number.parseInt(mainStore.adminSearchDebounceMs, 10) || 300));
   const showDataSkeleton = ref(false);
   const forceSkeletonOnLoading = ref(false);
 
@@ -139,7 +144,10 @@ export function useAdminUsersPage() {
   const activeCount = computed(() => filteredUsers.value.filter(userItem => userItem.status === 'active').length);
   const inactiveCount = computed(() => filteredUsers.value.filter(userItem => userItem.status === 'inactive').length);
 
-  const loadUsers = async (page = pagination.value.page, limit = pagination.value.limit) => {
+  const loadUsers = async (
+    page = Number(pagination.value?.page) || 1,
+    limit = resolveAdminPageSize(pagination.value?.limit, preferredPageSize.value)
+  ) => {
     if (!authStore.isAuthenticated) {
       return;
     }
@@ -160,7 +168,7 @@ export function useAdminUsersPage() {
 
   const resetUserPageState = () => {
     userStore.users = [];
-    userStore.pagination = { total: 0, page: 1, limit: 20, totalPages: 1 };
+    userStore.pagination = { total: 0, page: 1, limit: preferredPageSize.value, totalPages: 1 };
   };
 
   const {
@@ -191,13 +199,13 @@ export function useAdminUsersPage() {
     const nextPage = Math.min(Math.max(1, Number(page) || 1), totalPages);
     if (nextPage === (Number(pagination.value?.page) || 1)) return;
     forceSkeletonOnLoading.value = true;
-    await loadUsers(nextPage, pagination.value?.limit || 20);
+    await loadUsers(nextPage, resolveAdminPageSize(pagination.value?.limit, preferredPageSize.value));
     scrollToTableTop();
   };
 
   const handlePageSizeChange = async (limit) => {
-    const nextLimit = Math.max(1, Number.parseInt(limit, 10) || 20);
-    const currentLimit = Math.max(1, Number.parseInt(pagination.value?.limit, 10) || 20);
+    const nextLimit = resolveAdminPageSize(limit, preferredPageSize.value);
+    const currentLimit = resolveAdminPageSize(pagination.value?.limit, preferredPageSize.value);
     if (nextLimit === currentLimit) return;
 
     forceSkeletonOnLoading.value = true;
@@ -214,11 +222,7 @@ export function useAdminUsersPage() {
   };
 
   const formatDate = (value) => {
-    if (!value) return '-';
-    const normalized = value.replace(' ', 'T');
-    const date = new Date(normalized);
-    if (Number.isNaN(date.getTime())) return value;
-    return date.toLocaleString();
+    return formatDateTime(value, '-');
   };
 
   const formatRole = (role) => {
@@ -383,7 +387,7 @@ export function useAdminUsersPage() {
 
   const statusBadgeClass = (status) => getUserStatusBadgeClass(status);
 
-  const { runDebounced, clearDebounce } = useDebouncedFilters(400);
+  const { runDebounced, clearDebounce } = useDebouncedFilters();
 
   watch(
     loading,
@@ -412,7 +416,7 @@ export function useAdminUsersPage() {
         forceSkeletonOnLoading.value = true;
         await loadUsers(1);
       }
-    });
+    }, preferredSearchDebounce.value);
   });
 
   watch([roleFilter, statusFilter], () => {

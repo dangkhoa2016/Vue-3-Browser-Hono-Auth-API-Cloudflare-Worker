@@ -1,7 +1,17 @@
 const { defineStore } = Pinia;
+import { DEFAULT_ADMIN_PAGE_SIZE } from '../constants/pagination.js';
 import { apiClient, API_ENDPOINTS, DATA_PATHS, buildAdminUserRoleEndpoint } from '../api.js';
 import { useMainStore } from './mainStore.js';
 import { i18n } from '../i18n.js';
+
+const getDefaultAdminLimit = () => {
+  try {
+    const mainStore = useMainStore();
+      return resolveAdminPageSize(mainStore.adminPageSize, DEFAULT_ADMIN_PAGE_SIZE);
+  } catch (error) {
+    return DEFAULT_ADMIN_PAGE_SIZE;
+  }
+};
 
 export const useUserStore = defineStore('users', {
   state: () => ({
@@ -9,7 +19,7 @@ export const useUserStore = defineStore('users', {
     pagination: {
       total: 0,
       page: 1,
-      limit: 20,
+      limit: getDefaultAdminLimit(),
       totalPages: 1
     },
     loading: false,
@@ -18,15 +28,18 @@ export const useUserStore = defineStore('users', {
   }),
 
   actions: {
-    async fetchUsers({ page = 1, limit = 20, search = '', role = 'all', status = 'all', useServerFilter = true } = {}) {
+    async fetchUsers({ page = 1, limit, search = '', role = 'all', status = 'all', useServerFilter = true } = {}) {
       this.loading = true;
       this.error = null;
 
       try {
         const mainStore = useMainStore();
         let responseData;
+        const safeLimit = Number.isFinite(Number(limit)) && Number(limit) > 0
+          ? Number(limit)
+          : getDefaultAdminLimit();
 
-        const params = { page, limit };
+        const params = { page, limit: safeLimit };
         if (search) {
           params.search = search;
         }
@@ -87,7 +100,7 @@ export const useUserStore = defineStore('users', {
           if (useServerFilter && !isFiltered && hasPagination) {
             const total = pagination.total;
             const pageValue = typeof pagination.page === 'number' ? pagination.page : page;
-            const limitValue = typeof pagination.limit === 'number' ? pagination.limit : limit;
+            const limitValue = typeof pagination.limit === 'number' ? pagination.limit : safeLimit;
             const totalPages = typeof pagination.totalPages === 'number'
               ? pagination.totalPages
               : Math.max(1, Math.ceil(total / limitValue));
@@ -101,7 +114,6 @@ export const useUserStore = defineStore('users', {
             };
           } else {
             const total = users.length;
-            const safeLimit = typeof limit === 'number' && limit > 0 ? limit : 20;
             const totalPages = Math.max(1, Math.ceil(total / safeLimit));
             const safePage = Math.min(Math.max(page, 1), totalPages);
             const startIndex = (safePage - 1) * safeLimit;
@@ -121,7 +133,7 @@ export const useUserStore = defineStore('users', {
         if (!mainStore.mockApi) {
           const total = typeof pagination.total === 'number' ? pagination.total : this.users.length;
           const pageValue = typeof pagination.page === 'number' ? pagination.page : page;
-          const limitValue = typeof pagination.limit === 'number' ? pagination.limit : limit;
+          const limitValue = typeof pagination.limit === 'number' ? pagination.limit : safeLimit;
           const totalPages = typeof pagination.totalPages === 'number'
             ? pagination.totalPages
             : Math.max(1, Math.ceil(total / limitValue));
@@ -140,7 +152,7 @@ export const useUserStore = defineStore('users', {
         this.pagination = {
           total: 0,
           page: 1,
-          limit: 20,
+          limit: getDefaultAdminLimit(),
           totalPages: 1
         };
         this.error = (error && error.message) || 'Unknown error';

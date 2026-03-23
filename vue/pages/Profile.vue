@@ -112,6 +112,14 @@
               {{ $t('message.profile.account_info') }}
             </h2>
             <div class="w-full sm:w-auto flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+              <router-link
+                v-if="isAdmin"
+                to="/settings"
+                class="inline-flex items-center justify-center gap-2 rounded-xl border border-cyan-200 bg-cyan-50 px-4 py-2.5 text-sm font-semibold text-cyan-700 transition hover:border-cyan-300 hover:bg-cyan-100 dark:border-cyan-800 dark:bg-cyan-900/20 dark:text-cyan-200 dark:hover:bg-cyan-900/30"
+              >
+                <i class="bi bi-sliders2-vertical"></i>
+                {{ $t('message.navbar.settings', 'Settings') }}
+              </router-link>
               <ActionTextButton
                 v-if="!isEditing"
                 icon="bi bi-pencil-square"
@@ -413,6 +421,7 @@ const {
   canSubmitPassword,
   formatDate,
   getRoleIcon,
+  isAdmin,
   openLoginModal,
   loadProfile,
   startEditingProfile,

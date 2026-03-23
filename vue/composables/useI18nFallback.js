@@ -5,10 +5,10 @@ import { useI18n } from 'vue-i18n';
  * 
  * @param {Object} options - Options passed to vue-i18n's useI18n
  * @param {string} [options.useScope='global'] - The scope to use for i18n
- * @returns {{ t: Function, tf: (keyOrKeys: string|string[], fallback?: string, params?: Object) => string }}
+ * @returns {{ t: Function, tf: (keyOrKeys: string|string[], fallback?: string, params?: Object) => string, locale: import('vue').Ref<string> }}
  */
 export function useI18nFallback(options = { useScope: 'global' }) {
-  const { t, te } = useI18n(options);
+  const { t, te, locale } = useI18n(options);
 
   /**
    * Attempts to resolve a translation key.
@@ -51,6 +51,7 @@ export function useI18nFallback(options = { useScope: 'global' }) {
   };
 
   return {
+    locale,
     t,
     tf
   };

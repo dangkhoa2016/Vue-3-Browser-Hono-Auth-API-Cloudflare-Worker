@@ -6,6 +6,7 @@ import { useMainStore } from '/assets/js/stores/mainStore.js';
 import { useToastStore } from '/assets/js/stores/toastStore.js';
 import { useKvAdminConfigsStore } from '/assets/js/stores/kvAdminConfigsStore.js';
 import { useAuthGate } from '/vue/composables/useAuthGate.js';
+import { useDateTimeFormatter } from '/vue/composables/useDateTimeFormatter.js';
 import { useModalState } from '/vue/composables/useModalState.js';
 import { useDebouncedFilters } from '/vue/composables/useDebouncedFilters.js';
 import { useI18nFallback } from '/vue/composables/useI18nFallback.js';
@@ -17,6 +18,7 @@ export function useKvAdminConfigsPage() {
   const modalStore = useModalStore();
   const mainStore = useMainStore();
   const kvAdminConfigsStore = useKvAdminConfigsStore();
+  const { formatDateTime } = useDateTimeFormatter();
   const { storeToRefs } = Pinia;
   const { isLoading, errorMessage, rows, allowedKeys, allowedCount, lastUpdated } = storeToRefs(kvAdminConfigsStore);
 
@@ -47,7 +49,8 @@ export function useKvAdminConfigsPage() {
   const bulkSeed = ref(0);
   const bulkListRowId = ref(null);
   const toastStore = useToastStore();
-  const { runDebounced, clearDebounce } = useDebouncedFilters(200);
+  const preferredSearchDebounce = computed(() => Math.max(0, Number.parseInt(mainStore.adminSearchDebounceMs, 10) || 300));
+  const { runDebounced, clearDebounce } = useDebouncedFilters();
 
   const heroSectionClass =
     'relative overflow-hidden rounded-[32px] border border-slate-200/70 dark:border-slate-800 bg-gradient-to-br from-white via-amber-50/40 to-teal-50/40 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 p-8 shadow-[0_24px_80px_-60px_rgba(15,23,42,0.8)]';
@@ -91,8 +94,7 @@ export function useKvAdminConfigsPage() {
 
   const lastUpdatedLabel = computed(() => {
     if (!lastUpdated.value) return '-';
-    const date = new Date(lastUpdated.value);
-    return Number.isNaN(date.getTime()) ? lastUpdated.value : date.toLocaleString();
+    return formatDateTime(lastUpdated.value, '-');
   });
 
   const resetKvState = () => {
@@ -581,7 +583,7 @@ export function useKvAdminConfigsPage() {
     () => {
       runDebounced('kv-admin-configs-search', () => {
         debouncedSearch.value = search.value;
-      });
+      }, preferredSearchDebounce.value);
     },
     { immediate: true }
   );

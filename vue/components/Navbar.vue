@@ -1,8 +1,8 @@
 <template>
   <nav class="bg-white dark:bg-gray-800 shadow-md transition-colors duration-300">
     <div class="container mx-auto px-4">
-      <div class="flex justify-between h-16">
-        <div class="flex items-center">
+      <div class="flex justify-between gap-3 h-16">
+        <div class="flex items-center min-w-0 flex-1">
           <router-link to="/" class="flex-shrink-0 flex items-center group" :title="$t('message.navbar.brand_title')">
             <img src="/assets/img/favicon.png" alt="Logo"
               class="w-7 h-7 sm:w-8 sm:h-8 mr-2 group-hover:rotate-12 transition-transform" />
@@ -10,21 +10,21 @@
               class="text-lg sm:text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 hidden xs:inline">
               {{ $t('message.navbar.brand') }}</span>
           </router-link>
-          <div class="hidden lg:ml-4 lg:flex lg:space-x-1">
+          <div class="hidden min-[1100px]:ml-3 min-[1100px]:flex min-[1100px]:items-center min-[1100px]:space-x-0.5 2xl:ml-4 2xl:space-x-1">
             <router-link v-for="item in menuItems" :key="item.path" :to="item.path"
               :class="getTopMenuClass($route.path === item.path)">
               {{ item.name }}
             </router-link>
 
             <!-- Admin dropdown -->
-            <div v-if="isAuthenticated && isAdmin" class="relative" ref="adminDropdownRef"
+            <div v-if="isAuthenticated && isAdmin" class="relative shrink-0" ref="adminDropdownRef"
               @mouseenter="openAdminDropdown"
               @mouseleave="closeAdminDropdown">
               <button @click="toggleAdminDropdown"
                 :class="getTopMenuClass(showAdminDropdown || isAdminRouteActive)"
               >
                 <i class="bi bi-shield-lock text-[14px] mr-1.5"></i>
-                <span class="truncate max-w-[110px] xl:max-w-none">{{ $t('message.navbar.admin') }}</span>
+                <span class="truncate max-w-[110px] min-[1100px]:max-w-none">{{ $t('message.navbar.admin') }}</span>
                 <i class="bi bi-chevron-down text-[11px] ml-1.5 transition-transform duration-200" :class="{ 'rotate-180': showAdminDropdown }"></i>
               </button>
               <transition name="dropdown">
@@ -40,13 +40,13 @@
             </div>
 
             <!-- About / API dropdown -->
-            <div class="relative" ref="aboutDropdownRef"
+            <div class="relative shrink-0" ref="aboutDropdownRef"
               @mouseenter="openAboutDropdown"
               @mouseleave="closeAboutDropdown">
               <button @click="toggleAboutDropdown"
                 :class="getTopMenuClass(showAboutDropdown || isAboutRouteActive)"
               >
-                <span class="truncate max-w-[110px] xl:max-w-none">{{ $t('message.navbar.this_project') }}</span>
+                <span class="truncate max-w-[110px] min-[1100px]:max-w-none">{{ $t('message.navbar.this_project') }}</span>
                 <i class="bi bi-chevron-down text-[11px] ml-1.5 transition-transform duration-200" :class="{ 'rotate-180': showAboutDropdown }"></i>
               </button>
               <transition name="dropdown">
@@ -65,20 +65,60 @@
           </div>
         </div>
 
-        <div class="flex items-center space-x-1.5 sm:space-x-2 md:space-x-3">
+        <div class="flex shrink-0 items-center space-x-1 sm:space-x-1.5 min-[1100px]:space-x-2">
           <!-- User Profile (when authenticated) -->
           <template v-if="isAuthenticated">
-            <div class="hidden lg:flex items-center ml-1 border-l border-gray-200 dark:border-gray-700 pl-2 space-x-1">
-              <router-link to="/profile" 
-                :class="desktopProfileLinkClass">
-                <i class="bi bi-person-circle text-lg mr-2 text-gray-400 group-hover:text-blue-500 transition-colors"></i>
-                <span class="hidden xl:block max-w-[150px] truncate">{{ user?.full_name || user?.email }}</span>
-              </router-link>
-              <button @click="handleLogout"
-                :class="desktopLogoutButtonClass"
-                :title="$t('message.auth.logout')">
-                <i class="bi bi-box-arrow-right text-lg"></i>
+            <div class="relative hidden min-[1100px]:block ml-1 pl-1" ref="userDropdownRef">
+              <button @click="toggleUserDropdown"
+                :class="desktopUserToggleButtonClass"
+                :title="userDisplayName">
+                <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 text-xs font-bold text-white shadow-sm">
+                  {{ userInitials }}
+                </span>
+                <div class="hidden min-[1360px]:block min-w-0">
+                  <div class="max-w-[140px] truncate text-sm font-semibold text-gray-700 dark:text-gray-100">
+                    {{ userDisplayName }}
+                  </div>
+                  <div class="max-w-[140px] truncate text-[11px] uppercase tracking-[0.18em] text-gray-400 dark:text-gray-500">
+                    {{ userRoleLabel }}
+                  </div>
+                </div>
+                <i class="bi bi-chevron-down text-[11px] text-gray-400 transition-transform duration-200"
+                  :class="{ 'rotate-180': showUserDropdown }"></i>
               </button>
+
+              <transition name="dropdown">
+                <div v-if="showUserDropdown"
+                  class="absolute right-0 mt-2 w-64 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white/95 dark:bg-gray-800/95 p-2 shadow-xl z-50 backdrop-blur">
+                  <div class="flex items-center gap-3 rounded-xl px-3 py-2.5 bg-gray-50 dark:bg-gray-700/60">
+                    <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 text-sm font-bold text-white">
+                      {{ userInitials }}
+                    </span>
+                    <div class="min-w-0">
+                      <div class="truncate text-sm font-semibold text-gray-800 dark:text-gray-100">{{ userDisplayName }}</div>
+                      <div class="truncate text-xs text-gray-500 dark:text-gray-400">{{ user?.email }}</div>
+                    </div>
+                  </div>
+
+                  <div class="mt-2 space-y-1">
+                    <router-link to="/profile" @click="showUserDropdown = false"
+                      :class="desktopProfileLinkClass">
+                      <i class="bi bi-person-circle text-base mr-2 text-gray-400 group-hover:text-blue-500 transition-colors"></i>
+                      {{ $t('message.navbar.profile') }}
+                    </router-link>
+                    <router-link to="/settings" @click="showUserDropdown = false"
+                      :class="desktopProfileLinkClass">
+                      <i class="bi bi-sliders text-base mr-2 text-gray-400 group-hover:text-blue-500 transition-colors"></i>
+                      {{ $t('message.navbar.settings') }}
+                    </router-link>
+                    <button @click="handleLogout"
+                      class="w-full flex items-center px-3 py-2 rounded-xl text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
+                      <i class="bi bi-box-arrow-right text-base mr-2"></i>
+                      {{ $t('message.auth.logout') }}
+                    </button>
+                  </div>
+                </div>
+              </transition>
             </div>
           </template>
           
@@ -127,9 +167,9 @@
           <button @click="store.setMockApi(!store.mockApi)"
             :class="getDesktopApiToggleClass()"
             :title="$t('message.navbar.toggle_api_mode')">
-            <span class="w-2 h-2 rounded-full mr-2 shadow-sm"
+            <span class="h-2 w-2 rounded-full shrink-0 shadow-sm 2xl:mr-2"
               :class="store.mockApi ? 'bg-green-500' : 'bg-amber-500'"></span>
-            <span class="hidden lg:inline font-medium uppercase tracking-wider text-[11px] whitespace-nowrap">{{ store.mockApi ? $t('message.navbar.mock_label') : $t('message.navbar.real_label') }}</span>
+            <span class="hidden 2xl:inline font-medium uppercase tracking-wider text-[11px] whitespace-nowrap">{{ store.mockApi ? $t('message.navbar.mock_label') : $t('message.navbar.real_label') }}</span>
           </button>
 
           <!-- Dark Mode Toggle -->
@@ -150,7 +190,7 @@
 
       <!-- Mobile Menu -->
       <transition name="mobile-menu">
-        <div v-if="showMobileMenu" class="lg:hidden pb-3 pt-2 border-t border-gray-200 dark:border-gray-700">
+        <div v-if="showMobileMenu" class="min-[1100px]:hidden pb-3 pt-2 border-t border-gray-200 dark:border-gray-700">
           <div class="space-y-1">
             <router-link v-for="item in menuItems" :key="item.path" :to="item.path" @click="showMobileMenu = false"
               :class="getMobilePrimaryClass($route.path === item.path)">
@@ -282,6 +322,7 @@ const {
   showLanguageDropdown,
   showMobileMenu,
   showLogoutConfirm,
+  showUserDropdown,
   showAboutDropdown,
   showMobileAboutMenu,
   showAdminDropdown,
@@ -289,6 +330,7 @@ const {
   showLoginModal,
   showRegisterModal,
   languageDropdownRef,
+  userDropdownRef,
   aboutDropdownRef,
   adminDropdownRef,
   currentLanguage,
@@ -300,6 +342,9 @@ const {
   isAboutRouteActive,
   aboutMenuItems,
   user,
+  userDisplayName,
+  userRoleLabel,
+  userInitials,
   adminMenuItems,
   getTopMenuClass,
   getDropdownItemClass,
@@ -308,6 +353,7 @@ const {
   getMobileSubLinkClass,
   desktopProfileLinkClass,
   desktopLogoutButtonClass,
+  desktopUserToggleButtonClass,
   desktopLoginButtonClass,
   desktopRegisterButtonClass,
   languageToggleButtonClass,
@@ -325,6 +371,7 @@ const {
   toggleMobileMenu,
   toggleMobileAboutMenu,
   toggleMobileAdminMenu,
+  toggleUserDropdown,
   changeLanguage,
   openAboutDropdown,
   closeAboutDropdown,

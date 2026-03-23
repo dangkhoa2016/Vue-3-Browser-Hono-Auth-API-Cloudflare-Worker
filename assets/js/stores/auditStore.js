@@ -1,15 +1,25 @@
 const { defineStore } = Pinia;
+import { DEFAULT_ADMIN_PAGE_SIZE } from '../constants/pagination.js';
 import { apiClient, API_ENDPOINTS, DATA_PATHS } from '../api.js';
 import { useMainStore } from './mainStore.js';
 import { i18n } from '../i18n.js';
+
+const getDefaultAdminLimit = () => {
+  try {
+    const mainStore = useMainStore();
+      return resolveAdminPageSize(mainStore.adminPageSize, DEFAULT_ADMIN_PAGE_SIZE);
+  } catch (error) {
+    return DEFAULT_ADMIN_PAGE_SIZE;
+  }
+};
 
 export const useAuditStore = defineStore('audit', {
   state: () => ({
     logs: [],
     stats: null,
     loading: false,
-    pagination: { page: 1, limit: 20, total: 0, totalPages: 1 },
-    filters: { search: '', action: '', actorId: '', targetType: '', actorRole: '', startDate: '', endDate: '', page: 1, limit: 20 },
+    pagination: { page: 1, limit: getDefaultAdminLimit(), total: 0, totalPages: 1 },
+    filters: { search: '', action: '', actorId: '', targetType: '', actorRole: '', startDate: '', endDate: '', page: 1, limit: getDefaultAdminLimit() },
     error: null,
     lastUpdated: null
   }),
@@ -31,7 +41,7 @@ export const useAuditStore = defineStore('audit', {
           startDate: this.filters.startDate || undefined,
           endDate: this.filters.endDate || undefined,
           page: Number(this.filters.page) || 1,
-          limit: Number(this.filters.limit) || 20
+          limit: Number(this.filters.limit) || getDefaultAdminLimit()
         };
 
         if (mainStore.mockApi) {
@@ -86,7 +96,7 @@ export const useAuditStore = defineStore('audit', {
           });
 
           const total = logs.length;
-          const safeLimit = typeof params.limit === 'number' && params.limit > 0 ? params.limit : 20;
+          const safeLimit = typeof params.limit === 'number' && params.limit > 0 ? params.limit : getDefaultAdminLimit();
           const totalPages = Math.max(1, Math.ceil(total / safeLimit));
           const safePage = Math.min(Math.max(params.page, 1), totalPages);
           const startIndex = (safePage - 1) * safeLimit;
