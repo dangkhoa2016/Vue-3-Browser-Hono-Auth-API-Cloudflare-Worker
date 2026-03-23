@@ -250,7 +250,7 @@
         <PaginationControls
           :current-page="pagination.page || 1"
           :total-pages="pagination.totalPages || 1"
-          :page-size="pagination.limit || 20"
+          :page-size="pagination.limit"
           :page-size-options="[10, 20, 50]"
           :show-page-size="true"
           :loading="isLoading"
@@ -307,6 +307,7 @@
 <script setup>
 import { computed, ref, onMounted, watch } from 'vue';
 const { storeToRefs } = Pinia;
+import { DEFAULT_ADMIN_PAGE_SIZE, resolveAdminPageSize } from '/assets/js/constants/pagination.js';
 import { useSecurityIncidentStore } from '/assets/js/stores/securityIncidentStore.js';
 import { useMainStore } from '/assets/js/stores/mainStore.js';
 import ModalWindow from '/vue/components/ModalWindow.vue';
@@ -316,6 +317,7 @@ import ActionTextButton from '/vue/components/ActionTextButton.vue';
 import AsyncStateSection from '/vue/components/AsyncStateSection.vue';
 import PageHeroSection from '/vue/components/PageHeroSection.vue';
 import StatCard from '/vue/components/StatCard.vue';
+import { useDateTimeFormatter } from '/vue/composables/useDateTimeFormatter.js';
 import { useDebouncedFilters } from '/vue/composables/useDebouncedFilters.js';
 import { useModalState } from '/vue/composables/useModalState.js';
 import { useI18nFallback } from '/vue/composables/useI18nFallback.js';
@@ -327,6 +329,7 @@ import {
 
 const { t, tf } = useI18nFallback();
 const mainStore = useMainStore();
+const { formatDateTime } = useDateTimeFormatter();
 const securityStore = useSecurityIncidentStore();
 const { incidents, loading: isLoading, error: errorMessage, pagination } = storeToRefs(securityStore);
 const incidentModal = useModalState({ initialMode: 'view', initialValue: null });
@@ -337,7 +340,9 @@ const search = ref('');
 const severityFilter = ref('all');
 const statusFilter = ref('all');
 const useServerFilter = ref(true);
-const { runDebounced } = useDebouncedFilters(400);
+const preferredPageSize = computed(() => resolveAdminPageSize(mainStore.adminPageSize, DEFAULT_ADMIN_PAGE_SIZE));
+const preferredSearchDebounce = computed(() => Math.max(0, Number.parseInt(mainStore.adminSearchDebounceMs, 10) || 300));
+const { runDebounced } = useDebouncedFilters();
 
 const heroSectionClass =
   'relative overflow-hidden rounded-[32px] border border-slate-200/70 dark:border-slate-800 bg-gradient-to-br from-white via-amber-50/40 to-teal-50/40 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 p-8 shadow-[0_24px_80px_-60px_rgba(15,23,42,0.8)]';
@@ -382,10 +387,7 @@ const resolvedCount = computed(() => normalizedIncidents.value.filter((incident)
 const highSeverityCount = computed(() => normalizedIncidents.value.filter((incident) => (incident.severity || '').toLowerCase() === 'high').length);
 
 const formatDate = (d) => {
-  if (!d) return '-';
-  const date = new Date(d);
-  if (Number.isNaN(date.getTime())) return d;
-  return date.toLocaleString();
+  return formatDateTime(d, '-');
 };
 
 const formatStatus = (status) => {
@@ -427,7 +429,7 @@ const goToPage = async (page) => {
   scrollToTableTop();
 };
 
-const loadIncidents = async (page = pagination.value?.page || 1, limit = pagination.value?.limit || 20) => {
+const loadIncidents = async (page = pagination.value?.page || 1, limit = resolveAdminPageSize(pagination.value?.limit, preferredPageSize.value)) => {
   await securityStore.fetchIncidents({
     page,
     limit,
@@ -439,8 +441,8 @@ const loadIncidents = async (page = pagination.value?.page || 1, limit = paginat
 };
 
 const handlePageSizeChange = async (limit) => {
-  const nextLimit = Math.max(1, Number.parseInt(limit, 10) || 20);
-  const currentLimit = Math.max(1, Number.parseInt(pagination.value?.limit, 10) || 20);
+  const nextLimit = resolveAdminPageSize(limit, preferredPageSize.value);
+  const currentLimit = resolveAdminPageSize(pagination.value?.limit, preferredPageSize.value);
   if (nextLimit === currentLimit) return;
 
   await loadIncidents(1, nextLimit);
@@ -453,7 +455,7 @@ watch(search, () => {
   if (!useServerFilter.value) return;
   runDebounced('admin-security-incidents-search', async () => {
     await loadIncidents(1);
-  });
+  }, preferredSearchDebounce.value);
 });
 
 watch([severityFilter, statusFilter], () => {

@@ -14,7 +14,9 @@ export function useNavbar() {
   const showLanguageDropdown = ref(false);
   const showMobileMenu = ref(false);
   const showLogoutConfirm = ref(false);
+  const showUserDropdown = ref(false);
   const languageDropdownRef = ref(null);
+  const userDropdownRef = ref(null);
   const currentLanguage = computed(() => locale.value);
   const languages = SUPPORTED_LANGUAGES;
 
@@ -28,11 +30,39 @@ export function useNavbar() {
 
   const showLoginModal = computed(() => modalStore.showLoginModal);
   const showRegisterModal = computed(() => modalStore.showRegisterModal);
+  const userDisplayName = computed(() => user.value?.full_name || user.value?.email || t('message.navbar.profile'));
+  const userRoleLabel = computed(() => user.value?.role?.replace(/_/g, ' ') || 'user');
+  const userInitials = computed(() => {
+    const source = String(userDisplayName.value || '').trim();
 
-  const menuItems = computed(() => ([
-    { name: t('message.navbar.home'), path: '/' },
-    { name: t('message.navbar.profile'), path: '/profile' }
-  ]));
+    if (!source) {
+      return 'U';
+    }
+
+    const parts = source.split(/\s+/).filter(Boolean);
+
+    if (parts.length >= 2) {
+      return `${parts[0][0] || ''}${parts[1][0] || ''}`.toUpperCase();
+    }
+
+    return source.slice(0, 2).toUpperCase();
+  });
+
+  const menuItems = computed(() => {
+    const items = [
+      { name: t('message.navbar.home'), path: '/' }
+    ];
+
+    if (!isAuthenticated.value) {
+      items.push({ name: t('message.navbar.settings') || 'Settings', path: '/settings' });
+    }
+
+    if (isAuthenticated.value) {
+      items.push({ name: t('message.navbar.profile'), path: '/profile' });
+    }
+
+    return items;
+  });
 
   const showAboutDropdown = ref(false);
   const showMobileAboutMenu = ref(false);
@@ -85,7 +115,7 @@ export function useNavbar() {
   ]);
 
   const topMenuBaseClass =
-    'inline-flex items-center px-2 lg:px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200 whitespace-nowrap';
+    'inline-flex items-center px-2 min-[1100px]:px-2.5 2xl:px-3 py-2 rounded-lg text-[13px] 2xl:text-sm font-medium transition-colors duration-200 whitespace-nowrap';
   const topMenuActiveClass = 'bg-blue-50 text-blue-600 dark:bg-blue-900/40 dark:text-blue-300';
   const topMenuInactiveClass =
     'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-blue-600 dark:hover:text-blue-300';
@@ -103,19 +133,21 @@ export function useNavbar() {
   const mobileSubInactiveClass = 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700';
 
   const desktopProfileLinkClass =
-    'flex items-center px-2 py-2 rounded-lg text-sm font-medium transition-colors duration-200 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-blue-600 group';
+    'flex items-center min-w-0 px-3 py-2 rounded-xl text-sm font-medium transition-colors duration-200 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-blue-600 group';
   const desktopLogoutButtonClass =
     'flex items-center justify-center w-9 h-9 rounded-lg text-gray-500 hover:bg-red-50 hover:text-red-600 dark:text-gray-400 dark:hover:bg-red-900/20 dark:hover:text-red-400 transition-colors';
+  const desktopUserToggleButtonClass =
+    'hidden min-[1100px]:flex items-center gap-2 rounded-xl border border-gray-200/80 dark:border-gray-700 bg-white/90 dark:bg-gray-800/80 px-2.5 py-1.5 text-left shadow-sm transition-colors duration-200 hover:border-blue-200 hover:bg-blue-50/70 dark:hover:border-blue-800 dark:hover:bg-gray-700/80';
   const desktopLoginButtonClass =
-    'hidden lg:flex items-center px-2.5 py-1.5 rounded-full text-xs font-medium transition-all duration-200 shadow-sm border border-blue-200 dark:border-blue-800 bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30';
+    'hidden min-[1100px]:flex items-center px-2.5 py-1.5 rounded-full text-xs font-medium transition-all duration-200 shadow-sm border border-blue-200 dark:border-blue-800 bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30';
   const desktopRegisterButtonClass =
-    'hidden lg:flex items-center px-2.5 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 shadow-sm border border-transparent bg-blue-600 dark:bg-blue-500 text-white hover:bg-blue-700 dark:hover:bg-blue-600';
+    'hidden min-[1100px]:flex items-center px-2.5 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 shadow-sm border border-transparent bg-blue-600 dark:bg-blue-500 text-white hover:bg-blue-700 dark:hover:bg-blue-600';
   const languageToggleButtonClass =
     'flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800';
 
   const iconCircleButtonClass =
     'h-9 w-9 flex items-center justify-center rounded-full text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 focus:outline-none transition-transform duration-200 hover:scale-110 active:scale-95';
-  const mobileMenuButtonClass = `lg:hidden ${iconCircleButtonClass}`;
+  const mobileMenuButtonClass = `min-[1100px]:hidden ${iconCircleButtonClass}`;
 
   const mobileAuthButtonBaseClass =
     'w-full flex items-center justify-center px-3 py-2 rounded-lg text-sm transition-all duration-200 shadow-sm border';
@@ -135,7 +167,7 @@ export function useNavbar() {
   const languageOptionInactiveClass = 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600';
 
   const desktopApiToggleBaseClass =
-    'hidden md:flex items-center px-3 py-2 rounded-lg text-xs font-medium transition-colors duration-200';
+    'hidden min-[1100px]:flex h-9 w-9 items-center justify-center rounded-full text-[11px] font-medium transition-colors duration-200 2xl:h-auto 2xl:w-auto 2xl:justify-start 2xl:px-3 2xl:py-2 2xl:text-xs';
   const desktopApiToggleMockClass = 'text-green-700 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/20';
   const desktopApiToggleRealClass = 'text-amber-700 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-900/20';
 
@@ -200,6 +232,9 @@ export function useNavbar() {
     if (adminDropdownRef.value && !adminDropdownRef.value.contains(event.target)) {
       showAdminDropdown.value = false;
     }
+    if (userDropdownRef.value && !userDropdownRef.value.contains(event.target)) {
+      showUserDropdown.value = false;
+    }
   };
 
   const openAboutDropdown = () => {
@@ -262,6 +297,10 @@ export function useNavbar() {
     showMobileAdminMenu.value = !showMobileAdminMenu.value;
   };
 
+  const toggleUserDropdown = () => {
+    showUserDropdown.value = !showUserDropdown.value;
+  };
+
   const handleLoginSuccess = async (response) => {
     if (response.data) {
       const { user, access_token, refresh_token, expires_at, refresh_expires_at } = response.data;
@@ -270,17 +309,20 @@ export function useNavbar() {
 
       sessionStorage.removeItem('authRequired');
       sessionStorage.removeItem('intendedRoute');
+      showUserDropdown.value = false;
 
       modalStore.handleLoginSuccess(response);
     }
   };
 
   const handleLogout = () => {
+    showUserDropdown.value = false;
     showLogoutConfirm.value = true;
   };
 
   const confirmLogout = () => {
     authStore.logout();
+    showUserDropdown.value = false;
     showLogoutConfirm.value = false;
     showMobileMenu.value = false;
   };
@@ -288,11 +330,13 @@ export function useNavbar() {
   const openLoginModal = () => {
     modalStore.openLogin();
     showMobileMenu.value = false;
+    showUserDropdown.value = false;
   };
 
   const openRegisterModal = () => {
     modalStore.openRegister();
     showMobileMenu.value = false;
+    showUserDropdown.value = false;
   };
 
   const closeModals = () => {
@@ -327,6 +371,7 @@ export function useNavbar() {
     showLanguageDropdown,
     showMobileMenu,
     showLogoutConfirm,
+    showUserDropdown,
     showAboutDropdown,
     showMobileAboutMenu,
     showAdminDropdown,
@@ -334,6 +379,7 @@ export function useNavbar() {
     showLoginModal,
     showRegisterModal,
     languageDropdownRef,
+    userDropdownRef,
     aboutDropdownRef,
     adminDropdownRef,
     currentLanguage,
@@ -345,6 +391,9 @@ export function useNavbar() {
     isAboutRouteActive,
     aboutMenuItems,
     user,
+    userDisplayName,
+    userRoleLabel,
+    userInitials,
     adminMenuItems,
     getTopMenuClass,
     getDropdownItemClass,
@@ -353,6 +402,7 @@ export function useNavbar() {
     getMobileSubLinkClass,
     desktopProfileLinkClass,
     desktopLogoutButtonClass,
+    desktopUserToggleButtonClass,
     desktopLoginButtonClass,
     desktopRegisterButtonClass,
     languageToggleButtonClass,
@@ -370,6 +420,7 @@ export function useNavbar() {
     toggleMobileMenu,
     toggleMobileAboutMenu,
     toggleMobileAdminMenu,
+    toggleUserDropdown,
     changeLanguage,
     openAboutDropdown,
     closeAboutDropdown,
