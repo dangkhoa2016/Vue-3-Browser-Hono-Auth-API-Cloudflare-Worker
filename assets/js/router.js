@@ -53,13 +53,13 @@ const routes = [
     path: '/admin/dashboard',
     name: 'AdminDashboard',
     component: load('/vue/pages/AdminDashboard.vue'),
-    meta: { requiresAuth: true, keepAlive: true }
+    meta: { requiresAuth: true, adminOnly: true, keepAlive: true }
   },
   {
     path: '/admin/users',
     name: 'AdminUsers',
     component: load('/vue/pages/AdminUsers.vue'),
-    meta: { requiresAuth: true, keepAlive: true }
+    meta: { requiresAuth: true, adminOnly: true, keepAlive: true }
   },
   {
     path: '/admin/audit-logs',
@@ -71,37 +71,37 @@ const routes = [
     path: '/admin/advanced-audit',
     name: 'AdminAdvancedAudit',
     component: load('/vue/pages/AdminAdvancedAudit.vue'),
-    meta: { requiresAuth: true }
+    meta: { requiresAuth: true, adminOnly: true }
   },
   {
     path: '/admin/security-incidents',
     name: 'AdminSecurityIncidents',
     component: load('/vue/pages/AdminSecurityIncidents.vue'),
-    meta: { requiresAuth: true, keepAlive: true }
+    meta: { requiresAuth: true, adminOnly: true, keepAlive: true }
   },
   {
     path: '/admin/monitoring',
     name: 'AdminRealtimeMonitoring',
     component: load('/vue/pages/AdminRealtimeMonitoring.vue'),
-    meta: { requiresAuth: true }
+    meta: { requiresAuth: true, adminOnly: true }
   },
   {
     path: '/admin/stats',
     name: 'AdminSystemStats',
     component: load('/vue/pages/AdminSystemStats.vue'),
-    meta: { requiresAuth: true }
+    meta: { requiresAuth: true, adminOnly: true }
   },
   {
     path: '/admin/system-health',
     name: 'AdminSystemHealth',
     component: load('/vue/pages/AdminSystemHealth.vue'),
-    meta: { requiresAuth: true }
+    meta: { requiresAuth: true, adminOnly: true }
   },
   {
     path: '/admin/kv',
     name: 'KvAdminConfigs',
     component: load('/vue/pages/KvAdminConfigs.vue'),
-    meta: { requiresAuth: true, keepAlive: true }
+    meta: { requiresAuth: true, superAdminOnly: true, keepAlive: true }
   },
   {
     path: '/admin/kv/audit',
@@ -144,8 +144,11 @@ export const router = createRouter({
 
 // Authentication guard
 router.beforeEach(async (to, from, next) => {
-  // Check if route requires authentication
-  if (to.matched.some(record => record.meta.requiresAuth)) {
+  const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
+  const requiresAdmin = to.matched.some((record) => record.meta.adminOnly);
+  const requiresSuperAdmin = to.matched.some((record) => record.meta.superAdminOnly);
+
+  if (requiresAuth) {
     try {
       const { useAuthStore } = await import('/assets/js/stores/authStore.js');
       const authStore = useAuthStore();
@@ -158,6 +161,16 @@ router.beforeEach(async (to, from, next) => {
         // Allow navigation but page will show login modal
         next();
       } else {
+        const role = String(authStore.user?.role || '').toLowerCase();
+        const isAdmin = role === 'admin' || role === 'super_admin';
+        const isSuperAdmin = role === 'super_admin';
+
+        if ((requiresSuperAdmin && !isSuperAdmin) || (requiresAdmin && !isAdmin)) {
+          // Keep navigation non-blocking so the page can render its access-denied state.
+          next();
+          return;
+        }
+
         next();
       }
     } catch (error) {
