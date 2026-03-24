@@ -290,64 +290,108 @@ export default {
       }
     },
     about: {
-      advanced: {
-        admin_roles: {
-          body: '완전한 역할 기반 접근 제어 시스템.',
-          title: '관리 & 역할:'
+      access_intro: '라우트 구성은 공개 진단 화면과 인증이 필요한 운영 도구를 분리하고, 보호 구역에는 메타데이터를 사용합니다.',
+      access_items: {
+        cache: {
+          body: '무거운 관리자 화면은 운영 흐름에 도움이 될 때만 keepAlive 메타데이터로 상태를 유지합니다.',
+          title: '선택적 keep-alive'
         },
-        email_service: {
-          body: '이메일을 통한 사용자 활성화 (Brevo 연동).',
-          title: '이메일 서비스:'
+        protected: {
+          body: 'Profile, Settings, API Explorer, 관리자 페이지는 route meta와 auth guard를 사용합니다.',
+          title: '보호된 도구'
         },
-        enterprise_audit: {
-          body: '50개 이상의 감사 엔드포인트로 완전한 로깅.',
-          title: '엔터프라이즈 감사:'
-        },
-        rate_limiting: {
-          body: '로그인 시도를 IP 기반으로 추적.',
-          title: '요청 제한:'
-        },
-        zod_validation: {
-          body: 'i18n 지원을 갖춘 포괄적 스키마 검증.',
-          title: 'Zod 검증:'
+        public: {
+          body: 'About, Health, Version, Language는 로그인 없이 접근할 수 있습니다.',
+          title: '공개 라우트'
         }
       },
-      advanced_title: '고급 기능',
-      description: 'Hono.js와 D1 데이터베이스로 프로덕션 준비된 JWT 인증 시스템을 구축하는 종합 Cloudflare Workers 프로젝트입니다.',
-      features: {
-        d1: {
-          body: '글로벌 분산을 지원하는 SQLite 호환.',
-          title: 'Cloudflare D1:'
+      access_title: '접근 모델',
+      architecture_intro: 'documents 폴더는 각 레이어의 실질적인 책임을 정의하여 페이지가 화면 오케스트레이션에 집중하도록 합니다.',
+      architecture_title: '프런트엔드 아키텍처 경계',
+      badge: '브라우저 전용 Vue 관리자 프런트엔드',
+      description: '이 프로젝트는 Cloudflare Workers 위의 Hono Auth API를 위한 브라우저 전용 Vue 3 관리자 애플리케이션입니다. 사용자 운영, 감사 가시성, 보안 워크플로, API 탐색, 공개 엔드포인트 점검을 담당합니다.',
+      docs_body: 'pages, components, composables, stores, routing, bootstrap 사이의 경계를 명확히 하여 라우트 오케스트레이션을 재사용 UI와 API 조정 로직에서 분리합니다.',
+      docs_title: '아키텍처 가드레일',
+      layers: {
+        components: {
+          body: '명확한 props/events를 가진 재사용 UI 블록을 제공하고 불필요한 기능 결합을 피합니다.',
+          title: 'Components'
         },
-        hono: {
-          body: '빠르고 가벼운 JavaScript 프레임워크.',
-          title: 'Hono.js 프레임워크:'
+        composables: {
+          body: 'auth gate, modal state, debounce, i18n fallback, UI helper 같은 재사용 view logic을 보관합니다.',
+          title: 'Composables'
+        },
+        pages: {
+          body: '섹션을 조합하고 store/composable을 연결하며 라우트 수준 오케스트레이션만 담당합니다.',
+          title: 'Pages'
+        },
+        routing: {
+          body: 'route metadata, auth guard, keep-alive 결정, 앱 부트스트랩을 페이지 business logic과 분리합니다.',
+          title: 'Routing 및 bootstrap'
+        },
+        stores: {
+          body: '의미 있는 state 이름으로 business state, API I/O, mutation action을 조정합니다.',
+          title: 'Stores'
+        }
+      },
+      public_routes: {
+        cta: '라우트 열기',
+        health: '서비스 상태, 환경, 언어, uptime, 원본 health payload를 확인합니다.',
+        language: '현재 언어, 지원 언어 목록, locale 전환 동작을 확인합니다.',
+        version: '서비스 이름, 현재 버전, 언어, 엔드포인트 메타데이터를 확인합니다.'
+      },
+      public_routes_intro: '이 라우트들은 이미 About 내비게이션 그룹에 포함되어 있으며 백엔드 운영 상태를 빠르게 보여줍니다.',
+      public_routes_title: '공개 엔드포인트 라우트',
+      quality_intro: '저장소에는 프런트엔드가 커져도 아키텍처와 현지화 일관성을 유지하는 CLI 검사가 포함되어 있습니다.',
+      quality_items: {
+        boundaries: {
+          body: 'architecture boundaries 문서는 안전한 현대화 규칙과 병합 전 체크리스트를 정의합니다.',
+          title: '문서화된 경계'
+        },
+        file_size: {
+          body: 'pages <= 600줄, components <= 450줄을 목표로 하여 파일이 커질 때 분리를 유도합니다.',
+          title: 'Vue 파일 크기 제한'
         },
         i18n: {
-          body: '자동 언어 감지와 무제한 지원.',
-          title: '동적 i18n:'
+          body: 'tools/i18n.js의 audit, usage, check로 locale 커버리지와 key 사용을 검증할 수 있습니다.',
+          title: 'I18n 일관성 검사'
         },
-        jwt: {
-          body: 'bcrypt 해싱을 활용한 안전한 액세스 및 리프레시 토큰.',
-          title: 'JWT 인증:'
-        },
-        token_security: {
-          body: '블랙리스트, 회전, 전체 로그아웃 강제.',
-          title: '토큰 보안:'
+        script_setup: {
+          body: '전용 스크립트가 script-setup 적용 범위를 추적하여 현대화 진행을 측정 가능하게 합니다.',
+          title: 'Script setup 커버리지'
         }
       },
-      key_features_title: '주요 기능',
-      testing_intro: '프로젝트에는 다음을 포함하는 모듈식 테스트 스위트가 있습니다:',
-      testing_items: {
-        email_activation: '이메일 및 계정 활성화',
-        enterprise_audit: '엔터프라이즈 감사 시스템',
-        i18n_validation: 'i18n 및 다국어 검증',
-        rbac: '역할 기반 접근 제어 (RBAC)',
-        security_performance: '보안 및 성능',
-        system_integration: '시스템 및 통합 테스트'
+      quality_title: '품질 가드레일',
+      stack_items: {
+        backend: 'Cloudflare Workers 위의 Hono Auth API 연동',
+        i18n: '다국어 UI와 공개 엔드포인트 점검',
+        runtime: '정적 호스팅으로 동작하는 브라우저 전용 runtime',
+        vue: 'Vue 3 페이지와 재사용 컴포넌트'
       },
-      testing_title: '테스트 프레임워크',
-      title: 'Hono Auth Worker 소개'
+      stack_label: '프로젝트 초점',
+      summary_body: 'UI는 index.html에서 시작하며 어떤 static server로도 제공할 수 있습니다. 프런트엔드 runtime에는 빌드 단계가 필요 없고, Node.js는 tools/의 CLI 품질 스크립트용으로만 선택 사항입니다.',
+      summary_title: '런타임 모델',
+      surface_cards: {
+        audit: {
+          body: '일상 운영을 위해 audit logs, monitoring, 운영 가시성을 제공합니다.',
+          title: '감사와 모니터링'
+        },
+        public_endpoints: {
+          body: '보호된 관리자 화면에 들어가지 않고도 API 준비 상태를 확인할 수 있도록 health, version, language 라우트를 제공합니다.',
+          title: '공개 엔드포인트 점검'
+        },
+        security: {
+          body: 'security incidents, 토큰 중심 관리자 도구, 보호된 운영 워크플로를 지원합니다.',
+          title: '보안 워크플로'
+        },
+        users: {
+          body: '라우트 수준 관리자 화면에서 계정, 프로필, 역할, 운영 흐름을 관리합니다.',
+          title: '사용자 관리'
+        }
+      },
+      surface_intro: '현재 앱 범위는 단순한 인증 데모보다 넓으며 운영 관리자 화면과 API 주변 공개 진단을 포함합니다.',
+      surface_title: '이 프런트엔드가 다루는 범위',
+      title: '이 프런트엔드 소개'
     },
     app: {
       back_to_top: '맨 위로'

@@ -290,64 +290,108 @@ export default {
       }
     },
     about: {
-      advanced: {
-        admin_roles: {
-          body: '完全なロールベースアクセス制御システム。',
-          title: '管理者とロール:'
+      access_intro: 'ルート定義は公開診断と認証必須ツールを分離し、保護対象にはメタデータを使います。',
+      access_items: {
+        cache: {
+          body: '重い管理画面は、運用フローに有効な場合のみ keepAlive メタデータで状態を保持します。',
+          title: '選択的な keep-alive'
         },
-        email_service: {
-          body: 'メール経由のユーザー有効化（Brevo 連携）。',
-          title: 'メールサービス:'
+        protected: {
+          body: 'Profile、Settings、API Explorer、管理ページは route meta と auth guard を使います。',
+          title: '保護されたツール'
         },
-        enterprise_audit: {
-          body: '50 以上の監査エンドポイントによる完全なログ。',
-          title: 'エンタープライズ監査:'
-        },
-        rate_limiting: {
-          body: 'ログイン試行を IP ベースで追跡。',
-          title: 'レート制限:'
-        },
-        zod_validation: {
-          body: 'i18n 対応の包括的なスキーマ検証。',
-          title: 'Zod バリデーション:'
+        public: {
+          body: 'About、Health、Version、Language は認証なしで利用できます。',
+          title: '公開ルート'
         }
       },
-      advanced_title: '高度な機能',
-      description: 'Hono.js と D1 データベースを用いて、本番運用レベルの JWT 認証システムを構築する Cloudflare Workers プロジェクトです。',
-      features: {
-        d1: {
-          body: 'グローバル配信に対応した SQLite 互換。',
-          title: 'Cloudflare D1:'
+      access_title: 'アクセスモデル',
+      architecture_intro: 'documents フォルダーは各レイヤーの実践的な責務を定義し、ページは画面のオーケストレーションに集中します。',
+      architecture_title: 'フロントエンドのアーキテクチャ境界',
+      badge: 'ブラウザー専用 Vue 管理フロントエンド',
+      description: 'このプロジェクトは Cloudflare Workers 上の Hono Auth API 向けに作られた、ブラウザー専用の Vue 3 管理アプリケーションです。ユーザー運用、監査の可視化、セキュリティ運用、API 探索、公開エンドポイント確認を担います。',
+      docs_body: 'pages、components、composables、stores、routing、bootstrap の境界を明確にし、ルート制御と再利用 UI や API 協調ロジックを分離します。',
+      docs_title: 'アーキテクチャのガードレール',
+      layers: {
+        components: {
+          body: '明確な props / events を持つ再利用 UI を提供し、不要な機能結合を避けます。',
+          title: 'Components'
         },
-        hono: {
-          body: '高速で軽量な JavaScript フレームワーク。',
-          title: 'Hono.js フレームワーク:'
+        composables: {
+          body: 'auth gate、modal state、debounce、i18n fallback、UI helper などの再利用 view logic を保持します。',
+          title: 'Composables'
+        },
+        pages: {
+          body: 'セクションを構成し、store / composable を接続し、ルートレベルの制御だけを担当します。',
+          title: 'Pages'
+        },
+        routing: {
+          body: 'route metadata、auth guard、keep-alive 判定、起動処理をページの business logic から分離します。',
+          title: 'Routing と bootstrap'
+        },
+        stores: {
+          body: 'business state、API I/O、mutation action を意味のある state 名で調整します。',
+          title: 'Stores'
+        }
+      },
+      public_routes: {
+        cta: 'ルートを開く',
+        health: 'サービス状態、環境、言語、稼働時間、health の生 payload を確認します。',
+        language: '現在の言語、対応言語一覧、locale 切替の挙動を確認します。',
+        version: 'サービス名、現在バージョン、言語、エンドポイントのメタデータを確認します。'
+      },
+      public_routes_intro: 'これらのルートは About ナビゲーション群に含まれ、バックエンドの運用状況を素早く確認できます。',
+      public_routes_title: '公開エンドポイントルート',
+      quality_intro: 'リポジトリには、フロントエンド拡張時にもアーキテクチャとローカライズの整合性を保つ CLI チェックがあります。',
+      quality_items: {
+        boundaries: {
+          body: 'architecture boundaries ドキュメントは安全なモダナイズ規則とマージ前チェックリストを定義します。',
+          title: '文書化された境界'
+        },
+        file_size: {
+          body: 'pages <= 600 行、components <= 450 行を目標とし、肥大化時の分割を促します。',
+          title: 'Vue ファイルサイズ制限'
         },
         i18n: {
-          body: '自動言語検出と無制限の対応。',
-          title: '動的 i18n:'
+          body: 'tools/i18n.js の audit、usage、check で locale カバレッジと key 使用を検証できます。',
+          title: 'I18n 整合性チェック'
         },
-        jwt: {
-          body: 'bcrypt ハッシュを使った安全なアクセス & リフレッシュトークン。',
-          title: 'JWT 認証:'
-        },
-        token_security: {
-          body: 'ブラックリスト、ローテーション、全体ログアウトの強制。',
-          title: 'トークンセキュリティ:'
+        script_setup: {
+          body: '専用スクリプトが script-setup の適用状況を追跡し、モダナイズを計測可能にします。',
+          title: 'Script setup カバレッジ'
         }
       },
-      key_features_title: '主な機能',
-      testing_intro: '本プロジェクトには次を網羅するモジュール式テストスイートが含まれます:',
-      testing_items: {
-        email_activation: 'メールとアカウント有効化',
-        enterprise_audit: 'エンタープライズ監査システム',
-        i18n_validation: 'i18n と多言語バリデーション',
-        rbac: 'ロールベースアクセス制御 (RBAC)',
-        security_performance: 'セキュリティ & パフォーマンス',
-        system_integration: 'システム & 統合テスト'
+      quality_title: '品質ガードレール',
+      stack_items: {
+        backend: 'Cloudflare Workers 上の Hono Auth API 連携',
+        i18n: '多言語 UI と公開エンドポイント確認',
+        runtime: '静的ホスティングで動くブラウザー専用 runtime',
+        vue: 'Vue 3 ページと再利用コンポーネント'
       },
-      testing_title: 'テストフレームワーク',
-      title: 'Hono Auth Worker について'
+      stack_label: 'プロジェクトの焦点',
+      summary_body: 'UI は index.html から起動し、任意の static server で配信できます。フロントエンド runtime に build は不要で、Node.js は tools/ の CLI 品質スクリプト用に任意です。',
+      summary_title: 'ランタイムモデル',
+      surface_cards: {
+        audit: {
+          body: '日常運用のために audit logs、monitoring、運用可視化を提供します。',
+          title: '監査と監視'
+        },
+        public_endpoints: {
+          body: '保護ページに入らず API の準備状況を確認できる health、version、language ルートを提供します。',
+          title: '公開エンドポイント確認'
+        },
+        security: {
+          body: 'security incidents、token 管理ツール、保護された運用 workflow をサポートします。',
+          title: 'セキュリティ運用'
+        },
+        users: {
+          body: 'ルートレベルの管理画面からアカウント、プロフィール、ロール、運用フローを管理します。',
+          title: 'ユーザー管理'
+        }
+      },
+      surface_intro: 'このアプリの現在の範囲は単純な auth デモより広く、管理画面と API 周辺の公開診断を含みます。',
+      surface_title: 'このフロントエンドの担当範囲',
+      title: 'このフロントエンドについて'
     },
     app: {
       back_to_top: 'トップに戻る'

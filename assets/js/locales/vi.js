@@ -290,64 +290,108 @@ export default {
       }
     },
     about: {
-      advanced: {
-        admin_roles: {
-          body: 'Hệ thống phân quyền đầy đủ dựa trên vai trò.',
-          title: 'Quản trị & vai trò:'
+      access_intro: 'Route registry tách rõ nhóm chẩn đoán public với nhóm công cụ vận hành cần xác thực và dùng metadata để bảo vệ các khu vực cần guard.',
+      access_items: {
+        cache: {
+          body: 'Một số màn hình admin nặng có thể giữ trạng thái qua metadata keepAlive khi điều đó cải thiện luồng làm việc của operator.',
+          title: 'Keep-alive có chọn lọc'
         },
-        email_service: {
-          body: 'Kích hoạt người dùng qua email (tích hợp Brevo).',
-          title: 'Dịch vụ email:'
+        protected: {
+          body: 'Profile, Settings, API Explorer và các trang admin dựa vào route meta cùng auth guard.',
+          title: 'Công cụ được bảo vệ'
         },
-        enterprise_audit: {
-          body: 'Ghi log đầy đủ với hơn 50 điểm kiểm toán.',
-          title: 'Kiểm toán doanh nghiệp:'
-        },
-        rate_limiting: {
-          body: 'Theo dõi IP cho các lần đăng nhập.',
-          title: 'Giới hạn tốc độ:'
-        },
-        zod_validation: {
-          body: 'Kiểm tra lược đồ toàn diện với hỗ trợ i18n.',
-          title: 'Xác thực Zod:'
+        public: {
+          body: 'About, Health, Version và Language luôn truy cập được mà không cần đăng nhập.',
+          title: 'Route public'
         }
       },
-      advanced_title: 'Khả năng nâng cao',
-      description: 'Dự án Cloudflare Workers toàn diện sử dụng Hono.js và cơ sở dữ liệu D1 để xây dựng hệ thống xác thực JWT sẵn sàng sản xuất.',
-      features: {
-        d1: {
-          body: 'Tương thích SQLite với phân phối toàn cầu.',
-          title: 'Cloudflare D1:'
+      access_title: 'Mô hình truy cập',
+      architecture_intro: 'Thư mục documents định nghĩa ranh giới thực tế cho từng layer để page chỉ điều phối màn hình, còn các trách nhiệm thấp hơn nằm ở các khối dùng chung.',
+      architecture_title: 'Ranh giới kiến trúc frontend',
+      badge: 'Frontend quản trị Vue chạy trực tiếp trên browser',
+      description: 'Đây là ứng dụng quản trị Vue 3 chạy browser-only cho Hono Auth API trên Cloudflare Workers. Frontend này tập trung vào vận hành người dùng, quan sát audit, quy trình bảo mật, khám phá API và kiểm tra các public endpoint.',
+      docs_body: 'Frontend giữ ranh giới rõ giữa pages, components, composables, stores, routing và bootstrap để điều phối route tách biệt khỏi UI tái sử dụng và logic phối hợp API.',
+      docs_title: 'Guardrail kiến trúc',
+      layers: {
+        components: {
+          body: 'Cung cấp các khối UI tái sử dụng với props và events rõ ràng, tránh ghép cứng theo từng tính năng nếu không thực sự cần.',
+          title: 'Components'
         },
-        hono: {
-          body: 'Framework JavaScript nhẹ và nhanh.',
-          title: 'Hono.js Framework:'
+        composables: {
+          body: 'Chứa view logic tái sử dụng như auth gate, modal state, debounce, fallback i18n và helper UI.',
+          title: 'Composables'
+        },
+        pages: {
+          body: 'Ghép các section, kết nối store hoặc composable và chỉ xử lý orchestration ở cấp route.',
+          title: 'Pages'
+        },
+        routing: {
+          body: 'Giữ route metadata, auth guard, quyết định keep-alive và bootstrap khởi động ứng dụng tách khỏi business logic của page.',
+          title: 'Routing và bootstrap'
+        },
+        stores: {
+          body: 'Điều phối business state, API I/O và các mutation action với tên state mang đúng ý nghĩa.',
+          title: 'Stores'
+        }
+      },
+      public_routes: {
+        cta: 'Mở route',
+        health: 'Kiểm tra trạng thái dịch vụ, môi trường, ngôn ngữ, uptime và raw payload của health endpoint.',
+        language: 'Xem ngôn ngữ đang hoạt động, danh sách ngôn ngữ hỗ trợ và thử hành vi chuyển locale.',
+        version: 'Kiểm tra tên dịch vụ, phiên bản hiện tại, ngôn ngữ và metadata của endpoint.'
+      },
+      public_routes_intro: 'Các route này đã nằm trong nhóm điều hướng About và cung cấp góc nhìn vận hành nhanh về backend.',
+      public_routes_title: 'Các route public endpoint',
+      quality_intro: 'Repository đã có các CLI check để kiến trúc và localization giữ được tính nhất quán khi frontend tiếp tục mở rộng.',
+      quality_items: {
+        boundaries: {
+          body: 'Tài liệu architecture boundaries định nghĩa các quy tắc modernization an toàn và checklist trước khi merge.',
+          title: 'Ranh giới đã được tài liệu hóa'
+        },
+        file_size: {
+          body: 'Guardrail mặc định đặt mục tiêu pages <= 600 dòng và components <= 450 dòng để khuyến khích tách nhỏ khi file phình ra.',
+          title: 'Giới hạn kích thước file Vue'
         },
         i18n: {
-          body: 'Tự động phát hiện ngôn ngữ và hỗ trợ không giới hạn.',
-          title: 'I18n động:'
+          body: 'Có thể chạy tools/i18n.js với audit, usage hoặc check để xác minh độ phủ locale và key usage trong source.',
+          title: 'Kiểm tra tính nhất quán I18n'
         },
-        jwt: {
-          body: 'Token truy cập & làm mới an toàn với bcrypt.',
-          title: 'JWT Auth:'
-        },
-        token_security: {
-          body: 'Danh sách đen, xoay vòng và buộc đăng xuất toàn bộ.',
-          title: 'Bảo mật Token:'
+        script_setup: {
+          body: 'Một script riêng theo dõi độ phủ script-setup để quá trình hiện đại hóa có thể đo lường được.',
+          title: 'Độ phủ script setup'
         }
       },
-      key_features_title: 'Tính năng chính',
-      testing_intro: 'Dự án bao gồm bộ kiểm thử mô-đun toàn diện bao phủ:',
-      testing_items: {
-        email_activation: 'Email & kích hoạt tài khoản',
-        enterprise_audit: 'Hệ thống kiểm toán doanh nghiệp',
-        i18n_validation: 'kiểm thử i18n & đa ngôn ngữ',
-        rbac: 'Kiểm soát truy cập dựa trên vai trò (RBAC)',
-        security_performance: 'Bảo mật & hiệu năng',
-        system_integration: 'Kiểm thử hệ thống & tích hợp'
+      quality_title: 'Guardrail chất lượng',
+      stack_items: {
+        backend: 'Tích hợp Hono Auth API trên Cloudflare Workers',
+        i18n: 'UI đa ngôn ngữ và kiểm tra public endpoint',
+        runtime: 'Runtime browser-only với static hosting',
+        vue: 'Vue 3 pages và reusable components'
       },
-      testing_title: 'Bộ kiểm thử',
-      title: 'Về Hono Auth Worker'
+      stack_label: 'Trọng tâm dự án',
+      summary_body: 'UI khởi động từ index.html và có thể chạy trên bất kỳ static server nào. Frontend runtime không cần bước build; Node.js chỉ là tùy chọn cho các script chất lượng CLI trong tools/.',
+      summary_title: 'Mô hình runtime',
+      surface_cards: {
+        audit: {
+          body: 'Hiển thị audit logs, monitoring và khả năng quan sát vận hành cho nhu cầu quản trị hằng ngày.',
+          title: 'Audit và giám sát'
+        },
+        public_endpoints: {
+          body: 'Cung cấp các route health, version và language để kiểm tra mức sẵn sàng của API mà không cần vào vùng admin được bảo vệ.',
+          title: 'Kiểm tra public endpoint'
+        },
+        security: {
+          body: 'Hỗ trợ các màn hình security incidents, công cụ quản trị token và các workflow vận hành có guard.',
+          title: 'Workflow bảo mật'
+        },
+        users: {
+          body: 'Quản lý tài khoản, hồ sơ, vai trò và luồng thao tác operator từ các màn hình admin ở cấp route.',
+          title: 'Quản trị người dùng'
+        }
+      },
+      surface_intro: 'Phạm vi hiện tại của ứng dụng rộng hơn một auth demo đơn giản: nó hỗ trợ cả màn hình admin vận hành lẫn các chẩn đoán public quanh API.',
+      surface_title: 'Frontend hiện bao phủ gì',
+      title: 'Về frontend này'
     },
     app: {
       back_to_top: 'Lên đầu trang'
