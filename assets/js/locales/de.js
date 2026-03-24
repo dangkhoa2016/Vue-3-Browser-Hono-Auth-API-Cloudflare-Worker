@@ -290,64 +290,108 @@ export default {
       }
     },
     about: {
-      advanced: {
-        admin_roles: {
-          body: 'Vollständiges rollenbasiertes Zugriffskontrollsystem.',
-          title: 'Admin & Rollen:'
+      access_intro: 'Die Routen trennen öffentliche Diagnoseansichten von authentifizierten Operator-Tools und verwenden Metadaten für geschützte Bereiche.',
+      access_items: {
+        cache: {
+          body: 'Aufwendige Admin-Ansichten können ihren Zustand per keepAlive-Metadaten behalten, wenn das den Operator-Workflow verbessert.',
+          title: 'Selektives Keep-Alive'
         },
-        email_service: {
-          body: 'Benutzeraktivierung per E-Mail (Brevo-Integration).',
-          title: 'E-Mail-Dienst:'
+        protected: {
+          body: 'Profile, Settings, API Explorer und Admin-Seiten verlassen sich auf Route-Metadaten und Auth-Guards.',
+          title: 'Geschützte Tools'
         },
-        enterprise_audit: {
-          body: 'Vollständiges Logging mit über 50 Audit-Endpunkten.',
-          title: 'Enterprise Audit:'
-        },
-        rate_limiting: {
-          body: 'IP-basierte Nachverfolgung von Anmeldeversuchen.',
-          title: 'Rate Limiting:'
-        },
-        zod_validation: {
-          body: 'Umfassende Schemaprüfung mit i18n-Unterstützung.',
-          title: 'Zod-Validierung:'
+        public: {
+          body: 'About, Health, Version und Language bleiben ohne Anmeldung erreichbar.',
+          title: 'Öffentliche Routen'
         }
       },
-      advanced_title: 'Erweiterte Funktionen',
-      description: 'Ein umfassendes Cloudflare-Workers-Projekt mit Hono.js und D1-Datenbank für ein produktionsreifes JWT-Authentifizierungssystem.',
-      features: {
-        d1: {
-          body: 'SQLite-kompatibel mit globaler Verteilung.',
-          title: 'Cloudflare D1:'
+      access_title: 'Zugriffsmodell',
+      architecture_intro: 'Der documents-Ordner definiert praktische Verantwortlichkeiten je Layer, damit Pages nur die Screen-Orchestrierung übernehmen.',
+      architecture_title: 'Frontend-Architekturgrenzen',
+      badge: 'Browser-only Vue-Admin-Frontend',
+      description: 'Dieses Projekt ist eine browser-only Vue-3-Admin-Anwendung für die Hono Auth API auf Cloudflare Workers. Sie deckt Benutzerbetrieb, Audit-Transparenz, Security-Workflows, API-Erkundung und öffentliche Endpoint-Prüfung ab.',
+      docs_body: 'Das Frontend hält klare Grenzen zwischen Pages, Components, Composables, Stores, Routing und Bootstrap ein, damit Route-Orchestrierung von wiederverwendbarer UI und API-Koordination getrennt bleibt.',
+      docs_title: 'Architektur-Leitplanken',
+      layers: {
+        components: {
+          body: 'Stellen wiederverwendbare UI-Bausteine mit klaren Props und Events bereit und vermeiden unnötige Feature-Kopplung.',
+          title: 'Components'
         },
-        hono: {
-          body: 'Schnelles und leichtgewichtiges JavaScript-Framework.',
-          title: 'Hono.js Framework:'
+        composables: {
+          body: 'Enthalten wiederverwendbare View-Logik wie Auth-Gates, Modal-State, Debounce, i18n-Fallbacks und UI-Helfer.',
+          title: 'Composables'
+        },
+        pages: {
+          body: 'Kombinieren Sections, binden Stores oder Composables an und übernehmen nur die Route-Orchestrierung.',
+          title: 'Pages'
+        },
+        routing: {
+          body: 'Halten Route-Metadaten, Auth-Guards, Keep-Alive-Entscheidungen und App-Startlogik getrennt von Seiten-Business-Logik.',
+          title: 'Routing und Bootstrap'
+        },
+        stores: {
+          body: 'Koordinieren Business-State, API-I/O und Mutation-Aktionen mit semantischen State-Namen.',
+          title: 'Stores'
+        }
+      },
+      public_routes: {
+        cta: 'Route öffnen',
+        health: 'Prüft Service-Status, Umgebung, Sprache, Uptime und den rohen Health-Payload.',
+        language: 'Zeigt aktive Sprache, unterstützte Sprachen und das Verhalten beim Locale-Wechsel.',
+        version: 'Zeigt Service-Name, aktuelle Version, Sprache und Endpoint-Metadaten.'
+      },
+      public_routes_intro: 'Diese Routen gehören bereits zur About-Navigation und geben schnellen operativen Einblick in das Backend.',
+      public_routes_title: 'Öffentliche Endpoint-Routen',
+      quality_intro: 'Das Repository bringt CLI-Prüfungen mit, damit Architektur und Lokalisierung beim Ausbau des Frontends konsistent bleiben.',
+      quality_items: {
+        boundaries: {
+          body: 'Das Architektur-Dokument definiert sichere Modernisierungsregeln und Merge-Checklisten.',
+          title: 'Dokumentierte Grenzen'
+        },
+        file_size: {
+          body: 'Leitplanken zielen auf pages <= 600 Zeilen und components <= 450 Zeilen, um frühes Aufteilen zu fördern.',
+          title: 'Vue-Dateigrößenlimits'
         },
         i18n: {
-          body: 'Automatische Spracherkennung und unbegrenzte Unterstützung.',
-          title: 'Dynamisches I18n:'
+          body: 'Mit tools/i18n.js audit, usage oder check lässt sich Locale-Abdeckung und Key-Nutzung prüfen.',
+          title: 'I18n-Konsistenzprüfungen'
         },
-        jwt: {
-          body: 'Sichere Zugriffs- und Refresh-Token mit bcrypt-Hashing.',
-          title: 'JWT Auth:'
-        },
-        token_security: {
-          body: 'Blacklist, Rotation und erzwungenes Abmelden aller Sitzungen.',
-          title: 'Token-Sicherheit:'
+        script_setup: {
+          body: 'Ein eigenes Skript verfolgt die script-setup-Abdeckung, damit die Modernisierung messbar bleibt.',
+          title: 'Script-setup-Abdeckung'
         }
       },
-      key_features_title: 'Wesentliche Funktionen',
-      testing_intro: 'Das Projekt enthält eine umfassende modulare Testsuite für:',
-      testing_items: {
-        email_activation: 'E-Mail- & Kontoaktivierung',
-        enterprise_audit: 'Enterprise-Audit-System',
-        i18n_validation: 'i18n- und Mehrsprachen-Validierung',
-        rbac: 'Rollenbasierte Zugriffskontrolle (RBAC)',
-        security_performance: 'Sicherheit & Performance',
-        system_integration: 'System- und Integrationstests'
+      quality_title: 'Qualitäts-Leitplanken',
+      stack_items: {
+        backend: 'Hono-Auth-API-Integration auf Cloudflare Workers',
+        i18n: 'Mehrsprachige UI und öffentliche Endpoint-Prüfung',
+        runtime: 'Browser-only Runtime mit statischem Hosting',
+        vue: 'Vue-3-Pages und wiederverwendbare Components'
       },
-      testing_title: 'Test-Framework',
-      title: 'Über Hono Auth Worker'
+      stack_label: 'Projektfokus',
+      summary_body: 'Die UI startet aus index.html und kann von jedem statischen Server ausgeliefert werden. Für die Frontend-Runtime ist kein Build-Schritt nötig; Node.js ist nur optional für CLI-Qualitätsskripte in tools/.',
+      summary_title: 'Runtime-Modell',
+      surface_cards: {
+        audit: {
+          body: 'Stellt Audit-Logs, Monitoring und operative Transparenz für die tägliche Administration bereit.',
+          title: 'Audit und Monitoring'
+        },
+        public_endpoints: {
+          body: 'Bietet Health-, Version- und Language-Routen, damit die API-Bereitschaft ohne geschützte Admin-Seiten geprüft werden kann.',
+          title: 'Öffentliche Endpoint-Prüfung'
+        },
+        security: {
+          body: 'Unterstützt Security-Incident-Ansichten, tokenbezogene Admin-Tools und geschützte operative Workflows.',
+          title: 'Security-Workflows'
+        },
+        users: {
+          body: 'Verwaltet Konten, Profile, Rollen und Operator-Abläufe über routebasierte Admin-Seiten.',
+          title: 'Benutzerverwaltung'
+        }
+      },
+      surface_intro: 'Der aktuelle Umfang der App geht über eine einfache Auth-Demo hinaus: Sie enthält operative Admin-Oberflächen und öffentliche API-Diagnosen.',
+      surface_title: 'Was das Frontend abdeckt',
+      title: 'Über dieses Frontend'
     },
     app: {
       back_to_top: 'Nach oben'
