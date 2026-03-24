@@ -1,4 +1,4 @@
-import { computed, nextTick, onActivated, onMounted, ref, watch } from 'vue';
+import { computed, nextTick, ref, watch } from 'vue';
 import { apiClient, API_ENDPOINTS } from '/assets/js/api.js';
 import { useAuthStore } from '/assets/js/stores/authStore.js';
 import { useModalStore } from '/assets/js/stores/modalStore.js';
@@ -6,10 +6,14 @@ import { useMainStore } from '/assets/js/stores/mainStore.js';
 import { useToastStore } from '/assets/js/stores/toastStore.js';
 import { useKvAdminConfigsStore } from '/assets/js/stores/kvAdminConfigsStore.js';
 import { useAuthGate } from '/vue/composables/useAuthGate.js';
+import { createAuthGateCallbacks } from '/vue/composables/createAuthGateCallbacks.js';
 import { useDateTimeFormatter } from '/vue/composables/useDateTimeFormatter.js';
 import { useModalState } from '/vue/composables/useModalState.js';
+import { useAuthStateChangeWatcher } from '/vue/composables/useAuthStateChangeWatcher.js';
 import { useDebouncedFilters } from '/vue/composables/useDebouncedFilters.js';
 import { useI18nFallback } from '/vue/composables/useI18nFallback.js';
+import { useEnsureAuthenticatedLifecycle } from '/vue/composables/useEnsureAuthenticatedLifecycle.js';
+import { useMockApiChangeWatcher } from '/vue/composables/useMockApiChangeWatcher.js';
 import { getKvSourceBadgeClass } from '/vue/composables/useUiClassMap.js';
 
 export function useKvAdminConfigsPage() {
@@ -134,16 +138,12 @@ export function useKvAdminConfigsPage() {
     modalStore,
     sessionAuthFlagKey: 'authRequired',
     resetProtectedState: resetKvState,
-    onAuthenticated: async () => {
-      if (isSuperAdmin.value) {
+    ...createAuthGateCallbacks({
+      when: () => isSuperAdmin.value,
+      onAuthenticated: async () => {
         await loadConfigs();
       }
-    },
-    onModalSuccess: async () => {
-      if (isSuperAdmin.value) {
-        await loadConfigs();
-      }
-    }
+    })
   });
 
   const reload = async () => {
@@ -588,12 +588,7 @@ export function useKvAdminConfigsPage() {
     { immediate: true }
   );
 
-  watch(
-    () => authStore.isAuthenticated,
-    async (isAuthenticated) => {
-      await handleAuthStateChange(isAuthenticated);
-    }
-  );
+  useAuthStateChangeWatcher(authStore, handleAuthStateChange);
 
   watch(
     () => isSuperAdmin.value,
@@ -608,20 +603,13 @@ export function useKvAdminConfigsPage() {
     }
   );
 
-  watch(() => mainStore.mockApi, async (value, oldValue) => {
-      if (value === oldValue) return;
-      if (!authStore.isAuthenticated || !isSuperAdmin.value) return;
-      await loadConfigs();
-    }
-  );
-
-  onMounted(async () => {
-    await ensureAuthenticated({ checkSessionFlag: true, openModal: true });
+  useMockApiChangeWatcher(mainStore, async () => {
+    await loadConfigs();
+  }, {
+    shouldRefresh: () => authStore.isAuthenticated && isSuperAdmin.value
   });
 
-  onActivated(async () => {
-    await ensureAuthenticated({ checkSessionFlag: true, openModal: true });
-  });
+  useEnsureAuthenticatedLifecycle(ensureAuthenticated);
 
   return {
     showLoginRequired,

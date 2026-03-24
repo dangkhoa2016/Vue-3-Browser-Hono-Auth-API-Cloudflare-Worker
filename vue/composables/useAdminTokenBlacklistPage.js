@@ -1,4 +1,4 @@
-import { ref, computed, onActivated, onMounted, watch } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { useMainStore } from '/assets/js/stores/mainStore.js';
 import { useAuthStore } from '/assets/js/stores/authStore.js';
 import { useModalStore } from '/assets/js/stores/modalStore.js';
@@ -6,6 +6,10 @@ import { useTokenBlacklistStore } from '/assets/js/stores/tokenBlacklistStore.js
 import { useModalState } from '../composables/useModalState.js';
 import { useDebouncedFilters } from '../composables/useDebouncedFilters.js';
 import { useAuthGate } from '../composables/useAuthGate.js';
+import { createAuthGateCallbacks } from '/vue/composables/createAuthGateCallbacks.js';
+import { useAuthStateChangeWatcher } from '/vue/composables/useAuthStateChangeWatcher.js';
+import { useEnsureAuthenticatedLifecycle } from '/vue/composables/useEnsureAuthenticatedLifecycle.js';
+import { useMockApiChangeWatcher } from '/vue/composables/useMockApiChangeWatcher.js';
 import { useI18nFallback } from '../composables/useI18nFallback.js';
 
 export function useAdminTokenBlacklistPage() {
@@ -46,9 +50,11 @@ export function useAdminTokenBlacklistPage() {
   const { showLoginRequired, openLoginModal, ensureAuthenticated, handleAuthStateChange } = useAuthGate({
     authStore,
     modalStore,
-    onAuthenticated: async () => {
-      await fetchTokens();
-    }
+    ...createAuthGateCallbacks({
+      onAuthenticated: async () => {
+        await fetchTokens();
+      }
+    })
   });
 
   const formatDate = (dateString) => {
@@ -126,23 +132,15 @@ export function useAdminTokenBlacklistPage() {
     }
   };
 
-  onMounted(async () => {
-    await ensureAuthenticated({ checkSessionFlag: true, openModal: true });
+  useEnsureAuthenticatedLifecycle(ensureAuthenticated);
+
+  useMockApiChangeWatcher(mainStore, async () => {
+    fetchTokens();
+  }, {
+    shouldRefresh: () => authStore.isAuthenticated && isSuperAdmin.value
   });
 
-  onActivated(async () => {
-    await ensureAuthenticated({ checkSessionFlag: true, openModal: true });
-  });
-
-  watch(() => mainStore.mockApi, (newVal, oldVal) => {
-    if (newVal !== oldVal && authStore.isAuthenticated && isSuperAdmin.value) {
-      fetchTokens();
-    }
-  });
-
-  watch(() => authStore.isAuthenticated, async (newVal) => {
-    await handleAuthStateChange(newVal);
-  });
+  useAuthStateChangeWatcher(authStore, handleAuthStateChange);
 
   watch(searchQuery, (newVal) => {
     if (!newVal) {

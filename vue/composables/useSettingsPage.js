@@ -1,4 +1,4 @@
-import { computed, onActivated, onMounted, ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { apiClient, API_CONFIG, API_ENDPOINTS } from '/assets/js/api.js';
 import { normalizeApiBaseUrl, normalizeApiRequestTimeout } from '/assets/js/api/httpClient.js';
 import { DEFAULT_ADMIN_PAGE_SIZE, resolveAdminPageSize, stringifyAdminPageSize } from '/assets/js/constants/pagination.js';
@@ -8,9 +8,13 @@ import { useMainStore } from '/assets/js/stores/mainStore.js';
 import { useModalStore } from '/assets/js/stores/modalStore.js';
 import { useToastStore } from '/assets/js/stores/toastStore.js';
 import { useAuthGate } from '/vue/composables/useAuthGate.js';
+import { createAuthGateCallbacks } from '/vue/composables/createAuthGateCallbacks.js';
+import { useAuthStateChangeWatcher } from '/vue/composables/useAuthStateChangeWatcher.js';
+import { useEnsureAuthenticatedLifecycle } from '/vue/composables/useEnsureAuthenticatedLifecycle.js';
 import { getTimeFormatLabel, useDateTimeFormatter } from '/vue/composables/useDateTimeFormatter.js';
 import { useDeepLinkedTabs } from '/vue/composables/useDeepLinkedTabs.js';
 import { useI18nFallback } from '/vue/composables/useI18nFallback.js';
+import { useMockApiChangeWatcher } from '/vue/composables/useMockApiChangeWatcher.js';
 
 const normalizeText = (value) => String(value || '').trim();
 
@@ -325,12 +329,11 @@ export function useSettingsPage() {
     authStore,
     modalStore,
     resetProtectedState,
-    onAuthenticated: async () => {
-      await loadSettings();
-    },
-    onModalSuccess: async () => {
-      await loadSettings();
-    }
+    ...createAuthGateCallbacks({
+      onAuthenticated: async () => {
+        await loadSettings();
+      }
+    })
   });
 
   const setLanguage = async (nextLanguage) => {
@@ -517,40 +520,28 @@ export function useSettingsPage() {
     return formatDateTime(date, tf('message.settings.never_synced', 'Not synced yet'));
   };
 
-  onMounted(async () => {
-    if (authStore.isAuthenticated) {
-      await ensureAuthenticated({ checkSessionFlag: true, openModal: true });
-      return;
+  useEnsureAuthenticatedLifecycle(ensureAuthenticated, {
+    shouldEnsure: () => authStore.isAuthenticated,
+    onSkipMount: async () => {
+      await loadSettings();
+    },
+    onSkipActivate: async () => {
+      await loadSettings();
     }
-
-    await loadSettings();
   });
 
-  onActivated(async () => {
-    if (authStore.isAuthenticated) {
-      await ensureAuthenticated({ checkSessionFlag: true, openModal: true });
-      return;
+  useAuthStateChangeWatcher(authStore, handleAuthStateChange, {
+    onUnauthenticated: async () => {
+      resetProtectedState();
+      await loadSettings();
+      return false;
     }
-
-    await loadSettings();
   });
 
-  watch(() => authStore.isAuthenticated, async (value) => {
-    if (value) {
-      await handleAuthStateChange(value);
-      return;
-    }
-
-    resetProtectedState();
+  useMockApiChangeWatcher(mainStore, async () => {
     await loadSettings();
-  });
-
-  watch(() => mainStore.mockApi, async (value, oldValue) => {
-    if (value === oldValue || !authStore.isAuthenticated || !isAdmin.value) {
-      return;
-    }
-
-    await loadSettings();
+  }, {
+    shouldRefresh: () => authStore.isAuthenticated && isAdmin.value
   });
 
   watch(() => authStore.user?.id, (value, oldValue) => {

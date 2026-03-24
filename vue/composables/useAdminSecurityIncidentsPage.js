@@ -1,4 +1,4 @@
-import { computed, onActivated, onMounted, ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 const { storeToRefs } = Pinia;
 import { DEFAULT_ADMIN_PAGE_SIZE, resolveAdminPageSize } from '/assets/js/constants/pagination.js';
 import { useSecurityIncidentStore } from '/assets/js/stores/securityIncidentStore.js';
@@ -10,6 +10,10 @@ import { useDebouncedFilters } from '/vue/composables/useDebouncedFilters.js';
 import { useModalState } from '/vue/composables/useModalState.js';
 import { useI18nFallback } from '/vue/composables/useI18nFallback.js';
 import { useAuthGate } from '/vue/composables/useAuthGate.js';
+import { createAuthGateCallbacks } from '/vue/composables/createAuthGateCallbacks.js';
+import { useAuthStateChangeWatcher } from '/vue/composables/useAuthStateChangeWatcher.js';
+import { useEnsureAuthenticatedLifecycle } from '/vue/composables/useEnsureAuthenticatedLifecycle.js';
+import { useMockApiChangeWatcher } from '/vue/composables/useMockApiChangeWatcher.js';
 import {
   getSecurityIncidentTypeBadgeClass,
   getSecurityIncidentSeverityBadgeClass,
@@ -142,9 +146,11 @@ export function useAdminSecurityIncidentsPage() {
     authStore,
     modalStore,
     resetProtectedState,
-    onAuthenticated: async () => {
-      await loadIncidents(1);
-    }
+    ...createAuthGateCallbacks({
+      onAuthenticated: async () => {
+        await loadIncidents(1);
+      }
+    })
   });
 
   const goToPage = async (page) => {
@@ -184,27 +190,15 @@ export function useAdminSecurityIncidentsPage() {
     await loadIncidents(1);
   });
 
-  watch(() => mainStore.mockApi, async (value, oldValue) => {
-    if (value !== oldValue && authStore.isAuthenticated && isAdmin.value) {
-      await loadIncidents(1);
-    }
+  useMockApiChangeWatcher(mainStore, async () => {
+    await loadIncidents(1);
+  }, {
+    shouldRefresh: () => authStore.isAuthenticated && isAdmin.value
   });
 
-  watch(() => authStore.isAuthenticated, async (value) => {
-    await handleAuthStateChange(value);
-  });
+  useAuthStateChangeWatcher(authStore, handleAuthStateChange);
 
-  const ensurePageAccess = async () => {
-    await ensureAuthenticated({ checkSessionFlag: true, openModal: true });
-  };
-
-  onMounted(async () => {
-    await ensurePageAccess();
-  });
-
-  onActivated(async () => {
-    await ensurePageAccess();
-  });
+  useEnsureAuthenticatedLifecycle(ensureAuthenticated);
 
   return {
     actionsCellClass,

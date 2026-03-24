@@ -1,10 +1,13 @@
-import { computed, onActivated, onMounted, ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { apiClient, API_ENDPOINTS } from '/assets/js/api.js';
 import { useMainStore } from '/assets/js/stores/mainStore.js';
 import { useAuthStore } from '/assets/js/stores/authStore.js';
 import { useModalStore } from '/assets/js/stores/modalStore.js';
 import { useAuthGate } from '/vue/composables/useAuthGate.js';
+import { createAuthGateCallbacks } from '/vue/composables/createAuthGateCallbacks.js';
+import { useAuthStateChangeWatcher } from '/vue/composables/useAuthStateChangeWatcher.js';
+import { useEnsureAuthenticatedLifecycle } from '/vue/composables/useEnsureAuthenticatedLifecycle.js';
 
 export function useApiExplorerPage() {
   const apiInfo = ref(null);
@@ -22,21 +25,17 @@ export function useApiExplorerPage() {
   const { showLoginRequired, openLoginModal, ensureAuthenticated, handleAuthStateChange, markUnauthenticated } = useAuthGate({
     authStore,
     modalStore,
-    onAuthenticated: async () => {
-      await loadApiInfo();
-    }
+    ...createAuthGateCallbacks({
+      onAuthenticated: async () => {
+        await fetchApiInfo();
+      }
+    })
   });
 
-  const loadApiInfo = async () => {
+  const fetchApiInfo = async () => {
     try {
       isLoading.value = true;
       errorMessage.value = null;
-
-      const isAuth = await ensureAuthenticated({ checkSessionFlag: true, openModal: true });
-      if (!isAuth) {
-        isLoading.value = false;
-        return;
-      }
 
       const response = await apiClient.get(API_ENDPOINTS.API_INFO, {
         headers: {
@@ -59,6 +58,16 @@ export function useApiExplorerPage() {
     } finally {
       isLoading.value = false;
     }
+  };
+
+  const loadApiInfo = async () => {
+    const isAuth = await ensureAuthenticated({ checkSessionFlag: true, openModal: true });
+    if (!isAuth) {
+      isLoading.value = false;
+      return false;
+    }
+
+    return true;
   };
 
   const endpointCategories = computed(() => {
@@ -100,28 +109,20 @@ export function useApiExplorerPage() {
     };
   };
 
-  watch([() => mainStore.mockApi, locale], () => {
-    if (!mainStore.mockApi) {
-      loadApiInfo();
+  watch([() => mainStore.mockApi, locale], async () => {
+    if (!mainStore.mockApi && authStore.isAuthenticated && !showLoginRequired.value) {
+      await fetchApiInfo();
     }
   });
 
-  watch(
-    () => authStore.isAuthenticated,
-    async (isAuthenticated) => {
-      if (isAuthenticated === false) {
-        apiInfo.value = null;
-        errorMessage.value = null;
-      }
-      await handleAuthStateChange(isAuthenticated);
-    },
-    { immediate: false }
-  );
-
-  onMounted(loadApiInfo);
-  onActivated(() => {
-    loadApiInfo();
+  useAuthStateChangeWatcher(authStore, handleAuthStateChange, {
+    onUnauthenticated: async () => {
+      apiInfo.value = null;
+      errorMessage.value = null;
+    }
   });
+
+  useEnsureAuthenticatedLifecycle(ensureAuthenticated);
 
   return {
     apiInfo,

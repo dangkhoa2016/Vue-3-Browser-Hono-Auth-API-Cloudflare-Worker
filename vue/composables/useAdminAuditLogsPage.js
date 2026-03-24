@@ -1,4 +1,4 @@
-import { onMounted, watch, ref, computed } from 'vue';
+import { watch, ref, computed } from 'vue';
 import { DEFAULT_ADMIN_PAGE_SIZE, resolveAdminPageSize } from '/assets/js/constants/pagination.js';
 import { useAuditStore } from '/assets/js/stores/auditStore.js';
 import { useMainStore } from '/assets/js/stores/mainStore.js';
@@ -6,8 +6,12 @@ import { useAuthStore } from '/assets/js/stores/authStore.js';
 import { useModalStore } from '/assets/js/stores/modalStore.js';
 import { useToastStore } from '/assets/js/stores/toastStore.js';
 import { useAuthGate } from '/vue/composables/useAuthGate.js';
+import { createAuthGateCallbacks } from '/vue/composables/createAuthGateCallbacks.js';
+import { useAuthStateChangeWatcher } from '/vue/composables/useAuthStateChangeWatcher.js';
+import { useEnsureAuthenticatedLifecycle } from '/vue/composables/useEnsureAuthenticatedLifecycle.js';
 import { useDateTimeFormatter } from '/vue/composables/useDateTimeFormatter.js';
 import { useI18nFallback } from '/vue/composables/useI18nFallback.js';
+import { useMockApiChangeWatcher } from '/vue/composables/useMockApiChangeWatcher.js';
 import { useModalState } from '/vue/composables/useModalState.js';
 
 export function useAdminAuditLogsPage() {
@@ -137,18 +141,20 @@ export function useAdminAuditLogsPage() {
     authStore,
     modalStore,
     sessionAuthFlagKey: 'authRequired',
-    onAuthenticated: async () => {
-      await auditStore.fetchLogs();
-    },
-    onModalSuccess: async () => {
-      await auditStore.fetchLogs();
-    }
+    ...createAuthGateCallbacks({
+      onAuthenticated: async () => {
+        await auditStore.fetchLogs();
+        if (auditStore.fetchStats) {
+          auditStore.fetchStats().catch(() => {});
+        }
+      }
+    })
   });
 
-  watch(() => mainStore.mockApi, async (value, oldValue) => {
-    if (value === oldValue) return;
-    if (!authStore.isAuthenticated || showLoginRequired.value) return;
+  useMockApiChangeWatcher(mainStore, async () => {
     auditStore.fetchLogs();
+  }, {
+    shouldRefresh: () => authStore.isAuthenticated && !showLoginRequired.value
   });
 
   const showToast = (message, type = 'info') => {
@@ -241,20 +247,9 @@ export function useAdminAuditLogsPage() {
     logDetailModal.close({ reset: true });
   };
 
-  onMounted(async () => {
-    const ok = await ensureAuthenticated({ checkSessionFlag: true, openModal: true });
-    if (!ok) return;
-    if (auditStore.fetchStats) {
-      auditStore.fetchStats().catch(() => {});
-    }
-  });
+  useEnsureAuthenticatedLifecycle(ensureAuthenticated);
 
-  watch(
-    () => authStore.isAuthenticated,
-    async (isAuthenticated) => {
-      await handleAuthStateChange(isAuthenticated);
-    }
-  );
+  useAuthStateChangeWatcher(authStore, handleAuthStateChange);
 
   return {
     auditStore,

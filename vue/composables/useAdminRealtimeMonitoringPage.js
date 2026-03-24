@@ -1,11 +1,15 @@
-import { computed, onActivated, onMounted, watch } from 'vue';
+import { computed, watch } from 'vue';
 const { storeToRefs } = Pinia;
 import { useRealtimeMonitoringStore } from '/assets/js/stores/realtimeMonitoringStore.js';
 import { useAuthStore } from '/assets/js/stores/authStore.js';
 import { useModalStore } from '/assets/js/stores/modalStore.js';
 import { useMainStore } from '/assets/js/stores/mainStore.js';
 import { useAuthGate } from '/vue/composables/useAuthGate.js';
+import { createAuthGateCallbacks } from '/vue/composables/createAuthGateCallbacks.js';
+import { useAuthStateChangeWatcher } from '/vue/composables/useAuthStateChangeWatcher.js';
+import { useEnsureAuthenticatedLifecycle } from '/vue/composables/useEnsureAuthenticatedLifecycle.js';
 import { useI18nFallback } from '/vue/composables/useI18nFallback.js';
+import { useMockApiChangeWatcher } from '/vue/composables/useMockApiChangeWatcher.js';
 
 export function useAdminRealtimeMonitoringPage() {
   const { tf } = useI18nFallback();
@@ -117,9 +121,11 @@ export function useAdminRealtimeMonitoringPage() {
   const { showLoginRequired, openLoginModal, ensureAuthenticated, handleAuthStateChange } = useAuthGate({
     authStore,
     modalStore,
-    onAuthenticated: async () => {
-      await loadInitialMonitoringData();
-    }
+    ...createAuthGateCallbacks({
+      onAuthenticated: async () => {
+        await loadInitialMonitoringData();
+      }
+    })
   });
 
   const exportDashboard = async () => {
@@ -163,11 +169,7 @@ export function useAdminRealtimeMonitoringPage() {
     }
   };
 
-  watch(() => mainStore.mockApi, async (value, oldValue) => {
-    if (!isAuthenticated.value || !isAdmin.value || value === oldValue) {
-      return;
-    }
-
+  useMockApiChangeWatcher(mainStore, async (value, oldValue) => {
     if (oldValue === true && value === false) {
       monitoringStore.statusRequestedOnce = false;
       await loadInitialMonitoringData();
@@ -175,23 +177,13 @@ export function useAdminRealtimeMonitoringPage() {
     }
 
     await loadInitialMonitoringData();
+  }, {
+    shouldRefresh: () => isAuthenticated.value && isAdmin.value
   });
 
-  watch(() => authStore.isAuthenticated, async (value) => {
-    await handleAuthStateChange(value);
-  });
+  useAuthStateChangeWatcher(authStore, handleAuthStateChange);
 
-  const ensurePageAccess = async () => {
-    await ensureAuthenticated({ checkSessionFlag: true, openModal: true });
-  };
-
-  onMounted(async () => {
-    await ensurePageAccess();
-  });
-
-  onActivated(async () => {
-    await ensurePageAccess();
-  });
+  useEnsureAuthenticatedLifecycle(ensureAuthenticated);
 
   return {
     actionDistribution,

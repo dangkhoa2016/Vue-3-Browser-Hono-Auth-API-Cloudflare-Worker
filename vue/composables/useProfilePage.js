@@ -1,4 +1,4 @@
-import { ref, computed, onMounted, onActivated, watch } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useAuthStore } from '/assets/js/stores/authStore.js';
 import { useModalStore } from '/assets/js/stores/modalStore.js';
@@ -6,6 +6,9 @@ import { useToastStore } from '/assets/js/stores/toastStore.js';
 import { useProfileStore } from '/assets/js/stores/profileStore.js';
 import { useMainStore } from '/assets/js/stores/mainStore.js';
 import { useAuthGate } from '/vue/composables/useAuthGate.js';
+import { createAuthGateCallbacks } from '/vue/composables/createAuthGateCallbacks.js';
+import { useAuthStateChangeWatcher } from '/vue/composables/useAuthStateChangeWatcher.js';
+import { useEnsureAuthenticatedLifecycle } from '/vue/composables/useEnsureAuthenticatedLifecycle.js';
 
 export function useProfilePage() {
   const { storeToRefs } = Pinia;
@@ -349,32 +352,21 @@ export function useProfilePage() {
     modalStore,
     sessionAuthFlagKey: 'authRequired',
     resetProtectedState: resetProfileSessionState,
-    onAuthenticated: async () => {
-      await fetchProfileData();
-    },
-    onModalSuccess: async () => {
-      await fetchProfileData();
-    }
+    ...createAuthGateCallbacks({
+      onAuthenticated: async () => {
+        await fetchProfileData();
+      }
+    })
   });
 
-  const loadProfile = async () => {
-    await ensureAuthenticated({ checkSessionFlag: true, openModal: true });
-  };
-
-  watch(
-    () => authStore.isAuthenticated,
-    async (isAuthenticated) => {
-      if (isAuthenticated === false) {
-        resetEditingState();
-        markUnauthenticated();
-        openLoginModal();
-        return;
-      }
-
-      await handleAuthStateChange(isAuthenticated);
-    },
-    { immediate: false }
-  );
+  useAuthStateChangeWatcher(authStore, handleAuthStateChange, {
+    onUnauthenticated: async () => {
+      resetEditingState();
+      markUnauthenticated();
+      openLoginModal();
+      return false;
+    }
+  });
 
   watch(
     () => authStore.user?.id,
@@ -395,13 +387,11 @@ export function useProfilePage() {
     }
   );
 
-  onMounted(async () => {
-    await loadProfile();
-  });
+  const loadProfile = async () => {
+    await ensureAuthenticated({ checkSessionFlag: true, openModal: true });
+  };
 
-  onActivated(async () => {
-    await loadProfile();
-  });
+  useEnsureAuthenticatedLifecycle(ensureAuthenticated);
 
   const formatDate = (dateString) => {
     if (!dateString) return '';
