@@ -1,4 +1,4 @@
-import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
+import { computed, onActivated, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { useAuthStore } from '/assets/js/stores/authStore.js';
 import { useMainStore } from '/assets/js/stores/mainStore.js';
 import { useModalStore } from '/assets/js/stores/modalStore.js';
@@ -455,6 +455,10 @@ export function useAdminUsersPage() {
   });
 
   onMounted(async () => {
+    await ensureAuthenticated({ checkSessionFlag: true, openModal: true });
+  });
+
+  onActivated(async () => {
     await ensureAuthenticated({ checkSessionFlag: true, openModal: true });
   });
 

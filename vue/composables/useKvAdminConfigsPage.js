@@ -1,4 +1,4 @@
-import { computed, nextTick, onMounted, ref, watch } from 'vue';
+import { computed, nextTick, onActivated, onMounted, ref, watch } from 'vue';
 import { apiClient, API_ENDPOINTS } from '/assets/js/api.js';
 import { useAuthStore } from '/assets/js/stores/authStore.js';
 import { useModalStore } from '/assets/js/stores/modalStore.js';
@@ -616,6 +616,10 @@ export function useKvAdminConfigsPage() {
   );
 
   onMounted(async () => {
+    await ensureAuthenticated({ checkSessionFlag: true, openModal: true });
+  });
+
+  onActivated(async () => {
     await ensureAuthenticated({ checkSessionFlag: true, openModal: true });
   });
 

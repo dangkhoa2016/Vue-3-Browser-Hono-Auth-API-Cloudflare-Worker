@@ -24,8 +24,14 @@
         </div>
       </section>
 
+      <section v-if="!isAdmin" class="bg-rose-50/80 dark:bg-rose-900/20 border border-rose-200 dark:border-rose-800 rounded-3xl p-8 text-center shadow-sm">
+        <i class="bi bi-shield-lock-fill text-5xl text-rose-600 dark:text-rose-400 mb-4"></i>
+        <h3 class="text-xl font-bold text-rose-900 dark:text-rose-100 mb-2">{{ tf('message.advanced_audit.access_denied_title', 'Access denied') }}</h3>
+        <p class="text-rose-700 dark:text-rose-300">{{ tf('message.advanced_audit.access_denied_message', 'Only admin and super admin can access this page.') }}</p>
+      </section>
+
       <!-- Main Content Container with Tabs -->
-      <section class="rounded-[28px] border border-slate-200/70 dark:border-slate-800 bg-white/85 dark:bg-slate-900 p-6 shadow-[0_18px_50px_-40px_rgba(15,23,42,0.7)]">
+      <section v-else class="rounded-[28px] border border-slate-200/70 dark:border-slate-800 bg-white/85 dark:bg-slate-900 p-6 shadow-[0_18px_50px_-40px_rgba(15,23,42,0.7)]">
         
         <!-- Tabs Nav -->
         <div class="border-b border-slate-200 dark:border-slate-700 mb-8">
@@ -102,182 +108,32 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue';
 import AdvancedAuditAnalyticsTab from '/vue/components/AdvancedAuditAnalyticsTab.vue';
 import AdvancedAuditComplianceTab from '/vue/components/AdvancedAuditComplianceTab.vue';
 import AdvancedAuditArchivalTab from '/vue/components/AdvancedAuditArchivalTab.vue';
 import LoginRequiredPrompt from '/vue/components/LoginRequiredPrompt.vue';
-import { useAuthStore } from '/assets/js/stores/authStore.js';
-import { useAdvancedAuditStore } from '/assets/js/stores/advancedAuditStore.js';
-import { useMainStore } from '/assets/js/stores/mainStore.js';
-import { useModalStore } from '/assets/js/stores/modalStore.js';
-import { useToastStore } from '/assets/js/stores/toastStore.js';
-import { useDeepLinkedTabs } from '/vue/composables/useDeepLinkedTabs.js';
-import { useAuthGate } from '../composables/useAuthGate.js';
-import { useI18nFallback } from '/vue/composables/useI18nFallback.js';
-
-const { tf } = useI18nFallback({ useScope: 'global' });
-const authStore = useAuthStore();
-const auditStore = useAdvancedAuditStore();
-const mainStore = useMainStore();
-const modalStore = useModalStore();
-const toastStore = useToastStore();
-
-const isAuthenticated = computed(() => authStore.isAuthenticated);
-
-const tabs = computed(() => [
-  { key: 'analytics', name: tf('message.advanced_audit.tabs.analytics', 'Analytics'), icon: 'bi-graph-up' },
-  { key: 'compliance', name: tf('message.advanced_audit.tabs.compliance', 'Compliance'), icon: 'bi-shield-check' },
-  { key: 'archival', name: tf('message.advanced_audit.tabs.archival', 'Archival & Retention'), icon: 'bi-archive' }
-]);
+import { useAdminAdvancedAuditPage } from '/vue/composables/useAdminAdvancedAuditPage.js';
 
 const {
   activeTab,
+  analyticsData,
+  archivalData,
+  complianceData,
   copiedTabKey,
-  copyTabLink,
-  selectTab
-} = useDeepLinkedTabs({
-  routeName: 'AdminAdvancedAudit',
+  copyCurrentTabLink,
+  handleRequestPdf,
+  handleRestoreArchive,
+  handleRunArchival,
+  handleSetPolicy,
+  isAdmin,
+  isLoading,
+  openLoginModal,
+  refreshData,
+  selectTab,
+  showLoginRequired,
   tabs,
-  initialTab: 'analytics'
-});
-
-const analyticsData = computed(() => auditStore.analytics);
-const complianceData = computed(() => auditStore.compliance);
-const archivalData = computed(() => auditStore.archival);
-
-const isLocalLoading = ref(false);
-const isLoading = computed(() => auditStore.loading || isLocalLoading.value);
-
-const loadTabData = async (tab) => {
-  if (tab === 'analytics' && !analyticsData.value) {
-    await auditStore.fetchAnalytics();
-  } else if (tab === 'compliance' && !complianceData.value) {
-    await auditStore.fetchCompliance('7d');
-  } else if (tab === 'archival' && !archivalData.value) {
-    await auditStore.fetchArchival();
-  }
-};
-
-const resetCachedData = () => {
-  auditStore.analytics = null;
-  auditStore.compliance = null;
-  auditStore.archival = null;
-};
-
-const { showLoginRequired, openLoginModal, ensureAuthenticated, handleAuthStateChange } = useAuthGate({
-  authStore,
-  modalStore,
-  resetProtectedState: resetCachedData,
-  onAuthenticated: async () => {
-    await loadTabData(activeTab.value);
-  }
-});
-
-onMounted(async () => {
-  await ensureAuthenticated({ checkSessionFlag: true, openModal: true });
-});
-
-watch(isAuthenticated, async (newValue) => {
-  await handleAuthStateChange(newValue);
-});
-
-watch(activeTab, (newTab) => {
-  loadTabData(newTab);
-});
-
-watch(() => mainStore.mockApi, async (value, oldValue) => {
-  if (value === oldValue) return;
-  if (!authStore.isAuthenticated) return;
-  resetCachedData();
-  loadTabData(activeTab.value);
-});
-
-const refreshData = async () => {
-  isLocalLoading.value = true;
-  try {
-    const minLoadingTime = new Promise(resolve => setTimeout(resolve, 600));
-    let fetchPromise;
-
-    if (activeTab.value === 'analytics') fetchPromise = auditStore.fetchAnalytics();
-    else if (activeTab.value === 'compliance') fetchPromise = auditStore.fetchCompliance('7d');
-    else if (activeTab.value === 'archival') fetchPromise = auditStore.fetchArchival();
-
-    await Promise.all([fetchPromise, minLoadingTime]);
-  } finally {
-    isLocalLoading.value = false;
-  }
-};
-
-const copyCurrentTabLink = async (tabKey) => {
-  try {
-    const copied = await copyTabLink(tabKey);
-    if (!copied) {
-      return;
-    }
-
-    const label = tabs.value.find((tab) => tab.key === tabKey)?.name || tabKey;
-    toastStore.success(`${tf('message.settings.copy_link_success', 'Link copied')}: ${label}`);
-  } catch (error) {
-    console.warn('Copy advanced audit tab link failed:', error);
-    toastStore.error(tf('message.settings.copy_link_failed', 'Failed to copy link'));
-  }
-};
-
-const handleRunArchival = async (params = {}) => {
-  try {
-    const res = await auditStore.runArchival(params);
-    toastStore.success(res?.message || 'Archival process completed successfully!');
-    await refreshData();
-  } catch (error) {
-    console.error('Run archival failed:', error);
-    let errStr = error.response?.data?.error || error.message || 'Archival process failed';
-    if (error.response?.data?.errors && Array.isArray(error.response.data.errors)) {
-      errStr += ': ' + error.response.data.errors.map(e => e.message).join(', ');
-    }
-    toastStore.error(errStr);
-  }
-};
-
-const handleRequestPdf = async () => {
-  try {
-    await auditStore.exportAdvanced({ format: 'pdf', type: 'compliance' });
-    alert('Compliance PDF export initiated successfully!');
-  } catch (error) {
-    console.error('Export failed:', error);
-    alert('PDF Export failed: ' + (error.response?.data?.error || error.message));
-  }
-};
-
-const handleSetPolicy = async (params = {}) => {
-  try {
-    const res = await auditStore.manageRetention({ action: 'set_policy', policy: params });
-    toastStore.success(res?.message || 'Retention policy configured successfully!');
-    await refreshData();
-  } catch (error) {
-    console.error('Set policy failed:', error);
-    let errStr = error.response?.data?.error || error.message || 'Set policy failed';
-    if (error.response?.data?.errors && Array.isArray(error.response.data.errors)) {
-      errStr += ': ' + error.response.data.errors.map(e => e.message).join(', ');
-    }
-    toastStore.error(errStr);
-  }
-};
-
-const handleRestoreArchive = async (params = {}) => {
-  try {
-    const res = await auditStore.restoreArchive(params);
-    toastStore.success(res?.message || 'Archive restoration process initiated successfully!');
-    await refreshData();
-  } catch (error) {
-    console.error('Restore archive failed:', error);
-    let errStr = error.response?.data?.error || error.message || 'Restore process failed';
-    if (error.response?.data?.errors && Array.isArray(error.response.data.errors)) {
-      errStr += ': ' + error.response.data.errors.map(e => e.message).join(', ');
-    }
-    toastStore.error(errStr);
-  }
-};
+  tf
+} = useAdminAdvancedAuditPage();
 </script>
 
 <style scoped>

@@ -1,4 +1,4 @@
-import { computed, onMounted, watch } from 'vue';
+import { computed, onActivated, onMounted, watch } from 'vue';
 import { useAuthStore } from '/assets/js/stores/authStore.js';
 import { useMainStore } from '/assets/js/stores/mainStore.js';
 import { useModalStore } from '/assets/js/stores/modalStore.js';
@@ -97,7 +97,11 @@ export function useKvAdminRateLimitsPage() {
 
   onMounted(async () => {
     kvAdminRateLimitsStore.initializePruneRange();
-    await ensureAuthenticated({ checkSessionFlag: true, openModal: false });
+    await ensureAuthenticated({ checkSessionFlag: true, openModal: true });
+  });
+
+  onActivated(async () => {
+    await ensureAuthenticated({ checkSessionFlag: true, openModal: true });
   });
 
   watch(() => authStore.isAuthenticated, async (value) => {

@@ -519,7 +519,7 @@ export function useSettingsPage() {
 
   onMounted(async () => {
     if (authStore.isAuthenticated) {
-      await ensureAuthenticated({ checkSessionFlag: true, openModal: false });
+      await ensureAuthenticated({ checkSessionFlag: true, openModal: true });
       return;
     }
 
@@ -528,7 +528,7 @@ export function useSettingsPage() {
 
   onActivated(async () => {
     if (authStore.isAuthenticated) {
-      await ensureAuthenticated({ checkSessionFlag: true, openModal: false });
+      await ensureAuthenticated({ checkSessionFlag: true, openModal: true });
       return;
     }
 

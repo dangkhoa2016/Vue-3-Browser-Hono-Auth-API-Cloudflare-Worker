@@ -1,4 +1,4 @@
-import { computed, onMounted, ref, watch } from 'vue';
+import { computed, onActivated, onMounted, ref, watch } from 'vue';
 import { useAuthStore } from '/assets/js/stores/authStore.js';
 import { useModalStore } from '/assets/js/stores/modalStore.js';
 import { useToastStore } from '/assets/js/stores/toastStore.js';
@@ -81,13 +81,15 @@ export function useKvAdminEnvComparisonPage() {
   };
 
   const checkAuthAndLoad = async () => {
-    const ok = await ensureAuthenticated({ checkSessionFlag: true, openModal: false });
+    const ok = await ensureAuthenticated({ checkSessionFlag: true, openModal: true });
     if (ok && isSuperAdmin.value) {
       await fetchComparison();
     }
   };
 
   onMounted(checkAuthAndLoad);
+
+  onActivated(checkAuthAndLoad);
 
   watch(() => authStore.isAuthenticated, async (value) => {
     await handleAuthStateChange(value);

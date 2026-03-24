@@ -227,11 +227,11 @@ export function useAdminSystemHealthPage() {
   });
 
   onMounted(async () => {
-    await ensureAuthenticated({ checkSessionFlag: true, openModal: false });
+    await ensureAuthenticated({ checkSessionFlag: true, openModal: true });
   });
 
   onActivated(async () => {
-    await ensureAuthenticated({ checkSessionFlag: true, openModal: false });
+    await ensureAuthenticated({ checkSessionFlag: true, openModal: true });
   });
 
   return {
