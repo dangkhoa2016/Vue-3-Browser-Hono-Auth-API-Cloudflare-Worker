@@ -1,11 +1,15 @@
-import { computed, onActivated, onMounted, ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useAuthStore } from '/assets/js/stores/authStore.js';
 import { useModalStore } from '/assets/js/stores/modalStore.js';
 import { useToastStore } from '/assets/js/stores/toastStore.js';
 import { useMainStore } from '/assets/js/stores/mainStore.js';
 import { useKvAdminEnvComparisonStore } from '/assets/js/stores/kvAdminEnvComparisonStore.js';
 import { useAuthGate } from '/vue/composables/useAuthGate.js';
+import { createAuthGateCallbacks } from '/vue/composables/createAuthGateCallbacks.js';
+import { useAuthStateChangeWatcher } from '/vue/composables/useAuthStateChangeWatcher.js';
+import { useEnsureAuthenticatedLifecycle } from '/vue/composables/useEnsureAuthenticatedLifecycle.js';
 import { useI18nFallback } from '/vue/composables/useI18nFallback.js';
+import { useMockApiChangeWatcher } from '/vue/composables/useMockApiChangeWatcher.js';
 
 export function useKvAdminEnvComparisonPage() {
   const { t, tf } = useI18nFallback();
@@ -24,11 +28,12 @@ export function useKvAdminEnvComparisonPage() {
   const { showLoginRequired, openLoginModal, ensureAuthenticated, handleAuthStateChange, markUnauthenticated } = useAuthGate({
     authStore,
     modalStore,
-    onAuthenticated: async () => {
-      if (isSuperAdmin.value) {
+    ...createAuthGateCallbacks({
+      when: () => isSuperAdmin.value,
+      onAuthenticated: async () => {
         await fetchComparison();
       }
-    }
+    })
   });
 
   const formatValue = (val) => {
@@ -80,25 +85,14 @@ export function useKvAdminEnvComparisonPage() {
     toastStore.add(t('message.kv_admin_page.env_comparison.error_load_failed') || 'Failed to load environment comparison', 'error');
   };
 
-  const checkAuthAndLoad = async () => {
-    const ok = await ensureAuthenticated({ checkSessionFlag: true, openModal: true });
-    if (ok && isSuperAdmin.value) {
-      await fetchComparison();
-    }
-  };
+  useEnsureAuthenticatedLifecycle(ensureAuthenticated);
 
-  onMounted(checkAuthAndLoad);
+  useAuthStateChangeWatcher(authStore, handleAuthStateChange);
 
-  onActivated(checkAuthAndLoad);
-
-  watch(() => authStore.isAuthenticated, async (value) => {
-    await handleAuthStateChange(value);
-  });
-
-  watch(() => mainStore.mockApi, async (value, oldValue) => {
-    if (value === oldValue) return;
-    if (!authStore.isAuthenticated || !isSuperAdmin.value) return;
+  useMockApiChangeWatcher(mainStore, async () => {
     await fetchComparison();
+  }, {
+    shouldRefresh: () => authStore.isAuthenticated && isSuperAdmin.value
   });
 
   return {

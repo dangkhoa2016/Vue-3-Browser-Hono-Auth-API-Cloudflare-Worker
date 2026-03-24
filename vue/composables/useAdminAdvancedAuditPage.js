@@ -1,4 +1,4 @@
-import { computed, onActivated, onMounted, ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useAuthStore } from '/assets/js/stores/authStore.js';
 import { useAdvancedAuditStore } from '/assets/js/stores/advancedAuditStore.js';
 import { useMainStore } from '/assets/js/stores/mainStore.js';
@@ -6,7 +6,10 @@ import { useModalStore } from '/assets/js/stores/modalStore.js';
 import { useToastStore } from '/assets/js/stores/toastStore.js';
 import { useDeepLinkedTabs } from '/vue/composables/useDeepLinkedTabs.js';
 import { useAuthGate } from '/vue/composables/useAuthGate.js';
+import { createAuthGateCallbacks } from '/vue/composables/createAuthGateCallbacks.js';
+import { useEnsureAuthenticatedLifecycle } from '/vue/composables/useEnsureAuthenticatedLifecycle.js';
 import { useI18nFallback } from '/vue/composables/useI18nFallback.js';
+import { useMockApiChangeWatcher } from '/vue/composables/useMockApiChangeWatcher.js';
 
 export function useAdminAdvancedAuditPage() {
   const { tf } = useI18nFallback({ useScope: 'global' });
@@ -66,9 +69,11 @@ export function useAdminAdvancedAuditPage() {
     authStore,
     modalStore,
     resetProtectedState: resetCachedData,
-    onAuthenticated: async () => {
-      await loadTabData(activeTab.value);
-    }
+    ...createAuthGateCallbacks({
+      onAuthenticated: async () => {
+        await loadTabData(activeTab.value);
+      }
+    })
   });
 
   watch(isAuthenticated, async (newValue) => {
@@ -79,23 +84,14 @@ export function useAdminAdvancedAuditPage() {
     await loadTabData(newTab);
   });
 
-  watch(() => mainStore.mockApi, async (value, oldValue) => {
-    if (value === oldValue || !authStore.isAuthenticated || !isAdmin.value) return;
+  useMockApiChangeWatcher(mainStore, async () => {
     resetCachedData();
     await loadTabData(activeTab.value);
+  }, {
+    shouldRefresh: () => authStore.isAuthenticated && isAdmin.value
   });
 
-  const ensurePageAccess = async () => {
-    await ensureAuthenticated({ checkSessionFlag: true, openModal: true });
-  };
-
-  onMounted(async () => {
-    await ensurePageAccess();
-  });
-
-  onActivated(async () => {
-    await ensurePageAccess();
-  });
+  useEnsureAuthenticatedLifecycle(ensureAuthenticated);
 
   const refreshData = async () => {
     if (!isAuthenticated.value || !isAdmin.value) return;

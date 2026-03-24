@@ -1,4 +1,4 @@
-import { computed, onActivated, onMounted, watch } from 'vue';
+import { computed, watch } from 'vue';
 const { storeToRefs } = Pinia;
 import { i18n } from '/assets/js/i18n.js';
 import { useSystemHealthStore } from '/assets/js/stores/systemHealthStore.js';
@@ -7,6 +7,10 @@ import { useAuthStore } from '/assets/js/stores/authStore.js';
 import { useModalStore } from '/assets/js/stores/modalStore.js';
 import { useMainStore } from '/assets/js/stores/mainStore.js';
 import { useAuthGate } from '../composables/useAuthGate.js';
+import { createAuthGateCallbacks } from '/vue/composables/createAuthGateCallbacks.js';
+import { useAuthStateChangeWatcher } from '/vue/composables/useAuthStateChangeWatcher.js';
+import { useEnsureAuthenticatedLifecycle } from '/vue/composables/useEnsureAuthenticatedLifecycle.js';
+import { useMockApiChangeWatcher } from '/vue/composables/useMockApiChangeWatcher.js';
 import { getHealthTextClass, getHealthCheckBadgeClass, getBooleanHealthTextClass } from '/vue/composables/useUiClassMap.js';
 
 export function useAdminSystemHealthPage() {
@@ -212,27 +216,22 @@ export function useAdminSystemHealthPage() {
   const { showLoginRequired, openLoginModal, ensureAuthenticated, handleAuthStateChange } = useAuthGate({
     authStore,
     modalStore,
-    onAuthenticated: async () => {
-      await loadInitial();
-    }
+    ...createAuthGateCallbacks({
+      onAuthenticated: async () => {
+        await loadInitial();
+      }
+    })
   });
 
-  watch(() => authStore.isAuthenticated, async (value) => {
-    await handleAuthStateChange(value);
-  });
+  useAuthStateChangeWatcher(authStore, handleAuthStateChange);
 
-  watch(() => mainStore.mockApi, async (value, oldValue) => {
-    if (!isAuthenticated.value || !isAdmin.value || value === oldValue) return;
+  useMockApiChangeWatcher(mainStore, async () => {
     await loadInitial();
+  }, {
+    shouldRefresh: () => isAuthenticated.value && isAdmin.value
   });
 
-  onMounted(async () => {
-    await ensureAuthenticated({ checkSessionFlag: true, openModal: true });
-  });
-
-  onActivated(async () => {
-    await ensureAuthenticated({ checkSessionFlag: true, openModal: true });
-  });
+  useEnsureAuthenticatedLifecycle(ensureAuthenticated);
 
   return {
     isLoading,

@@ -1,7 +1,8 @@
-import { computed, onMounted, watch } from 'vue';
+import { computed, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useMainStore } from '/assets/js/stores/mainStore.js';
 import { usePublicEndpointStore } from '/assets/js/stores/publicEndpointStore.js';
+import { useMockApiChangeWatcher } from '/vue/composables/useMockApiChangeWatcher.js';
 import { useModalState } from '/vue/composables/useModalState.js';
 
 export function usePublicEndpointPage(options) {
@@ -57,10 +58,7 @@ export function usePublicEndpointPage(options) {
     jsonModal.close({ reset: true });
   };
 
-  watch(() => mainStore.mockApi, async (value, oldValue) => {
-    if (value === oldValue) {
-      return;
-    }
+  useMockApiChangeWatcher(mainStore, async () => {
     await loadData();
   });
 
