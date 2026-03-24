@@ -290,64 +290,108 @@ export default {
       }
     },
     about: {
-      advanced: {
-        admin_roles: {
-          body: 'Complete role-based access control system.',
-          title: 'Admin & Roles:'
+      access_intro: 'The route registry separates public diagnostics from authenticated operator tools and uses metadata for guarded areas.',
+      access_items: {
+        cache: {
+          body: 'Expensive admin views can preserve state through keepAlive metadata when that improves operator flow.',
+          title: 'Selective keep-alive'
         },
-        email_service: {
-          body: 'User activation via email (Brevo integration).',
-          title: 'Email Service:'
+        protected: {
+          body: 'Profile, Settings, API Explorer, and admin pages rely on route meta and auth guards.',
+          title: 'Protected tools'
         },
-        enterprise_audit: {
-          body: 'Complete logging with 50+ audit endpoints.',
-          title: 'Enterprise Audit:'
-        },
-        rate_limiting: {
-          body: 'IP-based tracking for login attempts.',
-          title: 'Rate Limiting:'
-        },
-        zod_validation: {
-          body: 'Comprehensive schema validation with i18n support.',
-          title: 'Zod Validation:'
+        public: {
+          body: 'About, Health, Version, and Language stay accessible without authentication.',
+          title: 'Public routes'
         }
       },
-      advanced_title: 'Advanced Capabilities',
-      description: 'A comprehensive Cloudflare Workers project using the Hono.js framework with D1 database to build a production-ready JWT authentication system.',
-      features: {
-        d1: {
-          body: 'SQLite compatible with global distribution.',
-          title: 'Cloudflare D1:'
+      access_title: 'Access model',
+      architecture_intro: 'The documents folder defines practical responsibilities for each layer so pages orchestrate screens and lower-level concerns stay in shared building blocks.',
+      architecture_title: 'Frontend architecture boundaries',
+      badge: 'Browser-only Vue admin frontend',
+      description: 'This project is a browser-only Vue 3 admin application for the Hono Auth API running on Cloudflare Workers. It focuses on user operations, audit visibility, security workflows, API exploration, and public endpoint inspection.',
+      docs_body: 'The frontend keeps clear boundaries between pages, components, composables, stores, routing, and bootstrap so route orchestration stays separate from reusable UI and API coordination.',
+      docs_title: 'Architecture guardrails',
+      layers: {
+        components: {
+          body: 'Provide reusable UI blocks with clear props and events instead of feature-specific coupling by default.',
+          title: 'Components'
         },
-        hono: {
-          body: 'Fast and lightweight JavaScript framework.',
-          title: 'Hono.js Framework:'
+        composables: {
+          body: 'Hold reusable view logic such as auth gates, modal state, debounce, fallback behavior, and UI helpers.',
+          title: 'Composables'
+        },
+        pages: {
+          body: 'Compose sections, connect stores or composables, and handle route-level orchestration only.',
+          title: 'Pages'
+        },
+        routing: {
+          body: 'Keep route metadata, auth guards, keep-alive decisions, and app startup wiring separate from page business logic.',
+          title: 'Routing and bootstrap'
+        },
+        stores: {
+          body: 'Coordinate business state, API I/O, and mutation actions with semantic state names.',
+          title: 'Stores'
+        }
+      },
+      public_routes: {
+        cta: 'Open route',
+        health: 'Check service status, environment, language, uptime, and raw health payload.',
+        language: 'Review the active language, supported language list, and test locale switching behavior.',
+        version: 'Inspect service name, current version, language, and endpoint metadata.'
+      },
+      public_routes_intro: 'These routes are already part of the About navigation group and provide quick operational visibility into the backend.',
+      public_routes_title: 'Public endpoint routes',
+      quality_intro: 'The repository ships with CLI checks so architecture and localization stay consistent as the frontend grows.',
+      quality_items: {
+        boundaries: {
+          body: 'The architecture boundaries document defines safe modernization rules and merge checklist items.',
+          title: 'Documented boundaries'
+        },
+        file_size: {
+          body: 'Guardrails target pages <= 600 lines and components <= 450 lines to encourage extractions when files grow.',
+          title: 'Vue file size limits'
         },
         i18n: {
-          body: 'Automatic language detection & unlimited support.',
-          title: 'Dynamic I18n:'
+          body: 'Run tools/i18n.js audit, usage, or check to verify locale coverage and source key usage.',
+          title: 'I18n consistency checks'
         },
-        jwt: {
-          body: 'Secure access & refresh tokens with bcrypt hashing.',
-          title: 'JWT Auth:'
-        },
-        token_security: {
-          body: 'Blacklist, rotation, and logout-all enforcement.',
-          title: 'Token Security:'
+        script_setup: {
+          body: 'A dedicated script tracks script-setup adoption so modernization can stay measurable.',
+          title: 'Script setup coverage'
         }
       },
-      key_features_title: 'Key Features',
-      testing_intro: 'The project includes a comprehensive modular test suite covering:',
-      testing_items: {
-        email_activation: 'Email & Account Activation',
-        enterprise_audit: 'Enterprise Audit System',
-        i18n_validation: 'i18n & Multilingual Validation',
-        rbac: 'Role-Based Access Control (RBAC)',
-        security_performance: 'Security & Performance',
-        system_integration: 'System & Integration Tests'
+      quality_title: 'Quality guardrails',
+      stack_items: {
+        backend: 'Hono Auth API integration on Cloudflare Workers',
+        i18n: 'Multi-language UI and public endpoint inspection',
+        runtime: 'Browser-only runtime with static hosting',
+        vue: 'Vue 3 pages and reusable components'
       },
-      testing_title: 'Testing Framework',
-      title: 'About Hono Auth Worker'
+      stack_label: 'Project focus',
+      summary_body: 'The UI starts from index.html and can run from any static server. No build step is required for the frontend runtime; Node.js is only optional for CLI quality scripts in tools/.',
+      summary_title: 'Runtime model',
+      surface_cards: {
+        audit: {
+          body: 'Surface audit logs, monitoring, and operational visibility for day-to-day administration.',
+          title: 'Audit and monitoring'
+        },
+        public_endpoints: {
+          body: 'Expose health, version, and language routes so API readiness can be checked without entering protected admin pages.',
+          title: 'Public endpoint inspection'
+        },
+        security: {
+          body: 'Support security incident views, token-focused admin tools, and guarded operational workflows.',
+          title: 'Security workflows'
+        },
+        users: {
+          body: 'Manage accounts, profiles, roles, and operator workflows from route-level admin screens.',
+          title: 'User administration'
+        }
+      },
+      surface_intro: 'The current app scope is broader than a simple auth demo: it supports operational admin screens and public diagnostics around the API.',
+      surface_title: 'What the frontend covers',
+      title: 'About This Frontend'
     },
     app: {
       back_to_top: 'Back to top'
