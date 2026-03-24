@@ -1,4 +1,4 @@
-import { computed, onActivated, onBeforeUnmount, onMounted, ref, watch } from 'vue';
+import { computed, onBeforeUnmount, ref, watch } from 'vue';
 import { useAuthStore } from '/assets/js/stores/authStore.js';
 import { useMainStore } from '/assets/js/stores/mainStore.js';
 import { useModalStore } from '/assets/js/stores/modalStore.js';
@@ -6,10 +6,14 @@ import { useUserStore } from '/assets/js/stores/userStore.js';
 import { useToastStore } from '/assets/js/stores/toastStore.js';
 import { DEFAULT_ADMIN_PAGE_SIZE, resolveAdminPageSize } from '/assets/js/constants/pagination.js';
 import { useAuthGate } from '/vue/composables/useAuthGate.js';
+import { createAuthGateCallbacks } from '/vue/composables/createAuthGateCallbacks.js';
+import { useAuthStateChangeWatcher } from '/vue/composables/useAuthStateChangeWatcher.js';
 import { useDateTimeFormatter } from '/vue/composables/useDateTimeFormatter.js';
 import { useDebouncedFilters } from '/vue/composables/useDebouncedFilters.js';
 import { useModalState } from '/vue/composables/useModalState.js';
 import { useI18nFallback } from '/vue/composables/useI18nFallback.js';
+import { useEnsureAuthenticatedLifecycle } from '/vue/composables/useEnsureAuthenticatedLifecycle.js';
+import { useMockApiChangeWatcher } from '/vue/composables/useMockApiChangeWatcher.js';
 import { getUserRoleBadgeClass, getUserStatusBadgeClass } from '/vue/composables/useUiClassMap.js';
 
 export function useAdminUsersPage() {
@@ -181,12 +185,14 @@ export function useAdminUsersPage() {
     modalStore,
     sessionAuthFlagKey: 'authRequired',
     resetProtectedState: resetUserPageState,
-    onAuthenticated: async () => {
-      await loadUsers(1);
-    },
-    onModalSuccess: async () => {
-      await loadUsers();
-    }
+    ...createAuthGateCallbacks({
+      onAuthenticated: async () => {
+        await loadUsers(1);
+      },
+      onModalSuccess: async () => {
+        await loadUsers();
+      }
+    })
   });
 
   const reload = async () => {
@@ -433,34 +439,23 @@ export function useAdminUsersPage() {
     }
   });
 
-  watch(() => mainStore.mockApi, async (value, oldValue) => {
-      if (value === oldValue) return;
-      if (!authStore.isAuthenticated || showLoginRequired.value) return;
+  useMockApiChangeWatcher(mainStore, async () => {
+    await loadUsers(1);
+  }, {
+    shouldRefresh: () => authStore.isAuthenticated && !showLoginRequired.value,
+    beforeRefresh: async () => {
       forceSkeletonOnLoading.value = true;
-      await loadUsers(1);
     }
-  );
+  });
 
-  watch(
-    () => authStore.isAuthenticated,
-    async (isAuthenticated) => {
-      await handleAuthStateChange(isAuthenticated);
-    },
-    { immediate: false }
-  );
+  useAuthStateChangeWatcher(authStore, handleAuthStateChange);
 
   onBeforeUnmount(() => {
     clearDebounce('admin-users-search');
     clearDebounce('admin-users-skeleton');
   });
 
-  onMounted(async () => {
-    await ensureAuthenticated({ checkSessionFlag: true, openModal: true });
-  });
-
-  onActivated(async () => {
-    await ensureAuthenticated({ checkSessionFlag: true, openModal: true });
-  });
+  useEnsureAuthenticatedLifecycle(ensureAuthenticated);
 
   return {
     t,

@@ -1,10 +1,14 @@
-import { computed, onActivated, onMounted, watch } from 'vue';
+import { computed, watch } from 'vue';
 import { useAuthStore } from '/assets/js/stores/authStore.js';
 import { useMainStore } from '/assets/js/stores/mainStore.js';
 import { useModalStore } from '/assets/js/stores/modalStore.js';
 import { useToastStore } from '/assets/js/stores/toastStore.js';
 import { useKvAdminRateLimitsStore } from '/assets/js/stores/kvAdminRateLimitsStore.js';
 import { useAuthGate } from '/vue/composables/useAuthGate.js';
+import { createAuthGateCallbacks } from '/vue/composables/createAuthGateCallbacks.js';
+import { useAuthStateChangeWatcher } from '/vue/composables/useAuthStateChangeWatcher.js';
+import { useEnsureAuthenticatedLifecycle } from '/vue/composables/useEnsureAuthenticatedLifecycle.js';
+import { useMockApiChangeWatcher } from '/vue/composables/useMockApiChangeWatcher.js';
 
 export function useKvAdminRateLimitsPage() {
   const { storeToRefs } = Pinia;
@@ -38,12 +42,14 @@ export function useKvAdminRateLimitsPage() {
     authStore,
     modalStore,
     resetProtectedState,
-    onAuthenticated: async () => {
-      await loadInitialRateLimits(false);
-    },
-    onModalSuccess: async () => {
-      await loadInitialRateLimits(true);
-    }
+    ...createAuthGateCallbacks({
+      onAuthenticated: async () => {
+        await loadInitialRateLimits(false);
+      },
+      onModalSuccess: async () => {
+        await loadInitialRateLimits(true);
+      }
+    })
   });
 
   const handleAuthError = (resultItem) => {
@@ -95,26 +101,22 @@ export function useKvAdminRateLimitsPage() {
 
   const loadMoreRateLimits = () => fetchRateLimits(false, true);
 
-  onMounted(async () => {
-    kvAdminRateLimitsStore.initializePruneRange();
-    await ensureAuthenticated({ checkSessionFlag: true, openModal: true });
+  useEnsureAuthenticatedLifecycle(ensureAuthenticated, {
+    onBeforeMount: async () => {
+      kvAdminRateLimitsStore.initializePruneRange();
+    }
   });
 
-  onActivated(async () => {
-    await ensureAuthenticated({ checkSessionFlag: true, openModal: true });
-  });
-
-  watch(() => authStore.isAuthenticated, async (value) => {
-    await handleAuthStateChange(value);
-    if (!value) {
+  useAuthStateChangeWatcher(authStore, handleAuthStateChange, {
+    onUnauthenticated: async () => {
       resetProtectedState();
     }
   });
 
-  watch(() => mainStore.mockApi, async (value, oldValue) => {
-    if (value === oldValue) return;
-    if (!authStore.isAuthenticated || !isSuperAdmin.value) return;
+  useMockApiChangeWatcher(mainStore, async () => {
     await fetchRateLimits(true, false);
+  }, {
+    shouldRefresh: () => authStore.isAuthenticated && isSuperAdmin.value
   });
 
   return {
