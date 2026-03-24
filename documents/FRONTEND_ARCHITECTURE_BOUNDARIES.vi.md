@@ -1,8 +1,8 @@
-# Ranh giới Kiến trúc Frontend
+# Ranh Giới Kiến Trúc Frontend
 
 > 🌐 Language / Ngôn ngữ: [English](FRONTEND_ARCHITECTURE_BOUNDARIES.md) | **Tiếng Việt**
 
-Tài liệu này mô tả các ranh giới thực tế cho frontend Vue chạy trực tiếp trên trình duyệt (`vue-hono-auth-api-cloudflare-worker`).
+[Quay lại Mục Lục Tài Liệu](DOCUMENTATION_INDEX.vi.md)
 
 ## 1) Trách nhiệm theo tầng
 
@@ -78,4 +78,6 @@ Trước khi merge thay đổi modernization:
 
 ---
 
-[Read this document in English](FRONTEND_ARCHITECTURE_BOUNDARIES.md)
+[Đọc tài liệu này bằng tiếng Anh](FRONTEND_ARCHITECTURE_BOUNDARIES.md)
+
+[Quay lại Mục Lục Tài Liệu](DOCUMENTATION_INDEX_vi.md)
