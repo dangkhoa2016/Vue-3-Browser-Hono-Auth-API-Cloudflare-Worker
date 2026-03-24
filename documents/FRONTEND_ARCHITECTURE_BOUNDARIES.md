@@ -2,7 +2,7 @@
 
 > 🌐 Language / Ngôn ngữ: **English** | [Tiếng Việt](FRONTEND_ARCHITECTURE_BOUNDARIES.vi.md)
 
-This document defines practical boundaries for the browser-only Vue frontend (`vue-hono-auth-api-cloudflare-worker`).
+[Back to Documentation Index](DOCUMENTATION_INDEX.md)
 
 ## 1) Layer Responsibilities
 
@@ -78,4 +78,6 @@ Before merging modernization changes:
 
 ---
 
-[Đọc tài liệu này bằng tiếng Việt](FRONTEND_ARCHITECTURE_BOUNDARIES_vi.md)
+[Read this document in Vietnamese](FRONTEND_ARCHITECTURE_BOUNDARIES_vi.md)
+
+[Back to Documentation Index](DOCUMENTATION_INDEX.md)

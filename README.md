@@ -81,5 +81,17 @@ node tools/vue-file-size-check.cjs --page-limit=600 --component-limit=450
 - CI workflow: `.github/workflows/vue-quality-check.yml` (strict mode, fail on violations).
 - Architecture boundaries: `documents/FRONTEND_ARCHITECTURE_BOUNDARIES.md`.
 
+## Review Documentation
+
+- Documentation index: `documents/DOCUMENTATION_INDEX.md`
+- Project review guide: `documents/PROJECT_REVIEW_GUIDE.md`
+- Runtime and loading: `documents/APP_RUNTIME_AND_LOADING.md`
+- Auth and session: `documents/AUTH_AND_SESSION_FLOW.md`
+- Admin audit and advanced audit: `documents/ADMIN_AUDIT_AND_ADVANCED_AUDIT.md`
+- Data access and mock API: `documents/DATA_ACCESS_AND_MOCK_API.md`
+- Realtime monitoring and dashboard: `documents/REALTIME_MONITORING_AND_DASHBOARD.md`
+- KV admin configs workflow: `documents/KV_ADMIN_CONFIGS_WORKFLOW.md`
+- Settings, i18n, and quality: `documents/SETTINGS_I18N_AND_QUALITY.md`
+
 ## Contribution
 This is a sample admin project. You can fork and develop additional features or improve the project structure.

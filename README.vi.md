@@ -81,5 +81,17 @@ node tools/vue-file-size-check.cjs --page-limit=600 --component-limit=450
 - Workflow CI: `.github/workflows/vue-quality-check.yml` (chế độ strict, fail khi vi phạm).
 - Tài liệu boundary kiến trúc: `documents/FRONTEND_ARCHITECTURE_BOUNDARIES.vi.md`.
 
+## Tài liệu review
+
+- Mục lục tài liệu: `documents/DOCUMENTATION_INDEX_vi.md`
+- Hướng dẫn review tổng quan: `documents/PROJECT_REVIEW_GUIDE_vi.md`
+- Runtime ứng dụng và cơ chế tải: `documents/APP_RUNTIME_AND_LOADING_vi.md`
+- Luồng xác thực và phiên làm việc: `documents/AUTH_AND_SESSION_FLOW_vi.md`
+- Audit quản trị và advanced audit: `documents/ADMIN_AUDIT_AND_ADVANCED_AUDIT_vi.md`
+- Truy cập dữ liệu và mock API: `documents/DATA_ACCESS_AND_MOCK_API_vi.md`
+- Giám sát thời gian thực và dashboard: `documents/REALTIME_MONITORING_AND_DASHBOARD_vi.md`
+- Luồng KV admin configs: `documents/KV_ADMIN_CONFIGS_WORKFLOW_vi.md`
+- Cài đặt, i18n, và công cụ chất lượng: `documents/SETTINGS_I18N_AND_QUALITY_vi.md`
+
 ## Đóng góp
 Đây là dự án mẫu cho admin, bạn có thể fork và phát triển thêm các tính năng hoặc cải tiến cấu trúc dự án.
