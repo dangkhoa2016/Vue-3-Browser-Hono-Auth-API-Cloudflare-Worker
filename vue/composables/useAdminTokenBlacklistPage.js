@@ -1,4 +1,4 @@
-import { ref, computed, onMounted, watch } from 'vue';
+import { ref, computed, onActivated, onMounted, watch } from 'vue';
 import { useMainStore } from '/assets/js/stores/mainStore.js';
 import { useAuthStore } from '/assets/js/stores/authStore.js';
 import { useModalStore } from '/assets/js/stores/modalStore.js';
@@ -127,7 +127,11 @@ export function useAdminTokenBlacklistPage() {
   };
 
   onMounted(async () => {
-    await ensureAuthenticated({ openModal: false });
+    await ensureAuthenticated({ checkSessionFlag: true, openModal: true });
+  });
+
+  onActivated(async () => {
+    await ensureAuthenticated({ checkSessionFlag: true, openModal: true });
   });
 
   watch(() => mainStore.mockApi, (newVal, oldVal) => {
