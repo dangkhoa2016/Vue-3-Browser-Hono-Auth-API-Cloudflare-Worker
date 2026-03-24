@@ -1,4 +1,4 @@
-import { ref, computed, onActivated, onMounted, watch } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { useMainStore } from '/assets/js/stores/mainStore.js';
 import { useAuthStore } from '/assets/js/stores/authStore.js';
 import { useModalStore } from '/assets/js/stores/modalStore.js';
@@ -8,7 +8,11 @@ import { useDateTimeFormatter } from '/vue/composables/useDateTimeFormatter.js';
 import { useDebouncedFilters } from '/vue/composables/useDebouncedFilters.js';
 import { useModalState } from '/vue/composables/useModalState.js';
 import { useAuthGate } from '/vue/composables/useAuthGate.js';
+import { createAuthGateCallbacks } from '/vue/composables/createAuthGateCallbacks.js';
+import { useAuthStateChangeWatcher } from '/vue/composables/useAuthStateChangeWatcher.js';
+import { useEnsureAuthenticatedLifecycle } from '/vue/composables/useEnsureAuthenticatedLifecycle.js';
 import { useI18nFallback } from '/vue/composables/useI18nFallback.js';
+import { useMockApiChangeWatcher } from '/vue/composables/useMockApiChangeWatcher.js';
 import { getTokenAuditActionClass } from '/vue/composables/useUiClassMap.js';
 
 export function useAdminTokenAuditPage() {
@@ -103,11 +107,12 @@ export function useAdminTokenAuditPage() {
     authStore,
     modalStore,
     sessionAuthFlagKey: 'authRequired',
-    onAuthenticated: async () => {
-      if (isSuperAdmin.value) {
+    ...createAuthGateCallbacks({
+      when: () => isSuperAdmin.value,
+      onAuthenticated: async () => {
         await fetchLogs();
       }
-    }
+    })
   });
 
   const changePage = (newPage) => {
@@ -187,23 +192,15 @@ export function useAdminTokenAuditPage() {
     }
   };
 
-  onMounted(async () => {
-    await ensureAuthenticated({ checkSessionFlag: true, openModal: true });
+  useEnsureAuthenticatedLifecycle(ensureAuthenticated);
+
+  useMockApiChangeWatcher(mainStore, async () => {
+    fetchLogs();
+  }, {
+    shouldRefresh: () => authStore.isAuthenticated && isSuperAdmin.value
   });
 
-  onActivated(async () => {
-    await ensureAuthenticated({ checkSessionFlag: true, openModal: true });
-  });
-
-  watch(() => mainStore.mockApi, (newVal, oldVal) => {
-    if (newVal !== oldVal && authStore.isAuthenticated && isSuperAdmin.value) {
-      fetchLogs();
-    }
-  });
-
-  watch(() => authStore.isAuthenticated, async (newVal) => {
-    await handleAuthStateChange(newVal);
-  });
+  useAuthStateChangeWatcher(authStore, handleAuthStateChange);
 
   return {
     tableRowClass,

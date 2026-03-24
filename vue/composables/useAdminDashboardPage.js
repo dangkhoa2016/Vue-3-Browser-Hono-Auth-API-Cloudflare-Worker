@@ -1,4 +1,4 @@
-import { computed, nextTick, onActivated, onMounted, ref, watch } from 'vue';
+import { computed, nextTick, ref, watch } from 'vue';
 const { storeToRefs } = Pinia;
 import { useI18n } from 'vue-i18n';
 import { useSystemStatsStore } from '/assets/js/stores/systemStatsStore.js';
@@ -10,6 +10,10 @@ import { useAuthStore } from '/assets/js/stores/authStore.js';
 import { useModalStore } from '/assets/js/stores/modalStore.js';
 import { useMainStore } from '/assets/js/stores/mainStore.js';
 import { useAuthGate } from '/vue/composables/useAuthGate.js';
+import { createAuthGateCallbacks } from '/vue/composables/createAuthGateCallbacks.js';
+import { useAuthStateChangeWatcher } from '/vue/composables/useAuthStateChangeWatcher.js';
+import { useEnsureAuthenticatedLifecycle } from '/vue/composables/useEnsureAuthenticatedLifecycle.js';
+import { useMockApiChangeWatcher } from '/vue/composables/useMockApiChangeWatcher.js';
 
 export function useAdminDashboardPage() {
   const { t } = useI18n({ useScope: 'global' });
@@ -317,31 +321,22 @@ export function useAdminDashboardPage() {
   const { showLoginRequired, openLoginModal, ensureAuthenticated, handleAuthStateChange } = useAuthGate({
     authStore,
     modalStore,
-    onAuthenticated: async () => {
-      await loadInitial();
-    }
+    ...createAuthGateCallbacks({
+      onAuthenticated: async () => {
+        await loadInitial();
+      }
+    })
   });
 
-  watch(() => authStore.isAuthenticated, async (value) => {
-    await handleAuthStateChange(value);
-  });
+  useAuthStateChangeWatcher(authStore, handleAuthStateChange);
 
-  watch(() => mainStore.mockApi, async (value, oldValue) => {
-    if (!isAuthenticated.value || !isAdmin.value || value === oldValue) return;
+  useMockApiChangeWatcher(mainStore, async () => {
     await loadInitial();
+  }, {
+    shouldRefresh: () => isAuthenticated.value && isAdmin.value
   });
 
-  const ensurePageAccess = async () => {
-    await ensureAuthenticated({ checkSessionFlag: true, openModal: true });
-  };
-
-  onMounted(async () => {
-    await ensurePageAccess();
-  });
-
-  onActivated(async () => {
-    await ensurePageAccess();
-  });
+  useEnsureAuthenticatedLifecycle(ensureAuthenticated);
 
   return {
     currentStepIndex,
