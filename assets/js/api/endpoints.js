@@ -80,21 +80,39 @@ export const API_ENDPOINTS = {
   // Security incidents (match backend route)
   SECURITY_INCIDENTS: '/api/security-incident/incidents',
   // Realtime monitoring
+  REALTIME_MONITORING_EVENTS_RECENT: '/api/realtime-monitoring/events/recent',
   REALTIME_MONITORING_STATUS: '/api/realtime-monitoring/monitoring/status',
   REALTIME_MONITORING_START: '/api/realtime-monitoring/monitoring/start',
   REALTIME_MONITORING_STOP: '/api/realtime-monitoring/monitoring/stop',
   REALTIME_MONITORING_THREATS: '/api/realtime-monitoring/monitoring/threats',
+  REALTIME_MONITORING_THREAT_RESOLVE: '/api/realtime-monitoring/monitoring/threats/:threatId/resolve',
   REALTIME_MONITORING_ANALYZE: '/api/realtime-monitoring/monitoring/analyze',
   REALTIME_MONITORING_SIMULATE: '/api/realtime-monitoring/monitoring/simulate',
   REALTIME_MONITORING_ALERTS_STATUS: '/api/realtime-monitoring/alerts/status',
   REALTIME_MONITORING_ALERTS_CONFIGURE: '/api/realtime-monitoring/alerts/configure',
   REALTIME_MONITORING_ALERTS_HISTORY: '/api/realtime-monitoring/alerts/history',
+  REALTIME_MONITORING_ALERTS_SEND: '/api/realtime-monitoring/alerts/send',
+  REALTIME_MONITORING_ALERTS_RULES: '/api/realtime-monitoring/alerts/rules',
+  REALTIME_MONITORING_ALERTS_RULE_TOGGLE: '/api/realtime-monitoring/alerts/rules/:ruleId/toggle',
+  REALTIME_MONITORING_ALERTS_CHANNELS: '/api/realtime-monitoring/alerts/channels',
+  REALTIME_MONITORING_ALERTS_TEST: '/api/realtime-monitoring/alerts/test',
   REALTIME_MONITORING_DASHBOARD_OVERVIEW: '/api/realtime-monitoring/dashboard/overview',
   REALTIME_MONITORING_DASHBOARD_REALTIME: '/api/realtime-monitoring/dashboard/realtime',
+  REALTIME_MONITORING_DASHBOARD_LIVE: '/api/realtime-monitoring/dashboard/live',
   REALTIME_MONITORING_DASHBOARD_TIMELINE: '/api/realtime-monitoring/dashboard/timeline',
+  REALTIME_MONITORING_DASHBOARD_SECURITY: '/api/realtime-monitoring/dashboard/security',
+  REALTIME_MONITORING_DASHBOARD_PERFORMANCE: '/api/realtime-monitoring/dashboard/performance',
+  REALTIME_MONITORING_DASHBOARD_CACHE: '/api/realtime-monitoring/dashboard/cache',
   REALTIME_MONITORING_DASHBOARD_HEALTH: '/api/realtime-monitoring/dashboard/health',
   REALTIME_MONITORING_DASHBOARD_EXPORT: '/api/realtime-monitoring/dashboard/export',
+  REALTIME_MONITORING_INCIDENTS_CREATE: '/api/realtime-monitoring/incidents/create',
 };
 
 export const buildAdminUserRoleEndpoint = (userId) =>
   API_ENDPOINTS.ADMIN_USER_ROLE.replace(':id', String(userId));
+
+export const buildRealtimeMonitoringThreatResolveEndpoint = (threatId) =>
+  API_ENDPOINTS.REALTIME_MONITORING_THREAT_RESOLVE.replace(':threatId', encodeURIComponent(String(threatId)));
+
+export const buildRealtimeMonitoringAlertRuleToggleEndpoint = (ruleId) =>
+  API_ENDPOINTS.REALTIME_MONITORING_ALERTS_RULE_TOGGLE.replace(':ruleId', encodeURIComponent(String(ruleId)));
