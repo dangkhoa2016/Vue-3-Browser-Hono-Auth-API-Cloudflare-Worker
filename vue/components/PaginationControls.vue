@@ -79,7 +79,12 @@
 
 <script setup>
 import { computed } from 'vue';
-import { DEFAULT_ADMIN_PAGE_SIZE, DEFAULT_ADMIN_PAGE_SIZE_OPTIONS } from '/assets/js/constants/pagination.js';
+import {
+  DEFAULT_ADMIN_PAGE_SIZE,
+  DEFAULT_ADMIN_PAGE_SIZE_OPTIONS,
+  buildAdminPageSizeOptions,
+  resolveAdminPageSize
+} from '/assets/js/constants/pagination.js';
 import { useMainStore } from '/assets/js/stores/mainStore.js';
 
 const props = defineProps({
@@ -181,8 +186,7 @@ const emitSizeChange = (value) => {
   const nextSize = Number.parseInt(value, 10);
   if (!Number.isFinite(nextSize) || nextSize <= 0) return;
 
-  const currentSize = Number.parseInt(props.pageSize, 10) || Number.parseInt(mainStore.adminPageSize, 10) || DEFAULT_ADMIN_PAGE_SIZE;
-    const currentSize = resolveAdminPageSize(props.pageSize, resolveAdminPageSize(mainStore.adminPageSize, DEFAULT_ADMIN_PAGE_SIZE));
+  const currentSize = resolveAdminPageSize(props.pageSize, resolveAdminPageSize(mainStore.adminPageSize, DEFAULT_ADMIN_PAGE_SIZE));
   if (nextSize === currentSize) return;
 
   emit('change-size', nextSize);

@@ -86,7 +86,7 @@ export function useAdminTokenAuditPage() {
 
   const fetchLogs = async (
     page = 1,
-    limit = resolveAdminPageSize(pagination.value?.limit, preferredPageSize.value)
+    limit = preferredPageSize.value
   ) => {
     if (!authStore.isAuthenticated || !isSuperAdmin.value) return;
 
@@ -117,7 +117,7 @@ export function useAdminTokenAuditPage() {
 
   const changePage = (newPage) => {
     if (newPage < 1 || (pagination.value.totalPages && newPage > pagination.value.totalPages)) return;
-    fetchLogs(newPage);
+    fetchLogs(newPage, preferredPageSize.value);
   };
 
   const handleSearch = () => {

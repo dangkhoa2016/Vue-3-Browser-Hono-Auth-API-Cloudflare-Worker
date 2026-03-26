@@ -1,7 +1,18 @@
 const { defineStore } = Pinia;
+import { DEFAULT_ADMIN_PAGE_SIZE, resolveAdminPageSize } from '../constants/pagination.js';
 import { apiClient } from '../api.js';
+import { useMainStore } from './mainStore.js';
 import { useToastStore } from './toastStore.js';
 import { i18n } from '../i18n.js';
+
+const getDefaultAdminLimit = () => {
+  try {
+    const mainStore = useMainStore();
+    return resolveAdminPageSize(mainStore.adminPageSize, DEFAULT_ADMIN_PAGE_SIZE);
+  } catch (error) {
+    return DEFAULT_ADMIN_PAGE_SIZE;
+  }
+};
 
 export const useTokenAuditStore = defineStore('tokenAudit', {
   state: () => ({
@@ -9,7 +20,7 @@ export const useTokenAuditStore = defineStore('tokenAudit', {
     pagination: {
       total: 0,
       page: 1,
-      limit: 10,
+      limit: getDefaultAdminLimit(),
       totalPages: 1
     },
     loading: false,
@@ -25,14 +36,15 @@ export const useTokenAuditStore = defineStore('tokenAudit', {
   }),
 
   actions: {
-    async fetchLogs({ page = 1, limit = 10, search = '' } = {}) {
+    async fetchLogs({ page = 1, limit = getDefaultAdminLimit(), search = '' } = {}) {
       this.loading = true;
       this.error = null;
 
       try {
+        const safeLimit = resolveAdminPageSize(limit, getDefaultAdminLimit());
         const params = new URLSearchParams({
           page,
-          limit
+          limit: safeLimit
         });
 
         if (search) {
@@ -47,12 +59,12 @@ export const useTokenAuditStore = defineStore('tokenAudit', {
           if (response.data.data) {
              this.pagination = { 
                page: Number(response.data.data.page) || page, 
-               limit: Number(response.data.data.limit) || limit, 
+              limit: resolveAdminPageSize(response.data.data.limit, safeLimit), 
                total: Number(response.data.data.total) || 0, 
                totalPages: Number(response.data.data.totalPages) || 1 
              };
           } else {
-             this.pagination = { page, limit, total: 0, totalPages: 1 };
+             this.pagination = { page, limit: safeLimit, total: 0, totalPages: 1 };
           }
           
           this.lastUpdated = new Date().toISOString();

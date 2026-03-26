@@ -1,7 +1,17 @@
 const { defineStore } = Pinia;
-import { DEFAULT_ADMIN_PAGE_SIZE } from '../constants/pagination.js';
+import { DEFAULT_ADMIN_PAGE_SIZE, resolveAdminPageSize } from '../constants/pagination.js';
 import { apiClient, API_ENDPOINTS } from '../api.js';
 import { i18n } from '../i18n.js';
+import { useMainStore } from './mainStore.js';
+
+const getDefaultAdminLimit = () => {
+  try {
+    const mainStore = useMainStore();
+    return resolveAdminPageSize(mainStore.adminPageSize, DEFAULT_ADMIN_PAGE_SIZE);
+  } catch (error) {
+    return DEFAULT_ADMIN_PAGE_SIZE;
+  }
+};
 
 export const useRealtimeMonitoringStore = defineStore('realtimeMonitoring', {
   state: () => ({
@@ -20,7 +30,7 @@ export const useRealtimeMonitoringStore = defineStore('realtimeMonitoring', {
     alertsStatus: null,
     alertsHistory: {
       alerts: [],
-      pagination: { page: 1, limit: DEFAULT_ADMIN_PAGE_SIZE, total: 0, totalPages: 1 }
+      pagination: { page: 1, limit: getDefaultAdminLimit(), total: 0, totalPages: 1 }
     },
     timeline: { points: [] },
     health: null,

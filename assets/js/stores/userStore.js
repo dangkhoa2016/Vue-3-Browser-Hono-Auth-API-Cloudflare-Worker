@@ -1,5 +1,5 @@
 const { defineStore } = Pinia;
-import { DEFAULT_ADMIN_PAGE_SIZE } from '../constants/pagination.js';
+import { DEFAULT_ADMIN_PAGE_SIZE, resolveAdminPageSize } from '../constants/pagination.js';
 import { apiClient, API_ENDPOINTS, DATA_PATHS, buildAdminUserRoleEndpoint } from '../api.js';
 import { useMainStore } from './mainStore.js';
 import { i18n } from '../i18n.js';
@@ -7,7 +7,7 @@ import { i18n } from '../i18n.js';
 const getDefaultAdminLimit = () => {
   try {
     const mainStore = useMainStore();
-      return resolveAdminPageSize(mainStore.adminPageSize, DEFAULT_ADMIN_PAGE_SIZE);
+    return resolveAdminPageSize(mainStore.adminPageSize, DEFAULT_ADMIN_PAGE_SIZE);
   } catch (error) {
     return DEFAULT_ADMIN_PAGE_SIZE;
   }
