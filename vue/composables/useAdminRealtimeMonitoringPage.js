@@ -1,4 +1,4 @@
-import { computed, watch } from 'vue';
+import { computed } from 'vue';
 const { storeToRefs } = Pinia;
 import { useRealtimeMonitoringStore } from '/assets/js/stores/realtimeMonitoringStore.js';
 import { useAuthStore } from '/assets/js/stores/authStore.js';
@@ -27,10 +27,15 @@ export function useAdminRealtimeMonitoringPage() {
     overview,
     users,
     security,
+    performance,
     metadata,
     timeline,
+    recentEvents,
+    alertsRules,
+    alertChannels,
     latestAnalysis,
     latestSimulation,
+    latestIncident,
     lastUpdated
   } = storeToRefs(monitoringStore);
 
@@ -74,6 +79,40 @@ export function useAdminRealtimeMonitoringPage() {
     return Array.isArray(rows) ? rows.slice(0, 6) : [];
   });
 
+  const recentEventItems = computed(() => {
+    const rows = recentEvents.value?.events;
+    return Array.isArray(rows) ? rows : [];
+  });
+
+  const recentEventCount = computed(() => Number(recentEvents.value?.count) || recentEventItems.value.length);
+
+  const alertRuleItems = computed(() => {
+    const rows = alertsRules.value?.rules;
+    return Array.isArray(rows) ? rows : [];
+  });
+
+  const alertRuleSummary = computed(() => ({
+    total: Number(alertsRules.value?.totalRules) || alertRuleItems.value.length,
+    enabled: Number(alertsRules.value?.enabledRules) || alertRuleItems.value.filter((item) => item?.enabled).length
+  }));
+
+  const alertChannelItems = computed(() => {
+    const rows = alertChannels.value?.channels;
+    return Array.isArray(rows) ? rows : [];
+  });
+
+  const alertChannelSummary = computed(() => ({
+    total: Number(alertChannels.value?.totalChannels) || alertChannelItems.value.length,
+    enabled: Number(alertChannels.value?.enabledChannels) || alertChannelItems.value.filter((item) => item?.enabled).length
+  }));
+
+  const performanceSummary = computed(() => ({
+    averageResponseTimeMs: Number(performance.value?.averageResponseTimeMs) || 0,
+    p95ResponseTimeMs: Number(performance.value?.p95ResponseTimeMs) || 0,
+    cacheHitRate: Number(performance.value?.cacheHitRate) || 0,
+    health: performance.value?.health || 'unknown'
+  }));
+
   const riskIndicators = computed(() => security.value?.analytics?.risk_indicators || {});
 
   const riskScore = computed(() => {
@@ -98,9 +137,27 @@ export function useAdminRealtimeMonitoringPage() {
     return date.toLocaleString();
   };
 
+  const promptText = (message, fallback = '') => {
+    if (typeof window === 'undefined' || typeof window.prompt !== 'function') return fallback;
+    const value = window.prompt(message, fallback);
+    if (value === null) return null;
+    return String(value).trim();
+  };
+
+  const confirmAction = (message) => {
+    if (typeof window === 'undefined' || typeof window.confirm !== 'function') return true;
+    return window.confirm(message);
+  };
+
   const refresh = async () => {
     if (!isAuthenticated.value || !isAdmin.value) return;
-    await monitoringStore.refreshSnapshot();
+    await Promise.all([
+      monitoringStore.refreshSnapshot(),
+      monitoringStore.fetchRecentEvents(),
+      monitoringStore.fetchAlertRules(),
+      monitoringStore.fetchAlertChannels(),
+      monitoringStore.fetchPerformanceDashboard()
+    ]);
   };
 
   const ensureMonitoringStatusLoadedOnce = async () => {
@@ -115,7 +172,13 @@ export function useAdminRealtimeMonitoringPage() {
   const loadInitialMonitoringData = async () => {
     if (!isAuthenticated.value || !isAdmin.value) return;
     await ensureMonitoringStatusLoadedOnce();
-    await monitoringStore.refreshSnapshot();
+    await Promise.all([
+      monitoringStore.refreshSnapshot(),
+      monitoringStore.fetchRecentEvents(),
+      monitoringStore.fetchAlertRules(),
+      monitoringStore.fetchAlertChannels(),
+      monitoringStore.fetchPerformanceDashboard()
+    ]);
   };
 
   const { showLoginRequired, openLoginModal, ensureAuthenticated, handleAuthStateChange } = useAuthGate({
@@ -169,6 +232,131 @@ export function useAdminRealtimeMonitoringPage() {
     }
   };
 
+  const refreshRecentEvents = async () => {
+    if (!isAuthenticated.value || !isAdmin.value) return;
+    try {
+      await monitoringStore.fetchRecentEvents();
+    } catch (_error) {
+    }
+  };
+
+  const testAlerts = async () => {
+    if (!isAuthenticated.value || !isAdmin.value) return;
+    try {
+      await monitoringStore.testAlertSystem();
+    } catch (_error) {
+    }
+  };
+
+  const createAlertRule = async () => {
+    if (!isAuthenticated.value || !isAdmin.value) return;
+
+    const name = promptText(
+      tf('message.realtime_monitoring.prompt_rule_name', 'Rule name'),
+      `${tf('message.realtime_monitoring.create_rule_default_prefix', 'Custom rule')} ${new Date().toLocaleTimeString()}`
+    );
+    if (!name) return;
+
+    const description = promptText(
+      tf('message.realtime_monitoring.prompt_rule_description', 'Rule description'),
+      tf('message.realtime_monitoring.prompt_rule_description_default', 'Created from realtime monitoring UI')
+    ) || tf('message.realtime_monitoring.prompt_rule_description_default', 'Created from realtime monitoring UI');
+    const severity = (
+      promptText(tf('message.realtime_monitoring.prompt_severity', 'Severity (low, medium, high, critical)'), 'medium') || 'medium'
+    ).toLowerCase();
+    const condition = promptText(tf('message.realtime_monitoring.prompt_condition_pattern', 'Condition pattern'), 'test') || 'test';
+
+    try {
+      await monitoringStore.createAlertRule({
+        name,
+        description,
+        severity,
+        enabled: true,
+        cooldown: 300,
+        channels: ['email'],
+        condition
+      });
+    } catch (_error) {
+    }
+  };
+
+  const toggleAlertRule = async (rule) => {
+    if (!isAuthenticated.value || !isAdmin.value || !rule?.id) return;
+    try {
+      await monitoringStore.toggleAlertRule(rule.id, !rule.enabled);
+    } catch (_error) {
+    }
+  };
+
+  const createAlertChannel = async () => {
+    if (!isAuthenticated.value || !isAdmin.value) return;
+
+    const name = promptText(
+      tf('message.realtime_monitoring.prompt_channel_name', 'Channel name'),
+      `${tf('message.realtime_monitoring.create_channel_default_prefix', 'Channel')} ${new Date().toLocaleTimeString()}`
+    );
+    if (!name) return;
+
+    const type = (
+      promptText(tf('message.realtime_monitoring.prompt_channel_type', 'Channel type (email, webhook, slack)'), 'email') || 'email'
+    ).toLowerCase();
+
+    try {
+      await monitoringStore.createAlertChannel({
+        name,
+        type,
+        enabled: true,
+        config: {
+          target: promptText(tf('message.realtime_monitoring.prompt_channel_target', 'Channel target'), 'ops@example.com') || 'ops@example.com'
+        }
+      });
+    } catch (_error) {
+    }
+  };
+
+  const clearCache = async () => {
+    if (!isAuthenticated.value || !isAdmin.value) return;
+
+    const key = promptText(tf('message.realtime_monitoring.prompt_cache_key', 'Cache key to clear. Leave blank to clear all.'), '');
+    if (key === null) return;
+
+    const label = key || tf('message.realtime_monitoring.all_dashboard_cache', 'all dashboard cache');
+    if (!confirmAction(tf('message.realtime_monitoring.confirm_clear_cache', 'Clear {label}?', { label }))) return;
+
+    try {
+      await monitoringStore.clearDashboardCache(key || null);
+      await monitoringStore.fetchPerformanceDashboard();
+    } catch (_error) {
+    }
+  };
+
+  const createIncident = async () => {
+    if (!isAuthenticated.value || !isAdmin.value) return;
+
+    const description = promptText(
+      tf('message.realtime_monitoring.prompt_incident_description', 'Incident description'),
+      tf('message.realtime_monitoring.prompt_incident_description_default', 'Manual incident created from monitoring UI')
+    );
+    if (!description) return;
+
+    const severity = (
+      promptText(tf('message.realtime_monitoring.prompt_incident_severity', 'Incident severity (low, medium, high, critical)'), 'medium') || 'medium'
+    ).toLowerCase();
+    const type = promptText(tf('message.realtime_monitoring.prompt_incident_type', 'Incident type'), 'manual_incident') || 'manual_incident';
+
+    try {
+      await monitoringStore.createIncident({
+        description,
+        severity,
+        type,
+        metadata: {
+          source: 'admin_realtime_monitoring_ui'
+        }
+      });
+    } catch (_error) {
+    }
+  };
+
   useMockApiChangeWatcher(mainStore, async (value, oldValue) => {
     if (oldValue === true && value === false) {
       monitoringStore.statusRequestedOnce = false;
@@ -190,8 +378,16 @@ export function useAdminRealtimeMonitoringPage() {
     actionLoading,
     adminActivity,
     analyzeThreats,
+    alertChannelItems,
+    alertChannelSummary,
+    alertRuleItems,
+    alertRuleSummary,
     cacheHitRate,
     cacheStatus,
+    clearCache,
+    createAlertChannel,
+    createAlertRule,
+    createIncident,
     dataTimestamp,
     error,
     exportDashboard,
@@ -199,12 +395,17 @@ export function useAdminRealtimeMonitoringPage() {
     heroSectionClass,
     isAdmin,
     isMonitoringActive,
+    latestIncident,
     latestAnalysis,
     latestSimulation,
     loading,
     openLoginModal,
     overviewTotals,
+    performanceSummary,
+    recentEventCount,
+    recentEventItems,
     refresh,
+    refreshRecentEvents,
     riskIndicators,
     riskScore,
     security,
@@ -212,9 +413,11 @@ export function useAdminRealtimeMonitoringPage() {
     simulateEvent,
     startMonitoring,
     stopMonitoring,
+    testAlerts,
     tf,
     timelineItems,
     timelineSummary,
+    toggleAlertRule,
     topActionsToday,
     usersByRole
   };
