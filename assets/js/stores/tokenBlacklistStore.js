@@ -1,7 +1,18 @@
 const { defineStore } = Pinia;
+import { DEFAULT_ADMIN_PAGE_SIZE, resolveAdminPageSize } from '../constants/pagination.js';
 import { apiClient } from '../api.js';
+import { useMainStore } from './mainStore.js';
 import { useToastStore } from './toastStore.js';
 import { i18n } from '../i18n.js';
+
+const getDefaultAdminLimit = () => {
+  try {
+    const mainStore = useMainStore();
+    return resolveAdminPageSize(mainStore.adminPageSize, DEFAULT_ADMIN_PAGE_SIZE);
+  } catch (error) {
+    return DEFAULT_ADMIN_PAGE_SIZE;
+  }
+};
 
 export const useTokenBlacklistStore = defineStore('tokenBlacklist', {
   state: () => ({
@@ -9,7 +20,7 @@ export const useTokenBlacklistStore = defineStore('tokenBlacklist', {
     pagination: {
       total: 0,
       page: 1,
-      limit: 10,
+      limit: getDefaultAdminLimit(),
       totalPages: 1
     },
     loading: false,
@@ -23,14 +34,15 @@ export const useTokenBlacklistStore = defineStore('tokenBlacklist', {
   }),
 
   actions: {
-    async fetchTokens({ page = 1, limit = 10, search = '' } = {}) {
+    async fetchTokens({ page = 1, limit = getDefaultAdminLimit(), search = '' } = {}) {
       this.loading = true;
       this.error = null;
 
       try {
+        const safeLimit = resolveAdminPageSize(limit, getDefaultAdminLimit());
         const params = new URLSearchParams({
           page,
-          limit
+          limit: safeLimit
         });
 
         if (search) {
@@ -41,7 +53,15 @@ export const useTokenBlacklistStore = defineStore('tokenBlacklist', {
         
         if (response.data?.success) {
           this.items = response.data.data?.items || [];
-          this.pagination = response.data.data?.pagination || { page, limit, total: 0, totalPages: 1 };
+          const responsePagination = response.data.data?.pagination;
+          this.pagination = responsePagination
+            ? {
+                page: Number(responsePagination.page) || page,
+                limit: resolveAdminPageSize(responsePagination.limit, safeLimit),
+                total: Number(responsePagination.total) || 0,
+                totalPages: Number(responsePagination.totalPages) || 1
+              }
+            : { page, limit: safeLimit, total: 0, totalPages: 1 };
           this.lastUpdated = new Date().toISOString();
         } else {
           this.error = response.data?.message || 'Failed to fetch blacklist tokens.';

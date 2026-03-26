@@ -1,6 +1,7 @@
 import { computed, nextTick, ref, watch } from 'vue';
 const { storeToRefs } = Pinia;
 import { useI18n } from 'vue-i18n';
+import { DEFAULT_ADMIN_PAGE_SIZE, resolveAdminPageSize } from '/assets/js/constants/pagination.js';
 import { useSystemStatsStore } from '/assets/js/stores/systemStatsStore.js';
 import { useSystemHealthStore } from '/assets/js/stores/systemHealthStore.js';
 import { useAuditStore } from '/assets/js/stores/auditStore.js';
@@ -53,6 +54,7 @@ export function useAdminDashboardPage() {
   const isAuthenticated = computed(() => authStore.isAuthenticated);
   const role = computed(() => String(authStore.user?.role || '').toLowerCase());
   const isAdmin = computed(() => role.value === 'admin' || role.value === 'super_admin');
+  const preferredIncidentPageSize = computed(() => resolveAdminPageSize(mainStore.adminPageSize, DEFAULT_ADMIN_PAGE_SIZE));
 
   const totalUsers = computed(() => {
     const value = Number(statsData.value?.totalUsers);
@@ -254,7 +256,7 @@ export function useAdminDashboardPage() {
       { key: 'stats', run: () => systemStatsStore.fetchSystemStats() },
       { key: 'health', run: () => systemHealthStore.fetchSystemHealth() },
       { key: 'audit', run: () => auditStore.fetchLogs() },
-      { key: 'incidents', run: () => securityIncidentStore.fetchIncidents({ page: 1 }) },
+      { key: 'incidents', run: () => securityIncidentStore.fetchIncidents({ page: 1, limit: preferredIncidentPageSize.value }) },
       { key: 'realtime', run: () => realtimeStore.fetchDashboardData() }
     ];
     const minStepDurationMs = 280;
