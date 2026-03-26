@@ -4,6 +4,7 @@ import { useMainStore } from '/assets/js/stores/mainStore.js';
 import { useModalStore } from '/assets/js/stores/modalStore.js';
 import { useToastStore } from '/assets/js/stores/toastStore.js';
 import { useKvAdminRateLimitsStore } from '/assets/js/stores/kvAdminRateLimitsStore.js';
+import { DEFAULT_ADMIN_PAGE_SIZE, resolveAdminPageSize } from '/assets/js/constants/pagination.js';
 import { useAuthGate } from '/vue/composables/useAuthGate.js';
 import { createAuthGateCallbacks } from '/vue/composables/createAuthGateCallbacks.js';
 import { useAuthStateChangeWatcher } from '/vue/composables/useAuthStateChangeWatcher.js';
@@ -20,6 +21,7 @@ export function useKvAdminRateLimitsPage() {
   const { isLoading, result, cleanForm, pruneForm, rateLimitsList, listComplete, listCursor, listPrefix } = storeToRefs(kvAdminRateLimitsStore);
 
   const isSuperAdmin = computed(() => authStore.user?.role?.toLowerCase() === 'super_admin');
+  const preferredPageSize = computed(() => resolveAdminPageSize(mainStore.adminPageSize, DEFAULT_ADMIN_PAGE_SIZE));
 
   const resetProtectedState = () => {
     kvAdminRateLimitsStore.rateLimitsList = [];
@@ -63,7 +65,10 @@ export function useKvAdminRateLimitsPage() {
   };
 
   const fetchRateLimits = async (reset = true, showToast = true) => {
-    const actionResult = await kvAdminRateLimitsStore.loadRateLimits(authStore.token, { reset });
+    const actionResult = await kvAdminRateLimitsStore.loadRateLimits(authStore.token, {
+      reset,
+      limit: preferredPageSize.value
+    });
     if (!actionResult.success && !handleAuthError(actionResult)) {
       toastStore.add('Failed to load rate limits list', 'error');
     } else if (actionResult.success && actionResult.message && showToast) {

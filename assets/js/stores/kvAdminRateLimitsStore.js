@@ -1,5 +1,16 @@
 const { defineStore } = Pinia;
+import { DEFAULT_ADMIN_PAGE_SIZE, resolveAdminPageSize } from '../constants/pagination.js';
 import { apiClient, API_ENDPOINTS } from '../api.js';
+import { useMainStore } from './mainStore.js';
+
+const getDefaultAdminLimit = () => {
+  try {
+    const mainStore = useMainStore();
+    return resolveAdminPageSize(mainStore.adminPageSize, DEFAULT_ADMIN_PAGE_SIZE);
+  } catch (error) {
+    return DEFAULT_ADMIN_PAGE_SIZE;
+  }
+};
 
 const createInitialCleanForm = () => ({
   prefix: 'rate_limit:',
@@ -43,7 +54,7 @@ export const useKvAdminRateLimitsStore = defineStore('kvAdminRateLimits', {
       this.errorMessage = null;
     },
 
-    async loadRateLimits(token, { reset = true } = {}) {
+    async loadRateLimits(token, { reset = true, limit = getDefaultAdminLimit() } = {}) {
       if (reset) {
         this.listCursor = null;
         this.rateLimitsList = [];
@@ -52,7 +63,7 @@ export const useKvAdminRateLimitsStore = defineStore('kvAdminRateLimits', {
       this.errorMessage = null;
 
       try {
-        const params = { limit: 50 };
+        const params = { limit: resolveAdminPageSize(limit, getDefaultAdminLimit()) };
         if (this.listPrefix) params.prefix = this.listPrefix;
         if (this.listCursor) params.cursor = this.listCursor;
         

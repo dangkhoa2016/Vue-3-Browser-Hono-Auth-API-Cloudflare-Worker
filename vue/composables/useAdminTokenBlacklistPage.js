@@ -3,6 +3,7 @@ import { useMainStore } from '/assets/js/stores/mainStore.js';
 import { useAuthStore } from '/assets/js/stores/authStore.js';
 import { useModalStore } from '/assets/js/stores/modalStore.js';
 import { useTokenBlacklistStore } from '/assets/js/stores/tokenBlacklistStore.js';
+import { DEFAULT_ADMIN_PAGE_SIZE, resolveAdminPageSize } from '/assets/js/constants/pagination.js';
 import { useModalState } from '../composables/useModalState.js';
 import { useDebouncedFilters } from '../composables/useDebouncedFilters.js';
 import { useAuthGate } from '../composables/useAuthGate.js';
@@ -23,6 +24,7 @@ export function useAdminTokenBlacklistPage() {
   const isLoading = computed(() => blacklistStore.loading);
   const errorMessage = computed(() => blacklistStore.error);
   const pagination = computed(() => blacklistStore.pagination);
+  const preferredPageSize = computed(() => resolveAdminPageSize(mainStore.adminPageSize, DEFAULT_ADMIN_PAGE_SIZE));
 
   const searchQuery = ref('');
   const { runDebounced, clearDebounce } = useDebouncedFilters();
@@ -70,19 +72,19 @@ export function useAdminTokenBlacklistPage() {
     }
   };
 
-  const fetchTokens = async (page = 1) => {
+  const fetchTokens = async (page = 1, limit = preferredPageSize.value) => {
     if (!authStore.isAuthenticated || !isSuperAdmin.value) return;
 
     await blacklistStore.fetchTokens({
       page,
-      limit: pagination.value.limit,
+      limit: resolveAdminPageSize(limit, preferredPageSize.value),
       search: searchQuery.value
     });
   };
 
   const changePage = (newPage) => {
     if (newPage < 1 || (pagination.value.totalPages && newPage > pagination.value.totalPages)) return;
-    fetchTokens(newPage);
+    fetchTokens(newPage, preferredPageSize.value);
   };
 
   const handleSearch = () => {
