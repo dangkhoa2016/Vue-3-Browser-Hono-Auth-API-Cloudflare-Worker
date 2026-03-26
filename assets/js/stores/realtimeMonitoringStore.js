@@ -1,6 +1,11 @@
 const { defineStore } = Pinia;
 import { DEFAULT_ADMIN_PAGE_SIZE, resolveAdminPageSize } from '../constants/pagination.js';
-import { apiClient, API_ENDPOINTS } from '../api.js';
+import {
+  apiClient,
+  API_ENDPOINTS,
+  buildRealtimeMonitoringThreatResolveEndpoint,
+  buildRealtimeMonitoringAlertRuleToggleEndpoint
+} from '../api.js';
 import { i18n } from '../i18n.js';
 import { useMainStore } from './mainStore.js';
 
@@ -21,7 +26,13 @@ export const useRealtimeMonitoringStore = defineStore('realtimeMonitoring', {
     realtime: null,
     users: null,
     security: null,
+    performance: null,
     metadata: null,
+    liveDashboard: null,
+    recentEvents: {
+      count: 0,
+      events: []
+    },
     threats: {
       activeThreats: [],
       resolvedThreats: [],
@@ -32,10 +43,13 @@ export const useRealtimeMonitoringStore = defineStore('realtimeMonitoring', {
       alerts: [],
       pagination: { page: 1, limit: getDefaultAdminLimit(), total: 0, totalPages: 1 }
     },
+    alertsRules: null,
+    alertChannels: null,
     timeline: { points: [] },
     health: null,
     latestAnalysis: null,
     latestSimulation: null,
+    latestIncident: null,
     statusRequestedOnce: false,
     loading: false,
     actionLoading: false,
@@ -73,6 +87,29 @@ export const useRealtimeMonitoringStore = defineStore('realtimeMonitoring', {
       return (err && err.message) || i18n.global.t('message.errors.unknown_error');
     },
 
+    async fetchRecentEvents() {
+      this.loading = true;
+      this.error = null;
+
+      try {
+        const response = await apiClient.get(API_ENDPOINTS.REALTIME_MONITORING_EVENTS_RECENT);
+        const payload = response?.data?.data || {};
+        const events = Array.isArray(payload.events) ? payload.events : [];
+
+        this.recentEvents = {
+          count: Number(payload.count) || events.length,
+          events
+        };
+        this.lastUpdated = new Date().toISOString();
+        return this.recentEvents;
+      } catch (error) {
+        this.error = this.normalizeError(error);
+        return null;
+      } finally {
+        this.loading = false;
+      }
+    },
+
     async fetchMonitoringStatus() {
       this.loading = true;
       this.error = null;
@@ -104,6 +141,52 @@ export const useRealtimeMonitoringStore = defineStore('realtimeMonitoring', {
         return null;
       } finally {
         this.loading = false;
+      }
+    },
+
+    async fetchThreats() {
+      this.loading = true;
+      this.error = null;
+
+      try {
+        const response = await apiClient.get(API_ENDPOINTS.REALTIME_MONITORING_THREATS);
+        const payload = response?.data?.data || {};
+        this.threats = {
+          ...(this.threats || {}),
+          ...(payload && typeof payload === 'object' ? payload : {})
+        };
+        this.lastUpdated = new Date().toISOString();
+        return this.threats;
+      } catch (error) {
+        this.error = this.normalizeError(error);
+        return null;
+      } finally {
+        this.loading = false;
+      }
+    },
+
+    async resolveThreat(threatId, payload = {}) {
+      this.actionLoading = true;
+      this.error = null;
+
+      try {
+        const response = await apiClient.post(
+          buildRealtimeMonitoringThreatResolveEndpoint(threatId),
+          payload
+        );
+
+        try {
+          await this.fetchThreats();
+        } catch (_error) {
+        }
+
+        this.lastUpdated = new Date().toISOString();
+        return response?.data || null;
+      } catch (error) {
+        this.error = this.normalizeError(error);
+        return null;
+      } finally {
+        this.actionLoading = false;
       }
     },
 
@@ -360,6 +443,279 @@ export const useRealtimeMonitoringStore = defineStore('realtimeMonitoring', {
       }
     },
 
+    async configureAlerts(payload = {}) {
+      this.actionLoading = true;
+      this.error = null;
+
+      try {
+        const response = await apiClient.post(API_ENDPOINTS.REALTIME_MONITORING_ALERTS_CONFIGURE, payload);
+        this.alertsStatus = response?.data?.data || this.alertsStatus;
+        this.lastUpdated = new Date().toISOString();
+        return this.alertsStatus;
+      } catch (error) {
+        this.error = this.normalizeError(error);
+        return null;
+      } finally {
+        this.actionLoading = false;
+      }
+    },
+
+    async fetchAlertsHistory(filters = {}) {
+      this.loading = true;
+      this.error = null;
+
+      try {
+        const response = await apiClient.get(API_ENDPOINTS.REALTIME_MONITORING_ALERTS_HISTORY, {
+          params: filters
+        });
+        this.alertsHistory = response?.data?.data || this.alertsHistory;
+        this.lastUpdated = new Date().toISOString();
+        return this.alertsHistory;
+      } catch (error) {
+        this.error = this.normalizeError(error);
+        return null;
+      } finally {
+        this.loading = false;
+      }
+    },
+
+    async sendManualAlert(payload = {}) {
+      this.actionLoading = true;
+      this.error = null;
+
+      try {
+        const response = await apiClient.post(API_ENDPOINTS.REALTIME_MONITORING_ALERTS_SEND, payload);
+
+        try {
+          await Promise.all([
+            this.fetchAlertsHistory(),
+            this.fetchMonitoringStatus()
+          ]);
+        } catch (_error) {
+        }
+
+        this.lastUpdated = new Date().toISOString();
+        return response?.data || null;
+      } catch (error) {
+        this.error = this.normalizeError(error);
+        return null;
+      } finally {
+        this.actionLoading = false;
+      }
+    },
+
+    async fetchAlertRules() {
+      this.loading = true;
+      this.error = null;
+
+      try {
+        const response = await apiClient.get(API_ENDPOINTS.REALTIME_MONITORING_ALERTS_RULES);
+        this.alertsRules = response?.data?.data || null;
+        this.lastUpdated = new Date().toISOString();
+        return this.alertsRules;
+      } catch (error) {
+        this.error = this.normalizeError(error);
+        return null;
+      } finally {
+        this.loading = false;
+      }
+    },
+
+    async createAlertRule(payload = {}) {
+      this.actionLoading = true;
+      this.error = null;
+
+      try {
+        const response = await apiClient.post(API_ENDPOINTS.REALTIME_MONITORING_ALERTS_RULES, payload);
+
+        try {
+          await this.fetchAlertRules();
+        } catch (_error) {
+        }
+
+        this.lastUpdated = new Date().toISOString();
+        return response?.data || null;
+      } catch (error) {
+        this.error = this.normalizeError(error);
+        return null;
+      } finally {
+        this.actionLoading = false;
+      }
+    },
+
+    async toggleAlertRule(ruleId, enabled) {
+      this.actionLoading = true;
+      this.error = null;
+
+      try {
+        const response = await apiClient.put(
+          buildRealtimeMonitoringAlertRuleToggleEndpoint(ruleId),
+          { enabled }
+        );
+
+        try {
+          await this.fetchAlertRules();
+        } catch (_error) {
+        }
+
+        this.lastUpdated = new Date().toISOString();
+        return response?.data || null;
+      } catch (error) {
+        this.error = this.normalizeError(error);
+        return null;
+      } finally {
+        this.actionLoading = false;
+      }
+    },
+
+    async fetchAlertChannels() {
+      this.loading = true;
+      this.error = null;
+
+      try {
+        const response = await apiClient.get(API_ENDPOINTS.REALTIME_MONITORING_ALERTS_CHANNELS);
+        this.alertChannels = response?.data?.data || null;
+        this.lastUpdated = new Date().toISOString();
+        return this.alertChannels;
+      } catch (error) {
+        this.error = this.normalizeError(error);
+        return null;
+      } finally {
+        this.loading = false;
+      }
+    },
+
+    async createAlertChannel(payload = {}) {
+      this.actionLoading = true;
+      this.error = null;
+
+      try {
+        const response = await apiClient.post(API_ENDPOINTS.REALTIME_MONITORING_ALERTS_CHANNELS, payload);
+
+        try {
+          await this.fetchAlertChannels();
+        } catch (_error) {
+        }
+
+        this.lastUpdated = new Date().toISOString();
+        return response?.data || null;
+      } catch (error) {
+        this.error = this.normalizeError(error);
+        return null;
+      } finally {
+        this.actionLoading = false;
+      }
+    },
+
+    async testAlertSystem() {
+      this.actionLoading = true;
+      this.error = null;
+
+      try {
+        const response = await apiClient.post(API_ENDPOINTS.REALTIME_MONITORING_ALERTS_TEST, {});
+        this.lastUpdated = new Date().toISOString();
+        return response?.data || null;
+      } catch (error) {
+        this.error = this.normalizeError(error);
+        return null;
+      } finally {
+        this.actionLoading = false;
+      }
+    },
+
+    async fetchDashboardOverview() {
+      this.loading = true;
+      this.error = null;
+
+      try {
+        const response = await apiClient.get(API_ENDPOINTS.REALTIME_MONITORING_DASHBOARD_OVERVIEW);
+        this.overview = response?.data?.data || null;
+        this.lastUpdated = new Date().toISOString();
+        return this.overview;
+      } catch (error) {
+        this.error = this.normalizeError(error);
+        return null;
+      } finally {
+        this.loading = false;
+      }
+    },
+
+    async fetchLiveDashboard() {
+      this.loading = true;
+      this.error = null;
+
+      try {
+        const response = await apiClient.get(API_ENDPOINTS.REALTIME_MONITORING_DASHBOARD_LIVE);
+        const payload = response?.data?.data || {};
+        this.liveDashboard = payload;
+
+        if (payload && typeof payload === 'object' && (payload.overview || payload.timeline || payload.users || payload.security)) {
+          this.applySnapshot(payload);
+        }
+
+        this.lastUpdated = new Date().toISOString();
+        return this.liveDashboard;
+      } catch (error) {
+        this.error = this.normalizeError(error);
+        return null;
+      } finally {
+        this.loading = false;
+      }
+    },
+
+    async fetchDashboardTimeline(hours = 24) {
+      this.loading = true;
+      this.error = null;
+
+      try {
+        const response = await apiClient.get(API_ENDPOINTS.REALTIME_MONITORING_DASHBOARD_TIMELINE, {
+          params: { hours }
+        });
+        this.timeline = response?.data?.data || this.timeline;
+        this.lastUpdated = new Date().toISOString();
+        return this.timeline;
+      } catch (error) {
+        this.error = this.normalizeError(error);
+        return null;
+      } finally {
+        this.loading = false;
+      }
+    },
+
+    async fetchSecurityDashboard() {
+      this.loading = true;
+      this.error = null;
+
+      try {
+        const response = await apiClient.get(API_ENDPOINTS.REALTIME_MONITORING_DASHBOARD_SECURITY);
+        this.security = response?.data?.data || null;
+        this.lastUpdated = new Date().toISOString();
+        return this.security;
+      } catch (error) {
+        this.error = this.normalizeError(error);
+        return null;
+      } finally {
+        this.loading = false;
+      }
+    },
+
+    async fetchPerformanceDashboard() {
+      this.loading = true;
+      this.error = null;
+
+      try {
+        const response = await apiClient.get(API_ENDPOINTS.REALTIME_MONITORING_DASHBOARD_PERFORMANCE);
+        this.performance = response?.data?.data || null;
+        this.lastUpdated = new Date().toISOString();
+        return this.performance;
+      } catch (error) {
+        this.error = this.normalizeError(error);
+        return null;
+      } finally {
+        this.loading = false;
+      }
+    },
+
     async exportDashboard(options = {}) {
       this.actionLoading = true;
       this.error = null;
@@ -414,6 +770,58 @@ export const useRealtimeMonitoringStore = defineStore('realtimeMonitoring', {
       }
     },
 
+    async clearDashboardCache(key = null) {
+      this.actionLoading = true;
+      this.error = null;
+
+      try {
+        const response = await apiClient.delete(API_ENDPOINTS.REALTIME_MONITORING_DASHBOARD_CACHE, {
+          params: key ? { key } : {}
+        });
+        this.lastUpdated = new Date().toISOString();
+        return response?.data || null;
+      } catch (error) {
+        this.error = this.normalizeError(error);
+        return null;
+      } finally {
+        this.actionLoading = false;
+      }
+    },
+
+    async fetchDashboardHealth() {
+      this.loading = true;
+      this.error = null;
+
+      try {
+        const response = await apiClient.get(API_ENDPOINTS.REALTIME_MONITORING_DASHBOARD_HEALTH);
+        this.health = response?.data?.data || null;
+        this.lastUpdated = new Date().toISOString();
+        return this.health;
+      } catch (error) {
+        this.error = this.normalizeError(error);
+        return null;
+      } finally {
+        this.loading = false;
+      }
+    },
+
+    async createIncident(payload = {}) {
+      this.actionLoading = true;
+      this.error = null;
+
+      try {
+        const response = await apiClient.post(API_ENDPOINTS.REALTIME_MONITORING_INCIDENTS_CREATE, payload);
+        this.latestIncident = response?.data?.data || null;
+        this.lastUpdated = new Date().toISOString();
+        return this.latestIncident;
+      } catch (error) {
+        this.error = this.normalizeError(error);
+        return null;
+      } finally {
+        this.actionLoading = false;
+      }
+    },
+
     async reload() {
       await this.fetchMonitoringStatus();
       await this.refreshSnapshot();
@@ -431,6 +839,7 @@ export const useRealtimeMonitoringStore = defineStore('realtimeMonitoring', {
         if (payload.overview && payload.timeline && payload.users && payload.security) {
           this.applySnapshot(payload);
           this.timeline = payload.timeline;
+          this.liveDashboard = payload;
         } else if (
           payload.status ||
           payload.overview ||
@@ -442,8 +851,10 @@ export const useRealtimeMonitoringStore = defineStore('realtimeMonitoring', {
           payload.health
         ) {
           this.applySnapshot(payload);
+          this.liveDashboard = payload;
         } else {
           this.realtime = payload;
+          this.liveDashboard = payload;
           if (typeof payload?.isActive === 'boolean') {
             this.status = {
               ...(this.status || {}),

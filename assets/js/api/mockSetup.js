@@ -47,6 +47,11 @@ export const setupMock = (enable) => {
         }
       };
 
+      const getPathSegments = (config) => {
+        const rawUrl = String(config?.url || '').split('?')[0];
+        return rawUrl.split('/').filter(Boolean);
+      };
+
       const getRealtimePayload = async () => {
         const base = await loadJson(DATA_PATHS.REALTIME_MONITORING_REALTIME);
         const payload = base?.data || {};
@@ -840,6 +845,29 @@ export const setupMock = (enable) => {
       });
 
       // Realtime monitoring: status
+      mock.onGet(MOCK_PATTERNS.REALTIME_MONITORING_EVENTS_RECENT).reply(async () => {
+        try {
+          const { threatsData } = await getRealtimePayload();
+          const events = [
+            ...(Array.isArray(threatsData?.recentThreats) ? threatsData.recentThreats : []),
+            ...(Array.isArray(threatsData?.activeThreats) ? threatsData.activeThreats : [])
+          ].slice(-25);
+
+          return [200, {
+            success: true,
+            data: {
+              count: events.length,
+              events
+            },
+            message: 'Recent events loaded'
+          }];
+        } catch (error) {
+          console.error('[Mock API] Monitoring recent events handler error:', error);
+          const message = (error && error.message) || 'Internal server error';
+          return [500, { success: false, error: message }];
+        }
+      });
+
       mock.onGet(MOCK_PATTERNS.REALTIME_MONITORING_STATUS).reply(async () => {
         try {
           const data = await loadJson(DATA_PATHS.REALTIME_MONITORING_STATUS_SUCCESS);
@@ -914,6 +942,29 @@ export const setupMock = (enable) => {
           return [200, { success: true, data: threatsData, message: 'Threat data loaded' }];
         } catch (error) {
           console.error('[Mock API] Monitoring threats handler error:', error);
+          const message = (error && error.message) || 'Internal server error';
+          return [500, { success: false, error: message }];
+        }
+      });
+
+      mock.onPost(MOCK_PATTERNS.REALTIME_MONITORING_THREAT_RESOLVE).reply(async (config) => {
+        try {
+          const body = parseBody(config);
+          const segments = getPathSegments(config);
+          const threatId = segments[segments.length - 2] || 'unknown-threat';
+          return [200, {
+            success: true,
+            data: {
+              threatId,
+              resolution: body.resolution || 'resolved',
+              note: body.note || '',
+              actionTaken: body.actionTaken || 'mock resolution',
+              testMode: true
+            },
+            message: 'Threat resolved'
+          }];
+        } catch (error) {
+          console.error('[Mock API] Monitoring threat resolve handler error:', error);
           const message = (error && error.message) || 'Internal server error';
           return [500, { success: false, error: message }];
         }
@@ -1035,6 +1086,141 @@ export const setupMock = (enable) => {
         }
       });
 
+      mock.onPost(MOCK_PATTERNS.REALTIME_MONITORING_ALERTS_SEND).reply(async (config) => {
+        try {
+          const body = parseBody(config);
+          return [200, {
+            success: true,
+            data: {
+              id: `alert_${Date.now()}`,
+              title: body.title || 'Manual alert',
+              message: body.message || 'Mock manual alert sent',
+              severity: body.severity || 'medium',
+              channels: Array.isArray(body.channels) ? body.channels : [],
+              createdAt: new Date().toISOString()
+            },
+            message: 'Manual alert sent'
+          }];
+        } catch (error) {
+          console.error('[Mock API] Alerts send handler error:', error);
+          const message = (error && error.message) || 'Internal server error';
+          return [500, { success: false, error: message }];
+        }
+      });
+
+      mock.onGet(MOCK_PATTERNS.REALTIME_MONITORING_ALERTS_RULES).reply(async () => {
+        try {
+          const { alertsStatusData } = await getRealtimePayload();
+          return [200, {
+            success: true,
+            data: {
+              totalRules: Number(alertsStatusData?.totalRules) || 6,
+              enabledRules: Number(alertsStatusData?.enabledRules) || 4,
+              disabledRules: Math.max((Number(alertsStatusData?.totalRules) || 6) - (Number(alertsStatusData?.enabledRules) || 4), 0),
+              recentlyTriggered: 2
+            },
+            message: 'Alert rules loaded'
+          }];
+        } catch (error) {
+          console.error('[Mock API] Alert rules handler error:', error);
+          const message = (error && error.message) || 'Internal server error';
+          return [500, { success: false, error: message }];
+        }
+      });
+
+      mock.onPost(MOCK_PATTERNS.REALTIME_MONITORING_ALERTS_RULES).reply(async (config) => {
+        try {
+          const body = parseBody(config);
+          return [200, {
+            success: true,
+            data: {
+              ruleId: `rule_${Date.now()}`,
+              ...body
+            },
+            message: 'Alert rule created'
+          }];
+        } catch (error) {
+          console.error('[Mock API] Alert rules create handler error:', error);
+          const message = (error && error.message) || 'Internal server error';
+          return [500, { success: false, error: message }];
+        }
+      });
+
+      mock.onPut(MOCK_PATTERNS.REALTIME_MONITORING_ALERTS_RULE_TOGGLE).reply(async (config) => {
+        try {
+          const body = parseBody(config);
+          const segments = getPathSegments(config);
+          const ruleId = segments[segments.length - 2] || 'unknown-rule';
+          return [200, {
+            success: true,
+            data: {
+              ruleId,
+              enabled: Boolean(body.enabled),
+              testMode: true
+            },
+            message: 'Alert rule toggled'
+          }];
+        } catch (error) {
+          console.error('[Mock API] Alert rules toggle handler error:', error);
+          const message = (error && error.message) || 'Internal server error';
+          return [500, { success: false, error: message }];
+        }
+      });
+
+      mock.onGet(MOCK_PATTERNS.REALTIME_MONITORING_ALERTS_CHANNELS).reply(async () => {
+        try {
+          return [200, {
+            success: true,
+            data: {
+              totalChannels: 3,
+              enabledChannels: 2,
+              channelTypes: ['email', 'webhook', 'slack']
+            },
+            message: 'Alert channels loaded'
+          }];
+        } catch (error) {
+          console.error('[Mock API] Alert channels handler error:', error);
+          const message = (error && error.message) || 'Internal server error';
+          return [500, { success: false, error: message }];
+        }
+      });
+
+      mock.onPost(MOCK_PATTERNS.REALTIME_MONITORING_ALERTS_CHANNELS).reply(async (config) => {
+        try {
+          const body = parseBody(config);
+          return [200, {
+            success: true,
+            data: {
+              channelId: `channel_${Date.now()}`,
+              ...body
+            },
+            message: 'Alert channel created'
+          }];
+        } catch (error) {
+          console.error('[Mock API] Alert channels create handler error:', error);
+          const message = (error && error.message) || 'Internal server error';
+          return [500, { success: false, error: message }];
+        }
+      });
+
+      mock.onPost(MOCK_PATTERNS.REALTIME_MONITORING_ALERTS_TEST).reply(async () => {
+        try {
+          return [200, {
+            success: true,
+            data: {
+              testedAt: new Date().toISOString(),
+              delivered: true,
+              channelsTested: 2
+            },
+            message: 'Alert system test completed'
+          }];
+        } catch (error) {
+          console.error('[Mock API] Alert system test handler error:', error);
+          const message = (error && error.message) || 'Internal server error';
+          return [500, { success: false, error: message }];
+        }
+      });
+
       // Realtime monitoring: dashboard overview
       mock.onGet(MOCK_PATTERNS.REALTIME_MONITORING_DASHBOARD_OVERVIEW).reply(async () => {
         try {
@@ -1063,6 +1249,17 @@ export const setupMock = (enable) => {
         }
       });
 
+      mock.onGet(MOCK_PATTERNS.REALTIME_MONITORING_DASHBOARD_LIVE).reply(async () => {
+        try {
+          const { rawData } = await getRealtimePayload();
+          return [200, { success: true, data: rawData, message: 'Live dashboard loaded' }];
+        } catch (error) {
+          console.error('[Mock API] Dashboard live handler error:', error);
+          const message = (error && error.message) || 'Internal server error';
+          return [500, { success: false, error: message }];
+        }
+      });
+
       // Realtime monitoring: dashboard timeline
       mock.onGet(MOCK_PATTERNS.REALTIME_MONITORING_DASHBOARD_TIMELINE).reply(async () => {
         try {
@@ -1070,6 +1267,37 @@ export const setupMock = (enable) => {
           return [200, { success: true, data: timelineData, message: 'Timeline loaded' }];
         } catch (error) {
           console.error('[Mock API] Dashboard timeline handler error:', error);
+          const message = (error && error.message) || 'Internal server error';
+          return [500, { success: false, error: message }];
+        }
+      });
+
+      mock.onGet(MOCK_PATTERNS.REALTIME_MONITORING_DASHBOARD_SECURITY).reply(async () => {
+        try {
+          const { rawData } = await getRealtimePayload();
+          return [200, { success: true, data: rawData.security || {}, message: 'Security dashboard loaded' }];
+        } catch (error) {
+          console.error('[Mock API] Dashboard security handler error:', error);
+          const message = (error && error.message) || 'Internal server error';
+          return [500, { success: false, error: message }];
+        }
+      });
+
+      mock.onGet(MOCK_PATTERNS.REALTIME_MONITORING_DASHBOARD_PERFORMANCE).reply(async () => {
+        try {
+          const { healthData } = await getRealtimePayload();
+          return [200, {
+            success: true,
+            data: {
+              averageResponseTimeMs: 145,
+              p95ResponseTimeMs: 320,
+              cacheHitRate: 92.4,
+              health: healthData?.status || 'healthy'
+            },
+            message: 'Performance dashboard loaded'
+          }];
+        } catch (error) {
+          console.error('[Mock API] Dashboard performance handler error:', error);
           const message = (error && error.message) || 'Internal server error';
           return [500, { success: false, error: message }];
         }
@@ -1115,6 +1343,47 @@ export const setupMock = (enable) => {
           }];
         } catch (error) {
           console.error('[Mock API] Dashboard export handler error:', error);
+          const message = (error && error.message) || 'Internal server error';
+          return [500, { success: false, error: message }];
+        }
+      });
+
+      mock.onDelete(MOCK_PATTERNS.REALTIME_MONITORING_DASHBOARD_CACHE).reply(async (config) => {
+        try {
+          const key = config?.params?.key || null;
+          return [200, {
+            success: true,
+            data: {
+              clearedAt: new Date().toISOString(),
+              key: key || 'all'
+            },
+            message: 'Dashboard cache cleared'
+          }];
+        } catch (error) {
+          console.error('[Mock API] Dashboard cache clear handler error:', error);
+          const message = (error && error.message) || 'Internal server error';
+          return [500, { success: false, error: message }];
+        }
+      });
+
+      mock.onPost(MOCK_PATTERNS.REALTIME_MONITORING_INCIDENTS_CREATE).reply(async (config) => {
+        try {
+          const body = parseBody(config);
+          return [200, {
+            success: true,
+            data: {
+              id: `rt_inc_${Date.now()}`,
+              type: body.type || 'test_incident',
+              severity: body.severity || 'low',
+              description: body.description || 'Mock realtime incident',
+              createdAt: new Date().toISOString(),
+              status: 'open',
+              metadata: body.metadata || {}
+            },
+            message: 'Realtime incident created'
+          }];
+        } catch (error) {
+          console.error('[Mock API] Realtime incident create handler error:', error);
           const message = (error && error.message) || 'Internal server error';
           return [500, { success: false, error: message }];
         }
