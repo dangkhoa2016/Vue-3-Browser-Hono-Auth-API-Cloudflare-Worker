@@ -1,0 +1,21 @@
+{
+  "success": true,
+  "data": {
+    "period": {
+      "start": "2026-03-26T06:18:32.359Z",
+      "description": "Last 24 hours"
+    },
+    "database": {
+      "totalLogs": 973,
+      "averageDuration": 23.088386433710173,
+      "eventRate": 40.54,
+      "estimatedSizeKB": 593,
+      "oldestLog": "2026-03-26T12:31:27.160Z",
+      "newestLog": "2026-03-27T06:18:32.033Z"
+    },
+    "system": {
+      "cacheSize": 0,
+      "cacheHitRate": 81.631915783866
+    }
+  }
+}

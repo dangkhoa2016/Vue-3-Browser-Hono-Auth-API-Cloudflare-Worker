@@ -152,6 +152,9 @@ router.beforeEach(async (to, from, next) => {
     try {
       const { useAuthStore } = await import('/assets/js/stores/authStore.js');
       const authStore = useAuthStore();
+      if (typeof authStore.init === 'function') {
+        authStore.init();
+      }
 
       if (!authStore.isAuthenticated) {
         // Store intended destination

@@ -1,0 +1,20 @@
+{
+  "success": true,
+  "message": "Monitoring event test_event simulated successfully",
+  "data": {
+    "id": "sim_1774591739106",
+    "timestamp": "2026-03-27T06:08:59.106Z",
+    "action": "test_event",
+    "type": "test_event",
+    "eventType": "test_event",
+    "actor_id": "system",
+    "actor_role": "system",
+    "ip_address": "127.0.0.1",
+    "user_agent": "Testing Agent",
+    "details": {},
+    "severity": "medium",
+    "data": {
+      "source": "ui"
+    }
+  }
+}
