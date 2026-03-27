@@ -6,6 +6,7 @@ import {
   buildRealtimeMonitoringThreatResolveEndpoint,
   buildRealtimeMonitoringAlertRuleToggleEndpoint
 } from '../api.js';
+import { getToastStore } from '../appServices.js';
 import { i18n } from '../i18n.js';
 import { useMainStore } from './mainStore.js';
 
@@ -44,6 +45,7 @@ export const useRealtimeMonitoringStore = defineStore('realtimeMonitoring', {
       pagination: { page: 1, limit: getDefaultAdminLimit(), total: 0, totalPages: 1 }
     },
     alertsRules: null,
+    alertsRulesLoading: false,
     alertChannels: null,
     timeline: { points: [] },
     health: null,
@@ -84,7 +86,21 @@ export const useRealtimeMonitoringStore = defineStore('realtimeMonitoring', {
 
   actions: {
     normalizeError(err) {
-      return (err && err.message) || i18n.global.t('message.errors.unknown_error');
+      return err?.response?.data?.message
+        || err?.response?.data?.error
+        || err?.message
+        || i18n.global.t('message.errors.unknown_error');
+    },
+
+    showSuccessToast(message) {
+      if (!message) {
+        return;
+      }
+
+      const toastStore = getToastStore();
+      if (toastStore?.success) {
+        toastStore.success(message);
+      }
     },
 
     async fetchRecentEvents() {
@@ -388,6 +404,7 @@ export const useRealtimeMonitoringStore = defineStore('realtimeMonitoring', {
 
       try {
         const response = await apiClient.post(API_ENDPOINTS.REALTIME_MONITORING_ANALYZE, { hours });
+        this.showSuccessToast(response?.data?.message);
         this.latestAnalysis = response?.data?.data || null;
 
         if (this.latestAnalysis && typeof this.latestAnalysis === 'object') {
@@ -432,6 +449,7 @@ export const useRealtimeMonitoringStore = defineStore('realtimeMonitoring', {
 
       try {
         const response = await apiClient.post(API_ENDPOINTS.REALTIME_MONITORING_SIMULATE, payload);
+        this.showSuccessToast(response?.data?.message);
         this.latestSimulation = response?.data?.data || null;
         this.lastUpdated = new Date().toISOString();
         return this.latestSimulation;
@@ -505,7 +523,7 @@ export const useRealtimeMonitoringStore = defineStore('realtimeMonitoring', {
     },
 
     async fetchAlertRules() {
-      this.loading = true;
+      this.alertsRulesLoading = true;
       this.error = null;
 
       try {
@@ -517,7 +535,7 @@ export const useRealtimeMonitoringStore = defineStore('realtimeMonitoring', {
         this.error = this.normalizeError(error);
         return null;
       } finally {
-        this.loading = false;
+        this.alertsRulesLoading = false;
       }
     },
 
@@ -527,6 +545,9 @@ export const useRealtimeMonitoringStore = defineStore('realtimeMonitoring', {
 
       try {
         const response = await apiClient.post(API_ENDPOINTS.REALTIME_MONITORING_ALERTS_RULES, payload);
+        const result = response?.data || null;
+
+        this.showSuccessToast(result?.message);
 
         try {
           await this.fetchAlertRules();
@@ -534,7 +555,7 @@ export const useRealtimeMonitoringStore = defineStore('realtimeMonitoring', {
         }
 
         this.lastUpdated = new Date().toISOString();
-        return response?.data || null;
+        return result;
       } catch (error) {
         this.error = this.normalizeError(error);
         return null;
@@ -591,6 +612,9 @@ export const useRealtimeMonitoringStore = defineStore('realtimeMonitoring', {
 
       try {
         const response = await apiClient.post(API_ENDPOINTS.REALTIME_MONITORING_ALERTS_CHANNELS, payload);
+        const result = response?.data || null;
+
+        this.showSuccessToast(result?.message);
 
         try {
           await this.fetchAlertChannels();
@@ -598,7 +622,7 @@ export const useRealtimeMonitoringStore = defineStore('realtimeMonitoring', {
         }
 
         this.lastUpdated = new Date().toISOString();
-        return response?.data || null;
+        return result;
       } catch (error) {
         this.error = this.normalizeError(error);
         return null;
@@ -613,8 +637,20 @@ export const useRealtimeMonitoringStore = defineStore('realtimeMonitoring', {
 
       try {
         const response = await apiClient.post(API_ENDPOINTS.REALTIME_MONITORING_ALERTS_TEST, {});
+        const result = response?.data || null;
+        const systemStatus = result?.data?.systemStatus || {};
+
+        if (systemStatus.rules) {
+          this.alertsRules = systemStatus.rules;
+        }
+
+        if (systemStatus.channels) {
+          this.alertChannels = systemStatus.channels;
+        }
+
+        this.showSuccessToast(result?.message);
         this.lastUpdated = new Date().toISOString();
-        return response?.data || null;
+        return result;
       } catch (error) {
         this.error = this.normalizeError(error);
         return null;
@@ -699,12 +735,15 @@ export const useRealtimeMonitoringStore = defineStore('realtimeMonitoring', {
       }
     },
 
-    async fetchPerformanceDashboard() {
+    async fetchPerformanceDashboard(options = {}) {
       this.loading = true;
       this.error = null;
 
       try {
         const response = await apiClient.get(API_ENDPOINTS.REALTIME_MONITORING_DASHBOARD_PERFORMANCE);
+        if (options?.showToast) {
+          this.showSuccessToast(response?.data?.message);
+        }
         this.performance = response?.data?.data || null;
         this.lastUpdated = new Date().toISOString();
         return this.performance;
@@ -778,6 +817,7 @@ export const useRealtimeMonitoringStore = defineStore('realtimeMonitoring', {
         const response = await apiClient.delete(API_ENDPOINTS.REALTIME_MONITORING_DASHBOARD_CACHE, {
           params: key ? { key } : {}
         });
+        this.showSuccessToast(response?.data?.message);
         this.lastUpdated = new Date().toISOString();
         return response?.data || null;
       } catch (error) {
@@ -811,6 +851,7 @@ export const useRealtimeMonitoringStore = defineStore('realtimeMonitoring', {
 
       try {
         const response = await apiClient.post(API_ENDPOINTS.REALTIME_MONITORING_INCIDENTS_CREATE, payload);
+        this.showSuccessToast(response?.data?.message);
         this.latestIncident = response?.data?.data || null;
         this.lastUpdated = new Date().toISOString();
         return this.latestIncident;

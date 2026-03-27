@@ -1,0 +1,79 @@
+{
+  "success": true,
+  "data": {
+    "totalChannels": 5,
+    "enabledChannels": 3,
+    "channels": [
+      {
+        "id": "console",
+        "name": "Console Logger",
+        "type": "console",
+        "enabled": true,
+        "stats": {
+          "alertsSent": 5,
+          "successCount": 5,
+          "errorCount": 0,
+          "lastError": null,
+          "averageResponseTime": 0
+        },
+        "lastUsed": "2026-03-27T07:19:28.848Z"
+      },
+      {
+        "id": "webhook",
+        "name": "Webhook Notifications",
+        "type": "webhook",
+        "enabled": false,
+        "stats": {
+          "alertsSent": 0,
+          "successCount": 0,
+          "errorCount": 0,
+          "lastError": null,
+          "averageResponseTime": 0
+        },
+        "lastUsed": null
+      },
+      {
+        "id": "email",
+        "name": "Email Notifications",
+        "type": "email",
+        "enabled": false,
+        "stats": {
+          "alertsSent": 0,
+          "successCount": 0,
+          "errorCount": 0,
+          "lastError": null,
+          "averageResponseTime": 0
+        },
+        "lastUsed": null
+      },
+      {
+        "id": "kv_storage",
+        "name": "KV Storage Alerts",
+        "type": "kv_storage",
+        "enabled": true,
+        "stats": {
+          "alertsSent": 5,
+          "successCount": 5,
+          "errorCount": 0,
+          "lastError": null,
+          "averageResponseTime": 0.5
+        },
+        "lastUsed": "2026-03-27T07:19:28.849Z"
+      },
+      {
+        "id": "custom_1774596048010_4fdl6nvin",
+        "name": "Channel 2:20:39 PM",
+        "type": "email",
+        "enabled": true,
+        "stats": {
+          "alertsSent": 0,
+          "successCount": 0,
+          "errorCount": 0,
+          "lastError": null,
+          "averageResponseTime": 0
+        },
+        "lastUsed": null
+      }
+    ]
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "success": true,
+  "message": "Real-time monitoring dashboard cache cleared successfully",
+  "data": {
+    "clearedAt": "2026-03-27T06:18:32.033Z",
+    "key": "all"
+  }
+}

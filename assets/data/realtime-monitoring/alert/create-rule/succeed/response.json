@@ -1,0 +1,16 @@
+{
+  "success": true,
+  "message": "Alert rule created successfully",
+  "data": {
+    "ruleId": "custom_1774590269426_gqdoccic0",
+    "name": "Custom rule 12:44:26 PM",
+    "description": "Created from realtime monitoring UI",
+    "severity": "medium",
+    "enabled": true,
+    "condition": "test",
+    "cooldown": 300,
+    "channels": [
+      "email"
+    ]
+  }
+}
