@@ -109,12 +109,17 @@ export function useAuthGate(options) {
     const authRequired = checkSessionFlag && sessionStorage.getItem(sessionAuthFlagKey) === 'true';
     const isAuthenticated = !!(authStore && authStore.isAuthenticated);
 
-    if (!isAuthenticated || authRequired) {
+    if (!isAuthenticated) {
       markUnauthenticated();
       if (openModal) {
         openLoginModal();
       }
       return false;
+    }
+
+    if (authRequired) {
+      sessionStorage.removeItem(sessionAuthFlagKey);
+      sessionStorage.removeItem('intendedRoute');
     }
 
     showLoginRequired.value = false;

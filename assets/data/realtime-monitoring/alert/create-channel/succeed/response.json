@@ -1,0 +1,13 @@
+{
+  "success": true,
+  "message": "Alert channel created successfully",
+  "data": {
+    "channelId": "custom_1774596048010_4fdl6nvin",
+    "name": "Channel 2:20:39 PM",
+    "type": "email",
+    "config": {
+      "target": "ops@example.com"
+    },
+    "enabled": true
+  }
+}
