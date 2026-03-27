@@ -5,6 +5,20 @@ import { API_ENDPOINTS, API_CONFIG, HTTP_STATUS } from './endpoints.js';
 
 const API_REQUEST_TIMEOUT_KEY = 'api-request-timeout-ms';
 
+function matchesEndpointPath(url, endpoint, baseURL) {
+  if (!url || !endpoint) {
+    return false;
+  }
+
+  try {
+    const resolvedUrl = new URL(url, baseURL || window.location.origin);
+    return resolvedUrl.pathname === endpoint;
+  } catch (_error) {
+    const normalizedUrl = String(url).split('?')[0].split('#')[0];
+    return normalizedUrl === endpoint;
+  }
+}
+
 export function normalizeApiBaseUrl(value) {
   const rawValue = String(value || '').trim();
   const fallback = String(API_CONFIG.DEFAULT_BASE_URL || API_CONFIG.BASE_URL || '').trim();
@@ -128,15 +142,15 @@ apiClient.interceptors.request.use(async (config) => {
   }
 
   const isAuthRequest = Boolean(config.url) && (
-    config.url.includes(API_ENDPOINTS.LOGIN) ||
-    config.url.includes(API_ENDPOINTS.REGISTER) ||
-    config.url.includes(API_ENDPOINTS.REFRESH_TOKEN)
+    matchesEndpointPath(config.url, API_ENDPOINTS.LOGIN, config.baseURL) ||
+    matchesEndpointPath(config.url, API_ENDPOINTS.REGISTER, config.baseURL) ||
+    matchesEndpointPath(config.url, API_ENDPOINTS.REFRESH_TOKEN, config.baseURL)
   );
 
   const isPublicRequest = Boolean(config.url) && (
-    config.url.includes(API_ENDPOINTS.PUBLIC_HEALTH) ||
-    config.url.includes(API_ENDPOINTS.PUBLIC_VERSION) ||
-    config.url.includes(API_ENDPOINTS.PUBLIC_LANGUAGE)
+    matchesEndpointPath(config.url, API_ENDPOINTS.PUBLIC_HEALTH, config.baseURL) ||
+    matchesEndpointPath(config.url, API_ENDPOINTS.PUBLIC_VERSION, config.baseURL) ||
+    matchesEndpointPath(config.url, API_ENDPOINTS.PUBLIC_LANGUAGE, config.baseURL)
   );
 
   // Block all non-auth requests until user logs in again after session expiry/refresh failure
@@ -149,7 +163,7 @@ apiClient.interceptors.request.use(async (config) => {
 
   // Token refresh logic
   // Skip token refresh for the refresh endpoint itself
-  if (authStore && !config.url.includes(API_ENDPOINTS.REFRESH_TOKEN) && !isPublicRequest) {
+  if (authStore && !matchesEndpointPath(config.url, API_ENDPOINTS.REFRESH_TOKEN, config.baseURL) && !isPublicRequest) {
     try {
       // Check if we need to refresh the token
       if (authStore.shouldRefreshToken) {
@@ -188,7 +202,7 @@ apiClient.interceptors.response.use(undefined, async (err) => {
   // Handle 401 Unauthorized - Try to refresh token
   if (err.response && err.response.status === 401) {
     // Skip refresh for the refresh token endpoint itself
-    if (config.url && !config.url.includes(API_ENDPOINTS.REFRESH_TOKEN)) {
+    if (config.url && !matchesEndpointPath(config.url, API_ENDPOINTS.REFRESH_TOKEN, config.baseURL)) {
       // Skip if we already tried to refresh for this request
       if (!config._retryWithRefresh) {
         console.log('[API] Got 401, attempting to refresh token...');

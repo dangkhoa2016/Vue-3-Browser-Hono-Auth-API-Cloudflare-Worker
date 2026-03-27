@@ -5,6 +5,8 @@ import { DATA_PATHS, MOCK_CONFIG, MOCK_PATTERNS } from './mockData.js';
 import { sleep } from '../helper.js';
 const MockAdapter = window.AxiosMockAdapter;
 
+const cloneJson = (value) => JSON.parse(JSON.stringify(value ?? null));
+
 const loadJson = async (path) => {
   const res = await fetch(path);
   if (!res.ok) {
@@ -23,6 +25,8 @@ export const setupMock = (enable) => {
       mock = new MockAdapter(apiClient, { delayResponse: MOCK_CONFIG.DELAY_RESPONSE });
       let mockMonitoringActive = false;
       let mockPendingEmail = null;
+      let mockAlertRules = null;
+      let mockAlertChannels = null;
       let mockAlertConfiguration = {
         thresholds: {
           failedLogins: 5,
@@ -88,6 +92,51 @@ export const setupMock = (enable) => {
           timelineData: payload.timeline || { points: [] },
           healthData: payload.health || { status: 'healthy' }
         };
+      };
+
+      const getAlertSystemMockState = async () => {
+        if (!mockAlertRules || !mockAlertChannels) {
+          const alertSystemResponse = await loadJson(DATA_PATHS.REALTIME_MONITORING_ALERT_TEST_SUCCESS);
+          const alertChannelResponse = await loadJson(DATA_PATHS.REALTIME_MONITORING_ALERT_CHANNEL_GET_SUCCESS);
+          const systemStatus = alertSystemResponse?.data?.systemStatus || {};
+
+          mockAlertRules = cloneJson(systemStatus.rules || {
+            totalRules: 0,
+            enabledRules: 0,
+            rules: []
+          });
+
+          mockAlertChannels = cloneJson(alertChannelResponse?.data || systemStatus.channels || {
+            totalChannels: 0,
+            enabledChannels: 0,
+            channels: []
+          });
+        }
+
+        return {
+          rules: mockAlertRules,
+          channels: mockAlertChannels
+        };
+      };
+
+      const recalculateMockAlertRuleSummary = () => {
+        if (!mockAlertRules) {
+          return;
+        }
+
+        const rules = Array.isArray(mockAlertRules.rules) ? mockAlertRules.rules : [];
+        mockAlertRules.totalRules = rules.length;
+        mockAlertRules.enabledRules = rules.filter((rule) => Boolean(rule?.enabled)).length;
+      };
+
+      const recalculateMockAlertChannelSummary = () => {
+        if (!mockAlertChannels) {
+          return;
+        }
+
+        const channels = Array.isArray(mockAlertChannels.channels) ? mockAlertChannels.channels : [];
+        mockAlertChannels.totalChannels = channels.length;
+        mockAlertChannels.enabledChannels = channels.filter((channel) => Boolean(channel?.enabled)).length;
       };
 
       const normalizeAuditStatsResponse = (raw) => {
@@ -974,15 +1023,28 @@ export const setupMock = (enable) => {
       mock.onPost(MOCK_PATTERNS.REALTIME_MONITORING_ANALYZE).reply(async (config) => {
         try {
           const body = parseBody(config);
+          const responseTemplate = await loadJson(DATA_PATHS.REALTIME_MONITORING_ANALYZE_SUCCESS);
+          const templateData = responseTemplate?.data || {};
+          const requestedHours = Number(body.hours) || 1;
+          const endTime = new Date().toISOString();
+          const startTime = new Date(Date.now() - (requestedHours * 60 * 60 * 1000)).toISOString();
+
           return [200, {
+            ...responseTemplate,
             success: true,
             data: {
-              hours: Number(body.hours) || 1,
-              threatsDetected: Math.floor(Math.random() * 5),
-              anomalies: Math.floor(Math.random() * 3),
-              generatedAt: new Date().toISOString()
+              ...templateData,
+              period: {
+                ...(templateData.period && typeof templateData.period === 'object' ? templateData.period : {}),
+                startTime,
+                endTime
+              },
+              eventCount: Number(templateData.eventCount) || 0,
+              threatsDetected: Number(templateData.threatsDetected) || 0,
+              threats: Array.isArray(templateData.threats) ? templateData.threats : [],
+              hours: requestedHours
             },
-            message: 'Threat analysis completed'
+            message: responseTemplate?.message || 'Real-time monitoring analysis completed successfully'
           }];
         } catch (error) {
           console.error('[Mock API] Monitoring analyze handler error:', error);
@@ -995,16 +1057,36 @@ export const setupMock = (enable) => {
       mock.onPost(MOCK_PATTERNS.REALTIME_MONITORING_SIMULATE).reply(async (config) => {
         try {
           const body = parseBody(config);
+          const responseTemplate = await loadJson(DATA_PATHS.REALTIME_MONITORING_SIMULATE_SUCCESS);
+          const templateData = responseTemplate?.data || {};
+          const eventType = String(body.eventType || body.type || templateData.eventType || templateData.type || 'test_event').trim();
+          const timestamp = new Date().toISOString();
+          const responseData = {
+            ...templateData,
+            ...body,
+            id: String(body.id || templateData.id || `sim_${Date.now()}`),
+            timestamp,
+            action: String(body.action || eventType).trim(),
+            type: eventType,
+            eventType,
+            actor_id: String(body.actor_id || templateData.actor_id || 'system'),
+            actor_role: String(body.actor_role || templateData.actor_role || 'system'),
+            ip_address: String(body.ip_address || templateData.ip_address || '127.0.0.1'),
+            user_agent: String(body.user_agent || templateData.user_agent || 'Testing Agent'),
+            details: body.details && typeof body.details === 'object'
+              ? body.details
+              : (templateData.details && typeof templateData.details === 'object' ? templateData.details : {}),
+            severity: String(body.severity || templateData.severity || 'medium').trim(),
+            data: body.data && typeof body.data === 'object'
+              ? body.data
+              : (templateData.data && typeof templateData.data === 'object' ? templateData.data : {})
+          };
+
           return [200, {
+            ...responseTemplate,
             success: true,
-            data: {
-              id: `sim_${Date.now()}`,
-              type: body.eventType || body.type || 'test_event',
-              action: body.action || body.eventType || 'test_event',
-              severity: body.severity || 'medium',
-              timestamp: new Date().toISOString()
-            },
-            message: 'Event simulated'
+            message: `Monitoring event ${eventType} simulated successfully`,
+            data: responseData
           }];
         } catch (error) {
           console.error('[Mock API] Monitoring simulate handler error:', error);
@@ -1110,15 +1192,10 @@ export const setupMock = (enable) => {
 
       mock.onGet(MOCK_PATTERNS.REALTIME_MONITORING_ALERTS_RULES).reply(async () => {
         try {
-          const { alertsStatusData } = await getRealtimePayload();
+          const { rules } = await getAlertSystemMockState();
           return [200, {
             success: true,
-            data: {
-              totalRules: Number(alertsStatusData?.totalRules) || 6,
-              enabledRules: Number(alertsStatusData?.enabledRules) || 4,
-              disabledRules: Math.max((Number(alertsStatusData?.totalRules) || 6) - (Number(alertsStatusData?.enabledRules) || 4), 0),
-              recentlyTriggered: 2
-            },
+            data: cloneJson(rules),
             message: 'Alert rules loaded'
           }];
         } catch (error) {
@@ -1131,13 +1208,54 @@ export const setupMock = (enable) => {
       mock.onPost(MOCK_PATTERNS.REALTIME_MONITORING_ALERTS_RULES).reply(async (config) => {
         try {
           const body = parseBody(config);
-          return [200, {
-            success: true,
-            data: {
-              ruleId: `rule_${Date.now()}`,
-              ...body
+          const responseTemplate = await loadJson(DATA_PATHS.REALTIME_MONITORING_ALERT_RULE_CREATE_SUCCESS);
+          await getAlertSystemMockState();
+
+          const fallbackRuleId = `custom_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`;
+          const templateData = responseTemplate?.data || {};
+          const channels = Array.isArray(body.channels)
+            ? body.channels.filter((channelId) => !!String(channelId || '').trim())
+            : (Array.isArray(templateData.channels) ? templateData.channels : []);
+          const createdRuleData = {
+            ...templateData,
+            ...body,
+            ruleId: String(body.ruleId || templateData.ruleId || fallbackRuleId),
+            name: String(body.name || templateData.name || '').trim(),
+            description: String(body.description || templateData.description || '').trim(),
+            severity: String(body.severity || templateData.severity || 'medium').trim(),
+            enabled: typeof body.enabled === 'boolean' ? body.enabled : Boolean(templateData.enabled),
+            condition: String(body.condition || templateData.condition || '').trim(),
+            cooldown: Number(body.cooldown ?? templateData.cooldown) || 0,
+            channels
+          };
+
+          const ruleRecord = {
+            id: createdRuleData.ruleId,
+            name: createdRuleData.name,
+            severity: createdRuleData.severity,
+            enabled: createdRuleData.enabled,
+            description: createdRuleData.description,
+            cooldown: createdRuleData.cooldown,
+            channels: createdRuleData.channels,
+            stats: {
+              triggeredCount: 0,
+              lastTriggered: null,
+              suppressedCount: 0
             },
-            message: 'Alert rule created'
+            lastTriggered: null
+          };
+
+          mockAlertRules.rules = [
+            ruleRecord,
+            ...(Array.isArray(mockAlertRules.rules) ? mockAlertRules.rules : [])
+          ].filter((rule, index, rules) => rules.findIndex((item) => item?.id === rule?.id) === index);
+          recalculateMockAlertRuleSummary();
+
+          return [200, {
+            ...responseTemplate,
+            success: true,
+            data: createdRuleData,
+            message: responseTemplate?.message || 'Alert rule created successfully'
           }];
         } catch (error) {
           console.error('[Mock API] Alert rules create handler error:', error);
@@ -1151,6 +1269,15 @@ export const setupMock = (enable) => {
           const body = parseBody(config);
           const segments = getPathSegments(config);
           const ruleId = segments[segments.length - 2] || 'unknown-rule';
+          await getAlertSystemMockState();
+
+          mockAlertRules.rules = (Array.isArray(mockAlertRules.rules) ? mockAlertRules.rules : []).map((rule) => (
+            rule?.id === ruleId
+              ? { ...rule, enabled: Boolean(body.enabled) }
+              : rule
+          ));
+          recalculateMockAlertRuleSummary();
+
           return [200, {
             success: true,
             data: {
@@ -1169,14 +1296,13 @@ export const setupMock = (enable) => {
 
       mock.onGet(MOCK_PATTERNS.REALTIME_MONITORING_ALERTS_CHANNELS).reply(async () => {
         try {
+          const { channels } = await getAlertSystemMockState();
+          const responseTemplate = await loadJson(DATA_PATHS.REALTIME_MONITORING_ALERT_CHANNEL_GET_SUCCESS);
           return [200, {
+            ...responseTemplate,
             success: true,
-            data: {
-              totalChannels: 3,
-              enabledChannels: 2,
-              channelTypes: ['email', 'webhook', 'slack']
-            },
-            message: 'Alert channels loaded'
+            data: cloneJson(channels),
+            message: responseTemplate?.message || 'Alert channels loaded'
           }];
         } catch (error) {
           console.error('[Mock API] Alert channels handler error:', error);
@@ -1188,13 +1314,49 @@ export const setupMock = (enable) => {
       mock.onPost(MOCK_PATTERNS.REALTIME_MONITORING_ALERTS_CHANNELS).reply(async (config) => {
         try {
           const body = parseBody(config);
-          return [200, {
-            success: true,
-            data: {
-              channelId: `channel_${Date.now()}`,
-              ...body
+          const responseTemplate = await loadJson(DATA_PATHS.REALTIME_MONITORING_ALERT_CHANNEL_CREATE_SUCCESS);
+          await getAlertSystemMockState();
+
+          const templateData = responseTemplate?.data || {};
+          const channelId = String(body.channelId || templateData.channelId || `channel_${Date.now()}`);
+          const createdChannelData = {
+            ...templateData,
+            ...body,
+            channelId,
+            name: String(body.name || templateData.name || '').trim(),
+            type: String(body.type || templateData.type || 'email').trim(),
+            enabled: typeof body.enabled === 'boolean' ? body.enabled : Boolean(templateData.enabled ?? true),
+            config: body.config && typeof body.config === 'object'
+              ? body.config
+              : (templateData.config && typeof templateData.config === 'object' ? templateData.config : {})
+          };
+
+          const channelRecord = {
+            id: createdChannelData.channelId,
+            name: createdChannelData.name,
+            type: createdChannelData.type,
+            enabled: createdChannelData.enabled,
+            stats: {
+              alertsSent: 0,
+              successCount: 0,
+              errorCount: 0,
+              lastError: null,
+              averageResponseTime: 0
             },
-            message: 'Alert channel created'
+            lastUsed: null
+          };
+
+          mockAlertChannels.channels = [
+            channelRecord,
+            ...(Array.isArray(mockAlertChannels.channels) ? mockAlertChannels.channels : [])
+          ].filter((channel, index, channels) => channels.findIndex((item) => item?.id === channel?.id) === index);
+          recalculateMockAlertChannelSummary();
+
+          return [200, {
+            ...responseTemplate,
+            success: true,
+            data: createdChannelData,
+            message: responseTemplate?.message || 'Alert channel created successfully'
           }];
         } catch (error) {
           console.error('[Mock API] Alert channels create handler error:', error);
@@ -1205,15 +1367,16 @@ export const setupMock = (enable) => {
 
       mock.onPost(MOCK_PATTERNS.REALTIME_MONITORING_ALERTS_TEST).reply(async () => {
         try {
-          return [200, {
-            success: true,
-            data: {
-              testedAt: new Date().toISOString(),
-              delivered: true,
-              channelsTested: 2
-            },
-            message: 'Alert system test completed'
-          }];
+          const responseTemplate = await loadJson(DATA_PATHS.REALTIME_MONITORING_ALERT_TEST_SUCCESS);
+          const { rules, channels } = await getAlertSystemMockState();
+          const responseData = cloneJson(responseTemplate);
+
+          if (responseData?.data?.systemStatus) {
+            responseData.data.systemStatus.rules = cloneJson(rules);
+            responseData.data.systemStatus.channels = cloneJson(channels);
+          }
+
+          return [200, responseData];
         } catch (error) {
           console.error('[Mock API] Alert system test handler error:', error);
           const message = (error && error.message) || 'Internal server error';
@@ -1285,16 +1448,12 @@ export const setupMock = (enable) => {
 
       mock.onGet(MOCK_PATTERNS.REALTIME_MONITORING_DASHBOARD_PERFORMANCE).reply(async () => {
         try {
-          const { healthData } = await getRealtimePayload();
+          const responseTemplate = await loadJson(DATA_PATHS.REALTIME_MONITORING_DASHBOARD_PERFORMANCE_SUCCESS);
           return [200, {
+            ...responseTemplate,
             success: true,
-            data: {
-              averageResponseTimeMs: 145,
-              p95ResponseTimeMs: 320,
-              cacheHitRate: 92.4,
-              health: healthData?.status || 'healthy'
-            },
-            message: 'Performance dashboard loaded'
+            data: responseTemplate?.data || {},
+            message: responseTemplate?.message || 'Performance dashboard loaded'
           }];
         } catch (error) {
           console.error('[Mock API] Dashboard performance handler error:', error);
@@ -1351,13 +1510,18 @@ export const setupMock = (enable) => {
       mock.onDelete(MOCK_PATTERNS.REALTIME_MONITORING_DASHBOARD_CACHE).reply(async (config) => {
         try {
           const key = config?.params?.key || null;
+          const responseTemplate = await loadJson(DATA_PATHS.REALTIME_MONITORING_CLEAR_CACHE_SUCCESS);
+          const templateData = responseTemplate?.data || {};
+
           return [200, {
+            ...responseTemplate,
             success: true,
             data: {
+              ...templateData,
               clearedAt: new Date().toISOString(),
-              key: key || 'all'
+              key: key || templateData.key || 'all'
             },
-            message: 'Dashboard cache cleared'
+            message: responseTemplate?.message || 'Real-time monitoring dashboard cache cleared successfully'
           }];
         } catch (error) {
           console.error('[Mock API] Dashboard cache clear handler error:', error);
@@ -1369,18 +1533,37 @@ export const setupMock = (enable) => {
       mock.onPost(MOCK_PATTERNS.REALTIME_MONITORING_INCIDENTS_CREATE).reply(async (config) => {
         try {
           const body = parseBody(config);
+          const responseTemplate = await loadJson(DATA_PATHS.REALTIME_MONITORING_INCIDENT_CREATE_SUCCESS);
+          const hasApiEnvelope = responseTemplate
+            && typeof responseTemplate === 'object'
+            && typeof responseTemplate.success === 'boolean'
+            && typeof responseTemplate.message === 'string'
+            && responseTemplate.data
+            && typeof responseTemplate.data === 'object';
+
+          const timestamp = new Date().toISOString();
+          const templateData = hasApiEnvelope ? responseTemplate.data : {};
+          const incidentData = {
+            ...templateData,
+            ...body,
+            id: String(body.id || templateData.id || `rt_inc_${Date.now()}`),
+            type: String(body.type || templateData.type || 'manual_incident').trim(),
+            severity: String(body.severity || templateData.severity || 'low').trim(),
+            description: String(body.description || templateData.description || 'Mock realtime incident').trim(),
+            createdAt: String(body.createdAt || templateData.createdAt || templateData.timestamp || timestamp),
+            status: String(body.status || templateData.status || 'open').trim(),
+            metadata: body.metadata && typeof body.metadata === 'object'
+              ? body.metadata
+              : (templateData.metadata && typeof templateData.metadata === 'object' ? templateData.metadata : {})
+          };
+
           return [200, {
+            ...(hasApiEnvelope ? responseTemplate : {}),
             success: true,
-            data: {
-              id: `rt_inc_${Date.now()}`,
-              type: body.type || 'test_incident',
-              severity: body.severity || 'low',
-              description: body.description || 'Mock realtime incident',
-              createdAt: new Date().toISOString(),
-              status: 'open',
-              metadata: body.metadata || {}
-            },
-            message: 'Realtime incident created'
+            data: incidentData,
+            message: hasApiEnvelope
+              ? responseTemplate.message
+              : `Realtime incident ${incidentData.type} created successfully`
           }];
         } catch (error) {
           console.error('[Mock API] Realtime incident create handler error:', error);

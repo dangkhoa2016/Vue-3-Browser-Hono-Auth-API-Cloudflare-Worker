@@ -1,0 +1,271 @@
+{
+  "success": true,
+  "message": "Alert system test completed",
+  "data": {
+    "success": true,
+    "testAlert": {
+      "id": "manual_1774590291800_emy9bm8zm",
+      "timestamp": "2026-03-27T05:44:51.800Z",
+      "source": "manual",
+      "severity": "low",
+      "title": "Test Alert",
+      "message": "This is a test alert to verify the alert system is working correctly.",
+      "data": {
+        "test": true,
+        "timestamp": "2026-03-27T05:44:51.800Z"
+      },
+      "sendResults": [
+        {
+          "channelId": "console",
+          "success": true,
+          "responseTime": 0
+        },
+        {
+          "channelId": "kv_storage",
+          "success": true,
+          "responseTime": 0
+        }
+      ],
+      "processedAt": "2026-03-27T05:44:51.800Z",
+      "isManual": true
+    },
+    "systemStatus": {
+      "statistics": {
+        "totalAlerts": 2,
+        "alertsBySevertiy": {
+          "critical": 0,
+          "high": 0,
+          "medium": 0,
+          "low": 2
+        },
+        "alertsToday": 2,
+        "lastAlert": "2026-03-27T05:44:51.800Z"
+      },
+      "channels": {
+        "totalChannels": 4,
+        "enabledChannels": 2,
+        "channels": [
+          {
+            "id": "console",
+            "name": "Console Logger",
+            "type": "console",
+            "enabled": true,
+            "stats": {
+              "alertsSent": 2,
+              "successCount": 2,
+              "errorCount": 0,
+              "lastError": null,
+              "averageResponseTime": 0
+            },
+            "lastUsed": "2026-03-27T05:44:51.800Z"
+          },
+          {
+            "id": "webhook",
+            "name": "Webhook Notifications",
+            "type": "webhook",
+            "enabled": false,
+            "stats": {
+              "alertsSent": 0,
+              "successCount": 0,
+              "errorCount": 0,
+              "lastError": null,
+              "averageResponseTime": 0
+            },
+            "lastUsed": null
+          },
+          {
+            "id": "email",
+            "name": "Email Notifications",
+            "type": "email",
+            "enabled": false,
+            "stats": {
+              "alertsSent": 0,
+              "successCount": 0,
+              "errorCount": 0,
+              "lastError": null,
+              "averageResponseTime": 0
+            },
+            "lastUsed": null
+          },
+          {
+            "id": "kv_storage",
+            "name": "KV Storage Alerts",
+            "type": "kv_storage",
+            "enabled": true,
+            "stats": {
+              "alertsSent": 2,
+              "successCount": 2,
+              "errorCount": 0,
+              "lastError": null,
+              "averageResponseTime": 0
+            },
+            "lastUsed": "2026-03-27T05:44:51.800Z"
+          }
+        ]
+      },
+      "rules": {
+        "totalRules": 8,
+        "enabledRules": 7,
+        "rules": [
+          {
+            "id": "critical_threat",
+            "name": "Critical Threat Detected",
+            "severity": "critical",
+            "enabled": true,
+            "description": "Alert on critical security threats",
+            "cooldown": 300000,
+            "channels": [
+              "console",
+              "webhook",
+              "kv_storage"
+            ],
+            "stats": {
+              "triggeredCount": 0,
+              "lastTriggered": null,
+              "suppressedCount": 0
+            },
+            "lastTriggered": null
+          },
+          {
+            "id": "high_threat",
+            "name": "High Risk Threat",
+            "severity": "high",
+            "enabled": true,
+            "description": "Alert on high-risk security threats",
+            "cooldown": 600000,
+            "channels": [
+              "console",
+              "kv_storage"
+            ],
+            "stats": {
+              "triggeredCount": 0,
+              "lastTriggered": null,
+              "suppressedCount": 0
+            },
+            "lastTriggered": null
+          },
+          {
+            "id": "brute_force",
+            "name": "Brute Force Attack",
+            "severity": "high",
+            "enabled": true,
+            "description": "Alert on potential brute force attacks",
+            "cooldown": 900000,
+            "channels": [
+              "console",
+              "webhook"
+            ],
+            "stats": {
+              "triggeredCount": 0,
+              "lastTriggered": null,
+              "suppressedCount": 0
+            },
+            "lastTriggered": null
+          },
+          {
+            "id": "admin_activity",
+            "name": "Admin Account Activity",
+            "severity": "medium",
+            "enabled": true,
+            "description": "Alert on significant admin activities",
+            "cooldown": 1800000,
+            "channels": [
+              "console",
+              "kv_storage"
+            ],
+            "stats": {
+              "triggeredCount": 0,
+              "lastTriggered": null,
+              "suppressedCount": 0
+            },
+            "lastTriggered": null
+          },
+          {
+            "id": "system_error",
+            "name": "System Error",
+            "severity": "medium",
+            "enabled": true,
+            "description": "Alert on system errors and failures",
+            "cooldown": 600000,
+            "channels": [
+              "console"
+            ],
+            "stats": {
+              "triggeredCount": 0,
+              "lastTriggered": null,
+              "suppressedCount": 0
+            },
+            "lastTriggered": null
+          },
+          {
+            "id": "after_hours",
+            "name": "After Hours Access",
+            "severity": "low",
+            "enabled": false,
+            "description": "Alert on access during non-business hours",
+            "cooldown": 3600000,
+            "channels": [
+              "console"
+            ],
+            "stats": {
+              "triggeredCount": 0,
+              "lastTriggered": null,
+              "suppressedCount": 0
+            },
+            "lastTriggered": null
+          },
+          {
+            "id": "custom_1774590205130_acflxptg1",
+            "name": "Custom rule 12:43:21 PM",
+            "severity": "medium",
+            "enabled": true,
+            "description": "Created from realtime monitoring UI",
+            "cooldown": 300,
+            "channels": [
+              "email"
+            ],
+            "stats": {
+              "triggeredCount": 0,
+              "lastTriggered": null,
+              "suppressedCount": 0
+            },
+            "lastTriggered": null
+          },
+          {
+            "id": "custom_1774590269426_gqdoccic0",
+            "name": "Custom rule 12:44:26 PM",
+            "severity": "medium",
+            "enabled": true,
+            "description": "Created from realtime monitoring UI",
+            "cooldown": 300,
+            "channels": [
+              "email"
+            ],
+            "stats": {
+              "triggeredCount": 0,
+              "lastTriggered": null,
+              "suppressedCount": 0
+            },
+            "lastTriggered": null
+          }
+        ]
+      },
+      "recentAlerts": [
+        {
+          "id": "manual_1774590291800_emy9bm8zm",
+          "severity": "low",
+          "title": "Test Alert",
+          "timestamp": "2026-03-27T05:44:51.800Z",
+          "isManual": true
+        },
+        {
+          "id": "manual_1774590289925_b3uc5emxg",
+          "severity": "low",
+          "title": "Test Alert",
+          "timestamp": "2026-03-27T05:44:49.925Z",
+          "isManual": true
+        }
+      ]
+    }
+  }
+}

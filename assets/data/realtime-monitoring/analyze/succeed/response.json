@@ -1,0 +1,28 @@
+{
+  "success": true,
+  "data": {
+    "period": {
+      "startTime": "2026-03-27T05:16:26.677Z",
+      "endTime": "2026-03-27T06:16:26.677Z"
+    },
+    "eventCount": 33,
+    "threatsDetected": 1,
+    "threats": [
+      {
+        "id": "threat_1774592186684_tgh35w8t4",
+        "ruleId": "anomalous_time_access",
+        "ruleName": "Anomalous Time-based Access",
+        "severity": "low",
+        "description": "Access during unusual hours",
+        "detectedAt": "2026-03-27T06:16:26.684Z",
+        "status": "active",
+        "threatType": "anomalous_time_access",
+        "actorId": 1,
+        "action": "login",
+        "accessTime": "2026-03-27T05:43:07.063Z",
+        "riskScore": 30
+      }
+    ]
+  },
+  "message": "Real-time monitoring analysis completed successfully"
+}

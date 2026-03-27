@@ -71,6 +71,15 @@ export const DATA_PATHS = {
   REALTIME_MONITORING_STATUS_SUCCESS: '/assets/data/realtime-monitoring/status/succeed/response.json',
   REALTIME_MONITORING_START_SUCCESS: '/assets/data/realtime-monitoring/start/succeed/response.json',
   REALTIME_MONITORING_STOP_SUCCESS: '/assets/data/realtime-monitoring/stop/succeed/response.json',
+  REALTIME_MONITORING_ALERT_RULE_CREATE_SUCCESS: '/assets/data/realtime-monitoring/alert/create-rule/succeed/response.json',
+  REALTIME_MONITORING_ALERT_CHANNEL_GET_SUCCESS: '/assets/data/realtime-monitoring/alert/get-channel/succeed/response.json',
+  REALTIME_MONITORING_ALERT_CHANNEL_CREATE_SUCCESS: '/assets/data/realtime-monitoring/alert/create-channel/succeed/response.json',
+  REALTIME_MONITORING_ALERT_TEST_SUCCESS: '/assets/data/realtime-monitoring/alert/test/succeed/response.json',
+  REALTIME_MONITORING_ANALYZE_SUCCESS: '/assets/data/realtime-monitoring/analyze/succeed/response.json',
+  REALTIME_MONITORING_SIMULATE_SUCCESS: '/assets/data/realtime-monitoring/monitoring-simulate/succeed/response.json',
+  REALTIME_MONITORING_INCIDENT_CREATE_SUCCESS: '/assets/data/realtime-monitoring/incidents-create/succeed/response.json',
+  REALTIME_MONITORING_CLEAR_CACHE_SUCCESS: '/assets/data/realtime-monitoring/clear-cache/succeed/response.json',
+  REALTIME_MONITORING_DASHBOARD_PERFORMANCE_SUCCESS: '/assets/data/realtime-monitoring/dashboard-performance/succeed/response.json',
   REALTIME_MONITORING_EXPORT_SUCCESS: '/assets/data/realtime-monitoring/export/succeed/response.json',
 };
 
