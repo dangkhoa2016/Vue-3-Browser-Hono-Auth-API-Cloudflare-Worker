@@ -233,6 +233,137 @@
         </div>
       </div>
 
+      <section
+        v-if="isSuperAdmin"
+        class="mb-6 rounded-2xl border border-amber-200/70 dark:border-amber-900/40 bg-gradient-to-br from-amber-50/90 via-white to-rose-50/80 dark:from-slate-900 dark:via-slate-900 dark:to-rose-950/20 p-6 shadow-sm"
+      >
+        <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+          <div class="max-w-3xl">
+            <div class="inline-flex items-center gap-2 rounded-full bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-200 px-3 py-1 text-xs font-semibold tracking-[0.2em] uppercase">
+              <i class="bi bi-scissors"></i>
+              {{ tf('message.audit.truncate_title', 'Safe Audit Truncate') }}
+            </div>
+            <h2 class="mt-4 text-xl font-black text-slate-900 dark:text-white">
+              {{ tf('message.audit.truncate_heading', 'Archive live audit logs before deleting them') }}
+            </h2>
+            <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">
+              {{ tf('message.audit.truncate_description', 'This action runs against the server endpoint that archives matching live audit logs into audit_logs_archive before deleting them from audit_logs. Always run a dry run first.') }}
+            </p>
+          </div>
+
+          <div class="rounded-2xl border border-amber-200/80 dark:border-amber-900/40 bg-white/80 dark:bg-slate-950/60 px-4 py-3 text-xs text-slate-600 dark:text-slate-300 lg:max-w-sm">
+            <p class="font-semibold text-slate-900 dark:text-slate-100">
+              {{ tf('message.audit.truncate_archive_required', 'Archive-first mode is always enforced by the API.') }}
+            </p>
+            <p class="mt-1">
+              {{ tf('message.audit.truncate_confirm_note', 'Execution requires a successful preview and an explicit confirmation before data is removed from live storage.') }}
+            </p>
+          </div>
+        </div>
+
+        <div class="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-[1fr_1fr_180px_auto]">
+          <div>
+            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+              {{ tf('message.audit.truncate_range_start', 'Start Date') }}
+            </label>
+            <input
+              v-model="truncateForm.startDate"
+              type="date"
+              class="w-full px-3 py-2.5 rounded-xl border border-slate-200/80 dark:border-slate-600 bg-white dark:bg-slate-800 text-sm text-slate-700 dark:text-slate-200 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition"
+            />
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+              {{ tf('message.audit.truncate_range_end', 'End Date') }}
+            </label>
+            <input
+              v-model="truncateForm.endDate"
+              type="date"
+              class="w-full px-3 py-2.5 rounded-xl border border-slate-200/80 dark:border-slate-600 bg-white dark:bg-slate-800 text-sm text-slate-700 dark:text-slate-200 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition"
+            />
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+              {{ tf('message.audit.truncate_batch_size', 'Batch Size') }}
+            </label>
+            <input
+              v-model.number="truncateForm.batchSize"
+              type="number"
+              min="1"
+              max="10000"
+              class="w-full px-3 py-2.5 rounded-xl border border-slate-200/80 dark:border-slate-600 bg-white dark:bg-slate-800 text-sm text-slate-700 dark:text-slate-200 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition"
+            />
+          </div>
+
+          <div class="flex flex-col justify-end gap-3 lg:items-end">
+            <ActionTextButton
+              tone="amber"
+              shape="xl"
+              :icon="truncateLoading ? 'bi bi-arrow-repeat animate-spin' : 'bi bi-search'"
+              :disabled="truncateLoading"
+              @click="previewTruncate"
+            >
+              {{ tf('message.audit.truncate_preview', 'Preview Dry Run') }}
+            </ActionTextButton>
+            <ActionTextButton
+              tone="rose"
+              shape="xl"
+              icon="bi bi-exclamation-triangle"
+              :disabled="truncateLoading || !truncatePreview || !truncatePreview.total_found"
+              @click="openTruncateConfirm"
+            >
+              {{ tf('message.audit.truncate_execute', 'Execute Truncate') }}
+            </ActionTextButton>
+          </div>
+        </div>
+
+        <div v-if="truncatePreview" class="mt-5 rounded-2xl border border-slate-200/80 dark:border-slate-700 bg-white/85 dark:bg-slate-950/70 p-5">
+          <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+            <div>
+              <p class="text-sm font-semibold text-slate-900 dark:text-slate-100">
+                {{ tf('message.audit.truncate_preview_result', 'Latest Truncate Preview') }}
+              </p>
+              <p class="text-xs text-slate-500 dark:text-slate-400">
+                {{ truncatePreview.start_date }} - {{ truncatePreview.end_date }}
+              </p>
+            </div>
+            <span class="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold"
+              :class="truncatePreview.dry_run ? 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-200' : 'bg-rose-100 text-rose-800 dark:bg-rose-900/30 dark:text-rose-200'"
+            >
+              <i :class="truncatePreview.dry_run ? 'bi bi-eye' : 'bi bi-trash3'"></i>
+              {{ truncatePreview.dry_run
+                ? tf('message.audit.truncate_mode_dry_run', 'Dry Run')
+                : tf('message.audit.truncate_mode_executed', 'Executed') }}
+            </span>
+          </div>
+
+          <div class="mt-4 grid grid-cols-2 gap-3 lg:grid-cols-5">
+            <div class="rounded-xl bg-slate-50 dark:bg-slate-900/70 p-3">
+              <p class="text-xs uppercase tracking-[0.2em] text-slate-500">{{ tf('message.audit.truncate_matches', 'Matched') }}</p>
+              <p class="mt-2 text-2xl font-black text-slate-900 dark:text-slate-100">{{ truncatePreview.total_found || 0 }}</p>
+            </div>
+            <div class="rounded-xl bg-slate-50 dark:bg-slate-900/70 p-3">
+              <p class="text-xs uppercase tracking-[0.2em] text-slate-500">{{ tf('message.audit.truncate_archived', 'Archived') }}</p>
+              <p class="mt-2 text-2xl font-black text-slate-900 dark:text-slate-100">{{ truncatePreview.archived_count || 0 }}</p>
+            </div>
+            <div class="rounded-xl bg-slate-50 dark:bg-slate-900/70 p-3">
+              <p class="text-xs uppercase tracking-[0.2em] text-slate-500">{{ tf('message.audit.truncate_deleted', 'Deleted') }}</p>
+              <p class="mt-2 text-2xl font-black text-slate-900 dark:text-slate-100">{{ truncatePreview.deleted_count || 0 }}</p>
+            </div>
+            <div class="rounded-xl bg-slate-50 dark:bg-slate-900/70 p-3">
+              <p class="text-xs uppercase tracking-[0.2em] text-slate-500">{{ tf('message.audit.truncate_batch_size', 'Batch Size') }}</p>
+              <p class="mt-2 text-2xl font-black text-slate-900 dark:text-slate-100">{{ truncatePreview.batch_size || 0 }}</p>
+            </div>
+            <div class="rounded-xl bg-slate-50 dark:bg-slate-900/70 p-3">
+              <p class="text-xs uppercase tracking-[0.2em] text-slate-500">{{ tf('message.audit.truncate_duration', 'Duration') }}</p>
+              <p class="mt-2 text-2xl font-black text-slate-900 dark:text-slate-100">{{ truncatePreview.duration_ms || 0 }}ms</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <!-- Summary and Export -->
       <div class="flex items-center justify-between mb-6">
         <div>
@@ -351,6 +482,20 @@
       </section>
     </template>
 
+    <ConfirmModal
+      :show="showTruncateConfirm"
+      :title="tf('message.audit.truncate_confirm_title', 'Execute audit log truncate?')"
+      :message="tf('message.audit.truncate_confirm_message', 'This will archive and permanently delete {count} live audit logs in the selected date range.', { count: Number(truncatePreview?.total_found) || 0 })"
+      :confirm-text="truncateLoading ? tf('message.audit.truncate_running', 'Running...') : tf('message.audit.truncate_execute', 'Execute Truncate')"
+      :cancel-text="tf('message.common.cancel', 'Cancel')"
+      icon="bi bi-exclamation-octagon"
+      icon-bg-class="bg-rose-100 dark:bg-rose-900/30"
+      icon-color-class="text-rose-600 dark:text-rose-300"
+      confirm-button-class="bg-rose-600 hover:bg-rose-700 focus:ring-rose-500"
+      @confirm="confirmTruncate"
+      @cancel="closeTruncateConfirm"
+    />
+
     <!-- Log Details Modal -->
 
     <ModalWindow :show="showModal" :title="tf('message.audit.log_details', 'Log Details')" @close="closeLog" :panel-class="'max-w-3xl sm:max-w-4xl w-full'">
@@ -444,6 +589,7 @@ export default {
 </script>
 
 <script setup>
+import ConfirmModal from '/vue/components/ConfirmModal.vue';
 import ModalWindow from '/vue/components/ModalWindow.vue';
 import PaginationControls from '/vue/components/PaginationControls.vue';
 import ActionIconButton from '/vue/components/ActionIconButton.vue';
@@ -475,11 +621,20 @@ const {
   avatarInitial,
   actorDisplay,
   actorRoleBadgeClass,
+  isSuperAdmin,
   heroSectionClass,
   filtersPanelClass,
   filterInputClass,
   filterSelectClass,
   actorAvatarClass,
+  truncateForm,
+  truncatePreview,
+  truncateLoading,
+  showTruncateConfirm,
+  previewTruncate,
+  openTruncateConfirm,
+  closeTruncateConfirm,
+  confirmTruncate,
   tf,
   tableTopRef
 } = useAdminAuditLogsPage();
