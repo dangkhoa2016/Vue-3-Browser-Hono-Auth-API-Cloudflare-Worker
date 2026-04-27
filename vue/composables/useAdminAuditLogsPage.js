@@ -26,7 +26,19 @@ export function useAdminAuditLogsPage() {
   });
   const showModal = logDetailModal.isOpen;
   const selectedLog = logDetailModal.value;
+  const truncateConfirmModal = useModalState({
+    initialMode: 'confirm',
+    initialValue: null
+  });
+  const showTruncateConfirm = truncateConfirmModal.isOpen;
   const tableTopRef = ref(null);
+  const truncateForm = ref({
+    startDate: '',
+    endDate: '',
+    batchSize: 1000
+  });
+  const truncatePreview = ref(null);
+  const truncateLoading = ref(false);
 
   const heroSectionClass =
     'relative overflow-hidden rounded-[32px] border border-slate-200/70 dark:border-slate-800 bg-gradient-to-br from-white via-cyan-50/40 to-teal-50/40 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 p-8 shadow-[0_24px_80px_-60px_rgba(15,23,42,0.8)]';
@@ -131,6 +143,7 @@ export function useAdminAuditLogsPage() {
   const { tf } = useI18nFallback();
   const authStore = useAuthStore();
   const modalStore = useModalStore();
+  const isSuperAdmin = computed(() => String(authStore.user?.role || '').toLowerCase() === 'super_admin');
 
   const {
     showLoginRequired,
@@ -160,6 +173,119 @@ export function useAdminAuditLogsPage() {
   const showToast = (message, type = 'info') => {
     toastStore.add(message, type);
   };
+
+  const normalizeTruncateDate = (value, boundary = 'start') => {
+    if (!value) return '';
+    const suffix = boundary === 'end' ? 'T23:59:59.999Z' : 'T00:00:00.000Z';
+    return new Date(`${value}${suffix}`).toISOString();
+  };
+
+  const validateTruncateForm = () => {
+    if (!truncateForm.value.startDate || !truncateForm.value.endDate) {
+      showToast(
+        tf('message.audit.truncate_validation_dates', 'Please select both start and end dates before running truncate.'),
+        'error'
+      );
+      return false;
+    }
+
+    if (truncateForm.value.startDate > truncateForm.value.endDate) {
+      showToast(
+        tf('message.audit.truncate_validation_range', 'Start date must be earlier than or equal to the end date.'),
+        'error'
+      );
+      return false;
+    }
+
+    return true;
+  };
+
+  const buildTruncatePayload = ({ dryRun = true, confirmDelete = false } = {}) => ({
+    startDate: normalizeTruncateDate(truncateForm.value.startDate, 'start'),
+    endDate: normalizeTruncateDate(truncateForm.value.endDate, 'end'),
+    batchSize: Math.max(1, Number(truncateForm.value.batchSize) || 1000),
+    archiveFirst: true,
+    dryRun,
+    confirmDelete
+  });
+
+  const truncateErrorMessage = (error) => {
+    if (Array.isArray(error?.response?.data?.errors) && error.response.data.errors.length > 0) {
+      return error.response.data.errors.map((item) => item.message).join(', ');
+    }
+
+    return error?.response?.data?.error
+      || error?.message
+      || tf('message.audit.truncate_failed', 'Failed to truncate audit logs.');
+  };
+
+  const previewTruncate = async () => {
+    if (!isSuperAdmin.value || truncateLoading.value || !validateTruncateForm()) return;
+
+    truncateLoading.value = true;
+    try {
+      const result = await auditStore.truncateLogsByDateRange(buildTruncatePayload({ dryRun: true }));
+      truncatePreview.value = result;
+
+      const count = Number(result?.total_found) || 0;
+      showToast(
+        count > 0
+          ? tf('message.audit.truncate_preview_ready', 'Dry run complete. {count} audit logs match this range.', { count })
+          : tf('message.audit.truncate_preview_empty', 'Dry run complete. No audit logs match this range.'),
+        'success'
+      );
+    } catch (error) {
+      console.error('Audit truncate preview failed', error);
+      showToast(truncateErrorMessage(error), 'error');
+    } finally {
+      truncateLoading.value = false;
+    }
+  };
+
+  const openTruncateConfirm = () => {
+    if (!isSuperAdmin.value || truncateLoading.value || !(Number(truncatePreview.value?.total_found) > 0)) return;
+    truncateConfirmModal.open(truncatePreview.value, 'confirm');
+  };
+
+  const closeTruncateConfirm = () => {
+    truncateConfirmModal.close({ reset: true });
+  };
+
+  const confirmTruncate = async () => {
+    if (!isSuperAdmin.value || truncateLoading.value || !validateTruncateForm()) return;
+
+    truncateLoading.value = true;
+    try {
+      const result = await auditStore.truncateLogsByDateRange(buildTruncatePayload({ dryRun: false, confirmDelete: true }));
+      truncatePreview.value = result;
+      closeTruncateConfirm();
+
+      showToast(
+        tf('message.audit.truncate_execute_success', 'Archived {archivedCount} and deleted {deletedCount} audit logs.', {
+          archivedCount: Number(result?.archived_count) || 0,
+          deletedCount: Number(result?.deleted_count) || 0
+        }),
+        'success'
+      );
+
+      await auditStore.fetchLogs();
+      if (auditStore.fetchStats) {
+        auditStore.fetchStats().catch(() => {});
+      }
+    } catch (error) {
+      console.error('Audit truncate execution failed', error);
+      showToast(truncateErrorMessage(error), 'error');
+    } finally {
+      truncateLoading.value = false;
+    }
+  };
+
+  watch(
+    () => [truncateForm.value.startDate, truncateForm.value.endDate, truncateForm.value.batchSize],
+    () => {
+      truncatePreview.value = null;
+    }
+  );
 
   const onExport = async (format = 'csv') => {
     try {
@@ -274,11 +400,20 @@ export function useAdminAuditLogsPage() {
     avatarInitial,
     actorDisplay,
     actorRoleBadgeClass,
+    isSuperAdmin,
     heroSectionClass,
     filtersPanelClass,
     filterInputClass,
     filterSelectClass,
     actorAvatarClass,
+    truncateForm,
+    truncatePreview,
+    truncateLoading,
+    showTruncateConfirm,
+    previewTruncate,
+    openTruncateConfirm,
+    closeTruncateConfirm,
+    confirmTruncate,
     tf,
     tableTopRef
   };

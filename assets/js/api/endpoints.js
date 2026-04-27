@@ -72,6 +72,7 @@ export const API_ENDPOINTS = {
   ADVANCED_AUDIT_ARCHIVAL: '/api/advanced-audit/archival/stats',
   ADVANCED_AUDIT_ARCHIVAL_RUN: '/api/advanced-audit/archival/run',
   ADVANCED_AUDIT_ARCHIVAL_RESTORE: '/api/advanced-audit/archival/restore',
+  ADVANCED_AUDIT_TRUNCATE: '/api/advanced-audit/truncate',
   ADVANCED_AUDIT_ARCHIVE: '/api/advanced-audit/archive',
   ADVANCED_AUDIT_EXPORT_ADVANCED: '/api/advanced-audit/export-advanced',
   ADVANCED_AUDIT_MIDDLEWARE_STATS: '/api/advanced-audit/middleware/stats',
