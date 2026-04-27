@@ -187,6 +187,65 @@ export const useAuditStore = defineStore('audit', {
       }
     },
 
+    async truncateLogsByDateRange(params = {}) {
+      this.loading = true;
+      this.error = null;
+      try {
+        const mainStore = useMainStore();
+
+        if (mainStore.mockApi) {
+          const res = await fetch(DATA_PATHS.AUDIT_LOGS_SUCCESS, { cache: 'no-store' });
+          if (!res.ok) {
+            throw new Error(res.statusText || i18n.global.t('message.errors.unknown_error'));
+          }
+
+          const responseData = await res.json();
+          const payload = responseData?.data || {};
+          const sourceLogs = Array.isArray(payload.logs)
+            ? payload.logs
+            : (Array.isArray(payload.items) ? payload.items : []);
+          const startTimestamp = new Date(params.startDate).getTime();
+          const endTimestamp = new Date(params.endDate).getTime();
+          const totalFound = sourceLogs.filter((log) => {
+            const rawTimestamp = log?.timestamp || log?.created_at;
+            const logTimestamp = new Date(rawTimestamp).getTime();
+            return Number.isFinite(logTimestamp)
+              && logTimestamp >= startTimestamp
+              && logTimestamp <= endTimestamp;
+          }).length;
+          const dryRun = params.dryRun !== false;
+
+          this.lastUpdated = new Date().toISOString();
+
+          return {
+            start_date: params.startDate,
+            end_date: params.endDate,
+            batch_size: Math.max(1, Number(params.batchSize) || 1000),
+            archive_first: params.archiveFirst === true,
+            dry_run: dryRun,
+            total_found: totalFound,
+            would_delete: totalFound,
+            archived_count: dryRun ? 0 : totalFound,
+            deleted_count: dryRun ? 0 : totalFound,
+            started_at: this.lastUpdated,
+            completed_at: this.lastUpdated,
+            duration_ms: 0
+          };
+        }
+
+        const response = await apiClient.post(API_ENDPOINTS.ADVANCED_AUDIT_TRUNCATE, params);
+        const result = response.data?.data || response.data;
+        this.lastUpdated = new Date().toISOString();
+        return result;
+      } catch (err) {
+        this.error = err?.response?.data?.error || err?.message || 'Failed to truncate audit logs';
+        console.error('[AuditStore] truncateLogsByDateRange failed', err);
+        throw err;
+      } finally {
+        this.loading = false;
+      }
+    },
+
     async reload() {
       await this.fetchLogs();
     },
