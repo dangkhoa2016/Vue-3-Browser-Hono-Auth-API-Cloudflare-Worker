@@ -1,0 +1,20 @@
+[run-frontend-gate] $ npm run test:browser -- --grep audit\ \(json\|csv\)\ download\|audit\ export\ HTML200 
+
+> frontend-remediation-verification@1.0.0 test:browser
+> playwright test --config browser/playwright.config.mjs --grep audit (json|csv) download|audit export HTML200
+
+[2m[WebServer] [22m(node:63259) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[2m[WebServer] [22m(Use `node --trace-warnings ...` to show where the warning was created)
+[2m[WebServer] [22mfake API on http://127.0.0.1:36249, static on http://127.0.0.1:46413
+
+Running 3 tests using 1 worker
+
+(node:63272) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:63272) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 [chromium] › browser/backend-contract-mock.spec.mjs:532:166 › audit json download preserves actual response bytes (6.3s)
+  ✓  2 [chromium] › browser/backend-contract-mock.spec.mjs:532:166 › audit csv download preserves actual response bytes (5.9s)
+  ✓  3 [chromium] › browser/backend-contract-mock.spec.mjs:560:1 › audit export HTML200 produces neither a download nor a success (5.9s)
+
+  3 passed (20.0s)

@@ -1,0 +1,45 @@
+[run-frontend-gate] $ npm run test:browser -- --grep profile\ remount\ fetches 
+
+> frontend-remediation-verification@1.0.0 test:browser
+> playwright test --config browser/playwright.config.mjs --grep profile remount fetches
+
+[2m[WebServer] [22m(node:175067) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[2m[WebServer] [22m(Use `node --trace-warnings ...` to show where the warning was created)
+[2m[WebServer] [22mfake API on http://127.0.0.1:32959, static on http://127.0.0.1:46049
+
+Running 1 test using 1 worker
+
+(node:175089) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:175089) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 [chromium] › browser/backend-contract-mock.spec.mjs:675:1 › profile remount fetches the current response after its store counter has advanced (24.4s)
+
+
+  1) [chromium] › browser/backend-contract-mock.spec.mjs:675:1 › profile remount fetches the current response after its store counter has advanced 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: getByText('R11 profile revision 1', { exact: true }).first()
+    Expected: visible
+    Timeout: 15000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 15000ms[22m
+    [2m  - waiting for getByText('R11 profile revision 1', { exact: true }).first()[22m
+
+
+      471 |   });
+      472 |   await page.goto('/#/profile');
+    > 473 |   await expect(page.getByText('R11 profile revision 1',{exact:true}).first()).toBeVisible();
+          |                                                                               ^
+      474 |   await page.goto('/#/');
+      475 |   await expect(page.getByText('R11 profile revision 1',{exact:true})).toHaveCount(0);
+      476 |   revision=2;
+        at /tmp/frontend-browser-run.G5Wdov/worktree/tests/browser/backend-contract-mock.spec.mjs:473:79
+
+    Error Context: test-results/backend-contract-mock-prof-9befe--store-counter-has-advanced-chromium/error-context.md
+
+  1 failed
+    [chromium] › browser/backend-contract-mock.spec.mjs:675:1 › profile remount fetches the current response after its store counter has advanced 

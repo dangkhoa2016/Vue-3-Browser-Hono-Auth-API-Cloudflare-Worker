@@ -1,0 +1,22 @@
+[run-frontend-gate] $ npm run test:browser -- --grep monitoring\ form\ submits\|monitoring\ rule\ channel 
+
+> frontend-remediation-verification@1.0.0 test:browser
+> playwright test --config browser/playwright.config.mjs --grep monitoring form submits|monitoring rule channel
+
+[2m[WebServer] [22m(node:170363) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[2m[WebServer] [22m(Use `node --trace-warnings ...` to show where the warning was created)
+[2m[WebServer] [22mfake API on http://127.0.0.1:40017, static on http://127.0.0.1:46629
+
+Running 5 tests using 1 worker
+
+(node:170372) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:170372) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 [chromium] › browser/backend-contract-mock.spec.mjs:584:269 › monitoring form submits entered data: Create Rule (7.8s)
+  ✓  2 [chromium] › browser/backend-contract-mock.spec.mjs:584:269 › monitoring form submits entered data: Create Channel (6.8s)
+  ✓  3 [chromium] › browser/backend-contract-mock.spec.mjs:584:269 › monitoring form submits entered data: Clear Cache (7.1s)
+  ✓  4 [chromium] › browser/backend-contract-mock.spec.mjs:584:269 › monitoring form submits entered data: Create Incident (8.2s)
+  ✓  5 [chromium] › browser/backend-contract-mock.spec.mjs:621:1 › monitoring rule channel checkboxes emit selected channels without resetting other fields (7.9s)
+
+  5 passed (39.5s)

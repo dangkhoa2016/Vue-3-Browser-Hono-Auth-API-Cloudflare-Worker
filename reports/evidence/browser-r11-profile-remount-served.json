@@ -1,0 +1,11 @@
+{
+  "label": "r11-profile-remount",
+  "sourceDigest": "fcb2195ddb645869c96b733542b037c9427caaeb63e4c8fee7514c64605ad503",
+  "staticPort": 46049,
+  "apiPort": 32959,
+  "installKey": "676ae3c2f6fcbf551971a6b753e1b0c18ba6ce5aac0e419c5a50d480a724a327",
+  "installCache": "/workspaces/frontend-r11-session/deps-cache-reviewed/676ae3c2f6fcbf551971a6b753e1b0c18ba6ce5aac0e419c5a50d480a724a327",
+  "scratchBase": "/tmp",
+  "servedRoot": "/tmp/frontend-browser-run.G5Wdov/worktree",
+  "startedAt": "2026-09-30T06:48:06Z"
+}

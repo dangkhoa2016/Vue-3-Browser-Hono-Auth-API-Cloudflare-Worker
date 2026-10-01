@@ -1,0 +1,132 @@
+[run-frontend-gate] $ node --test regression/lock-deadline-contract.test.mjs 
+✖ N7 invalid initial monotonic reading refuses work: null (3.015163ms)
+✖ N7 invalid initial monotonic reading refuses work: NaN (0.531553ms)
+✖ N7 invalid initial monotonic reading refuses work: Infinity (0.321029ms)
+✖ N7 invalid initial monotonic reading refuses work: throws (0.175578ms)
+✖ N7 late grant waits for the already-running asynchronous fence (12.449911ms)
+✖ N7 a clock regression above its initial value cannot extend the budget (2.062743ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 0
+ℹ fail 6
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 101.69436
+
+✖ failing tests:
+
+test at regression/lock-deadline-contract.test.mjs:8:54
+✖ N7 invalid initial monotonic reading refuses work: null (3.015163ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + 1
+  - {
+  -   fenced: 'lock-acquisition-timeout'
+  - }
+  
+      at TestContext.<anonymous> (file:///workspaces/frontend-r11-work/tests/regression/lock-deadline-contract.test.mjs:16:10)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: { fenced: 'lock-acquisition-timeout' },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at regression/lock-deadline-contract.test.mjs:8:54
+✖ N7 invalid initial monotonic reading refuses work: NaN (0.531553ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + 1
+  - {
+  -   fenced: 'lock-acquisition-timeout'
+  - }
+  
+      at TestContext.<anonymous> (file:///workspaces/frontend-r11-work/tests/regression/lock-deadline-contract.test.mjs:16:10)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: { fenced: 'lock-acquisition-timeout' },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at regression/lock-deadline-contract.test.mjs:8:54
+✖ N7 invalid initial monotonic reading refuses work: Infinity (0.321029ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + 1
+  - {
+  -   fenced: 'lock-acquisition-timeout'
+  - }
+  
+      at TestContext.<anonymous> (file:///workspaces/frontend-r11-work/tests/regression/lock-deadline-contract.test.mjs:16:10)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: { fenced: 'lock-acquisition-timeout' },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at regression/lock-deadline-contract.test.mjs:8:54
+✖ N7 invalid initial monotonic reading refuses work: throws (0.175578ms)
+  Error: clock unavailable
+      at Object.monotonicNow (file:///workspaces/frontend-r11-work/tests/regression/lock-deadline-contract.test.mjs:13:84)
+      at acquireWithDeadline (/workspaces/frontend-r11-work/assets/js/api/sessionCoordinator.js:219:64)
+      at TestContext.<anonymous> (file:///workspaces/frontend-r11-work/tests/regression/lock-deadline-contract.test.mjs:11:24)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:969:18)
+      at Test.postRun (node:internal/test_runner/test:1537:19)
+      at Test.run (node:internal/test_runner/test:1462:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7)
+
+test at regression/lock-deadline-contract.test.mjs:22:1
+✖ N7 late grant waits for the already-running asynchronous fence (12.449911ms)
+  AssertionError [ERR_ASSERTION]: grant must not return the uninitialized fence result
+  + actual - expected
+  
+  + null
+  - Symbol(never-settled)
+  
+      at TestContext.<anonymous> (file:///workspaces/frontend-r11-work/tests/regression/lock-deadline-contract.test.mjs:33:10)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at regression/lock-deadline-contract.test.mjs:39:1
+✖ N7 a clock regression above its initial value cannot extend the budget (2.062743ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + 1
+  - {
+  -   fenced: 'lock-acquisition-timeout'
+  - }
+  
+      at TestContext.<anonymous> (file:///workspaces/frontend-r11-work/tests/regression/lock-deadline-contract.test.mjs:52:10)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: { fenced: 'lock-acquisition-timeout' },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }

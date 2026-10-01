@@ -1,0 +1,1717 @@
+{
+  "schema": "frontend-source-identity/1",
+  "generatedAt": "2026-09-28T06:21:17.291Z",
+  "repo": {
+    "head": "a1db43b7e432795c41c727324d87c66f63c22cbb",
+    "baseTree": "55033e41514957bbd7c13289661018aa6980a91c",
+    "branch": "remediation/round6-wip",
+    "statusSha256": "b285f605891cc8bbd9231731ecbdf3b3ab87f66165544b256f1e1dbf1620c407",
+    "statusEntryCount": 26
+  },
+  "policy": {
+    "includeRoots": [
+      "assets",
+      "vue",
+      "tools",
+      "tests/regression",
+      "tests/browser",
+      "reports"
+    ],
+    "includeFiles": [
+      "index.html",
+      "tests/package.json",
+      "tests/package-lock.json"
+    ],
+    "excludePrefixes": [
+      ".git",
+      "node_modules",
+      "tests/test-results",
+      "tests/playwright-report",
+      "reports/evidence"
+    ]
+  },
+  "fileCount": 280,
+  "digest": "620c833b149528ea86d35a5200721cbfe1fc843247596f1a82ddb42fe911a902",
+  "files": [
+    {
+      "path": "assets/css/admin-table.css",
+      "mode": "100644",
+      "size": 3355,
+      "sha256": "29fa536d8a3d9ecb9465a136e9cb773b8ffb575056c7b2229d056f8dcd478e64"
+    },
+    {
+      "path": "assets/css/loader.css",
+      "mode": "100644",
+      "size": 7696,
+      "sha256": "2d0351ec896ae16965c05ee9edfcc64998fb2309a52c2f8b95c4ad6a3691a4ce"
+    },
+    {
+      "path": "assets/css/styles.css",
+      "mode": "100644",
+      "size": 390,
+      "sha256": "d06f81fed4f76acfcc64735f2cd28655ae4f36644fa7aaeb0cc577b6e7597aab"
+    },
+    {
+      "path": "assets/data/advanced-audit/analytics/middleware/stats/succeed/response.json",
+      "mode": "100644",
+      "size": 503,
+      "sha256": "eda4365f7f8463290b58d5aa1332da9ef0e057ea1a1d672e68988fd4fe8e876e"
+    },
+    {
+      "path": "assets/data/advanced-audit/analytics/security/succeed/response.json",
+      "mode": "100644",
+      "size": 1026,
+      "sha256": "f4bb681a7e566a926df931f319183b6f5bcd04136cee3b572dd8b137f6815b58"
+    },
+    {
+      "path": "assets/data/advanced-audit/analytics/succeed/response.json",
+      "mode": "100644",
+      "size": 3557,
+      "sha256": "8191a33685e44b8b3b0ba7d79845807cca8604291c5ec165d77ed9f5f9096d88"
+    },
+    {
+      "path": "assets/data/advanced-audit/archival/restore/fail/validate.json",
+      "mode": "100644",
+      "size": 511,
+      "sha256": "f14a5c16cfb7d723f9ff8e883a14cc039404be77963ee0bf409fd7b4de0914a7"
+    },
+    {
+      "path": "assets/data/advanced-audit/archival/run/succeed/response.json",
+      "mode": "100644",
+      "size": 1136,
+      "sha256": "a9942cc1e29097ef9db3b19bc21785d87f8b75b5b2c8b25d8a09a1cbc2a3b8f1"
+    },
+    {
+      "path": "assets/data/advanced-audit/archival/stats/succeed/response.json",
+      "mode": "100644",
+      "size": 1149,
+      "sha256": "477553bd4dfe122c7cd6ae3fea833273566e45a93bc454d82b2f7516fd04f1d7"
+    },
+    {
+      "path": "assets/data/advanced-audit/archival/succeed/response.json",
+      "mode": "100644",
+      "size": 1090,
+      "sha256": "3f6ecda5d23d85e64ab94e5310a4dbc99456f8989a64a8ccbe881e1eb9268635"
+    },
+    {
+      "path": "assets/data/advanced-audit/compliance/enforce-policy/succeed/response.json",
+      "mode": "100644",
+      "size": 5818,
+      "sha256": "899aeebea5d53c88f774a88385ff342c4a1a0d4e0ff40a8eee5394fb6dffb9e4"
+    },
+    {
+      "path": "assets/data/advanced-audit/compliance/report/succeed/response.json",
+      "mode": "100644",
+      "size": 3082,
+      "sha256": "2e1073ea1ecae5a5c3096ef11d7888740a8bb9bf7ae9a82544eb1b3ea6503664"
+    },
+    {
+      "path": "assets/data/advanced-audit/compliance/succeed/response.json",
+      "mode": "100644",
+      "size": 704,
+      "sha256": "90be3ff20366867f5002835bbb4c9beaeed3551608eaf4946f778225a09b34d9"
+    },
+    {
+      "path": "assets/data/advanced-audit/rention/succeed/response.json",
+      "mode": "100644",
+      "size": 318,
+      "sha256": "b73b90591c901b2cce3ebcd6b7a0367f213c1d7aad0995b80057351732c762fe"
+    },
+    {
+      "path": "assets/data/audit/logs/succeed/response.json",
+      "mode": "100644",
+      "size": 32381,
+      "sha256": "22fa63ffea28c48299bdf9e11a7e3198bc4b1cc56fb7308509770a86a9462da9"
+    },
+    {
+      "path": "assets/data/audit/stats/succeed/response.json",
+      "mode": "100644",
+      "size": 1143,
+      "sha256": "261727a59677742ca91e166a9956eb108b854b9ccbc61dcf0d83917ae8a9ad24"
+    },
+    {
+      "path": "assets/data/health/response.json",
+      "mode": "100644",
+      "size": 217,
+      "sha256": "377d362fde13adbc2fa1387c3afd3e9d9c005923fcd2e605b05690c6d3caf464"
+    },
+    {
+      "path": "assets/data/kv-admin/alerts/response.json",
+      "mode": "100644",
+      "size": 172,
+      "sha256": "c92d7bb503549dd9194662ca1578b53973649a986b0b4df65fe895c10b772add"
+    },
+    {
+      "path": "assets/data/kv-admin/batch/succeed/response.json",
+      "mode": "100644",
+      "size": 525,
+      "sha256": "a0dec1454db02308f6958e5df2bdbedc08ee902e29d7526888ba563142fd869a"
+    },
+    {
+      "path": "assets/data/kv-admin/compliance/response.json",
+      "mode": "100644",
+      "size": 146,
+      "sha256": "1f9e38f81b5611e71812725cf80c03a54bc4912f23971fa4259949f6a0a01b4d"
+    },
+    {
+      "path": "assets/data/kv-admin/configs.json",
+      "mode": "100644",
+      "size": 424,
+      "sha256": "8e321b75ab969d4dafe0701997d2b087e582782de8d35e5b5100edf972f998dd"
+    },
+    {
+      "path": "assets/data/kv-admin/delete/succeed/response.json",
+      "mode": "100644",
+      "size": 261,
+      "sha256": "955d4008fa5a616a73e5224d04ab1d564bf24e190b44d927cc9218c2132b5814"
+    },
+    {
+      "path": "assets/data/kv-admin/env-comparison/response.json",
+      "mode": "100644",
+      "size": 14205,
+      "sha256": "50bb6b56ba1236b832e51baf7de9df41e1e8f5dde3aceaeb2092cb3b62e3d2d6"
+    },
+    {
+      "path": "assets/data/kv-admin/features/response.json",
+      "mode": "100644",
+      "size": 312,
+      "sha256": "0d4ef84bdb34f94d56cb57d9f375e831fa68718573339a9dad69d91e29985e61"
+    },
+    {
+      "path": "assets/data/kv-admin/features/toggle/succeed/response.json",
+      "mode": "100644",
+      "size": 207,
+      "sha256": "b1f296f6120663d252124331f1d0b7a9c8e0808df67038769d9f8d92c3438396"
+    },
+    {
+      "path": "assets/data/kv-admin/performance/response.json",
+      "mode": "100644",
+      "size": 260,
+      "sha256": "c2eda3db6890c371331fe9ecfe79ecec4d30b9703b34282825d0ea2ef65e526c"
+    },
+    {
+      "path": "assets/data/kv-admin/rate-limit/clean/response.json",
+      "mode": "100644",
+      "size": 424,
+      "sha256": "7e006c2c42d14d4ce5e0b9e3d74cad6a190b051838653f1f546652e7212b13e4"
+    },
+    {
+      "path": "assets/data/kv-admin/rate-limit/prune/response.json",
+      "mode": "100644",
+      "size": 667,
+      "sha256": "0d2e5a4ccadc4da936c91b120971c846600c4072f1ff2693cab830ab8b434f14"
+    },
+    {
+      "path": "assets/data/kv-admin/rate-limit/succeed/response.json",
+      "mode": "100644",
+      "size": 8364,
+      "sha256": "23f02a239e017856e93a5071529723adacb3da181ab8f71da31198fdacd05013"
+    },
+    {
+      "path": "assets/data/kv-admin/retention/response.json",
+      "mode": "100644",
+      "size": 299,
+      "sha256": "4dcdebc189abd2d01ef214f14f6392f75afc20fcf1fb0c924f119454b632d6e1"
+    },
+    {
+      "path": "assets/data/kv-admin/update/fail/invalid.json",
+      "mode": "100755",
+      "size": 2555,
+      "sha256": "abcdcbc20dd989137cea145cda571c9d402cac5541b731e0e28608152e7efaf0"
+    },
+    {
+      "path": "assets/data/kv-admin/update/succeed/response.json",
+      "mode": "100644",
+      "size": 282,
+      "sha256": "66dffebfdd4e6e52f4b7a759cff4c9a62f668e5eb728262109ddcb6d14c38000"
+    },
+    {
+      "path": "assets/data/language/response.json",
+      "mode": "100644",
+      "size": 238,
+      "sha256": "2de68d8bb234cd9ccf01f5c80d0790b9cae994797f9506ab4b586e864c8b2b62"
+    },
+    {
+      "path": "assets/data/login/fail/invalid-email-or-password.json",
+      "mode": "100755",
+      "size": 72,
+      "sha256": "a46d5c3cce2392774b77654489fefe9d3ae53d0ab4928dc713232e78c137a435"
+    },
+    {
+      "path": "assets/data/login/fail/validate-1.json",
+      "mode": "100644",
+      "size": 371,
+      "sha256": "8da784f6e5fbebd997df4a4b323bbc195578c712973dbb43f3c15674aa0edb05"
+    },
+    {
+      "path": "assets/data/login/fail/validate-2.json",
+      "mode": "100755",
+      "size": 328,
+      "sha256": "a28ca6a335c7e1c1723d7ae27231d4cc6a8d3c58aa68f19ff4048d36147efef4"
+    },
+    {
+      "path": "assets/data/login/fail/validate-3.json",
+      "mode": "100644",
+      "size": 330,
+      "sha256": "213dcae753a3adcd89b63874a37558783a8a245901f05af117c9b68b44c3c1da"
+    },
+    {
+      "path": "assets/data/login/succeed/response.json",
+      "mode": "100644",
+      "size": 636,
+      "sha256": "da48d4f672ecaba54cfe956336bdb1460b54d7ebc6087975afa7b02b81203655"
+    },
+    {
+      "path": "assets/data/profile/api.json",
+      "mode": "100644",
+      "size": 1691,
+      "sha256": "4a1ebfde0c2c503918bbcb0b4fd236ba482cc7d82c356a0b37ade04969e4b1f3"
+    },
+    {
+      "path": "assets/data/profile/succeed.json",
+      "mode": "100644",
+      "size": 373,
+      "sha256": "d1a3164bd560efe2c13954f8711efc46ad93d50bf24fd602ca59e7a3779e93b5"
+    },
+    {
+      "path": "assets/data/profile/update/succeed/response.json",
+      "mode": "100644",
+      "size": 517,
+      "sha256": "a05c8748106277711dcd9594a0f6889a4db199ff49d2c22985b775a4f4b0bea8"
+    },
+    {
+      "path": "assets/data/realtime-monitoring/alert/create-channel/succeed/response.json",
+      "mode": "100644",
+      "size": 273,
+      "sha256": "dd33de29738a5662270a1eac2301f9f20a1c5edf152b22b5f1e2fd4a521f0679"
+    },
+    {
+      "path": "assets/data/realtime-monitoring/alert/create-rule/succeed/response.json",
+      "mode": "100644",
+      "size": 363,
+      "sha256": "91129f7f05c7dfc66b9f29a2ac72f6db2ccf4c5d7d7ad747ff7d52b7889bc34f"
+    },
+    {
+      "path": "assets/data/realtime-monitoring/alert/get-channel/succeed/response.json",
+      "mode": "100644",
+      "size": 1852,
+      "sha256": "f18260b5239253f368fbea7d12e5398aed7b35447f1bd898df1a2dcc5e329471"
+    },
+    {
+      "path": "assets/data/realtime-monitoring/alert/test/succeed/response.json",
+      "mode": "100644",
+      "size": 7616,
+      "sha256": "f644813099cd423b4e68cfa8a79d57c50b178ec1e573ad47ed7d063484aa5391"
+    },
+    {
+      "path": "assets/data/realtime-monitoring/analyze/succeed/response.json",
+      "mode": "100644",
+      "size": 780,
+      "sha256": "54bb79b17b4323565ab712e621716ed6b9cb546e6ab327a82871ab5517b59455"
+    },
+    {
+      "path": "assets/data/realtime-monitoring/clear-cache/succeed/response.json",
+      "mode": "100644",
+      "size": 175,
+      "sha256": "09ef0dc4505f7f5559166150ded97b5398de0c7bc3c8e683851d4c122f0addaf"
+    },
+    {
+      "path": "assets/data/realtime-monitoring/dashboard-performance/succeed/response.json",
+      "mode": "100644",
+      "size": 467,
+      "sha256": "5b7fd3f0d12a589c53b9749570d0857ac7512dfa1f82cce57853e0319621dfc5"
+    },
+    {
+      "path": "assets/data/realtime-monitoring/export/succeed/response.json",
+      "mode": "100644",
+      "size": 15705,
+      "sha256": "7ab3a0a030be7f04daabb240e15a67cde8a960be33a8d177ac6660ef0bec06f9"
+    },
+    {
+      "path": "assets/data/realtime-monitoring/incidents-create/succeed/response.json",
+      "mode": "100644",
+      "size": 366,
+      "sha256": "ef6948e11606596c942beca194b0a33f011228f57b1a1f23cf759d1d4c3d9090"
+    },
+    {
+      "path": "assets/data/realtime-monitoring/monitoring-simulate/succeed/response.json",
+      "mode": "100644",
+      "size": 473,
+      "sha256": "dca1e2a7a0504e40c00de7483ba2285bf39d14b36f1d32b761071c2e3b05b602"
+    },
+    {
+      "path": "assets/data/realtime-monitoring/realtime/succeed/response.json",
+      "mode": "100644",
+      "size": 9211,
+      "sha256": "a624687868e266805eaef2ebc717d0fe92597d3f640487fbf5c9e529541e2f6f"
+    },
+    {
+      "path": "assets/data/realtime-monitoring/start/succeed/response.json",
+      "mode": "100644",
+      "size": 200,
+      "sha256": "1d74ecf910e512ce87ba46bc3dcbf787c30be21ed42a00e193b77bc868b8bf05"
+    },
+    {
+      "path": "assets/data/realtime-monitoring/status/succeed/response.json",
+      "mode": "100644",
+      "size": 1771,
+      "sha256": "d04a8a94b1b7ac810208a726db401376325e3528de4c1c8978decb7bf0345b0c"
+    },
+    {
+      "path": "assets/data/realtime-monitoring/stop/succeed/response.json",
+      "mode": "100644",
+      "size": 140,
+      "sha256": "24761b372ad3f7c55a4c2ca936243429662ee039d15b99ef3a729adde755c204"
+    },
+    {
+      "path": "assets/data/refresh_token/fail/expired.json",
+      "mode": "100644",
+      "size": 70,
+      "sha256": "9dc5d79e9f2b1e54b71049b499efedead4771fb3ac87e6e85e09b164d4b0c721"
+    },
+    {
+      "path": "assets/data/refresh_token/fail/invalid.json",
+      "mode": "100644",
+      "size": 353,
+      "sha256": "ffea516fc4a608dd4d60f1d4cf5f93d031f89818618c2fcfa9f60ba412a42eb8"
+    },
+    {
+      "path": "assets/data/refresh_token/succeed/response.json",
+      "mode": "100644",
+      "size": 541,
+      "sha256": "966c07880e072b2d69952e9aeb9d1f4294f853a354409935bf0cca8d8dc785fc"
+    },
+    {
+      "path": "assets/data/register/fail/validate-1.json",
+      "mode": "100644",
+      "size": 336,
+      "sha256": "3e2f504a82266f8ed493f7e4d4cbf453e8969a999c42eddb24441c4498b0aff0"
+    },
+    {
+      "path": "assets/data/register/fail/validate-10.json",
+      "mode": "100644",
+      "size": 350,
+      "sha256": "0a0f28b871fec961b20f70adbb6802215ddc3356d1cf9873ffedc188fe2ba81b"
+    },
+    {
+      "path": "assets/data/register/fail/validate-2.json",
+      "mode": "100644",
+      "size": 378,
+      "sha256": "d439bc031db65c6f8c4d65d91bc54027248fa9edc3a2afc5c6eefac298ba80f0"
+    },
+    {
+      "path": "assets/data/register/fail/validate-3.json",
+      "mode": "100644",
+      "size": 335,
+      "sha256": "d0054ba552a6508c24f8baf17e2d8f7caebeeb7dc9799afabf3642c007de8966"
+    },
+    {
+      "path": "assets/data/register/fail/validate-4.json",
+      "mode": "100644",
+      "size": 358,
+      "sha256": "902f50ec40c54b0c8d95a8ecd80166a1f2c0935c2327b6d4e48f391ed0c37f57"
+    },
+    {
+      "path": "assets/data/register/fail/validate-5.json",
+      "mode": "100644",
+      "size": 337,
+      "sha256": "5e586777e60cad573c459c360762092b5ef8b3b0e9ed38cfee23646e129d3216"
+    },
+    {
+      "path": "assets/data/register/fail/validate-6.json",
+      "mode": "100644",
+      "size": 360,
+      "sha256": "b8938981235a6a962bbdadbd9a4b4dbb6d3ed82b92da904a86922c90d8ae5a61"
+    },
+    {
+      "path": "assets/data/register/fail/validate-7.json",
+      "mode": "100644",
+      "size": 352,
+      "sha256": "4b7a80dd658e759940f68257c99c96997e181664eba8522c6a4d3db26233f892"
+    },
+    {
+      "path": "assets/data/register/fail/validate-8.json",
+      "mode": "100644",
+      "size": 555,
+      "sha256": "69e6cdb9d8e797049ad1cf94af5f3ee56a9bfe48840819bd0593de87eeb254bc"
+    },
+    {
+      "path": "assets/data/register/fail/validate-9.json",
+      "mode": "100644",
+      "size": 352,
+      "sha256": "e79b6138259edf055b51a2ec49411a10def29182a18bd667bbd40759a9931357"
+    },
+    {
+      "path": "assets/data/register/succeed/response1.json",
+      "mode": "100644",
+      "size": 496,
+      "sha256": "3733a8c3895844d145e205a2f50d7f05cfc4356ac2a980439fc9f1a97fb2b138"
+    },
+    {
+      "path": "assets/data/register/succeed/response2.json",
+      "mode": "100644",
+      "size": 389,
+      "sha256": "cd19cb49cf0d272dbbb5659106d22e064afaf0db8b3c5c517b42bfa97a1656d7"
+    },
+    {
+      "path": "assets/data/security-incident/succeed/response.json",
+      "mode": "100644",
+      "size": 45136,
+      "sha256": "a53d7d7c5abdaeb5dc96f05e262ca3746614892ee9b1250cbf758f0e72052628"
+    },
+    {
+      "path": "assets/data/system-health/succeed/response.json",
+      "mode": "100644",
+      "size": 4555,
+      "sha256": "a4643968111bdeec13bc48ccb1e9dbcf57180aebfabe94a55dfa3cb48efb323e"
+    },
+    {
+      "path": "assets/data/system-stats/succeed/response.json",
+      "mode": "100644",
+      "size": 307,
+      "sha256": "be90c09ebd0d1bb8bfd97f0241f65102d9784fdba9d1587385a2641e4e09ef49"
+    },
+    {
+      "path": "assets/data/token-audit/bulk-delete/succeed/response.json",
+      "mode": "100644",
+      "size": 114,
+      "sha256": "936fb3832205275bbcf233c7fd006bf795329e5d8c9384555b9a7965ef980651"
+    },
+    {
+      "path": "assets/data/token-audit/delete/succeed/response.json",
+      "mode": "100644",
+      "size": 106,
+      "sha256": "c83a11ab26b91ec0333aac0d595845e3c829b37f3045d46b6315b27978a1bd61"
+    },
+    {
+      "path": "assets/data/token-audit/detail/succeed/response.json",
+      "mode": "100644",
+      "size": 569,
+      "sha256": "16ecb538454b410a2694be83f05effec9fa84c1950a4aec1fe51d5a03bfe2856"
+    },
+    {
+      "path": "assets/data/token-audit/list/succeed/response.json",
+      "mode": "100644",
+      "size": 5356,
+      "sha256": "fb4c17f59e9c3c1aea91fa4b2473a83b5eb9d03b9c8fd58780b8a39b8c57637a"
+    },
+    {
+      "path": "assets/data/token-blacklist/create/fail/error.json",
+      "mode": "100644",
+      "size": 153,
+      "sha256": "2163c310a33fa3e9043239b38a139e31190d24e24e42e7d4ac06738c999a25ea"
+    },
+    {
+      "path": "assets/data/token-blacklist/create/fail/invalid.json",
+      "mode": "100644",
+      "size": 276,
+      "sha256": "d898cb7aa6b862d00ad92ace8d34d90e72c03e4710e3303b80d7414f5aeb662c"
+    },
+    {
+      "path": "assets/data/token-blacklist/create/succeed/response.json",
+      "mode": "100644",
+      "size": 113,
+      "sha256": "cc0dbace8bd0c385a462aba8acc56c3e1b0e233e30cb9224223a24ad63f1d37f"
+    },
+    {
+      "path": "assets/data/token-blacklist/list/succeed/response.json",
+      "mode": "100644",
+      "size": 640,
+      "sha256": "33e30574a60a4ba4a1d8938c55436eacca40c1e19c9f1c6508760dc99980e6c8"
+    },
+    {
+      "path": "assets/data/users/change-password/fail/invalid-current-password.json",
+      "mode": "100644",
+      "size": 84,
+      "sha256": "9f5eb1c3d28a783d1ba9ebc520834d3933383f1a50c6713096bc2d4f104f2f6d"
+    },
+    {
+      "path": "assets/data/users/change-password/fail/validate-1.json",
+      "mode": "100644",
+      "size": 341,
+      "sha256": "a36c713b197c2d9cb0f60982b6cffce34c7e87aac31e8f3e2c8c5943b0c5ada2"
+    },
+    {
+      "path": "assets/data/users/change-password/succeed/response.json",
+      "mode": "100644",
+      "size": 107,
+      "sha256": "104986f0e4ead593ebdf139958a5799da90f45e89205ffd7cae6d817c31c5472"
+    },
+    {
+      "path": "assets/data/users/change-role/succeed/response.json",
+      "mode": "100644",
+      "size": 472,
+      "sha256": "356ee81de32534a9db9a0a417cbb6782cd54716bc5d4419f0ef1ab927a6df14f"
+    },
+    {
+      "path": "assets/data/users/create/succeed/response.json",
+      "mode": "100644",
+      "size": 362,
+      "sha256": "81d3477e68140dbca15995e467f215abf57ada3d42c479368bf5a4e2981ea1d4"
+    },
+    {
+      "path": "assets/data/users/list/succeed/super-admin+users.json",
+      "mode": "100644",
+      "size": 3070,
+      "sha256": "3998d9a47cc1bc8af7e28bb67f909ec89562271927db73279f2813253b387ccb"
+    },
+    {
+      "path": "assets/data/users/update/succeed/response.json",
+      "mode": "100644",
+      "size": 385,
+      "sha256": "f859a285718b89731b333328cf29e20aba7af5f6774605823ee0f662d5e365b4"
+    },
+    {
+      "path": "assets/data/version/response.json",
+      "mode": "100644",
+      "size": 113,
+      "sha256": "71f434bf0ee5d1881b3a5fbf3875516cd3715316939a0f2a472ebc2d51edc9f5"
+    },
+    {
+      "path": "assets/img/favicon.ico",
+      "mode": "100644",
+      "size": 139791,
+      "sha256": "f4d0c5b55e005534fddb6d932065ecce99bfb09a8a4d90bf7f766dd4d7054e68"
+    },
+    {
+      "path": "assets/img/favicon.png",
+      "mode": "100644",
+      "size": 18297,
+      "sha256": "a7092cbb45bf466036e280d7aad31bb27c709aece5b1641e18b1c0ba99413bdd"
+    },
+    {
+      "path": "assets/js/api.js",
+      "mode": "100644",
+      "size": 420,
+      "sha256": "b284621ae13d0742f4b91fe8f3daf13a7224aeffffdf45a8584f1def740a7658"
+    },
+    {
+      "path": "assets/js/api/apiIdentity.js",
+      "mode": "100644",
+      "size": 9691,
+      "sha256": "20d1f884ba4986ec6898071ece3a167293d37290aa5ac25b6d03c438a5b50b27"
+    },
+    {
+      "path": "assets/js/api/backendContract.js",
+      "mode": "100644",
+      "size": 14183,
+      "sha256": "ec01c2497d88d66edee53b6120916429cf03d81ccca75802ddd43b3ad93ce8bb"
+    },
+    {
+      "path": "assets/js/api/endpoints.js",
+      "mode": "100644",
+      "size": 6491,
+      "sha256": "71a558d406a2665381b2cca255a7a241a9b421943a2a74e97e26ad55558a95ea"
+    },
+    {
+      "path": "assets/js/api/httpClient.js",
+      "mode": "100644",
+      "size": 24709,
+      "sha256": "0eaa3ded109c3562b6fba0ef188b6b2bbc3b9f0536362cf5ad8e92a7b1f9a535"
+    },
+    {
+      "path": "assets/js/api/loginFieldErrors.js",
+      "mode": "100644",
+      "size": 2963,
+      "sha256": "5d1d5f997db7d3d0d641d8ad21837b679473bed51003fb608e73ad4e661162ab"
+    },
+    {
+      "path": "assets/js/api/mockData.js",
+      "mode": "100644",
+      "size": 16225,
+      "sha256": "407f8506ac5b9ed1358311fa11417b04685b2e98f156faca3aa0e55742c3f488"
+    },
+    {
+      "path": "assets/js/api/mockSetup.js",
+      "mode": "100644",
+      "size": 70123,
+      "sha256": "27eb82dfb6606851f969c8a1d19b726094ba0d301e83bf3d72e1b3b99074a514"
+    },
+    {
+      "path": "assets/js/api/protectedState.js",
+      "mode": "100644",
+      "size": 1952,
+      "sha256": "9ff69e21210592edaa936a2fcc9dda20c3866bdc84cd0f9b72930f782f44356e"
+    },
+    {
+      "path": "assets/js/api/sessionCoordinator.js",
+      "mode": "100644",
+      "size": 33431,
+      "sha256": "afab268958a0f07a723d0df3726081484a9b1f7261ea7601bd1f0388e8e5eb49"
+    },
+    {
+      "path": "assets/js/api/sessionStorage.js",
+      "mode": "100644",
+      "size": 39253,
+      "sha256": "16885562ef22d539c146b8d74e3d9c2495beadec843a5c1322c8c2711b4d8ced"
+    },
+    {
+      "path": "assets/js/appServices.js",
+      "mode": "100644",
+      "size": 1544,
+      "sha256": "1244ebccf2f25eed9eb245e0daa12d30d58564eb5dad1fb61c219f12dab944d5"
+    },
+    {
+      "path": "assets/js/constants/pagination.js",
+      "mode": "100644",
+      "size": 798,
+      "sha256": "38aab875b173929d4ea204b1513f2e951a2a84819328b6f604fbbdf27dde9fcc"
+    },
+    {
+      "path": "assets/js/helper.js",
+      "mode": "100644",
+      "size": 76,
+      "sha256": "610057e0cb6ba4df42f6eae8aa6fe616392784fe9d467970b9ab597acf66d1d4"
+    },
+    {
+      "path": "assets/js/i18n.js",
+      "mode": "100644",
+      "size": 2863,
+      "sha256": "d60397f5940b9ec8bf83d633758eabbd49d233ec12f8e618de2c5aa603c1641b"
+    },
+    {
+      "path": "assets/js/init.js",
+      "mode": "100644",
+      "size": 8217,
+      "sha256": "ba699b7f5204547b336e8ef199c47c7419237cc229d492a44deb3e08836b79d3"
+    },
+    {
+      "path": "assets/js/locales/de.js",
+      "mode": "100644",
+      "size": 67120,
+      "sha256": "5371c5f016a2e91dfbfe132432734e55d56b7b1943d932373642f716d8c9441d"
+    },
+    {
+      "path": "assets/js/locales/en.js",
+      "mode": "100644",
+      "size": 61362,
+      "sha256": "256290ff3618d4e2c915167c67942d4a34cce7228eea9bdba97f9afb0dbd3491"
+    },
+    {
+      "path": "assets/js/locales/ja.js",
+      "mode": "100644",
+      "size": 74084,
+      "sha256": "9aeff7d4c7acf125403712490f033d135c6f9ea7cbfefca76dddd8f57d073c34"
+    },
+    {
+      "path": "assets/js/locales/ko.js",
+      "mode": "100644",
+      "size": 68992,
+      "sha256": "a13c676ee133405847b8a5e08991e2742a054af338317357f28e473f55c1c6a1"
+    },
+    {
+      "path": "assets/js/locales/vi.js",
+      "mode": "100644",
+      "size": 72463,
+      "sha256": "ba07b9adc43d17cff8326566ca7d05ae09098eff9a865005b0b544c10c5f4e72"
+    },
+    {
+      "path": "assets/js/router.js",
+      "mode": "100644",
+      "size": 5849,
+      "sha256": "e5a54918bfbafecbd5b1507fd38d9ae723b2893a06cc6a32eb3a2e6afa515c5f"
+    },
+    {
+      "path": "assets/js/stores/advancedAuditStore.js",
+      "mode": "100644",
+      "size": 19578,
+      "sha256": "ea53ae919cfbfb644e581c9a1cd907eb4ef6fd0c0fc0e36958ed2a2642658d1d"
+    },
+    {
+      "path": "assets/js/stores/auditStore.js",
+      "mode": "100644",
+      "size": 10415,
+      "sha256": "35496f0f8dee43ac28e7a903d1e97a1e8cd32ec564697922f720af891879479a"
+    },
+    {
+      "path": "assets/js/stores/authStore.js",
+      "mode": "100644",
+      "size": 67211,
+      "sha256": "af8a1d2afce0e12ec73481deb16f8dd3aedfb7dcd0ea6f2596c2d51095b51290"
+    },
+    {
+      "path": "assets/js/stores/kvAdminAuditConfigsStore.js",
+      "mode": "100644",
+      "size": 5808,
+      "sha256": "adc8d5cc550d7c2460a75b29dd70ff0f84a2fc22cd8a6e12b534acfb175da287"
+    },
+    {
+      "path": "assets/js/stores/kvAdminConfigsStore.js",
+      "mode": "100644",
+      "size": 5419,
+      "sha256": "318a4c1870d8d296b9b7fde711e797f144cd468d7f39e3cd7ee2acc3612a0129"
+    },
+    {
+      "path": "assets/js/stores/kvAdminEnvComparisonStore.js",
+      "mode": "100644",
+      "size": 2336,
+      "sha256": "8f83a042ea96383fcec1e12e0eaf839e447b530f1cb5e8f330434fe8f4bfc5a8"
+    },
+    {
+      "path": "assets/js/stores/kvAdminRateLimitsStore.js",
+      "mode": "100644",
+      "size": 4855,
+      "sha256": "f0c4722550e21100eb1eb89f2f817df1c95b9c8ba0cc4be967bbdf57c5071c1e"
+    },
+    {
+      "path": "assets/js/stores/mainStore.js",
+      "mode": "100644",
+      "size": 7184,
+      "sha256": "61df4a0b00fa7b60c6c28879ad0a126b1a4dff1c6094714f891ab0433ed9caf8"
+    },
+    {
+      "path": "assets/js/stores/modalStore.js",
+      "mode": "100644",
+      "size": 1652,
+      "sha256": "f9b9bf047574b014fe6da935c5dbf71343dea232aa9971e002a2d0bd45b6558a"
+    },
+    {
+      "path": "assets/js/stores/profileStore.js",
+      "mode": "100644",
+      "size": 8524,
+      "sha256": "660e72c72198d36a3e3a85f5f276eb984300248bae16d0cb92c7c63af31068da"
+    },
+    {
+      "path": "assets/js/stores/publicEndpointStore.js",
+      "mode": "100644",
+      "size": 1637,
+      "sha256": "e5f56a5ccd17b5ae7f65fcacbca4a1bf900b7cda1efed5da2da43b5772353f82"
+    },
+    {
+      "path": "assets/js/stores/realtimeMonitoringStore.js",
+      "mode": "100644",
+      "size": 30525,
+      "sha256": "a8e9c35325717457e1bfc361e924592ad436c70aff5ccdd38326573ead19c587"
+    },
+    {
+      "path": "assets/js/stores/securityIncidentStore.js",
+      "mode": "100644",
+      "size": 6160,
+      "sha256": "315cc2a7d6f84ebcf5428a6f5365b8fcb02371d1fa0fee8724247a349eb8ae13"
+    },
+    {
+      "path": "assets/js/stores/systemHealthStore.js",
+      "mode": "100644",
+      "size": 2520,
+      "sha256": "22dd0d6cb1e1d4d54830079abf43960e4d78721e2546a7251d010675db74faee"
+    },
+    {
+      "path": "assets/js/stores/systemStatsStore.js",
+      "mode": "100644",
+      "size": 2215,
+      "sha256": "73fa79b2fff94cbc40b0a081f1fcfe203981d901a4a8b2f1d59c536a8327f3d1"
+    },
+    {
+      "path": "assets/js/stores/toastStore.js",
+      "mode": "100644",
+      "size": 1947,
+      "sha256": "dea6ef320fa4e7fc2eb276c2c76fc81b7aa10403e5abf42e672873243f594ab4"
+    },
+    {
+      "path": "assets/js/stores/tokenAuditStore.js",
+      "mode": "100644",
+      "size": 7485,
+      "sha256": "8027e23f2e3cf7bcc85f626c40662326031f3b2e6ec7b83e5f9d1db03ee4217c"
+    },
+    {
+      "path": "assets/js/stores/tokenBlacklistStore.js",
+      "mode": "100644",
+      "size": 7778,
+      "sha256": "1a25c1cda853311ca3d4543a7ffd9be67f2955514851ea3a9383da1c8e38b42f"
+    },
+    {
+      "path": "assets/js/stores/userStore.js",
+      "mode": "100644",
+      "size": 8723,
+      "sha256": "5cd00da521a4b645cffb4193b2d6ebba0e4def42719b0bee2ffe33162d5a2c62"
+    },
+    {
+      "path": "assets/js/utils/dateTime.js",
+      "mode": "100644",
+      "size": 1260,
+      "sha256": "324a3b077b5bb540b7c39f9cf511c948bbf4d21c135eefabd91335cab5fd5947"
+    },
+    {
+      "path": "assets/js/utils/loaderUtils.js",
+      "mode": "100644",
+      "size": 3886,
+      "sha256": "85bdabbd95126977b27a09f2b1084f2a6170efdca68e12d049db349f246d1c07"
+    },
+    {
+      "path": "index.html",
+      "mode": "100644",
+      "size": 867,
+      "sha256": "db04bbda1b74af0c9398ac453b76505e7c16b48dc5adfe05a9e42ee7c218bfcb"
+    },
+    {
+      "path": "reports/FRONTEND-EXECUTION-LOG.vi.md",
+      "mode": "100644",
+      "size": 5423,
+      "sha256": "f6a8a199710495edeba41326f6f08d85efbf546080cc8021dc1ccdbbfadb2290"
+    },
+    {
+      "path": "reports/FRONTEND-FINDING-MATRIX.tsv",
+      "mode": "100644",
+      "size": 17545,
+      "sha256": "1cc72cca530f401a0da559bfffb87ad5f813e8d054b516dddfc7e00e576056c3"
+    },
+    {
+      "path": "reports/FRONTEND-HANDOFF.vi.md",
+      "mode": "100644",
+      "size": 21118,
+      "sha256": "ac0b311c2ad09bcc65f4869734168d5e79313d072e728f5852a34235aa2554ac"
+    },
+    {
+      "path": "tests/browser/backend-capabilities.spec.mjs",
+      "mode": "100644",
+      "size": 8106,
+      "sha256": "5c45f6d6b14c040651e85f460ac372fef0391a8521f6f5275a70ac8e8b706998"
+    },
+    {
+      "path": "tests/browser/backend-contract-mock.spec.mjs",
+      "mode": "100644",
+      "size": 13611,
+      "sha256": "a2ff4f524b98e04c58de4b6e0bcec8f767ee1a593453bfe4aabe81964216a39f"
+    },
+    {
+      "path": "tests/browser/fake-api.mjs",
+      "mode": "100644",
+      "size": 22261,
+      "sha256": "cb350a1fa14a1434d3c6b82c46ca2abfa5c991d35481a33832769337a0ae29f6"
+    },
+    {
+      "path": "tests/browser/fixtures.js",
+      "mode": "100644",
+      "size": 4227,
+      "sha256": "67186b740761d47dff5f5074100033c92ec2416924bd6f3a5801d84c2f21be96"
+    },
+    {
+      "path": "tests/browser/harness-egress.spec.mjs",
+      "mode": "100644",
+      "size": 12216,
+      "sha256": "97a2b38093ae83dad57364dce06709a3b86dda9ff2ff4f6b157ef45887d0378b"
+    },
+    {
+      "path": "tests/browser/helpers/browser-fixture.mjs",
+      "mode": "100644",
+      "size": 49061,
+      "sha256": "3368ae7cd28cf83fbcb9db17894e943e597b8d667010577defa73f311051f5e5"
+    },
+    {
+      "path": "tests/browser/helpers/integration-session.mjs",
+      "mode": "100644",
+      "size": 9324,
+      "sha256": "cfcfa418d358f16ce3dbb84378a60538d9716a6e92e041299f5e8e3531ce3872"
+    },
+    {
+      "path": "tests/browser/playwright.config.mjs",
+      "mode": "100644",
+      "size": 2138,
+      "sha256": "6c529b9874e3f5e04c78d1ff03484e3c24f51fec510bdef5c577f65a722de155"
+    },
+    {
+      "path": "tests/browser/playwright.integration.config.mjs",
+      "mode": "100644",
+      "size": 3425,
+      "sha256": "769e71bb530194351ede1bcff3d12b28d6576dfc94083846bab0c415cebbc638"
+    },
+    {
+      "path": "tests/browser/session-flow.spec.mjs",
+      "mode": "100644",
+      "size": 10978,
+      "sha256": "aa228592936aab67360f663fa540082aebc10e99b4fed4e5cf6ebee5612b32c4"
+    },
+    {
+      "path": "tests/browser/session-invariants.spec.mjs",
+      "mode": "100644",
+      "size": 56760,
+      "sha256": "ea6ae2b99e1dc1d7cbd43ab623e1efd12903dd69d9ee366eda336f6e476e5087"
+    },
+    {
+      "path": "tests/browser/session-seed-smoke.spec.mjs",
+      "mode": "100644",
+      "size": 5813,
+      "sha256": "8bea480e51b2d9212e67e3371481c2d0e0a82fd6c243fa38247e3480d9781532"
+    },
+    {
+      "path": "tests/package-lock.json",
+      "mode": "100644",
+      "size": 14477,
+      "sha256": "cebccba60a9f9372d17f3215b58466a426a504f4a93b0720f172fd0493d60c50"
+    },
+    {
+      "path": "tests/package.json",
+      "mode": "100644",
+      "size": 1210,
+      "sha256": "6b54d1d856ed4b2d3f3b979ef3112ddb096b8fbfbb9915ed388fcf2c4bdf9b63"
+    },
+    {
+      "path": "tests/regression/auth-transport.test.mjs",
+      "mode": "100644",
+      "size": 37015,
+      "sha256": "27e026cef9ac2076f550b25ab50941eb306282f737b8872edc6b30046eb224c1"
+    },
+    {
+      "path": "tests/regression/backend-contract-ui.test.mjs",
+      "mode": "100644",
+      "size": 31760,
+      "sha256": "f2f84d893d13f31182b1127796ff0b4b6c8ba7d0235af65fc6e973ba15e83fec"
+    },
+    {
+      "path": "tests/regression/contract-mask.test.mjs",
+      "mode": "100644",
+      "size": 12858,
+      "sha256": "d1df5cb9e22c3532f5428968a24859989565c0955b0deb78d63bba895087bd49"
+    },
+    {
+      "path": "tests/regression/harness-boundaries.test.mjs",
+      "mode": "100644",
+      "size": 24299,
+      "sha256": "36d88c1586bdd7c46ac2ada3ac60374089f0dddd7e297dcf5d31aabc7b811600"
+    },
+    {
+      "path": "tests/regression/helpers/app-harness.mjs",
+      "mode": "100644",
+      "size": 8804,
+      "sha256": "a5022fc92d8a4574103059002baa4c8f0393df2e0e6216c31457e20ed1f31e27"
+    },
+    {
+      "path": "tests/regression/helpers/browser-env.mjs",
+      "mode": "100644",
+      "size": 21848,
+      "sha256": "9b9f6c0e1b6369eb0eecc61a4eb5b10db21695b1f94bec1f2877cb6e2c48d292"
+    },
+    {
+      "path": "tests/regression/helpers/manual-clock.mjs",
+      "mode": "100644",
+      "size": 4253,
+      "sha256": "65e5977fc558b2b91f85754ff852a44dcf591f8f225241c02ad89a2bf82bd426"
+    },
+    {
+      "path": "tests/regression/integration-fixture.test.mjs",
+      "mode": "100644",
+      "size": 8542,
+      "sha256": "6ace3cf31f6e36322cd837e5f5cb981e8c9c39dbd25ca074a929bd40d25b88ef"
+    },
+    {
+      "path": "tests/regression/loopback-transport.test.mjs",
+      "mode": "100644",
+      "size": 17258,
+      "sha256": "55ac7eb7cb774277c77512b68bf0301e07be0bcc9bddafe117cd0d64a25a7c96"
+    },
+    {
+      "path": "tests/regression/profile-caller.test.mjs",
+      "mode": "100644",
+      "size": 23807,
+      "sha256": "cffce7f3b5d07fef5f1923bac371007e3e6c128868ccbffbb87ee5288c12f880"
+    },
+    {
+      "path": "tests/regression/profile-session.test.mjs",
+      "mode": "100644",
+      "size": 9442,
+      "sha256": "6bc82b611889b7b9a05c817112e39a0549ee2a444ea7264d453ace45c6e1a9f8"
+    },
+    {
+      "path": "tests/regression/refresh-commit-order.test.mjs",
+      "mode": "100644",
+      "size": 17399,
+      "sha256": "6b6e4e0c405e0ed729f24d5efa10c484b28d1cbf4f93bb77c6481015671ede38"
+    },
+    {
+      "path": "tests/regression/refresh-lock-pin.test.mjs",
+      "mode": "100644",
+      "size": 3174,
+      "sha256": "b882d0b30cc42e90c33bfb36ee0e0bc830b34f8ea1b1fdd21d00f911c9ccbc2a"
+    },
+    {
+      "path": "tests/regression/session-lifecycle.test.mjs",
+      "mode": "100644",
+      "size": 26569,
+      "sha256": "14942d68ce75f45682eb335dc9bd96d79a4c6f6572e3517fedaeec196ce68c6d"
+    },
+    {
+      "path": "tests/regression/session-write-order.test.mjs",
+      "mode": "100644",
+      "size": 73416,
+      "sha256": "ee6fffa848dafee92521169c5271e2b35f4a14f26b12dfbd4c2afa987d1930c2"
+    },
+    {
+      "path": "tests/regression/source-identity.test.mjs",
+      "mode": "100644",
+      "size": 13199,
+      "sha256": "2ec4a9ca331a1f0e88f11293cefebf3039f5f2be724cbcb1a3722a8409463409"
+    },
+    {
+      "path": "tests/regression/validate-reports.test.mjs",
+      "mode": "100644",
+      "size": 25965,
+      "sha256": "5eacea52bf516ebee7c7f057878aa345ed353681aad3bfe759e258f68e6e273c"
+    },
+    {
+      "path": "tools/I18N_TOOLS_EN.md",
+      "mode": "100644",
+      "size": 10937,
+      "sha256": "9d843f8a4464d141db61d5dc3cc518dc86a9f3c4b1ab4dce21cfbb20efc9d151"
+    },
+    {
+      "path": "tools/I18N_TOOLS_VI.md",
+      "mode": "100644",
+      "size": 12576,
+      "sha256": "f40ab410f0550f0178cf68e9254b9fc578e74056ee627758a7dd031cb9d38220"
+    },
+    {
+      "path": "tools/check-cdn-pins.cjs",
+      "mode": "100644",
+      "size": 4961,
+      "sha256": "fccbafed9d800c1acf9ae5e5784ad5cb1f910ca1ab04ab74bada7f0cb669caf0"
+    },
+    {
+      "path": "tools/frontend-source-identity.mjs",
+      "mode": "100644",
+      "size": 13406,
+      "sha256": "3148cad01293bd60ae897bf033b9abbdcc571ecc0bc1ebee2b27a3eed7383df8"
+    },
+    {
+      "path": "tools/i18n-audit.js",
+      "mode": "100644",
+      "size": 15983,
+      "sha256": "e25d8055985c91245da65dbe2afeb03f9050ca1a04e94db3e28f2ad0de5463fa"
+    },
+    {
+      "path": "tools/i18n-quick.sh",
+      "mode": "100755",
+      "size": 5915,
+      "sha256": "f3ca98945998eb097ff2cbcc242dc317fe0cda7ffcf68ceaea922a3ce8d84331"
+    },
+    {
+      "path": "tools/i18n-usage-check.js",
+      "mode": "100644",
+      "size": 10119,
+      "sha256": "463943b771e4073b789e4b514b8205c565c4b46e4a4a1c181f4220e50c88ee1e"
+    },
+    {
+      "path": "tools/i18n.js",
+      "mode": "100644",
+      "size": 12508,
+      "sha256": "e7f1b04ccb0b0b9b6f9bacf35d37e09a7b81e579c375c23f7afd3b8d65eb0da7"
+    },
+    {
+      "path": "tools/run-browser-gate.sh",
+      "mode": "100755",
+      "size": 4328,
+      "sha256": "584563aa9bd92a1ad222df848bde029218b2ef7347ffdb50f9447f60a7daab7f"
+    },
+    {
+      "path": "tools/run-frontend-gate-selftest.sh",
+      "mode": "100755",
+      "size": 8362,
+      "sha256": "bb00cec9793cc5d7776696545c953cc1627c7dfdd3eb07b1afe9bb61d3d14c56"
+    },
+    {
+      "path": "tools/run-frontend-gate.sh",
+      "mode": "100755",
+      "size": 10358,
+      "sha256": "da3167841d8b51b934b78dbe09fd611d359713983f7a243249927c345af9be65"
+    },
+    {
+      "path": "tools/test-browser.sh",
+      "mode": "100644",
+      "size": 3367,
+      "sha256": "e2bc203d8dfa23dc4ed2faaf9f9a7c5d4444b923e6f10571ab97a15dc132d6e3"
+    },
+    {
+      "path": "tools/validate-reports.mjs",
+      "mode": "100644",
+      "size": 25273,
+      "sha256": "01f940b2b9bb8e86f73e72a2f0f8655ea72d59a814b85906528a6fbf0b9ef275"
+    },
+    {
+      "path": "tools/vue-custom-lint.cjs",
+      "mode": "100644",
+      "size": 2632,
+      "sha256": "9c100fbf7d3a14505e1ca222093dc466b6478e2e6af7edd911a447c5a1d61f45"
+    },
+    {
+      "path": "tools/vue-file-size-check.cjs",
+      "mode": "100644",
+      "size": 5024,
+      "sha256": "f947f728f2d7046847a3b9c782701f69d09597fe57afe7dd87a608eafd84834e"
+    },
+    {
+      "path": "tools/vue-script-setup-coverage.cjs",
+      "mode": "100644",
+      "size": 3266,
+      "sha256": "40224e666adc0c71574557dcc09a5fd8a300dbd29ca8a6f8bfe045617e1527c7"
+    },
+    {
+      "path": "vue/App.vue",
+      "mode": "100644",
+      "size": 4861,
+      "sha256": "b461bff651cfc85cbaed10b9ff200ea7e82330a3da0705115fc3b8b14d97be57"
+    },
+    {
+      "path": "vue/Loader.js",
+      "mode": "100644",
+      "size": 9470,
+      "sha256": "8cc4704337a96e8c8d0a8bb97a1c6f4f509e159a70db481e7055c042ed1ec797"
+    },
+    {
+      "path": "vue/Loader.vue",
+      "mode": "100644",
+      "size": 3053,
+      "sha256": "d4a2d7cf6a57e1873e05ac49ffe2b7ae4a845eaeb0340e7251422a8a22539613"
+    },
+    {
+      "path": "vue/components/ActionIconButton.vue",
+      "mode": "100644",
+      "size": 1271,
+      "sha256": "44c62a462fdb790f545a1bdb043ceab72e089ff02607d4d2af9496901b01e192"
+    },
+    {
+      "path": "vue/components/ActionTextButton.vue",
+      "mode": "100644",
+      "size": 2407,
+      "sha256": "2598c56e673c75056a8d53be1800f07f4bfc88d27cc49a2d68883a4e8279a683"
+    },
+    {
+      "path": "vue/components/AdvancedAuditAnalyticsTab.vue",
+      "mode": "100644",
+      "size": 24584,
+      "sha256": "e6800e44ac7698eb938850ddeb06275e03acbc4704421d10885cbf6d42ab6dfc"
+    },
+    {
+      "path": "vue/components/AdvancedAuditArchivalTab.vue",
+      "mode": "100644",
+      "size": 36443,
+      "sha256": "a3045340d494bcb1e086e70b4454f93fdae19d01ab9e4e141447424965e7cc9b"
+    },
+    {
+      "path": "vue/components/AdvancedAuditComplianceTab.vue",
+      "mode": "100644",
+      "size": 21883,
+      "sha256": "4e55ec503f64988cd2ffaba5f1844b8d70e5676b97fd441998e4a9a971f46ebf"
+    },
+    {
+      "path": "vue/components/AsyncLoader.vue",
+      "mode": "100644",
+      "size": 8080,
+      "sha256": "5c8091b25aafaade8b87508cc384f389dce4e848abeb8e0309610e52a90d706d"
+    },
+    {
+      "path": "vue/components/AsyncStateSection.vue",
+      "mode": "100644",
+      "size": 1660,
+      "sha256": "d2d6598df19aefb82d4fe7f3e7061da503a3e4c4b953b03456d6b58552651dae"
+    },
+    {
+      "path": "vue/components/AuditLogDetailsModal.vue",
+      "mode": "100644",
+      "size": 4122,
+      "sha256": "3e5f491953bf0d077f20ea73d6ec0254072debb74d03d593b5a0d230f20cb47e"
+    },
+    {
+      "path": "vue/components/AuditStatsGrid.vue",
+      "mode": "100644",
+      "size": 2819,
+      "sha256": "dc1ea0a0879e46e2fbdf2552a02b447be87c7790cfdf6ad0940925f2e6413778"
+    },
+    {
+      "path": "vue/components/AuditTruncatePanel.vue",
+      "mode": "100644",
+      "size": 7514,
+      "sha256": "7e53229e40e4b644063d7628e1863c1810d2571f2cd203e9ee1179bb905d2835"
+    },
+    {
+      "path": "vue/components/ConfirmDeleteModal.vue",
+      "mode": "100644",
+      "size": 3201,
+      "sha256": "503264366380e16723b552568a7a61314b6c4e1b7f3898f3c3472c45edac193c"
+    },
+    {
+      "path": "vue/components/ConfirmModal.vue",
+      "mode": "100644",
+      "size": 1984,
+      "sha256": "39324cc95a6b0646eb5d0562a7c02d951f385dd922d72af6d58afadbab5083ea"
+    },
+    {
+      "path": "vue/components/LoginModal.vue",
+      "mode": "100644",
+      "size": 5618,
+      "sha256": "172b369e3307a71a21fa7d7ec38b891480aa7efb2302612a6f4b74536987373d"
+    },
+    {
+      "path": "vue/components/LoginRequiredPrompt.vue",
+      "mode": "100644",
+      "size": 2643,
+      "sha256": "ff84d3df79d5d91ffdf84c7416381056a851875d8981877ff73840759d39d2c5"
+    },
+    {
+      "path": "vue/components/LogoutWarning.vue",
+      "mode": "100644",
+      "size": 1202,
+      "sha256": "32fa3665038967b6f7463603b6c667d14646b1a18962550e0bacce3b0279508b"
+    },
+    {
+      "path": "vue/components/ModalWindow.vue",
+      "mode": "100644",
+      "size": 3594,
+      "sha256": "22b158a835a8bd9a754b1fafbc746e5f065de7e2b16bc7c93514f887bba77b15"
+    },
+    {
+      "path": "vue/components/Navbar.vue",
+      "mode": "100644",
+      "size": 19118,
+      "sha256": "983062c21a1b6c375ab31bcbaad04acc63af26b4985e3864297a2e0125989d34"
+    },
+    {
+      "path": "vue/components/PageHeroSection.vue",
+      "mode": "100644",
+      "size": 703,
+      "sha256": "f808660012a6762ec31da4c9c7211b1422bb24d09ad09469c41cef79f47415ef"
+    },
+    {
+      "path": "vue/components/PaginationControls.vue",
+      "mode": "100644",
+      "size": 6796,
+      "sha256": "0dc6ce5bbdd59a4ccc107ad182f52046e9ab9f464693e7693b12bde571e6aed3"
+    },
+    {
+      "path": "vue/components/RealtimeAlertChannelModal.vue",
+      "mode": "100644",
+      "size": 4082,
+      "sha256": "0a3e4dc8539d63ff113e9d4d9633b6bd173c577ff69500688be74ac5b2b8ec12"
+    },
+    {
+      "path": "vue/components/RealtimeAlertRuleModal.vue",
+      "mode": "100644",
+      "size": 8017,
+      "sha256": "0b2a39a19c65abc69a7aac8ff51af0287108d579c422a40897dfc5a6efc9f0cc"
+    },
+    {
+      "path": "vue/components/RealtimeAlertRulesSection.vue",
+      "mode": "100644",
+      "size": 8471,
+      "sha256": "718619ef0e14c944acdf674ea22c26ae60128559555b822ba3a032dc4e147f9d"
+    },
+    {
+      "path": "vue/components/RealtimeBreakdownTables.vue",
+      "mode": "100644",
+      "size": 8004,
+      "sha256": "4203de1a25fb683d05cf7917fc09447a3c4037fc9b80e5b299b60925bf59dcff"
+    },
+    {
+      "path": "vue/components/RealtimeClearCacheModal.vue",
+      "mode": "100644",
+      "size": 2648,
+      "sha256": "e4fe84807a601f55a6b91070f14193c60d4ae524d8573e1c573d7d9c3b17ccda"
+    },
+    {
+      "path": "vue/components/RealtimeIncidentModal.vue",
+      "mode": "100644",
+      "size": 4207,
+      "sha256": "6566b9505e36648fd9fc67584086ac37664e2b78a2f9e87e3aeb1576a93972ac"
+    },
+    {
+      "path": "vue/components/RealtimeOpsControlsSection.vue",
+      "mode": "100644",
+      "size": 9758,
+      "sha256": "a00756031561fb87ddbd20ae31b7b94eacc285d76167926f63d5063bd0ec5f4a"
+    },
+    {
+      "path": "vue/components/RealtimeToggleRuleConfirmModal.vue",
+      "mode": "100644",
+      "size": 1548,
+      "sha256": "029ae56a49c6c5060678f249ea872c745166102c5087a11a45dc5342790f355f"
+    },
+    {
+      "path": "vue/components/RealtimeTopActionsSection.vue",
+      "mode": "100644",
+      "size": 3062,
+      "sha256": "47555004e7fc7c6c3c57294978f2b4f5ea0a378ad5096832f77badaabf21c652"
+    },
+    {
+      "path": "vue/components/RegisterModal.vue",
+      "mode": "100644",
+      "size": 9692,
+      "sha256": "4e45c90594d01674b80a2a84dc38951c09c8c958bbbf5731160432b7fef98e6a"
+    },
+    {
+      "path": "vue/components/RoleChangeModal.vue",
+      "mode": "100644",
+      "size": 4198,
+      "sha256": "cea9a0607e4d46d16c8f32fca29ae5b2a4309969ded3f45ed21d9137d9c971e8"
+    },
+    {
+      "path": "vue/components/SessionPersistenceWarning.vue",
+      "mode": "100644",
+      "size": 2490,
+      "sha256": "c3d80384e9db5357549db0fb294b4c64abe603c5d959073b27a11079ed9f5101"
+    },
+    {
+      "path": "vue/components/StatCard.vue",
+      "mode": "100644",
+      "size": 1527,
+      "sha256": "97c8546a262fc4c953adac5e8ede4fc9219dc92b1428b61fa4c7429ef5a13874"
+    },
+    {
+      "path": "vue/components/ToastNotification.vue",
+      "mode": "100644",
+      "size": 2440,
+      "sha256": "d7b1cc85496081725ef98120876b29aa9e8e3f7c45aa01fdda6157dc123451b6"
+    },
+    {
+      "path": "vue/components/UserModal.vue",
+      "mode": "100644",
+      "size": 9133,
+      "sha256": "16c19b2169fd276da5a2a4f05626d0e176a6e126227a481e320b7321cc6ff068"
+    },
+    {
+      "path": "vue/composables/createAuthGateCallbacks.js",
+      "mode": "100644",
+      "size": 712,
+      "sha256": "c5f8edf2e573933415f5442ea33b291451f271e4eafd4e03ce88e18ad4f1fb86"
+    },
+    {
+      "path": "vue/composables/useAdminAdvancedAuditPage.js",
+      "mode": "100644",
+      "size": 7372,
+      "sha256": "ce4207a2b5e50490fe59219cd77a21c58176e213b2341ee9851273bc7def3467"
+    },
+    {
+      "path": "vue/composables/useAdminAuditLogsPage.js",
+      "mode": "100644",
+      "size": 15048,
+      "sha256": "a4a6efbec5e14026fed2f5dcdb1e469ac72435e37582edfafcc4ae855f49a288"
+    },
+    {
+      "path": "vue/composables/useAdminDashboardPage.js",
+      "mode": "100644",
+      "size": 14343,
+      "sha256": "fd4c6b5d3b8df4f94e0894e8e65a0a666d0833887b5dd2569bcaf242a231c9a2"
+    },
+    {
+      "path": "vue/composables/useAdminRealtimeMonitoringPage.js",
+      "mode": "100644",
+      "size": 21703,
+      "sha256": "66a8847484fe5311dbfa459eaede766c2c88ea538465594532830aeac4cf7b0f"
+    },
+    {
+      "path": "vue/composables/useAdminSecurityIncidentsPage.js",
+      "mode": "100644",
+      "size": 10476,
+      "sha256": "3b6105304d6716fdc89bc0f06414c37c906d9500fc69bd59b5eaedb3ca2cfe73"
+    },
+    {
+      "path": "vue/composables/useAdminSystemHealthPage.js",
+      "mode": "100644",
+      "size": 10680,
+      "sha256": "0c6b08ad5d679127d72940b536a64c360c689362c7e9aaac0fc1c959f9841b42"
+    },
+    {
+      "path": "vue/composables/useAdminSystemStatsPage.js",
+      "mode": "100644",
+      "size": 7792,
+      "sha256": "f89ccd5031997ab96718bc9a65b04038916dbbecfc314c64ab77c0f2a7da6952"
+    },
+    {
+      "path": "vue/composables/useAdminTokenAuditPage.js",
+      "mode": "100644",
+      "size": 8675,
+      "sha256": "82336bfaee8471ad767bdc627266a547c064d756bdd06ef73e656643dc94fe18"
+    },
+    {
+      "path": "vue/composables/useAdminTokenBlacklistPage.js",
+      "mode": "100644",
+      "size": 5541,
+      "sha256": "7d180b9e7ea51d2e3de901bc669fc133ce6779bcd6c7fd178ecb6a8365a701f9"
+    },
+    {
+      "path": "vue/composables/useAdminUsersPage.js",
+      "mode": "100644",
+      "size": 17752,
+      "sha256": "e55a8f102b3d489f69bef306b241c1beaf6d9f69fa1bcef5c4ec81ff96f1a997"
+    },
+    {
+      "path": "vue/composables/useAdvancedAuditArchivalTab.js",
+      "mode": "100644",
+      "size": 2929,
+      "sha256": "8fd67cbab8dbcc1b2aaca9a7f32d9c72f15a9b4776b3fb037608b423f45e73e3"
+    },
+    {
+      "path": "vue/composables/useApiExplorerPage.js",
+      "mode": "100644",
+      "size": 4100,
+      "sha256": "f63df330abe57b1ec8bb26b078204114ff368cfea2927961f3b3b64d30dcbeb9"
+    },
+    {
+      "path": "vue/composables/useAuthGate.js",
+      "mode": "100644",
+      "size": 5348,
+      "sha256": "4082becdc17a77ff69e922a26d865acb2df456ea88cfae57b14aa793d44093e5"
+    },
+    {
+      "path": "vue/composables/useAuthStateChangeWatcher.js",
+      "mode": "100644",
+      "size": 823,
+      "sha256": "7fafacfb20782b0325625ebc6a7b3b2a363d1fb0b1b5d2c489dbdb1be3aebb82"
+    },
+    {
+      "path": "vue/composables/useDateTimeFormatter.js",
+      "mode": "100644",
+      "size": 2121,
+      "sha256": "f1789631698e5fb719c541dfccb614530a034443fda42dbf12900b5b1143ada0"
+    },
+    {
+      "path": "vue/composables/useDebouncedFilters.js",
+      "mode": "100644",
+      "size": 1018,
+      "sha256": "8ec1883bb1a718d904182fb8bc75f41b6605a1b234a20d7312a7b915f99e4871"
+    },
+    {
+      "path": "vue/composables/useDeepLinkedTabs.js",
+      "mode": "100644",
+      "size": 4438,
+      "sha256": "1752d20cdb3dc020a1bf164358a0c414566ea9382207aab0701fcb0f252c34dc"
+    },
+    {
+      "path": "vue/composables/useEnsureAuthenticatedLifecycle.js",
+      "mode": "100644",
+      "size": 919,
+      "sha256": "97a6ae67177353d9996980e72e4ba37da503b457c650ed2da9c40c4a3f2c96f6"
+    },
+    {
+      "path": "vue/composables/useI18nFallback.js",
+      "mode": "100644",
+      "size": 1988,
+      "sha256": "6021dab1c4b70a386c4c21ddc8f67b1abd86dea7530c47842a1795d38b579c65"
+    },
+    {
+      "path": "vue/composables/useKvAdminAuditConfigsPage.js",
+      "mode": "100644",
+      "size": 3497,
+      "sha256": "d1da6dea116a98c8704794ccdb8c0e89740c82b742d51b131a1d9ee454cb57e1"
+    },
+    {
+      "path": "vue/composables/useKvAdminConfigsPage.js",
+      "mode": "100644",
+      "size": 21897,
+      "sha256": "29ee40cef793750841c303c9464019cd5d98f0f06b1409aa25480f46388462be"
+    },
+    {
+      "path": "vue/composables/useKvAdminEnvComparisonPage.js",
+      "mode": "100644",
+      "size": 4158,
+      "sha256": "74135d2112bb72a1bb081fd5613af8637132da8a575b1c1c13d517ba4f722157"
+    },
+    {
+      "path": "vue/composables/useKvAdminRateLimitsPage.js",
+      "mode": "100644",
+      "size": 4814,
+      "sha256": "2f2e71877e6139ff1fe67abbc3cbd15abe81250bb6e626dd30185b4ebdd8b383"
+    },
+    {
+      "path": "vue/composables/useLoginModalForm.js",
+      "mode": "100644",
+      "size": 5147,
+      "sha256": "893d49741d626be73a881f69f57a8cf13eb8e802382870efa6492cdd83a01802"
+    },
+    {
+      "path": "vue/composables/useMockApiChangeWatcher.js",
+      "mode": "100644",
+      "size": 610,
+      "sha256": "8f431001c7f6b2947ea5c1bf7466bae9fd2746f8a72745787cd0d1379afb166a"
+    },
+    {
+      "path": "vue/composables/useModalState.js",
+      "mode": "100644",
+      "size": 989,
+      "sha256": "c0d60b38a92867371f910dd6b0992020e009569996d39d1061f6411fab1f84a8"
+    },
+    {
+      "path": "vue/composables/useNavbar.js",
+      "mode": "100644",
+      "size": 19482,
+      "sha256": "db93a97da0a773dae73da41d22c9151d807b94eff20590910cb04710ccde9478"
+    },
+    {
+      "path": "vue/composables/useProfilePage.js",
+      "mode": "100644",
+      "size": 20071,
+      "sha256": "ae58795506fe721257c69930de7c03a27ec6b80a736f40cd8fafee80c81ebc01"
+    },
+    {
+      "path": "vue/composables/usePublicEndpointPage.js",
+      "mode": "100644",
+      "size": 2283,
+      "sha256": "d83dca8cb07bb2826f6d0dab09936bdc1ad65e1f86474465771c43f62b5cb396"
+    },
+    {
+      "path": "vue/composables/useRegisterModalForm.js",
+      "mode": "100644",
+      "size": 3316,
+      "sha256": "e2ca5f1f0a88def108bfe6bd9f078e08d731101b65b43d9a903c403ca39d4405"
+    },
+    {
+      "path": "vue/composables/useSessionContextWatch.js",
+      "mode": "100644",
+      "size": 1312,
+      "sha256": "51a377be6e052cac077a0821c9998dd12a09cbc1861cd077693f0bde1b9cb5a8"
+    },
+    {
+      "path": "vue/composables/useSettingsPage.js",
+      "mode": "100644",
+      "size": 22591,
+      "sha256": "c2d6d7c7aae0f9f54e60dde2459c9eb7553967edd4df590d5290c5c054859b9f"
+    },
+    {
+      "path": "vue/composables/useUiClassMap.js",
+      "mode": "100644",
+      "size": 6088,
+      "sha256": "9342fcff7407f9bd00c23094d2cee153921401abdf8352611d6e674ad064d3a3"
+    },
+    {
+      "path": "vue/composables/useUserModalForm.js",
+      "mode": "100644",
+      "size": 724,
+      "sha256": "abfa7fca99c3e5bc00be5e7781143f890b361587a480fe926b2609f24188ac65"
+    },
+    {
+      "path": "vue/pages/About.vue",
+      "mode": "100644",
+      "size": 14596,
+      "sha256": "5a0b76600078f5b7511429895556468020ee38d9d60fbbe13b2371d0fab38d26"
+    },
+    {
+      "path": "vue/pages/AdminAdvancedAudit.vue",
+      "mode": "100644",
+      "size": 6367,
+      "sha256": "f8cfd3a08af02691ee1adc8493c389a0c395a15a38a452c0010201998a5a874e"
+    },
+    {
+      "path": "vue/pages/AdminAuditLogs.vue",
+      "mode": "100644",
+      "size": 21155,
+      "sha256": "15206850daed774729b88f93a270afa910179db23cfb50a4f9b831b713de99eb"
+    },
+    {
+      "path": "vue/pages/AdminDashboard.vue",
+      "mode": "100644",
+      "size": 13777,
+      "sha256": "0d6664367c673dad4c8d28621b29a58a9b2fdc9ae3818ec72566bf9c1105727a"
+    },
+    {
+      "path": "vue/pages/AdminRealtimeMonitoring.vue",
+      "mode": "100644",
+      "size": 22463,
+      "sha256": "0b4f7063b92749ece2893e2ac16740f645d67c69019569a76f98374e56c1ab2f"
+    },
+    {
+      "path": "vue/pages/AdminSecurityIncidents.vue",
+      "mode": "100644",
+      "size": 19094,
+      "sha256": "82d9596bde62b30795b657d95d236bea70b0a459cf6735dfe1e5498a8dec073c"
+    },
+    {
+      "path": "vue/pages/AdminSystemHealth.vue",
+      "mode": "100644",
+      "size": 26169,
+      "sha256": "73358dfaef623fe984751ca2848e294dc75f4cce94225edf974da35280e78576"
+    },
+    {
+      "path": "vue/pages/AdminSystemStats.vue",
+      "mode": "100644",
+      "size": 23033,
+      "sha256": "f7ca4b3bfdca648de0ddeee78b97036649ccbc32555ad09409df015497e31217"
+    },
+    {
+      "path": "vue/pages/AdminTokenAudit.vue",
+      "mode": "100644",
+      "size": 27054,
+      "sha256": "cc9afc45a200ee05350226571bd3e341fdbcd8233a220bbe5fb2801ded799016"
+    },
+    {
+      "path": "vue/pages/AdminTokenBlacklist.vue",
+      "mode": "100644",
+      "size": 18254,
+      "sha256": "bf6a4f8b07498f85a9f455b99aa5eec16361404642b94cde15088de87acb1b5c"
+    },
+    {
+      "path": "vue/pages/AdminUsers.vue",
+      "mode": "100644",
+      "size": 16714,
+      "sha256": "aa30761964682e10e0b391c2efb60e8852177118318e267e96a15a8f2b71d900"
+    },
+    {
+      "path": "vue/pages/ApiExplorer.vue",
+      "mode": "100644",
+      "size": 9218,
+      "sha256": "18475a3e6e3b5c132ea699dfa7bd7bb92ce100202255e30588a7c0548f24eeb9"
+    },
+    {
+      "path": "vue/pages/Home.vue",
+      "mode": "100644",
+      "size": 5770,
+      "sha256": "42aec5091bd8fd0631af46c25f0982092c6856610b4fa6d4b15855f82779d77d"
+    },
+    {
+      "path": "vue/pages/KvAdminAuditConfigs.vue",
+      "mode": "100644",
+      "size": 15519,
+      "sha256": "a222e4ee51b48b4cf2f558032f069e4909bd14b853f11988df9d9cea92389044"
+    },
+    {
+      "path": "vue/pages/KvAdminConfigs.vue",
+      "mode": "100644",
+      "size": 16735,
+      "sha256": "34d9a36f03dacc9103d2544fadc0847a28f5e134f1e718e147a1c2374d28efa1"
+    },
+    {
+      "path": "vue/pages/KvAdminEnvComparison.vue",
+      "mode": "100644",
+      "size": 13619,
+      "sha256": "8f8b2a72dc1fb8741a3a5aafe0b0d99748f581c0d0c22f6e2f0e730065d0e91a"
+    },
+    {
+      "path": "vue/pages/KvAdminRateLimits.vue",
+      "mode": "100644",
+      "size": 10373,
+      "sha256": "acf45fcc69e0df9e210ddc81bc3b98bec1686d917de1451bf789a72cdd68adb4"
+    },
+    {
+      "path": "vue/pages/NotFound.vue",
+      "mode": "100644",
+      "size": 1870,
+      "sha256": "5b4a15dcef2cf473b889ab22470a5070bd5d7e6d3b2809aed5b1d4a45cc1803c"
+    },
+    {
+      "path": "vue/pages/Profile.vue",
+      "mode": "100644",
+      "size": 21490,
+      "sha256": "b143e3253069172fa9207441b354c8211337b7d9937bd9ff80d4c7ec1571ee53"
+    },
+    {
+      "path": "vue/pages/PublicHealth.vue",
+      "mode": "100644",
+      "size": 8168,
+      "sha256": "df42d667bd61ac1abfdda3d07790fc9cc09a82bea9ee37c38bd23ede3649442d"
+    },
+    {
+      "path": "vue/pages/PublicLanguage.vue",
+      "mode": "100644",
+      "size": 8290,
+      "sha256": "833f7481211a3cd715a26b7babafaf2ed83b0accb6585e24ba33f4ef525108cd"
+    },
+    {
+      "path": "vue/pages/PublicVersion.vue",
+      "mode": "100644",
+      "size": 7420,
+      "sha256": "f07f56885b51a697fdf7c76a2f5812ab728734f08d1d07db3bd632faa313b51e"
+    },
+    {
+      "path": "vue/pages/Settings.vue",
+      "mode": "100644",
+      "size": 23483,
+      "sha256": "340e58e5a6f252e3a7be139a241667ac6c7d5de876d3386c6a86858f98c1115f"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "label": "r11-monitoring-red-fixed",
+  "sourceDigest": "94850ff03fd1dba079303c918217cefef6345f93455923b54b0b008903152433",
+  "staticPort": 35943,
+  "apiPort": 44309,
+  "installKey": "676ae3c2f6fcbf551971a6b753e1b0c18ba6ce5aac0e419c5a50d480a724a327",
+  "installCache": "/workspaces/frontend-r11-session/deps-cache-reviewed/676ae3c2f6fcbf551971a6b753e1b0c18ba6ce5aac0e419c5a50d480a724a327",
+  "scratchBase": "/tmp",
+  "servedRoot": "/tmp/frontend-browser-run.4ngxd7/worktree",
+  "startedAt": "2026-09-30T06:39:33Z"
+}

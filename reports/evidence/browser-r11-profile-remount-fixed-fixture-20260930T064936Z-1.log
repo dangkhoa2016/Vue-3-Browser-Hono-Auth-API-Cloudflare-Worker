@@ -1,0 +1,18 @@
+[run-frontend-gate] $ npm run test:browser -- --grep profile\ remount\ fetches 
+
+> frontend-remediation-verification@1.0.0 test:browser
+> playwright test --config browser/playwright.config.mjs --grep profile remount fetches
+
+[2m[WebServer] [22m(node:176179) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[2m[WebServer] [22m(Use `node --trace-warnings ...` to show where the warning was created)
+[2m[WebServer] [22mfake API on http://127.0.0.1:39343, static on http://127.0.0.1:40983
+
+Running 1 test using 1 worker
+
+(node:176198) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:176198) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 [chromium] › browser/backend-contract-mock.spec.mjs:675:1 › profile remount fetches the current response after its store counter has advanced (14.0s)
+
+  1 passed (17.6s)

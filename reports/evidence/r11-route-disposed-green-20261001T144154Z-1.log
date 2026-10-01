@@ -1,0 +1,67 @@
+[run-frontend-gate] $ node --test regression/harness-boundaries.test.mjs 
+▶ the egress allowlist is the exact pinned artifacts the loader names, and nothing else
+  ✔ every named artifact is derived from the loader, so the list cannot drift (1.981769ms)
+  ✔ the pin gate and the browser policy scan the same files, and say so (0.809059ms)
+  ✔ a named resource is named in full, query included (FR9-04) (2.059074ms)
+  ✔ every package artifact names an exact version, and the rest are accounted for (0.372555ms)
+  ✔ a pinned artifact is allowed (0.40727ms)
+  ✔ an unpinned artifact on an allowed host is blocked (0.342739ms)
+  ✔ the right path at the wrong version is blocked (0.260606ms)
+  ✔ a resource a pinned stylesheet references is declared, not inherited from a directory (1.734658ms)
+  ✔ the one shape rule is derived from the pinned stylesheet, and is a shape and not a host (0.629745ms)
+  ✔ the dynamic font subset endpoint is a second shape, scoped to one path (1.363695ms)
+  ✔ the loopback fixture origins are allowed (0.234327ms)
+  ✔ any other origin is blocked, including a lookalike host (0.42294ms)
+  ✔ Tailwind uses its direct versioned artifact and refuses root/other versions (0.463135ms)
+  ✔ a blocked URL says why, so a failure is readable (0.227594ms)
+✔ the egress allowlist is the exact pinned artifacts the loader names, and nothing else (14.354643ms)
+▶ a problem allowance is typed, so it cannot cover an unrelated failure that shares a word
+  ✔ an allowance must say which kind of problem it is about (1.206192ms)
+  ✔ an allowance for a refused request does not swallow an uncaught page error (0.866467ms)
+  ✔ a canary with the same words but a different source still fails (0.356646ms)
+  ✔ a failed-request allowance is scoped to the request it names (0.474796ms)
+  ✔ an allowance for a method does not cover the same path with another method (0.229969ms)
+  ✔ an allowance may state how many problems it expects (4.379114ms)
+  ✔ a count may be a range, for noise that is conditional but never legitimate twice (2.651309ms)
+  ✔ the reason is still mandatory (0.164677ms)
+  ✔ an uncaught page error is reported with no allowance at all (0.13935ms)
+✔ a problem allowance is typed, so it cannot cover an unrelated failure that shares a word (11.69501ms)
+▶ FR10-03: attaching a collector no longer switches off the teardown check
+  ✔ a pageerror nobody declared fails the run even though a collector is attached (1.81044ms)
+  ✔ a pageerror raised *after* the case checked is still caught (1.152721ms)
+  ✔ asking twice is the same answer, not a second round of consumption (0.528076ms)
+  ✔ a case that checks and declares correctly is not failed by the teardown (0.482651ms)
+✔ FR10-03: attaching a collector no longer switches off the teardown check (4.473801ms)
+▶ FR10-04: the browser is handed back exactly as it was found
+  ✔ the wrappers are restored on dispose (0.154628ms)
+  ✔ a second run does not wrap the first run, and the first registry stops growing (0.502467ms)
+  ✔ a dozen consecutive lifecycles each guard and watch exactly once (1.418247ms)
+  ✔ a teardown that fails still hands the browser back (0.662788ms)
+  ✔ someone else's wrapper is left alone, and the run says it could not restore (1.060208ms)
+✔ FR10-04: the browser is handed back exactly as it was found (4.492996ms)
+▶ FR10-08: a provoked refusal has to be named, not counted
+  ✔ a bare count is refused outright (1.260192ms)
+  ✔ expectBlocked() with no arguments is refused (0.207016ms)
+  ✔ a declaration that does not match the URL is refused (3.298377ms)
+  ✔ a declaration whose reason does not match is refused (1.917379ms)
+  ✔ a declaration that provoked fewer refusals than it asked for is refused (1.023821ms)
+  ✔ a refusal smuggled in beside a declared one is caught immediately (1.107077ms)
+  ✔ a refusal that arrives after the declaration is caught at teardown (1.678403ms)
+  ✔ a correctly declared provocation is fully discharged (0.81423ms)
+✔ FR10-08: a provoked refusal has to be named, not counted (12.481598ms)
+▶ FR10-08: every context the run creates has service workers blocked, whatever the case asked for
+  ✔ a case that asks for allow is overridden (0.461261ms)
+  ✔ the pin does not discard the options a case did set (0.260916ms)
+✔ FR10-08: every context the run creates has service workers blocked, whatever the case asked for (1.128256ms)
+✔ FR12-04: external resources require actual method and resource type (0.462904ms)
+✔ N5 route lifecycle: response disposal caused by context close (0.753487ms)
+✔ N5 route lifecycle: response disposal while context is open (0.218078ms)
+✔ N5 route lifecycle: unrelated network error during close (0.283881ms)
+ℹ tests 52
+ℹ suites 0
+ℹ pass 52
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 714.088621

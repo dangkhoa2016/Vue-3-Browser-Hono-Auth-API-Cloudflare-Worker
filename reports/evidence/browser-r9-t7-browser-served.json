@@ -1,0 +1,11 @@
+{
+  "label": "r9-t7-browser",
+  "sourceDigest": "3e0ff8fa2d1bd353c07f1fb415461d068c49534a268a3d6e3d8ab16647ae2bbb",
+  "staticPort": 41153,
+  "apiPort": 36941,
+  "installKey": "82d8ec472a6d4b2a9e464cd6a7421c4f7c16af768b55e35c1a93cfe5867010d0",
+  "installCache": "/root/.cache/frontend-browser-install/82d8ec472a6d4b2a9e464cd6a7421c4f7c16af768b55e35c1a93cfe5867010d0",
+  "scratchBase": "/tmp/opencode",
+  "servedRoot": "/tmp/opencode/frontend-browser-run.K3iFdf/worktree",
+  "startedAt": "2026-09-28T10:23:53Z"
+}

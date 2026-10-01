@@ -1,0 +1,11 @@
+{
+  "label": "r11-review-browser-green",
+  "sourceDigest": "c00d82a041c2b51da54ceaac6a9d56f9db757bf958cb136ed7ac507daf594fd4",
+  "staticPort": 36681,
+  "apiPort": 40493,
+  "installKey": "676ae3c2f6fcbf551971a6b753e1b0c18ba6ce5aac0e419c5a50d480a724a327",
+  "installCache": "/workspaces/frontend-r11-session/deps-cache-reviewed/676ae3c2f6fcbf551971a6b753e1b0c18ba6ce5aac0e419c5a50d480a724a327",
+  "scratchBase": "/tmp",
+  "servedRoot": "/tmp/frontend-browser-run.FvpC5R/worktree",
+  "startedAt": "2026-10-01T07:11:35Z"
+}

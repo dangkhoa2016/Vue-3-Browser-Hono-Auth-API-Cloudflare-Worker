@@ -1,0 +1,58 @@
+[run-frontend-gate] $ node --test regression/loopback-transport.test.mjs 
+[run-frontend-gate] (timeout 120s enforced)
+▶ loopback transport (real axios 1.20.0)
+  ✔ a 401 rotates the session once and replays the request with the new bearer (90.535098ms)
+  ✔ several requests that 401 at once share one refresh and one rotation (35.202372ms)
+  ✔ a 401 of a request that was already superseded neither refreshes nor replays (30.110095ms)
+  ✔ a rotation the server answers with an ended session ends this one and replays nothing (19.237145ms)
+  ✔ a busy backend keeps the session instead of logging the user out (17.151381ms)
+  ✔ a mutation rejected with 401 is not replayed (13.777312ms)
+  ✔ a request to a foreign origin is refused and no bearer leaves the tab (21.58584ms)
+  ✔ a refused connection is reported without ending the session (2023.131485ms)
+✔ loopback transport (real axios 1.20.0) (2260.650368ms)
+✖ R11 history review: a gateway 401 refreshes and replays within the same full API identity (14.190665ms)
+✖ R11 history review: credential-free endpoints strip caller supplied bearer headers on the wire (14.557458ms)
+ℹ tests 10
+ℹ suites 1
+ℹ pass 8
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2605.543469
+
+✖ failing tests:
+
+test at regression/loopback-transport.test.mjs:408:1
+✖ R11 history review: a gateway 401 refreshes and replays within the same full API identity (14.190665ms)
+  AxiosError: Request failed with status code 401
+      at settle (file:///workspaces/frontend-r11-work/tests/node_modules/axios/lib/core/settle.js:19:12)
+      at IncomingMessage.handleStreamEnd (file:///workspaces/frontend-r11-work/tests/node_modules/axios/lib/adapters/http.js:1318:13)
+      at IncomingMessage.emit (node:events:526:24)
+      at endReadableNT (node:internal/streams/readable:1757:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+      at Axios.request (file:///workspaces/frontend-r11-work/tests/node_modules/axios/lib/core/Axios.js:48:43)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async TestContext.<anonymous> (file:///workspaces/frontend-r11-work/tests/regression/loopback-transport.test.mjs:418:20)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7)
+
+test at regression/loopback-transport.test.mjs:425:1
+✖ R11 history review: credential-free endpoints strip caller supplied bearer headers on the wire (14.557458ms)
+  AssertionError [ERR_ASSERTION]: credential-free endpoint /api/auth/login
+  + actual - expected
+  
+  + 'Bearer FAKE_CALLER_ACCESS'
+  - null
+  
+      at TestContext.<anonymous> (file:///workspaces/frontend-r11-work/tests/regression/loopback-transport.test.mjs:431:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'Bearer FAKE_CALLER_ACCESS',
+    expected: null,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

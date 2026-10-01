@@ -1,0 +1,46 @@
+[run-frontend-gate] $ npm run test:browser -- 
+
+> frontend-remediation-verification@1.0.0 test:browser
+> playwright test --config browser/playwright.config.mjs
+
+[2m[WebServer] [22mfake API on http://127.0.0.1:18788, static on http://127.0.0.1:4173
+
+Running 33 tests using 1 worker
+
+  ✓   1 [chromium] › browser/backend-contract-mock.spec.mjs:94:3 › the backend contract, against a peer that can be told the answer › the session record and the contract answers belong to the same API identity (14.9s)
+  ✓   2 [chromium] › browser/backend-contract-mock.spec.mjs:101:3 › the backend contract, against a peer that can be told the answer › an unconfirmed PDF export is disabled, and no export request is even sent (23.9s)
+  ✓   3 [chromium] › browser/backend-contract-mock.spec.mjs:114:3 › the backend contract, against a peer that can be told the answer › a refused export always explains itself, and never claims the backend refused it (31.7s)
+  ✓   4 [chromium] › browser/backend-contract-mock.spec.mjs:136:3 › the backend contract, against a peer that can be told the answer › a confirmed PDF export is enabled, because the backend said so (19.0s)
+  ✓   5 [chromium] › browser/backend-contract-mock.spec.mjs:147:3 › the backend contract, against a peer that can be told the answer › an export the backend refuses is reported, not swallowed into a false success (24.2s)
+  ✓   6 [chromium] › browser/backend-contract-mock.spec.mjs:168:3 › the backend contract, against a peer that can be told the answer › continuous monitoring stays refused while the backend has not confirmed it (18.6s)
+  ✓   7 [chromium] › browser/backend-contract-mock.spec.mjs:182:3 › the backend contract, against a peer that can be told the answer › an explicitly unsupported capability is refused even though the backend answered (25.8s)
+  ✓   8 [chromium] › browser/backend-contract-mock.spec.mjs:194:3 › the backend contract, against a peer that can be told the answer › confirmed monitoring enables the control and a real start reaches the backend (21.1s)
+  ✓   9 [chromium] › browser/backend-contract-mock.spec.mjs:209:3 › the backend contract, against a peer that can be told the answer › a capability answer from one session is not inherited by the next one (37.7s)
+  ✓  10 [chromium] › browser/backend-contract-mock.spec.mjs:228:3 › the backend contract, against a peer that can be told the answer › a raw secret in the env comparison is never rendered (21.3s)
+  ✓  11 [chromium] › browser/backend-contract-mock.spec.mjs:252:3 › the backend contract, against a peer that can be told the answer › a secret that is only almost masked is not shown either (24.1s)
+  ✓  12 [chromium] › browser/backend-contract-mock.spec.mjs:272:3 › the backend contract, against a peer that can be told the answer › a missing value is reported as absent rather than as an empty success (24.2s)
+  ✓  13 [chromium] › browser/harness-egress.spec.mjs:30:3 › the egress boundary, proved rather than assumed › the shared context refuses an unpinned artifact on a host the app legitimately uses (3.1s)
+  ✓  14 [chromium] › browser/harness-egress.spec.mjs:81:3 › the egress boundary, proved rather than assumed › a spec that never asks for a guard still gets one (151ms)
+  ✓  15 [chromium] › browser/session-flow.spec.mjs:79:3 › the session record in a real browser › a login through the real form writes one canonical record and a matching mirror (18.7s)
+  ✓  16 [chromium] › browser/session-flow.spec.mjs:116:3 › the session record in a real browser › a rejected login renders the field errors instead of crashing the form (FA-03) (13.4s)
+  ✓  17 [chromium] › browser/session-flow.spec.mjs:141:3 › the session record in a real browser › a logout writes a tombstone and clears the legacy keys (18.2s)
+  ✓  18 [chromium] › browser/session-flow.spec.mjs:174:3 › the session record in a real browser › a second tab learns about the logout without writing a tombstone of its own (28.7s)
+  ✓  19 [chromium] › browser/session-invariants.spec.mjs:137:3 › session invariants in a real browser › the second tab is authenticated in the DOM, and the logout takes that away (30.7s)
+  ✓  20 [chromium] › browser/session-invariants.spec.mjs:175:3 › session invariants in a real browser › a protected action that carried a bearer stops carrying one once the session ended (24.8s)
+  ✓  21 [chromium] › browser/session-invariants.spec.mjs:219:3 › session invariants in a real browser › with reconciliation disabled, the second tab does *not* sign out (26.8s)
+  ✓  22 [chromium] › browser/session-invariants.spec.mjs:259:3 › session invariants in a real browser › a rotation queued behind another tab's writer lock lands once, after the lock (22.4s)
+  ✓  23 [chromium] › browser/session-invariants.spec.mjs:342:3 › session invariants in a real browser › a second tab does not spend the predecessor while the first rotation is uncommitted (FA8-01) (39.3s)
+  ✓  24 [chromium] › browser/session-invariants.spec.mjs:454:3 › session invariants in a real browser › a rotation the backend has already invalidated ends the session instead of continuing (18.5s)
+  ✓  25 [chromium] › browser/session-invariants.spec.mjs:479:3 › session invariants in a real browser › a temporary backend failure keeps the session instead of ending it (14.5s)
+  ✓  26 [chromium] › browser/session-invariants.spec.mjs:518:3 › session invariants in a real browser › a rotation answer computed for the old session never overwrites the session that replaced it (41.1s)
+  ✓  27 [chromium] › browser/session-invariants.spec.mjs:635:3 › session invariants in a real browser › a logout queued behind a held lock still ends the session exactly once (21.7s)
+  ✓  28 [chromium] › browser/session-invariants.spec.mjs:690:3 › session invariants in a real browser › a login that lands while an old logout is still settling owns the session, not the logout (24.9s)
+  ✓  29 [chromium] › browser/session-invariants.spec.mjs:766:3 › session invariants in a real browser › without writer serialization the session is memory-only, and a reload starts signed out (21.0s)
+  ✓  30 [chromium] › browser/session-invariants.spec.mjs:804:3 › session invariants in a real browser › a session whose write fails says so, instead of looking saved (32.5s)
+  ✓  31 [chromium] › browser/session-invariants.spec.mjs:840:3 › session invariants in a real browser › a session is not carried over to a different API identity (26.5s)
+  ✓  32 [chromium] › browser/session-invariants.spec.mjs:871:3 › session invariants in a real browser › a record that is not a session at all is refused, and the tab asks to sign in again (7.0s)
+  ✓  33 [chromium] › browser/session-invariants.spec.mjs:908:3 › session invariants in a real browser › an endpoint switched in another tab is adopted, and the old server's session does not follow it (42.4s)
+
+  Slow test file: [chromium] › browser/session-invariants.spec.mjs (6.6m)
+  Consider running tests from slow files in parallel. See: https://playwright.dev/docs/test-parallel
+  33 passed (12.8m)

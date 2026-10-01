@@ -1,0 +1,24 @@
+run-frontend-gate: evidence for one producer run
+label:      r11-egress-positive
+argv:       npm run test:browser -- --grep egress\|FR9-03 
+command:    npm run test:browser -- --grep egress|FR9-03
+cwd:        /workspaces/frontend-r11-session/browser-runs/frontend-browser-run.yFAIim/worktree/tests
+repo_root:  /workspaces/frontend-r11-session/browser-runs/frontend-browser-run.yFAIim/worktree
+source_digest:      0b1dc809efc9e3d429b6ba28d50785623a346ff6818a86d6e25b22f271524575
+source_manifest:    /workspaces/frontend-r11-session/browser-runs/frontend-browser-run.yFAIim/worktree/reports/evidence/r11-egress-positive-20260929T095015Z-1.source-before.manifest.json
+source_snapshot:    /workspaces/frontend-r11-session/browser-runs/frontend-browser-run.yFAIim/worktree/reports/evidence/r11-egress-positive-20260929T095015Z-1.source.tar.gz
+git:        branch=remediation/r11 head=d523d07d423d415ccb341049a1d007ad2b84d3eb base_tree=a327ec340766b1c9254aecde375a83c4a06fb41b status_sha256=81ada58c2019138067a9a16d973bdf0665b277b41286b93941d413c42ef1f349
+timeout_s:  <none>
+started_at: 2026-09-29T09:50:16Z
+node:       v24.20.0
+npm:        11.19.0
+git:        git version 2.43.0
+os:         Linux x86_64
+---- producer output below ----
+ended_at:   2026-09-29T09:50:29Z
+exit:       0
+result:     RAN
+source_digest_after:  0b1dc809efc9e3d429b6ba28d50785623a346ff6818a86d6e25b22f271524575
+source_manifest_after: /workspaces/frontend-r11-session/browser-runs/frontend-browser-run.yFAIim/worktree/reports/evidence/r11-egress-positive-20260929T095015Z-1.source-after.manifest.json
+source_drift: none
+log:        /workspaces/frontend-r11-session/browser-runs/frontend-browser-run.yFAIim/worktree/reports/evidence/r11-egress-positive-20260929T095015Z-1.log

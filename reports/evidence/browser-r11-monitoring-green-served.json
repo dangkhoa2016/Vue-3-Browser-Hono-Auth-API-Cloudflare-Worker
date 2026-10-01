@@ -1,0 +1,11 @@
+{
+  "label": "r11-monitoring-green",
+  "sourceDigest": "9c501b6874477519fb127e1872568c62efba3f968dbc812a56204d7215b6a2a4",
+  "staticPort": 46629,
+  "apiPort": 40017,
+  "installKey": "676ae3c2f6fcbf551971a6b753e1b0c18ba6ce5aac0e419c5a50d480a724a327",
+  "installCache": "/workspaces/frontend-r11-session/deps-cache-reviewed/676ae3c2f6fcbf551971a6b753e1b0c18ba6ce5aac0e419c5a50d480a724a327",
+  "scratchBase": "/tmp",
+  "servedRoot": "/tmp/frontend-browser-run.5Ij6R6/worktree",
+  "startedAt": "2026-09-30T06:43:16Z"
+}

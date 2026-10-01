@@ -1,0 +1,24 @@
+run-frontend-gate: evidence for one producer run
+label:      r11-review-close-start
+argv:       npm run test:browser -- --grep shared\ context\ refuses\|rotation\ queued\ behind\|rotation\ answer\ computed 
+command:    npm run test:browser -- --grep shared context refuses|rotation queued behind|rotation answer computed
+cwd:        /tmp/frontend-browser-run.psJuGW/worktree/tests
+repo_root:  /tmp/frontend-browser-run.psJuGW/worktree
+source_digest:      b50bd872d7996eab66ad5e0c5d4ecf0e94c8f1f3f03f78ac516aca64713fbb88
+source_manifest:    /tmp/frontend-browser-run.psJuGW/worktree/reports/evidence/r11-review-close-start-20261001T073340Z-1.source-before.manifest.json
+source_snapshot:    /tmp/frontend-browser-run.psJuGW/worktree/reports/evidence/r11-review-close-start-20261001T073340Z-1.source.tar.gz
+git:        branch=remediation/r11 head=681ae2071951fbf1a3776e884c45b524f833ba77 base_tree=778512ca8307df56036d2a1b06340bb0e300e77a status_sha256=52f1a030b977a382e9c26229c9b62ffcda4b8fc659bc2f61917e1d4f4805b35d
+timeout_s:  <none>
+started_at: 2026-10-01T07:33:41Z
+node:       v24.20.0
+npm:        11.19.0
+git:        git version 2.43.0
+os:         Linux x86_64
+---- producer output below ----
+ended_at:   2026-10-01T07:34:09Z
+exit:       0
+result:     RAN
+source_digest_after:  b50bd872d7996eab66ad5e0c5d4ecf0e94c8f1f3f03f78ac516aca64713fbb88
+source_manifest_after: /tmp/frontend-browser-run.psJuGW/worktree/reports/evidence/r11-review-close-start-20261001T073340Z-1.source-after.manifest.json
+source_drift: none
+log:        /tmp/frontend-browser-run.psJuGW/worktree/reports/evidence/r11-review-close-start-20261001T073340Z-1.log

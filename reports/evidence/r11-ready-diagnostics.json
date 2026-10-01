@@ -1,0 +1,48 @@
+{
+  "schema": "frontend-diagnostic-observations/1",
+  "note": "Raw evidence preserved. Skipped or drifting diagnostics are observations, never passing-gate claims.",
+  "runs": [
+    {
+      "status": "INVALID_SOURCE_DRIFT",
+      "eligibleForPassingGate": false,
+      "observation": {
+        "runId": "r11-ready-missing-20260930T001912Z-1",
+        "tier": "browser",
+        "command": "npm run test:integration",
+        "exitCode": 3,
+        "sourceDigest": "dc69eb84cad9aabb0541c7ff1d61076b677fb5a54608ebf77448990d37692c79",
+        "replay": "VERIFIED",
+        "replayRequired": true,
+        "outcome": {
+          "tests": 6,
+          "pass": 0,
+          "fail": 0,
+          "skipped": 6,
+          "cancelled": 0
+        }
+      },
+      "problems": []
+    },
+    {
+      "status": "PENDING",
+      "eligibleForPassingGate": false,
+      "observation": {
+        "runId": "r11-ready-missing-fixed-20260930T002550Z-1",
+        "tier": "browser",
+        "command": "npm run test:integration",
+        "exitCode": 0,
+        "sourceDigest": "5a344912b04758223547f1a16a6664bd0670272938a7ac4468a1ffce31c741c1",
+        "replay": "VERIFIED",
+        "replayRequired": true,
+        "outcome": {
+          "tests": 6,
+          "pass": 0,
+          "fail": 0,
+          "skipped": 6,
+          "cancelled": 0
+        }
+      },
+      "problems": []
+    }
+  ]
+}

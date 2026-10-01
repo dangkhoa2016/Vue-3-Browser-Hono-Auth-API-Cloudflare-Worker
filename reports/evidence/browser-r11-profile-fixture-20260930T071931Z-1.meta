@@ -1,0 +1,24 @@
+run-frontend-gate: evidence for one producer run
+label:      r11-profile-fixture
+argv:       npm run test:browser -- --grep a\ protected\ action\ that\ carried 
+command:    npm run test:browser -- --grep a protected action that carried
+cwd:        /tmp/frontend-browser-run.k9NuPb/worktree/tests
+repo_root:  /tmp/frontend-browser-run.k9NuPb/worktree
+source_digest:      0930d9772cfb73fe737f8b2c47b90c3f6d926f26ff23b1ae266b36fa6c19cb3a
+source_manifest:    /tmp/frontend-browser-run.k9NuPb/worktree/reports/evidence/r11-profile-fixture-20260930T071931Z-1.source-before.manifest.json
+source_snapshot:    /tmp/frontend-browser-run.k9NuPb/worktree/reports/evidence/r11-profile-fixture-20260930T071931Z-1.source.tar.gz
+git:        branch=remediation/r11 head=6e185df127d9ce3c59ee97f61064f34abcca985d base_tree=ba028372a15db377626ee1e984f80ec6f66d4bd4 status_sha256=b970b34ee3b459b423e635074ad42273c589c1066b9ea59bdcf8713c1b627fc4
+timeout_s:  <none>
+started_at: 2026-09-30T07:19:33Z
+node:       v24.20.0
+npm:        11.19.0
+git:        git version 2.43.0
+os:         Linux x86_64
+---- producer output below ----
+ended_at:   2026-09-30T07:19:54Z
+exit:       0
+result:     RAN
+source_digest_after:  0930d9772cfb73fe737f8b2c47b90c3f6d926f26ff23b1ae266b36fa6c19cb3a
+source_manifest_after: /tmp/frontend-browser-run.k9NuPb/worktree/reports/evidence/r11-profile-fixture-20260930T071931Z-1.source-after.manifest.json
+source_drift: none
+log:        /tmp/frontend-browser-run.k9NuPb/worktree/reports/evidence/r11-profile-fixture-20260930T071931Z-1.log

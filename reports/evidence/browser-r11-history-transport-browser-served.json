@@ -1,0 +1,11 @@
+{
+  "label": "r11-history-transport-browser",
+  "sourceDigest": "13ef8627e7a0acfa896f223269d01d55f10561d990d9998026eae7634ad4283d",
+  "staticPort": 38299,
+  "apiPort": 43933,
+  "installKey": "676ae3c2f6fcbf551971a6b753e1b0c18ba6ce5aac0e419c5a50d480a724a327",
+  "installCache": "/workspaces/frontend-r11-session/deps-cache-reviewed/676ae3c2f6fcbf551971a6b753e1b0c18ba6ce5aac0e419c5a50d480a724a327",
+  "scratchBase": "/tmp",
+  "servedRoot": "/tmp/frontend-browser-run.rkjXwx/worktree",
+  "startedAt": "2026-09-30T13:24:34Z"
+}

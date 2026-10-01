@@ -1,0 +1,24 @@
+run-frontend-gate: evidence for one producer run
+label:      r11-review-closed-canaries
+argv:       npm run test:browser -- --config browser/playwright.canary.config.mjs 
+command:    npm run test:browser -- --config browser/playwright.canary.config.mjs
+cwd:        /tmp/frontend-browser-run.bLRWE6/worktree/tests
+repo_root:  /tmp/frontend-browser-run.bLRWE6/worktree
+source_digest:      b50bd872d7996eab66ad5e0c5d4ecf0e94c8f1f3f03f78ac516aca64713fbb88
+source_manifest:    /tmp/frontend-browser-run.bLRWE6/worktree/reports/evidence/r11-review-closed-canaries-20261001T075517Z-1.source-before.manifest.json
+source_snapshot:    /tmp/frontend-browser-run.bLRWE6/worktree/reports/evidence/r11-review-closed-canaries-20261001T075517Z-1.source.tar.gz
+git:        branch=remediation/r11 head=681ae2071951fbf1a3776e884c45b524f833ba77 base_tree=778512ca8307df56036d2a1b06340bb0e300e77a status_sha256=277ebec770206c086c1ad171525c49e99c618f9ea3d6ef0a7ad3396e53583a8f
+timeout_s:  <none>
+started_at: 2026-10-01T07:55:18Z
+node:       v24.20.0
+npm:        11.19.0
+git:        git version 2.43.0
+os:         Linux x86_64
+---- producer output below ----
+ended_at:   2026-10-01T07:55:43Z
+exit:       1
+result:     RAN
+source_digest_after:  b50bd872d7996eab66ad5e0c5d4ecf0e94c8f1f3f03f78ac516aca64713fbb88
+source_manifest_after: /tmp/frontend-browser-run.bLRWE6/worktree/reports/evidence/r11-review-closed-canaries-20261001T075517Z-1.source-after.manifest.json
+source_drift: none
+log:        /tmp/frontend-browser-run.bLRWE6/worktree/reports/evidence/r11-review-closed-canaries-20261001T075517Z-1.log

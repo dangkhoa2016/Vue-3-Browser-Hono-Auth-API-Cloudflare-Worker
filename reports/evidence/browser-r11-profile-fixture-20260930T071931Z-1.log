@@ -1,0 +1,18 @@
+[run-frontend-gate] $ npm run test:browser -- --grep a\ protected\ action\ that\ carried 
+
+> frontend-remediation-verification@1.0.0 test:browser
+> playwright test --config browser/playwright.config.mjs --grep a protected action that carried
+
+[2m[WebServer] [22m(node:193078) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[2m[WebServer] [22m(Use `node --trace-warnings ...` to show where the warning was created)
+[2m[WebServer] [22mfake API on http://127.0.0.1:34649, static on http://127.0.0.1:44485
+
+Running 1 test using 1 worker
+
+(node:193107) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:193107) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 [chromium] › browser/session-invariants.spec.mjs:153:3 › session invariants in a real browser › a protected action that carried a bearer stops carrying one once the session ended (13.0s)
+
+  1 passed (17.1s)

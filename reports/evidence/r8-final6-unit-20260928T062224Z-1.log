@@ -1,0 +1,1536 @@
+[run-frontend-gate] $ npm run test:unit 
+
+> frontend-remediation-verification@1.0.0 test:unit
+> node --test regression/*.test.mjs
+
+TAP version 13
+# Subtest: F01 — logout revokes the server session and always clears local state
+    # Subtest: explicit logout calls the backend exactly once with the token snapshot taken before clearing
+    ok 1 - explicit logout calls the backend exactly once with the token snapshot taken before clearing
+      ---
+      duration_ms: 50.364793
+      ...
+    # Subtest: double-clicking logout does not send a second request
+    ok 2 - double-clicking logout does not send a second request
+      ---
+      duration_ms: 39.06357
+      ...
+    # Subtest: logout failure still clears local state and reports revocation as NOT confirmed
+    ok 3 - logout failure still clears local state and reports revocation as NOT confirmed
+      ---
+      duration_ms: 44.125375
+      ...
+    # Subtest: logout of a session whose access token already expired does not trigger a token refresh
+    ok 4 - logout of a session whose access token already expired does not trigger a token refresh
+      ---
+      duration_ms: 50.651906
+      ...
+    # Subtest: session-expired cleanup does not call the logout endpoint (no recursive logout)
+    ok 5 - session-expired cleanup does not call the logout endpoint (no recursive logout)
+      ---
+      duration_ms: 51.432817
+      ...
+    # Subtest: Navbar confirmLogout performs the remote logout and reports the revocation outcome
+    ok 6 - Navbar confirmLogout performs the remote logout and reports the revocation outcome
+      ---
+      duration_ms: 68.686978
+      ...
+    1..6
+ok 1 - F01 — logout revokes the server session and always clears local state
+  ---
+  duration_ms: 307.234486
+  type: 'suite'
+  ...
+# Subtest: F02 — transport retries only idempotent requests
+    # Subtest: post /api/advanced-audit/truncate is sent once on 500
+    ok 1 - post /api/advanced-audit/truncate is sent once on 500
+      ---
+      duration_ms: 56.432867
+      ...
+    # Subtest: post /api/admin/users is sent once on 500
+    ok 2 - post /api/admin/users is sent once on 500
+      ---
+      duration_ms: 46.104863
+      ...
+    # Subtest: post /api/user/change-password is sent once on 500
+    ok 3 - post /api/user/change-password is sent once on 500
+      ---
+      duration_ms: 35.453149
+      ...
+    # Subtest: put /api/admin/users/7 is sent once on 500
+    ok 4 - put /api/admin/users/7 is sent once on 500
+      ---
+      duration_ms: 98.899294
+      ...
+    # Subtest: patch /api/kv-admin/configs/JWT_SECRET is sent once on 500
+    ok 5 - patch /api/kv-admin/configs/JWT_SECRET is sent once on 500
+      ---
+      duration_ms: 46.174737
+      ...
+    # Subtest: delete /api/admin/token-blacklist/9 is sent once on 500
+    ok 6 - delete /api/admin/token-blacklist/9 is sent once on 500
+      ---
+      duration_ms: 55.07483
+      ...
+    # Subtest: a lost response (network error) does not replay a mutation
+    ok 7 - a lost response (network error) does not replay a mutation
+      ---
+      duration_ms: 52.076543
+      ...
+    # Subtest: GET retries a 500 up to the configured limit
+    ok 8 - GET retries a 500 up to the configured limit
+      ---
+      duration_ms: 120.573941
+      ...
+    # Subtest: GET does not retry 503 or 429 (no retry storm against an overloaded backend)
+    ok 9 - GET does not retry 503 or 429 (no retry storm against an overloaded backend)
+      ---
+      duration_ms: 69.856268
+      ...
+    # Subtest: an aborted/cancelled request is not retried
+    ok 10 - an aborted/cancelled request is not retried
+      ---
+      duration_ms: 28.810015
+      ...
+    # Subtest: auth endpoints are never retried
+    ok 11 - auth endpoints are never retried
+      ---
+      duration_ms: 40.697399
+      ...
+    # Subtest: a mutation rejected with 401 is not replayed after a successful refresh
+    ok 12 - a mutation rejected with 401 is not replayed after a successful refresh
+      ---
+      duration_ms: 61.309235
+      ...
+    # Subtest: a safe GET rejected with 401 is replayed once after a refresh
+    ok 13 - a safe GET rejected with 401 is replayed once after a refresh
+      ---
+      duration_ms: 27.678253
+      ...
+    # Subtest: a safe GET is refreshed before it is sent, so no 401 round-trip is needed
+    ok 14 - a safe GET is refreshed before it is sent, so no 401 round-trip is needed
+      ---
+      duration_ms: 28.675246
+      ...
+    1..14
+ok 2 - F02 — transport retries only idempotent requests
+  ---
+  duration_ms: 771.160757
+  type: 'suite'
+  ...
+# Subtest: F03 — API identity isolation
+    # Subtest: a token issued by API A is never attached to a request for API B
+    ok 1 - a token issued by API A is never attached to a request for API B
+      ---
+      duration_ms: 16.388705
+      ...
+    # Subtest: changing the API identity clears the session so the UI must ask for a new login
+    ok 2 - changing the API identity clears the session so the UI must ask for a new login
+      ---
+      duration_ms: 22.031121
+      ...
+    # Subtest: two different base paths on the same origin are different identities
+    ok 3 - two different base paths on the same origin are different identities
+      ---
+      duration_ms: 28.571255
+      ...
+    # Subtest: an absolute URL pointing at another API identity does not receive the bearer token
+    ok 4 - an absolute URL pointing at another API identity does not receive the bearer token
+      ---
+      duration_ms: 27.660528
+      ...
+    # Subtest: a late refresh response cannot restore a session after the identity changed
+    ok 5 - a late refresh response cannot restore a session after the identity changed
+      ---
+      duration_ms: 20.204221
+      ...
+    # Subtest: legacy persisted tokens without an identity binding force a fresh login
+    ok 6 - legacy persisted tokens without an identity binding force a fresh login
+      ---
+      duration_ms: 22.282278
+      ...
+    # Subtest: a session bound to the current identity is restored on init
+    ok 7 - a session bound to the current identity is restored on init
+      ---
+      duration_ms: 24.563992
+      ...
+    1..7
+ok 3 - F03 — API identity isolation
+  ---
+  duration_ms: 163.107908
+  type: 'suite'
+  ...
+# Subtest: F04 — expiry, single-flight refresh and multi-tab coordination
+    # Subtest: expiry is evaluated against a synced clock instead of a cached Date.now read
+    ok 1 - expiry is evaluated against a synced clock instead of a cached Date.now read
+      ---
+      duration_ms: 25.255225
+      ...
+    # Subtest: 20 concurrent requests in one tab trigger exactly one refresh
+    ok 2 - 20 concurrent requests in one tab trigger exactly one refresh
+      ---
+      duration_ms: 44.427429
+      ...
+    # Subtest: a losing tab adopts the winner session on REFRESH_ALREADY_ROTATED without minting again
+    ok 3 - a losing tab adopts the winner session on REFRESH_ALREADY_ROTATED without minting again
+      ---
+      duration_ms: 139.422958
+      ...
+    # Subtest: a refresh conflict without a winner inside the timeout asks for a new login exactly once
+    ok 4 - a refresh conflict without a winner inside the timeout asks for a new login exactly once
+      ---
+      duration_ms: 122.736169
+      ...
+    # Subtest: 503 or network failure during refresh does not clear the session
+    ok 5 - 503 or network failure during refresh does not clear the session
+      ---
+      duration_ms: 66.078509
+      ...
+    # Subtest: a rejected refresh token (401) clears the session and asks for a new login
+    ok 6 - a rejected refresh token (401) clears the session and asks for a new login
+      ---
+      duration_ms: 25.571988
+      ...
+    # Subtest: logging out while a refresh is in flight cannot resurrect the session
+    ok 7 - logging out while a refresh is in flight cannot resurrect the session
+      ---
+      duration_ms: 26.090073
+      ...
+    1..7
+ok 4 - F04 — expiry, single-flight refresh and multi-tab coordination
+  ---
+  duration_ms: 450.414524
+  type: 'suite'
+  ...
+# Subtest: OF-02 — the credential boundary is decided by the URL that is really sent
+    # Subtest: an ordinary relative endpoint under a base path is in scope and keeps the bearer
+    ok 1 - an ordinary relative endpoint under a base path is in scope and keeps the bearer
+      ---
+      duration_ms: 22.201436
+      ...
+    # Subtest: a same-origin absolute URL outside the configured base path loses the bearer
+    ok 2 - a same-origin absolute URL outside the configured base path loses the bearer
+      ---
+      duration_ms: 23.05256
+      ...
+    # Subtest: a base path is not matched by prefix, so /api-a-evil is not /api-a
+    ok 3 - a base path is not matched by prefix, so /api-a-evil is not /api-a
+      ---
+      duration_ms: 25.635293
+      ...
+    # Subtest: a protocol-relative URL is absolute and never inherits the configured base
+    ok 4 - a protocol-relative URL is absolute and never inherits the configured base
+      ---
+      duration_ms: 25.92057
+      ...
+    # Subtest: an auth endpoint outside the configured API is refused outright, not sent anonymously
+    ok 5 - an auth endpoint outside the configured API is refused outright, not sent anonymously
+      ---
+      duration_ms: 19.310547
+      ...
+    # Subtest: login and register never receive a bearer, even inside the configured API
+    ok 6 - login and register never receive a bearer, even inside the configured API
+      ---
+      duration_ms: 23.684237
+      ...
+    # Subtest: the auth endpoints are still recognised when the API is served under a base path
+    ok 7 - the auth endpoints are still recognised when the API is served under a base path
+      ---
+      duration_ms: 19.782071
+      ...
+    1..7
+ok 5 - OF-02 — the credential boundary is decided by the URL that is really sent
+  ---
+  duration_ms: 160.362919
+  type: 'suite'
+  ...
+# Subtest: FR6-A — the remote logout owns its target, its promise and its flags
+    # Subtest: a confirmed 200 reports its own result and never disturbs the session that replaced A
+    ok 1 - a confirmed 200 reports its own result and never disturbs the session that replaced A
+      ---
+      duration_ms: 23.88948
+      ...
+    # Subtest: a 204 reports its own result and never disturbs the session that replaced A
+    ok 2 - a 204 reports its own result and never disturbs the session that replaced A
+      ---
+      duration_ms: 20.239936
+      ...
+    # Subtest: a 503 reports its own result and never disturbs the session that replaced A
+    ok 3 - a 503 reports its own result and never disturbs the session that replaced A
+      ---
+      duration_ms: 19.718672
+      ...
+    # Subtest: a malformed 200 that only has HTTP 200 reports its own result and never disturbs the session that replaced A
+    ok 4 - a malformed 200 that only has HTTP 200 reports its own result and never disturbs the session that replaced A
+      ---
+      duration_ms: 24.240741
+      ...
+    # Subtest: an HTML 200 error page reports its own result and never disturbs the session that replaced A
+    ok 5 - an HTML 200 error page reports its own result and never disturbs the session that replaced A
+      ---
+      duration_ms: 29.104758
+      ...
+    # Subtest: a newer logout that starts while the first is in flight keeps its own promise and flags
+    ok 6 - a newer logout that starts while the first is in flight keeps its own promise and flags
+      ---
+      duration_ms: 28.079682
+      ...
+    # Subtest: a timeout of the revoke is not a confirmation and is still visible to the caller
+    ok 7 - a timeout of the revoke is not a confirmation and is still visible to the caller
+      ---
+      duration_ms: 30.938806
+      ...
+    1..7
+ok 6 - FR6-A — the remote logout owns its target, its promise and its flags
+  ---
+  duration_ms: 177.035407
+  type: 'suite'
+  ...
+# Subtest: F05 — contract adapter reads published fields only
+    # Subtest: a capability is supported only when explicitly true
+    ok 1 - a capability is supported only when explicitly true
+      ---
+      duration_ms: 5.033648
+      ...
+    # Subtest: capability map is found at the published envelope positions and merged forward only
+    ok 2 - capability map is found at the published envelope positions and merged forward only
+      ---
+      duration_ms: 4.495092
+      ...
+    # Subtest: error codes are read from machine fields, never from a localized message
+    ok 3 - error codes are read from machine fields, never from a localized message
+      ---
+      duration_ms: 5.162339
+      ...
+    1..3
+ok 7 - F05 — contract adapter reads published fields only
+  ---
+  duration_ms: 16.71122
+  type: 'suite'
+  ...
+# Subtest: F05 — advanced audit export never claims an unverified capability
+    # Subtest: PDF export is refused locally when the backend publishes no capability
+    ok 1 - PDF export is refused locally when the backend publishes no capability
+      ---
+      duration_ms: 17.412027
+      ...
+    # Subtest: PDF export is allowed only when the backend explicitly confirms the capability
+    ok 2 - PDF export is allowed only when the backend explicitly confirms the capability
+      ---
+      duration_ms: 17.428005
+      ...
+    # Subtest: a 422 UNSUPPORTED_EXPORT_OPTION response is an error, never a download success
+    ok 3 - a 422 UNSUPPORTED_EXPORT_OPTION response is an error, never a download success
+      ---
+      duration_ms: 18.103272
+      ...
+    # Subtest: verified JSON/CSV exports keep working without a capability map, and stop when denied
+    ok 4 - verified JSON/CSV exports keep working without a capability map, and stop when denied
+      ---
+      duration_ms: 13.50652
+      ...
+    # Subtest: encryption and compression options are refused unless the backend publishes them
+    ok 5 - encryption and compression options are refused unless the backend publishes them
+      ---
+      duration_ms: 11.690984
+      ...
+    1..5
+ok 8 - F05 — advanced audit export never claims an unverified capability
+  ---
+  duration_ms: 79.10235
+  type: 'suite'
+  ...
+# Subtest: F05 — continuous monitoring follows the backend, never an optimistic flag
+    # Subtest: start is blocked without a published capability and no request is sent
+    ok 1 - start is blocked without a published capability and no request is sent
+      ---
+      duration_ms: 13.586588
+      ...
+    # Subtest: an explicit false capability is reported as confirmed-but-disabled
+    ok 2 - an explicit false capability is reported as confirmed-but-disabled
+      ---
+      duration_ms: 13.30379
+      ...
+    # Subtest: a start response without an explicit active flag must not claim active monitoring
+    ok 3 - a start response without an explicit active flag must not claim active monitoring
+      ---
+      duration_ms: 14.620011
+      ...
+    # Subtest: 422 UNSUPPORTED_MONITORING_MODE never becomes an active monitoring state
+    ok 4 - 422 UNSUPPORTED_MONITORING_MODE never becomes an active monitoring state
+      ---
+      duration_ms: 10.386478
+      ...
+    # Subtest: status polling after start/stop keeps the active flag server-owned
+    ok 5 - status polling after start/stop keeps the active flag server-owned
+      ---
+      duration_ms: 13.901225
+      ...
+    # Subtest: capabilities published on the status payload unlock the start control
+    ok 6 - capabilities published on the status payload unlock the start control
+      ---
+      duration_ms: 17.764714
+      ...
+    1..6
+ok 9 - F05 — continuous monitoring follows the backend, never an optimistic flag
+  ---
+  duration_ms: 84.271327
+  type: 'suite'
+  ...
+# Subtest: F05 — a failure envelope is never downloaded as a successful file
+    # Subtest: a 200 response carrying an error envelope writes no file
+    ok 1 - a 200 response carrying an error envelope writes no file
+      ---
+      duration_ms: 11.789748
+      ...
+    # Subtest: an empty result is reported as an error, not downloaded as an empty export
+    ok 2 - an empty result is reported as an error, not downloaded as an empty export
+      ---
+      duration_ms: 28.900396
+      ...
+    # Subtest: a real export body still produces a file
+    ok 3 - a real export body still produces a file
+      ---
+      duration_ms: 35.066019
+      ...
+    1..3
+ok 10 - F05 — a failure envelope is never downloaded as a successful file
+  ---
+  duration_ms: 76.344435
+  type: 'suite'
+  ...
+# Subtest: F05 — env comparison never discloses raw secret values
+    # Subtest: a legacy response with raw values is sanitized before it reaches the UI state
+    ok 1 - a legacy response with raw values is sanitized before it reaches the UI state
+      ---
+      duration_ms: 14.881388
+      ...
+    # Subtest: a real masked value survives; a "masked" field carrying a raw value is dropped
+    ok 2 - a real masked value survives; a "masked" field carrying a raw value is dropped
+      ---
+      duration_ms: 11.729532
+      ...
+    # Subtest: the page renders configured/masked states only, and masked text is not editable input
+    ok 3 - the page renders configured/masked states only, and masked text is not editable input
+      ---
+      duration_ms: 14.680766
+      ...
+    1..3
+ok 11 - F05 — env comparison never discloses raw secret values
+  ---
+  duration_ms: 41.680998
+  type: 'suite'
+  ...
+# Subtest: OF-07 — export options reach the backend under the names it reads
+    # Subtest: an alias the UI still sends is verified, then transmitted as the canonical key
+    ok 1 - an alias the UI still sends is verified, then transmitted as the canonical key
+      ---
+      duration_ms: 13.770935
+      ...
+    # Subtest: an option with no published capability is still refused under the alias spelling
+    ok 2 - an option with no published capability is still refused under the alias spelling
+      ---
+      duration_ms: 13.829841
+      ...
+    # Subtest: the canonical spelling is accepted directly
+    ok 3 - the canonical spelling is accepted directly
+      ---
+      duration_ms: 16.129063
+      ...
+    1..3
+ok 12 - OF-07 — export options reach the backend under the names it reads
+  ---
+  duration_ms: 44.152051
+  type: 'suite'
+  ...
+# Subtest: OF-08 — a capability answer belongs to the context it was fetched for
+    # Subtest: a session change discards the cached capability map
+    ok 1 - a session change discards the cached capability map
+      ---
+      duration_ms: 14.675327
+      ...
+    # Subtest: an API identity change discards the cached capability map
+    ok 2 - an API identity change discards the cached capability map
+      ---
+      duration_ms: 14.339892
+      ...
+    # Subtest: the scope key separates identity, session and contract revision
+    ok 3 - the scope key separates identity, session and contract revision
+      ---
+      duration_ms: 0.598197
+      ...
+    1..3
+ok 13 - OF-08 — a capability answer belongs to the context it was fetched for
+  ---
+  duration_ms: 30.031751
+  type: 'suite'
+  ...
+# Subtest: OF-05 — a 2xx is not a success
+    # Subtest: export reports a semantic failure instead of a completed download
+    ok 1 - export reports a semantic failure instead of a completed download
+      ---
+      duration_ms: 33.598883
+      ...
+    # Subtest: archival run and manual archive refuse a 200 that reports failure
+    ok 2 - archival run and manual archive refuse a 200 that reports failure
+      ---
+      duration_ms: 27.621004
+      ...
+    # Subtest: a genuine success is still reported as success
+    ok 3 - a genuine success is still reported as success
+      ---
+      duration_ms: 13.582904
+      ...
+    # Subtest: a payload without a `success` field keeps the status-based behaviour
+    ok 4 - a payload without a `success` field keeps the status-based behaviour
+      ---
+      duration_ms: 13.516717
+      ...
+    1..4
+ok 14 - OF-05 — a 2xx is not a success
+  ---
+  duration_ms: 88.871388
+  type: 'suite'
+  ...
+# Subtest: OF-09 — a masked secret is never rendered as a raw value
+    # Subtest: sanitisation drops an unmasked value instead of passing it through
+    ok 1 - sanitisation drops an unmasked value instead of passing it through
+      ---
+      duration_ms: 1.065668
+      ...
+    # Subtest: a masked-only comparison is not reported as a disclosure
+    ok 2 - a masked-only comparison is not reported as a disclosure
+      ---
+      duration_ms: 0.318521
+      ...
+    1..2
+ok 15 - OF-09 — a masked secret is never rendered as a raw value
+  ---
+  duration_ms: 2.188816
+  type: 'suite'
+  ...
+# Subtest: OF-06 — the revocation warning is actually rendered
+    # Subtest: Navbar binds the warning message and the dismiss action to the component
+    ok 1 - Navbar binds the warning message and the dismiss action to the component
+      ---
+      duration_ms: 0.768553
+      ...
+    1..1
+ok 16 - OF-06 — the revocation warning is actually rendered
+  ---
+  duration_ms: 0.99767
+  type: 'suite'
+  ...
+# Subtest: FA-03 — the login form can render the field errors the backend sends
+    # Subtest: the real error envelope is understood, whatever spelling the field uses
+    ok 1 - the real error envelope is understood, whatever spelling the field uses
+      ---
+      duration_ms: 5.233893
+      ...
+    # Subtest: a missing or malformed field never throws while the template asks about it
+    ok 2 - a missing or malformed field never throws while the template asks about it
+      ---
+      duration_ms: 1.811904
+      ...
+    # Subtest: an error is not attributed to a field it did not name
+    ok 3 - an error is not attributed to a field it did not name
+      ---
+      duration_ms: 1.539789
+      ...
+    # Subtest: a response without field errors yields an empty list, not a broken one
+    ok 4 - a response without field errors yields an empty list, not a broken one
+      ---
+      duration_ms: 1.484173
+      ...
+    # Subtest: the composable uses the tested helper instead of matching fields itself
+    ok 5 - the composable uses the tested helper instead of matching fields itself
+      ---
+      duration_ms: 4.207036
+      ...
+    # Subtest: the modal template renders the field error list through the helper
+    ok 6 - the modal template renders the field error list through the helper
+      ---
+      duration_ms: 0.42711
+      ...
+    1..6
+ok 17 - FA-03 — the login form can render the field errors the backend sends
+  ---
+  duration_ms: 17.119866
+  type: 'suite'
+  ...
+# Subtest: FA-04 — an export option alias only ever speaks for its own option
+    # Subtest: a compression alias is not read as an encryption request
+    ok 1 - a compression alias is not read as an encryption request
+      ---
+      duration_ms: 2.949074
+      ...
+    # Subtest: an encryption alias is not read as a compression request
+    ok 2 - an encryption alias is not read as a compression request
+      ---
+      duration_ms: 2.009267
+      ...
+    # Subtest: all four on/off combinations stay independent
+    ok 3 - all four on/off combinations stay independent
+      ---
+      duration_ms: 2.158226
+      ...
+    # Subtest: the precedence between a canonical key and an alias is defined, not accidental
+    ok 4 - the precedence between a canonical key and an alias is defined, not accidental
+      ---
+      duration_ms: 2.958947
+      ...
+    # Subtest: the store sends exactly the options the user selected, and nothing else
+    ok 5 - the store sends exactly the options the user selected, and nothing else
+      ---
+      duration_ms: 3.05688
+      ...
+    # Subtest: a non-object parameter cannot throw
+    ok 6 - a non-object parameter cannot throw
+      ---
+      duration_ms: 2.19246
+      ...
+    1..6
+ok 18 - FA-04 — an export option alias only ever speaks for its own option
+  ---
+  duration_ms: 15.941415
+  type: 'suite'
+  ...
+# Subtest: FA-05 — a mask is only recognised in the bounded contract form
+    # Subtest: a raw secret with two trailing asterisks is not a mask
+    ok 1 - a raw secret with two trailing asterisks is not a mask
+      ---
+      duration_ms: 3.394278
+      ...
+    # Subtest: a mask preview with a large visible part is refused
+    ok 2 - a mask preview with a large visible part is refused
+      ---
+      duration_ms: 2.836195
+      ...
+    # Subtest: sanitisation drops the value instead of rendering it
+    ok 3 - sanitisation drops the value instead of rendering it
+      ---
+      duration_ms: 2.977452
+      ...
+    # Subtest: the detector reports the probe as a disclosure
+    ok 4 - the detector reports the probe as a disclosure
+      ---
+      duration_ms: 3.18482
+      ...
+    # Subtest: a valid mask does not excuse a raw field sitting next to it
+    ok 5 - a valid mask does not excuse a raw field sitting next to it
+      ---
+      duration_ms: 2.821179
+      ...
+    # Subtest: a full comparison is sanitised without leaking the secret
+    ok 6 - a full comparison is sanitised without leaking the secret
+      ---
+      duration_ms: 4.769975
+      ...
+    1..6
+ok 19 - FA-05 — a mask is only recognised in the bounded contract form
+  ---
+  duration_ms: 20.780612
+  type: 'suite'
+  ...
+# Subtest: the egress allowlist is the exact pinned artifacts the loader names, and nothing else
+    # Subtest: every named artifact is derived from the loader, so the list cannot drift
+    ok 1 - every named artifact is derived from the loader, so the list cannot drift
+      ---
+      duration_ms: 2.916176
+      ...
+    # Subtest: the pin gate and the browser policy scan the same files, and say so
+    ok 2 - the pin gate and the browser policy scan the same files, and say so
+      ---
+      duration_ms: 1.033414
+      ...
+    # Subtest: a named resource is named in full, query included (FR9-04)
+    ok 3 - a named resource is named in full, query included (FR9-04)
+      ---
+      duration_ms: 1.588626
+      ...
+    # Subtest: every package artifact names an exact version, and the rest are accounted for
+    ok 4 - every package artifact names an exact version, and the rest are accounted for
+      ---
+      duration_ms: 0.425171
+      ...
+    # Subtest: a pinned artifact is allowed
+    ok 5 - a pinned artifact is allowed
+      ---
+      duration_ms: 0.396257
+      ...
+    # Subtest: an unpinned artifact on an allowed host is blocked
+    ok 6 - an unpinned artifact on an allowed host is blocked
+      ---
+      duration_ms: 0.384513
+      ...
+    # Subtest: the right path at the wrong version is blocked
+    ok 7 - the right path at the wrong version is blocked
+      ---
+      duration_ms: 0.246287
+      ...
+    # Subtest: a resource a pinned stylesheet references is declared, not inherited from a directory
+    ok 8 - a resource a pinned stylesheet references is declared, not inherited from a directory
+      ---
+      duration_ms: 0.69445
+      ...
+    # Subtest: the one shape rule is derived from the pinned stylesheet, and is a shape and not a host
+    ok 9 - the one shape rule is derived from the pinned stylesheet, and is a shape and not a host
+      ---
+      duration_ms: 0.511507
+      ...
+    # Subtest: the loopback fixture origins are allowed
+    ok 10 - the loopback fixture origins are allowed
+      ---
+      duration_ms: 0.328872
+      ...
+    # Subtest: any other origin is blocked, including a lookalike host
+    ok 11 - any other origin is blocked, including a lookalike host
+      ---
+      duration_ms: 0.444131
+      ...
+    # Subtest: the build CDN with no pinnable path is pinned to the exact request the loader makes
+    ok 12 - the build CDN with no pinnable path is pinned to the exact request the loader makes
+      ---
+      duration_ms: 0.504448
+      ...
+    # Subtest: a blocked URL says why, so a failure is readable
+    ok 13 - a blocked URL says why, so a failure is readable
+      ---
+      duration_ms: 0.408313
+      ...
+    1..13
+ok 20 - the egress allowlist is the exact pinned artifacts the loader names, and nothing else
+  ---
+  duration_ms: 15.591286
+  ...
+# Subtest: a problem allowance is typed, so it cannot cover an unrelated failure that shares a word
+    # Subtest: an allowance must say which kind of problem it is about
+    ok 1 - an allowance must say which kind of problem it is about
+      ---
+      duration_ms: 1.306629
+      ...
+    # Subtest: an allowance for a refused request does not swallow an uncaught page error
+    ok 2 - an allowance for a refused request does not swallow an uncaught page error
+      ---
+      duration_ms: 0.836722
+      ...
+    # Subtest: a canary with the same words but a different source still fails
+    ok 3 - a canary with the same words but a different source still fails
+      ---
+      duration_ms: 0.462289
+      ...
+    # Subtest: a failed-request allowance is scoped to the request it names
+    ok 4 - a failed-request allowance is scoped to the request it names
+      ---
+      duration_ms: 0.730138
+      ...
+    # Subtest: an allowance for a method does not cover the same path with another method
+    ok 5 - an allowance for a method does not cover the same path with another method
+      ---
+      duration_ms: 0.362773
+      ...
+    # Subtest: an allowance may state how many problems it expects
+    ok 6 - an allowance may state how many problems it expects
+      ---
+      duration_ms: 7.849131
+      ...
+    # Subtest: a count may be a range, for noise that is conditional but never legitimate twice
+    ok 7 - a count may be a range, for noise that is conditional but never legitimate twice
+      ---
+      duration_ms: 3.514694
+      ...
+    # Subtest: the reason is still mandatory
+    ok 8 - the reason is still mandatory
+      ---
+      duration_ms: 0.256133
+      ...
+    # Subtest: an uncaught page error is reported with no allowance at all
+    ok 9 - an uncaught page error is reported with no allowance at all
+      ---
+      duration_ms: 0.233947
+      ...
+    1..9
+ok 21 - a problem allowance is typed, so it cannot cover an unrelated failure that shares a word
+  ---
+  duration_ms: 17.163387
+  ...
+# Subtest: FR6-H — the init callback runs in a realm that has only its argument
+ok 22 - FR6-H — the init callback runs in a realm that has only its argument
+  ---
+  duration_ms: 5.956075
+  ...
+# Subtest: FR6-H — the seeded record is one the product reader accepts, unrelaxed
+ok 23 - FR6-H — the seeded record is one the product reader accepts, unrelaxed
+  ---
+  duration_ms: 8.630475
+  ...
+# Subtest: FR6-H — the seed touches auth keys and nothing else
+ok 24 - FR6-H — the seed touches auth keys and nothing else
+  ---
+  duration_ms: 6.490575
+  ...
+# Subtest: FR6-H — a legacy mirror cannot lead the record after seeding
+ok 25 - FR6-H — a legacy mirror cannot lead the record after seeding
+  ---
+  duration_ms: 1.721333
+  ...
+# Subtest: FR6-H — buildSeedArgs refuses the shapes the validator would reject
+ok 26 - FR6-H — buildSeedArgs refuses the shapes the validator would reject
+  ---
+  duration_ms: 1.136981
+  ...
+# Subtest: FR6-H — a missing READY manifest is pending; a broken one fails
+ok 27 - FR6-H — a missing READY manifest is pending; a broken one fails
+  ---
+  duration_ms: 2.711662
+  ...
+# Subtest: loopback transport (real axios 1.20.0)
+    # Subtest: a 401 rotates the session once and replays the request with the new bearer
+    ok 1 - a 401 rotates the session once and replays the request with the new bearer
+      ---
+      duration_ms: 105.452124
+      ...
+    # Subtest: several requests that 401 at once share one refresh and one rotation
+    ok 2 - several requests that 401 at once share one refresh and one rotation
+      ---
+      duration_ms: 90.604754
+      ...
+    # Subtest: a 401 of a request that was already superseded neither refreshes nor replays
+    ok 3 - a 401 of a request that was already superseded neither refreshes nor replays
+      ---
+      duration_ms: 40.271048
+      ...
+    # Subtest: a rotation the server answers with an ended session ends this one and replays nothing
+    ok 4 - a rotation the server answers with an ended session ends this one and replays nothing
+      ---
+      duration_ms: 65.125142
+      ...
+    # Subtest: a busy backend keeps the session instead of logging the user out
+    ok 5 - a busy backend keeps the session instead of logging the user out
+      ---
+      duration_ms: 39.724052
+      ...
+    # Subtest: a mutation rejected with 401 is not replayed
+    ok 6 - a mutation rejected with 401 is not replayed
+      ---
+      duration_ms: 34.196107
+      ...
+    # Subtest: a request to a foreign origin is refused and no bearer leaves the tab
+    ok 7 - a request to a foreign origin is refused and no bearer leaves the tab
+      ---
+      duration_ms: 44.24796
+      ...
+    # Subtest: a refused connection is reported without ending the session
+    ok 8 - a refused connection is reported without ending the session
+      ---
+      duration_ms: 2038.690633
+      ...
+    1..8
+ok 28 - loopback transport (real axios 1.20.0)
+  ---
+  duration_ms: 2465.679826
+  type: 'suite'
+  ...
+# Subtest: FR6-I — a profile response for a replaced session mutates nothing the new session can see
+ok 29 - FR6-I — a profile response for a replaced session mutates nothing the new session can see
+  ---
+  duration_ms: 70.596677
+  ...
+# Subtest: FR6-I — a profile response for a session that was only *repointed* is refused too
+ok 30 - FR6-I — a profile response for a session that was only *repointed* is refused too
+  ---
+  duration_ms: 31.411793
+  ...
+# Subtest: FR6-I — a server save that the device could not store is reported as exactly that
+ok 31 - FR6-I — a server save that the device could not store is reported as exactly that
+  ---
+  duration_ms: 33.393177
+  ...
+# Subtest: FR6-I — a refused profile commit keeps the tokens it was asked to keep
+ok 32 - FR6-I — a refused profile commit keeps the tokens it was asked to keep
+  ---
+  duration_ms: 30.851004
+  ...
+# Subtest: FR6-I — clearPendingEmail has the same ownership semantics as the profile save
+ok 33 - FR6-I — clearPendingEmail has the same ownership semantics as the profile save
+  ---
+  duration_ms: 31.343038
+  ...
+# Subtest: FR6-I — a rotation between the request and the commit keeps the new tokens
+ok 34 - FR6-I — a rotation between the request and the commit keeps the new tokens
+  ---
+  duration_ms: 51.683627
+  ...
+# Subtest: FR6-I — a reload of a committed profile keeps the metadata, and the loading flag belongs to the newest request
+ok 35 - FR6-I — a reload of a committed profile keeps the metadata, and the loading flag belongs to the newest request
+  ---
+  duration_ms: 42.604582
+  ...
+# Subtest: FR6-J — a rejected login keeps its field errors and does not close the modal
+ok 36 - FR6-J — a rejected login keeps its field errors and does not close the modal
+  ---
+  duration_ms: 34.933637
+  ...
+# Subtest: FR6-J — a sign-in the session record refuses does not close the modal as a success
+ok 37 - FR6-J — a sign-in the session record refuses does not close the modal as a success
+  ---
+  duration_ms: 27.488573
+  ...
+# Subtest: FR6-J — reduced mode signs in for the tab and says the session cannot be kept
+ok 38 - FR6-J — reduced mode signs in for the tab and says the session cannot be kept
+  ---
+  duration_ms: 27.443368
+  ...
+# Subtest: FR6-J — a login response for a superseded intent emits nothing at all
+ok 39 - FR6-J — a login response for a superseded intent emits nothing at all
+  ---
+  duration_ms: 22.912044
+  ...
+# Subtest: a profile change is written to the canonical record, not only to a variable
+ok 40 - a profile change is written to the canonical record, not only to a variable
+  ---
+  duration_ms: 38.925344
+  ...
+# Subtest: a profile change keeps the tokens it did not mean to replace
+ok 41 - a profile change keeps the tokens it did not mean to replace
+  ---
+  duration_ms: 29.414923
+  ...
+# Subtest: a rotation queued behind a profile write merges instead of overwriting it
+ok 42 - a rotation queued behind a profile write merges instead of overwriting it
+  ---
+  duration_ms: 26.074473
+  ...
+# Subtest: a rotation waits for the writer lock, and the profile it was built on is not lost
+ok 43 - a rotation waits for the writer lock, and the profile it was built on is not lost
+  ---
+  duration_ms: 31.553296
+  ...
+# Subtest: a profile response for a session this tab no longer owns changes nothing
+ok 44 - a profile response for a session this tab no longer owns changes nothing
+  ---
+  duration_ms: 42.556954
+  ...
+# Subtest: a profile write that cannot be stored is reported, and the mirror is not left ahead
+ok 45 - a profile write that cannot be stored is reported, and the mirror is not left ahead
+  ---
+  duration_ms: 26.931475
+  ...
+# Subtest: a profile write for an ended session is refused
+ok 46 - a profile write for an ended session is refused
+  ---
+  duration_ms: 41.990171
+  ...
+# Subtest: R5-B — a refresh does not resolve while its rotation is still uncommitted
+ok 47 - R5-B — a refresh does not resolve while its rotation is still uncommitted
+  ---
+  duration_ms: 58.093728
+  ...
+# Subtest: R5-B — nothing is published before the write lands
+ok 48 - R5-B — nothing is published before the write lands
+  ---
+  duration_ms: 50.823132
+  ...
+# Subtest: R5-B — twenty callers share one flight and one commit, and none gets the expired bearer
+ok 49 - R5-B — twenty callers share one flight and one commit, and none gets the expired bearer
+  ---
+  duration_ms: 22.883043
+  ...
+# Subtest: R7-FA8-01 — two tabs do not spend the predecessor before the first commit
+ok 50 - R7-FA8-01 — two tabs do not spend the predecessor before the first commit
+  ---
+  duration_ms: 48.786324
+  ...
+# Subtest: R7-FA8-01 — a tab queued behind a rotation adopts the successor instead of rotating again
+ok 51 - R7-FA8-01 — a tab queued behind a rotation adopts the successor instead of rotating again
+  ---
+  duration_ms: 71.108438
+  ...
+# Subtest: R7-FA8-01 — a queued rotation does not spend or clobber a session that replaced it
+ok 52 - R7-FA8-01 — a queued rotation does not spend or clobber a session that replaced it
+  ---
+  duration_ms: 59.002002
+  ...
+# Subtest: R5-B — a rotation this tab did not commit yields no token
+ok 53 - R5-B — a rotation this tab did not commit yields no token
+  ---
+  duration_ms: 28.13755
+  ...
+# Subtest: R5-B — a temporary backend failure keeps the snapshot and still refuses the request
+ok 54 - R5-B — a temporary backend failure keeps the snapshot and still refuses the request
+  ---
+  duration_ms: 25.554109
+  ...
+# Subtest: the browser helpers assert on the refresh lock the coordinator actually takes
+ok 55 - the browser helpers assert on the refresh lock the coordinator actually takes
+  ---
+  duration_ms: 2.406983
+  ...
+# Subtest: the browser helpers assert on the writer lock the session writer actually takes
+ok 56 - the browser helpers assert on the writer lock the session writer actually takes
+  ---
+  duration_ms: 0.50408
+  ...
+# Subtest: the coordinator names the refresh lock from the pinned prefix, not from a literal
+ok 57 - the coordinator names the refresh lock from the pinned prefix, not from a literal
+  ---
+  duration_ms: 0.351574
+  ...
+# Subtest: FA-01 — a rotation cannot resurrect a session another tab ended
+    # Subtest: a rotation held by a second tab is refused while the record is a tombstone
+    ok 1 - a rotation held by a second tab is refused while the record is a tombstone
+      ---
+      duration_ms: 68.764817
+      ...
+    # Subtest: a rotation of a record owned by a different login session is refused
+    ok 2 - a rotation of a record owned by a different login session is refused
+      ---
+      duration_ms: 43.721318
+      ...
+    # Subtest: a rotation is refused when the record was purged, instead of being written back
+    ok 3 - a rotation is refused when the record was purged, instead of being written back
+      ---
+      duration_ms: 21.036061
+      ...
+    # Subtest: a new login may follow a logout, and takes a version above the tombstone
+    ok 4 - a new login may follow a logout, and takes a version above the tombstone
+      ---
+      duration_ms: 25.00471
+      ...
+    # Subtest: with a writer lock, a rotation queued behind a logout is refused, not written
+    ok 5 - with a writer lock, a rotation queued behind a logout is refused, not written
+      ---
+      duration_ms: 47.432921
+      ...
+    # Subtest: without a lock, an ambiguous snapshot is reported instead of being called atomic
+    ok 6 - without a lock, an ambiguous snapshot is reported instead of being called atomic
+      ---
+      duration_ms: 23.084556
+      ...
+    1..6
+ok 58 - FA-01 — a rotation cannot resurrect a session another tab ended
+  ---
+  duration_ms: 232.113861
+  type: 'suite'
+  ...
+# Subtest: FA-02 — adopting another tab's record is a read, not a rotation
+    # Subtest: adopting the same snapshot twice does not raise the stored version
+    ok 1 - adopting the same snapshot twice does not raise the stored version
+      ---
+      duration_ms: 20.419175
+      ...
+    # Subtest: adoption never writes, so a storage event cannot start a write loop between tabs
+    ok 2 - adoption never writes, so a storage event cannot start a write loop between tabs
+      ---
+      duration_ms: 60.631823
+      ...
+    # Subtest: the lifecycle channel is named after the API identity, not the session
+    ok 3 - the lifecycle channel is named after the API identity, not the session
+      ---
+      duration_ms: 24.747963
+      ...
+    # Subtest: a published lifecycle event carries metadata only, never a bearer
+    ok 4 - a published lifecycle event carries metadata only, never a bearer
+      ---
+      duration_ms: 22.794671
+      ...
+    # Subtest: a tab bound before the login receives it through the shared channel
+    ok 5 - a tab bound before the login receives it through the shared channel
+      ---
+      duration_ms: 37.40483
+      ...
+    # Subtest: a tab that missed the message still reconciles on focus
+    ok 6 - a tab that missed the message still reconciles on focus
+      ---
+      duration_ms: 42.122384
+      ...
+    # Subtest: without a BroadcastChannel the storage event is the fallback
+    ok 7 - without a BroadcastChannel the storage event is the fallback
+      ---
+      duration_ms: 31.696378
+      ...
+    # Subtest: a logout published by another tab ends this one, without this tab writing a tombstone
+    ok 8 - a logout published by another tab ends this one, without this tab writing a tombstone
+      ---
+      duration_ms: 42.557123
+      ...
+    1..8
+ok 59 - FA-02 — adopting another tab's record is a read, not a rotation
+  ---
+  duration_ms: 283.764639
+  type: 'suite'
+  ...
+# Subtest: FA-06 — one validator decides, and it runs before anything is mutated
+    # Subtest: a millisecond expiry is rejected instead of being stored and reported as degraded storage
+    ok 1 - a millisecond expiry is rejected instead of being stored and reported as degraded storage
+      ---
+      duration_ms: 17.141602
+      ...
+    # Subtest: a rotation is validated exactly as strictly as a login
+    ok 2 - a rotation is validated exactly as strictly as a login
+      ---
+      duration_ms: 22.10229
+      ...
+    # Subtest: a login that the validator refuses is never written, whatever the store reports
+    ok 3 - a login that the validator refuses is never written, whatever the store reports
+      ---
+      duration_ms: 17.137881
+      ...
+    # Subtest: a record whose state is unknown is corruption, not an active session
+    ok 4 - a record whose state is unknown is corruption, not an active session
+      ---
+      duration_ms: 5.610465
+      ...
+    # Subtest: a store that finds such a record requires a new login and keeps no token
+    ok 5 - a store that finds such a record requires a new login and keeps no token
+      ---
+      duration_ms: 27.575633
+      ...
+    1..5
+ok 60 - FA-06 — one validator decides, and it runs before anything is mutated
+  ---
+  duration_ms: 90.472638
+  type: 'suite'
+  ...
+# Subtest: FA-07 — a rejected record is never replaced by legacy token material
+    # Subtest: a corrupt canonical record is not filled in from the legacy keys
+    ok 1 - a corrupt canonical record is not filled in from the legacy keys
+      ---
+      duration_ms: 49.975268
+      ...
+    # Subtest: a record bound to another API identity is rejected, and legacy keys do not help
+    ok 2 - a record bound to another API identity is rejected, and legacy keys do not help
+      ---
+      duration_ms: 20.452207
+      ...
+    # Subtest: a tombstone is not overridden by a consistent legacy session
+    ok 3 - a tombstone is not overridden by a consistent legacy session
+      ---
+      duration_ms: 15.563011
+      ...
+    # Subtest: a genuinely absent record is still migrated from a consistent legacy session
+    ok 4 - a genuinely absent record is still migrated from a consistent legacy session
+      ---
+      duration_ms: 16.988909
+      ...
+    # Subtest: an unbound legacy session is purged instead of migrated
+    ok 5 - an unbound legacy session is purged instead of migrated
+      ---
+      duration_ms: 27.888774
+      ...
+    1..5
+ok 61 - FA-07 — a rejected record is never replaced by legacy token material
+  ---
+  duration_ms: 131.44743
+  type: 'suite'
+  ...
+# Subtest: R5-A — a rotation queued before a logout never revives the session
+ok 62 - R5-A — a rotation queued before a logout never revives the session
+  ---
+  duration_ms: 71.139605
+  ...
+# Subtest: R5-A — a logout that lands first is not undone by the rotation that follows it
+ok 63 - R5-A — a logout that lands first is not undone by the rotation that follows it
+  ---
+  duration_ms: 32.51996
+  ...
+# Subtest: R5-A — a login that was queued and then logged out is rejected, not resurrected
+ok 64 - R5-A — a login that was queued and then logged out is rejected, not resurrected
+  ---
+  duration_ms: 23.458587
+  ...
+# Subtest: R5-A — a logout never removes a session that a newer login already owns
+ok 65 - R5-A — a logout never removes a session that a newer login already owns
+  ---
+  duration_ms: 27.36158
+  ...
+# Subtest: R5-A — a rotation of a session that ended survives an API identity switch
+ok 66 - R5-A — a rotation of a session that ended survives an API identity switch
+  ---
+  duration_ms: 33.225647
+  ...
+# Subtest: R5-A — ending a session also ends a rotation of the same session that landed first
+ok 67 - R5-A — ending a session also ends a rotation of the same session that landed first
+  ---
+  duration_ms: 32.008909
+  ...
+# Subtest: R5-A / FA-02 — ending the same session twice is idempotent and does not churn the record
+ok 68 - R5-A / FA-02 — ending the same session twice is idempotent and does not churn the record
+  ---
+  duration_ms: 24.501589
+  ...
+# Subtest: R5-C — two identities on one origin serialise on the single writer lock
+ok 69 - R5-C — two identities on one origin serialise on the single writer lock
+  ---
+  duration_ms: 57.945657
+  ...
+# Subtest: R5-C — a re-read under the lock is what makes a rotation merge into the newest snapshot
+ok 70 - R5-C — a re-read under the lock is what makes a rotation merge into the newest snapshot
+  ---
+  duration_ms: 57.62039
+  ...
+# Subtest: R5-C — without a writer lock the session stays memory-only and says so
+ok 71 - R5-C — without a writer lock the session stays memory-only and says so
+  ---
+  duration_ms: 27.53428
+  ...
+# Subtest: R5-C — reduced mode does not re-hydrate a stored record, and reload is not a silent login
+ok 72 - R5-C — reduced mode does not re-hydrate a stored record, and reload is not a silent login
+  ---
+  duration_ms: 19.071831
+  ...
+# Subtest: R5-C — a storage failure is reported, never dressed up as a committed session
+ok 73 - R5-C — a storage failure is reported, never dressed up as a committed session
+  ---
+  duration_ms: 21.525688
+  ...
+# Subtest: R5-C — a storage read exception is reported as unavailable, not as an absent session
+ok 74 - R5-C — a storage read exception is reported as unavailable, not as an absent session
+  ---
+  duration_ms: 23.464162
+  ...
+# Subtest: FR6-A — a remote logout that is still pending does not end the login that replaced it
+ok 75 - FR6-A — a remote logout that is still pending does not end the login that replaced it
+  ---
+  duration_ms: 26.048911
+  ...
+# Subtest: FR6-A — the end target cannot be re-bound to whatever the record says after the await
+ok 76 - FR6-A — the end target cannot be re-bound to whatever the record says after the await
+  ---
+  duration_ms: 25.530494
+  ...
+# Subtest: FR6-A — ending a lifecycle that is already ended is idempotent and writes nothing
+ok 77 - FR6-A — ending a lifecycle that is already ended is idempotent and writes nothing
+  ---
+  duration_ms: 25.256234
+  ...
+# Subtest: FR6-B — a memory-only login that is logged out immediately stays signed out
+ok 78 - FR6-B — a memory-only login that is logged out immediately stays signed out
+  ---
+  duration_ms: 26.687832
+  ...
+# Subtest: FR6-C — a refresh in reduced mode is refused before the network, with a typed reason
+ok 79 - FR6-C — a refresh in reduced mode is refused before the network, with a typed reason
+  ---
+  duration_ms: 23.544345
+  ...
+# Subtest: FR6-C — a memory-only session in one tab never consumes the durable session of another
+ok 80 - FR6-C — a memory-only session in one tab never consumes the durable session of another
+  ---
+  duration_ms: 22.603161
+  ...
+# Subtest: FR6-C — reduced mode never adopts, migrates or purges a shared record
+ok 81 - FR6-C — reduced mode never adopts, migrates or purges a shared record
+  ---
+  duration_ms: 56.624046
+  ...
+# Subtest: FR6-C — two reduced-mode logins: the latest intent wins and the older one changes nothing
+ok 82 - FR6-C — two reduced-mode logins: the latest intent wins and the older one changes nothing
+  ---
+  duration_ms: 58.504729
+  ...
+# Subtest: FR6-C — a storage that starts failing mid-session degrades without inventing a session
+ok 83 - FR6-C — a storage that starts failing mid-session degrades without inventing a session
+  ---
+  duration_ms: 60.141042
+  ...
+# Subtest: FR6-D — ending session A leaves a valid record of another identity completely untouched
+ok 84 - FR6-D — ending session A leaves a valid record of another identity completely untouched
+  ---
+  duration_ms: 76.706205
+  ...
+# Subtest: FR6-D — the same sessionId string under a different identity is still a different lifecycle
+ok 85 - FR6-D — the same sessionId string under a different identity is still a different lifecycle
+  ---
+  duration_ms: 30.223541
+  ...
+# Subtest: FR6-E — a rotation response built from an old predecessor cannot replace the newer successor
+ok 86 - FR6-E — a rotation response built from an old predecessor cannot replace the newer successor
+  ---
+  duration_ms: 34.319485
+  ...
+# Subtest: FR6-E — a rotation of a foreign or ended lifecycle is refused, whatever the predecessor says
+ok 87 - FR6-E — a rotation of a foreign or ended lifecycle is refused, whatever the predecessor says
+  ---
+  duration_ms: 43.250109
+  ...
+# Subtest: FR6-F — adopting another tab's session is a pure read: zero writes, zero removals
+ok 88 - FR6-F — adopting another tab's session is a pure read: zero writes, zero removals
+  ---
+  duration_ms: 43.686821
+  ...
+# Subtest: a lock deadline bounds the wait for the lock, not the work done once it is granted
+ok 89 - a lock deadline bounds the wait for the lock, not the work done once it is granted
+  ---
+  duration_ms: 80.95559
+  ...
+# Subtest: a lock deadline is elapsed time, and it is the configured length
+    # Subtest: timeout_20000_not_fenced_at_15000
+    ok 1 - timeout_20000_not_fenced_at_15000
+      ---
+      duration_ms: 5.499744
+      ...
+    # Subtest: a frozen wall clock does not decide the deadline, and a backwards one does not extend it
+    ok 2 - a frozen wall clock does not decide the deadline, and a backwards one does not extend it
+      ---
+      duration_ms: 2.149925
+      ...
+    # Subtest: a timer that fires early re-arms for the remaining time instead of fencing
+    ok 3 - a timer that fires early re-arms for the remaining time instead of fencing
+      ---
+      duration_ms: 1.926377
+      ...
+    # Subtest: a granted lock is not abandoned when the work outlives the budget
+    ok 4 - a granted lock is not abandoned when the work outlives the budget
+      ---
+      duration_ms: 1.896435
+      ...
+    # Subtest: the fence settles once, however many times it is reached
+    ok 5 - the fence settles once, however many times it is reached
+      ---
+      duration_ms: 1.369835
+      ...
+    # Subtest: every outcome clears the timer it armed
+    ok 6 - every outcome clears the timer it armed
+      ---
+      duration_ms: 3.445169
+      ...
+    # Subtest: a runtime with no monotonic clock gets a stated policy, not an unbounded wait
+    ok 7 - a runtime with no monotonic clock gets a stated policy, not an unbounded wait
+      ---
+      duration_ms: 1.952381
+      ...
+    # Subtest: a monotonic clock that stops answering numbers is a broken clock, not an infinite budget
+    ok 8 - a monotonic clock that stops answering numbers is a broken clock, not an infinite budget
+      ---
+      duration_ms: 3.835713
+      ...
+    # Subtest: a source that moves backwards is not monotonic, and is treated the same way
+    ok 9 - a source that moves backwards is not monotonic, and is treated the same way
+      ---
+      duration_ms: 1.37114
+      ...
+    1..9
+ok 90 - a lock deadline is elapsed time, and it is the configured length
+  ---
+  duration_ms: 38.808499
+  ...
+# Subtest: a refresh that cannot take the lock reports it at the configured elapsed time, not the capped one
+ok 91 - a refresh that cannot take the lock reports it at the configured elapsed time, not the capped one
+  ---
+  duration_ms: 68.165911
+  ...
+# Subtest: the default scheduler bounds a real wait
+ok 92 - the default scheduler bounds a real wait
+  ---
+  duration_ms: 70.026323
+  ...
+# Subtest: editing the bytes of an already-modified file changes the identity, and the old status hash does not
+ok 93 - editing the bytes of an already-modified file changes the identity, and the old status hash does not
+  ---
+  duration_ms: 177.99635
+  ...
+# Subtest: the bytes of an untracked helper change the identity, even though the status names only its directory
+ok 94 - the bytes of an untracked helper change the identity, even though the status names only its directory
+  ---
+  duration_ms: 97.850116
+  ...
+# Subtest: an executable bit is part of the identity
+ok 95 - an executable bit is part of the identity
+  ---
+  duration_ms: 136.076173
+  ...
+# Subtest: adding and deleting a file both change the identity
+ok 96 - adding and deleting a file both change the identity
+  ---
+  duration_ms: 128.809945
+  ...
+# Subtest: the same tree produces the same digest however the filesystem feels about it
+ok 97 - the same tree produces the same digest however the filesystem feels about it
+  ---
+  duration_ms: 196.625903
+  ...
+# Subtest: evidence written by a run is outside the identity, so a run cannot invalidate its own record
+ok 98 - evidence written by a run is outside the identity, so a run cannot invalidate its own record
+  ---
+  duration_ms: 175.044302
+  ...
+# Subtest: node_modules, git and the Playwright output directories are not source
+ok 99 - node_modules, git and the Playwright output directories are not source
+  ---
+  duration_ms: 86.738168
+  ...
+# Subtest: an env-shaped path is excluded by name even inside an included tree
+ok 100 - an env-shaped path is excluded by name even inside an included tree
+  ---
+  duration_ms: 80.746786
+  ...
+# Subtest: a manifest names what was in the run, and the base tree is labelled as the base
+ok 101 - a manifest names what was in the run, and the base tree is labelled as the base
+  ---
+  duration_ms: 61.151553
+  ...
+# Subtest: a snapshot restores every file the manifest names, with the mode the manifest recorded
+ok 102 - a snapshot restores every file the manifest names, with the mode the manifest recorded
+  ---
+  duration_ms: 170.78665
+  ...
+# Subtest: the same content snapshots to the same bytes, and a changed byte changes them
+ok 103 - the same content snapshots to the same bytes, and a changed byte changes them
+  ---
+  duration_ms: 150.848052
+  ...
+# Subtest: the CLI writes what the library builds, and reports the digest on stdout
+ok 104 - the CLI writes what the library builds, and reports the digest on stdout
+  ---
+  duration_ms: 515.733976
+  ...
+# Subtest: a usage error is exit 2 and an unreadable repository is exit 3, not a zero that looks like a pass
+ok 105 - a usage error is exit 2 and an unreadable repository is exit 3, not a zero that looks like a pass
+  ---
+  duration_ms: 417.769936
+  ...
+# Subtest: FR9-06: a well-formed set of reports validates clean
+ok 106 - FR9-06: a well-formed set of reports validates clean
+  ---
+  duration_ms: 30.615333
+  ...
+# Subtest: FR9-06: a row with too few cells is caught, because a short TSV row renders fine
+ok 107 - FR9-06: a row with too few cells is caught, because a short TSV row renders fine
+  ---
+  duration_ms: 11.308624
+  ...
+# Subtest: FR9-06: a required finding with no row is caught
+ok 108 - FR9-06: a required finding with no row is caught
+  ---
+  duration_ms: 4.344147
+  ...
+# Subtest: FR9-06: a status outside the closed set is caught
+ok 109 - FR9-06: a status outside the closed set is caught
+  ---
+  duration_ms: 10.099109
+  ...
+# Subtest: FR9-06: a VERIFIED row naming evidence that does not exist is caught
+ok 110 - FR9-06: a VERIFIED row naming evidence that does not exist is caught
+  ---
+  duration_ms: 10.133725
+  ...
+# Subtest: FR9-06: a VERIFIED row with no test is caught, because a verified finding with no test is an assertion
+ok 111 - FR9-06: a VERIFIED row with no test is caught, because a verified finding with no test is an assertion
+  ---
+  duration_ms: 4.780151
+  ...
+# Subtest: FR9-06: a path in a row that is not a file in the repo is caught
+ok 112 - FR9-06: a path in a row that is not a file in the repo is caught
+  ---
+  duration_ms: 4.595282
+  ...
+# Subtest: FR9-06: the harness spelling of a path is accepted, so the check is not merely a spelling lottery
+ok 113 - FR9-06: the harness spelling of a path is accepted, so the check is not merely a spelling lottery
+  ---
+  duration_ms: 4.656555
+  ...
+# Subtest: FR9-06: a gate count no log records is caught, so a stale "33/33" cannot outlive its run
+ok 114 - FR9-06: a gate count no log records is caught, so a stale "33/33" cannot outlive its run
+  ---
+  duration_ms: 3.622643
+  ...
+# Subtest: FR9-06: a gate count a log does record is accepted
+ok 115 - FR9-06: a gate count a log does record is accepted
+  ---
+  duration_ms: 3.522074
+  ...
+# Subtest: FR9-06: a row VERIFIED in the matrix but OPEN in the handoff is caught
+ok 116 - FR9-06: a row VERIFIED in the matrix but OPEN in the handoff is caught
+  ---
+  duration_ms: 2.945631
+  ...
+# Subtest: FR9-06: an evidence reference in the handoff that does not exist is caught
+ok 117 - FR9-06: an evidence reference in the handoff that does not exist is caught
+  ---
+  duration_ms: 2.986958
+  ...
+# Subtest: FR9-06: the real reports in this repo validate
+ok 118 - FR9-06: the real reports in this repo validate
+  ---
+  duration_ms: 84.843578
+  ...
+# Subtest: FR9-06: the reports and the evidence can be pointed at separately
+ok 119 - FR9-06: the reports and the evidence can be pointed at separately
+  ---
+  duration_ms: 15.590738
+  ...
+# Subtest: FR9-06: --mode final holds a delivered tree to shipping its evidence
+ok 120 - FR9-06: --mode final holds a delivered tree to shipping its evidence
+  ---
+  duration_ms: 5.825295
+  ...
+# Subtest: FR9-06: a matrix with no schema line is refused rather than guessed at
+ok 121 - FR9-06: a matrix with no schema line is refused rather than guessed at
+  ---
+  duration_ms: 10.737576
+  ...
+# Subtest: FR9-06: a status outside the pinned enum is refused, including one that reads like success
+ok 122 - FR9-06: a status outside the pinned enum is refused, including one that reads like success
+  ---
+  duration_ms: 36.843266
+  ...
+# Subtest: FR9-06: IMPLEMENTED_UNVERIFIED is not treated as done, so a row cannot skip its evidence
+ok 123 - FR9-06: IMPLEMENTED_UNVERIFIED is not treated as done, so a row cannot skip its evidence
+  ---
+  duration_ms: 11.96749
+  ...
+# Subtest: FR9-06: a "12/12 CDN references" line is not read as 12 passing unit tests
+ok 124 - FR9-06: a "12/12 CDN references" line is not read as 12 passing unit tests
+  ---
+  duration_ms: 10.732073
+  ...
+# Subtest: FR9-06: a gate count on a line with no run named is not a claim either
+ok 125 - FR9-06: a gate count on a line with no run named is not a claim either
+  ---
+  duration_ms: 13.085967
+  ...
+# Subtest: FR9-06: a complete N/N gate count is still checked, so a stale full pass cannot survive
+ok 126 - FR9-06: a complete N/N gate count is still checked, so a stale full pass cannot survive
+  ---
+  duration_ms: 10.051484
+  ...
+# Subtest: FR9-06: a run name cited in the handoff that never ran is caught
+ok 127 - FR9-06: a run name cited in the handoff that never ran is caught
+  ---
+  duration_ms: 6.953317
+  ...
+# Subtest: FR9-06: a cited run whose timestamp was mistyped is caught
+ok 128 - FR9-06: a cited run whose timestamp was mistyped is caught
+  ---
+  duration_ms: 7.017165
+  ...
+# Subtest: FR9-06: a tree with no evidence directory says so once, instead of per row
+ok 129 - FR9-06: a tree with no evidence directory says so once, instead of per row
+  ---
+  duration_ms: 9.024233
+  ...
+# Subtest: FR9-06: an early return has the same shape as a full one, so a caller can destructure it
+ok 130 - FR9-06: an early return has the same shape as a full one, so a caller can destructure it
+  ---
+  duration_ms: 8.671413
+  ...
+# Subtest: FR9-06: a run stamp that is genuinely absent is caught even though the directory is
+ok 131 - FR9-06: a run stamp that is genuinely absent is caught even though the directory is
+  ---
+  duration_ms: 7.152198
+  ...
+# Subtest: FR9-06: a run label is reported when there is no evidence directory to resolve it against
+ok 132 - FR9-06: a run label is reported when there is no evidence directory to resolve it against
+  ---
+  duration_ms: 4.978353
+  ...
+1..132
+# tests 270
+# suites 24
+# pass 270
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 15225.393099

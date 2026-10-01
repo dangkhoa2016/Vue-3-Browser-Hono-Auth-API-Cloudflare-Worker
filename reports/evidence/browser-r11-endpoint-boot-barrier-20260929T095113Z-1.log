@@ -1,0 +1,19 @@
+[run-frontend-gate] $ npm run test:browser -- --grep N6\ endpoint 
+
+> frontend-remediation-verification@1.0.0 test:browser
+> playwright test --config browser/playwright.config.mjs --grep N6 endpoint
+
+[2m[WebServer] [22m(node:50825) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[2m[WebServer] [22m(Use `node --trace-warnings ...` to show where the warning was created)
+[2m[WebServer] [22mfake API on http://127.0.0.1:45531, static on http://127.0.0.1:45351
+
+Running 2 tests using 1 worker
+
+(node:50839) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:50839) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 [chromium] › browser/backend-contract-mock.spec.mjs:443:67 › N6 endpoint transition holds accepted A through Settings Save: same-origin-basepath (20.2s)
+  ✓  2 [chromium] › browser/backend-contract-mock.spec.mjs:443:67 › N6 endpoint transition holds accepted A through Settings Save: localhost-alias (18.9s)
+
+  2 passed (41.1s)

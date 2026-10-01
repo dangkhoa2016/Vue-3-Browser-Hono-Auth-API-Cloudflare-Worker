@@ -1,0 +1,24 @@
+run-frontend-gate: evidence for one producer run
+label:      r11-export
+argv:       npm run test:browser -- --grep audit\ \(json\|csv\)\ download\|audit\ export\ HTML200 
+command:    npm run test:browser -- --grep audit (json|csv) download|audit export HTML200
+cwd:        /workspaces/frontend-r11-session/browser-runs/frontend-browser-run.ImPmBY/worktree/tests
+repo_root:  /workspaces/frontend-r11-session/browser-runs/frontend-browser-run.ImPmBY/worktree
+source_digest:      4aaf9b1eb7b8337b6c0908d306e7f3e5f04c7398119426f97775ee40b98cf799
+source_manifest:    /workspaces/frontend-r11-session/browser-runs/frontend-browser-run.ImPmBY/worktree/reports/evidence/r11-export-20260929T100117Z-1.source-before.manifest.json
+source_snapshot:    /workspaces/frontend-r11-session/browser-runs/frontend-browser-run.ImPmBY/worktree/reports/evidence/r11-export-20260929T100117Z-1.source.tar.gz
+git:        branch=remediation/r11 head=d523d07d423d415ccb341049a1d007ad2b84d3eb base_tree=a327ec340766b1c9254aecde375a83c4a06fb41b status_sha256=cbc8197bfbdfda87baa8ce0f13f783c7e68e82d82df8a92137308fa2dfa5f658
+timeout_s:  <none>
+started_at: 2026-09-29T10:01:18Z
+node:       v24.20.0
+npm:        11.19.0
+git:        git version 2.43.0
+os:         Linux x86_64
+---- producer output below ----
+ended_at:   2026-09-29T10:01:41Z
+exit:       1
+result:     RAN
+source_digest_after:  4aaf9b1eb7b8337b6c0908d306e7f3e5f04c7398119426f97775ee40b98cf799
+source_manifest_after: /workspaces/frontend-r11-session/browser-runs/frontend-browser-run.ImPmBY/worktree/reports/evidence/r11-export-20260929T100117Z-1.source-after.manifest.json
+source_drift: none
+log:        /workspaces/frontend-r11-session/browser-runs/frontend-browser-run.ImPmBY/worktree/reports/evidence/r11-export-20260929T100117Z-1.log

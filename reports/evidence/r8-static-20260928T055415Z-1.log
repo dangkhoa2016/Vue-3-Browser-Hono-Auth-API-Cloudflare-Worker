@@ -1,0 +1,69 @@
+[run-frontend-gate] $ npm run test:static 
+
+> frontend-remediation-verification@1.0.0 test:static
+> node ../tools/vue-file-size-check.cjs && node ../tools/vue-custom-lint.cjs && node ../tools/vue-script-setup-coverage.cjs && node ../tools/i18n.js check && node ../tools/check-cdn-pins.cjs
+
+
+[1m[36mVue File Size Check[0m
+Checked files: 57
+Limits: pages <= 600 lines, components <= 450 lines
+[32m✓ All files are within limits.[0m
+
+
+Vue Custom Lint
+Checked files: 59
+✓ No custom lint violations found.
+
+
+Vue Script Setup Coverage
+Pages: 23/23 (100%) | threshold 100%
+Components: 34/34 (100%) | threshold 100%
+Global: 57/57 (100%) | threshold 100%
+✓ Coverage thresholds satisfied.
+
+[90mLoading locale files from: /tmp/opencode/r8/work/assets/js/locales[0m
+[90mFound 5 locale file(s): de.js, en.js, ja.js, ko.js, vi.js[0m
+
+
+[1m[36m╔════════════════════════════════════════════════════════════╗[0m
+[1m[36m║        i18n AUDIT & COMPARISON REPORT                             ║[0m
+[1m[36m╚════════════════════════════════════════════════════════════╝[0m
+
+[1m📊 Summary:[0m
+  Reference Locale: [36mde[0m
+  Total Keys: [33m1168[0m
+
+[1m📚 Locale Overview:[0m
+  [32m✓[0m DE: 1168 keys
+  [32m✓[0m EN: 1168 keys
+  [32m✓[0m JA: 1168 keys
+  [32m✓[0m KO: 1168 keys
+  [32m✓[0m VI: 1168 keys
+
+[1m[32m✅ All checks passed! All locales are consistent.[0m
+
+
+[1m[36mi18n Usage Check[0m
+[90mChecked locales: de, en, ja, ko, vi[0m
+[90mDetected keys in source: 991[0m
+
+[32m✓ All used i18n keys exist in checked locale files.[0m
+
+CDN pin check (static only, pass --online to probe reachability)
+
+OK   index.html: https://unpkg.com/vue@3.5.43/dist/vue.global.js
+OK   index.html: https://unpkg.com/vue3-sfc-loader@0.9.5/dist/vue3-sfc-loader.js
+OK   index.html: https://unpkg.com/vue-i18n@11.4.12/dist/vue-i18n.global.js
+OK   vue/Loader.js: https://unpkg.com/nprogress@0.2.0/nprogress.css
+OK   vue/Loader.js: https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css
+OK   vue/Loader.js: https://unpkg.com/vue-demi@0.14.10/lib/index.iife.js
+OK   vue/Loader.js: https://cdn.jsdelivr.net/npm/pinia@3.0.4/dist/pinia.iife.prod.js
+OK   vue/Loader.js: https://unpkg.com/nprogress@0.2.0/nprogress.js
+OK   vue/Loader.js: https://unpkg.com/axios@1.20.0/dist/axios.min.js
+OK   vue/Loader.js: https://unpkg.com/axios-mock-adapter@2.1.0/dist/axios-mock-adapter.min.js
+OK   vue/Loader.js: https://unpkg.com/vue-router@4.6.4/dist/vue-router.global.js
+WARN vue/Loader.vue: https://fonts.googleapis.com/css2?family=Noto+Sans:wght@500;700&family=Noto+Sans+KR:wght@500;700&family=Noto+Sans+JP:wght@500;700&display=swap  [Google Fonts is query-addressed and republished in place; the browser policy names this exact request and no other resource on that host]
+
+12/12 CDN references pinned to an exact version.
+1 accepted floating reference(s) recorded above.
+PASS: every CDN reference resolves to an exact version.

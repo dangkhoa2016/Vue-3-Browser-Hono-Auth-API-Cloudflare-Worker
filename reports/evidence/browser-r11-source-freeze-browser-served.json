@@ -1,0 +1,11 @@
+{
+  "label": "r11-source-freeze-browser",
+  "sourceDigest": "add591bd2ab02152504e1f17753ce41708bf4f3f8a7963913213c13391b0966f",
+  "staticPort": 45141,
+  "apiPort": 40677,
+  "installKey": "676ae3c2f6fcbf551971a6b753e1b0c18ba6ce5aac0e419c5a50d480a724a327",
+  "installCache": "/workspaces/frontend-r11-session/deps-cache-reviewed/676ae3c2f6fcbf551971a6b753e1b0c18ba6ce5aac0e419c5a50d480a724a327",
+  "scratchBase": "/tmp",
+  "servedRoot": "/tmp/frontend-browser-run.7KSXHA/worktree",
+  "startedAt": "2026-10-01T14:43:46Z"
+}

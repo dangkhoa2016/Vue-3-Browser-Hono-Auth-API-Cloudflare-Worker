@@ -1,0 +1,24 @@
+run-frontend-gate: evidence for one producer run
+label:      r11-source-freeze-browser
+argv:       npm run test:browser -- 
+command:    npm run test:browser --
+cwd:        /tmp/frontend-browser-run.7KSXHA/worktree/tests
+repo_root:  /tmp/frontend-browser-run.7KSXHA/worktree
+source_digest:      add591bd2ab02152504e1f17753ce41708bf4f3f8a7963913213c13391b0966f
+source_manifest:    /tmp/frontend-browser-run.7KSXHA/worktree/reports/evidence/r11-source-freeze-browser-20261001T144404Z-1.source-before.manifest.json
+source_snapshot:    /tmp/frontend-browser-run.7KSXHA/worktree/reports/evidence/r11-source-freeze-browser-20261001T144404Z-1.source.tar.gz
+git:        branch=remediation/r11 head=fc9393aa978287fdd1ee46ea921a2441f14a7c32 base_tree=19be0ef636844f197beca1e8a881f865f6460a02 status_sha256=0dd9f42483030047221a304656d3e480fd5683f25baf431e8c4850bae8804463
+timeout_s:  <none>
+started_at: 2026-10-01T14:44:05Z
+node:       v24.20.0
+npm:        11.19.0
+git:        git version 2.43.0
+os:         Linux x86_64
+---- producer output below ----
+ended_at:   2026-10-01T14:51:20Z
+exit:       0
+result:     RAN
+source_digest_after:  add591bd2ab02152504e1f17753ce41708bf4f3f8a7963913213c13391b0966f
+source_manifest_after: /tmp/frontend-browser-run.7KSXHA/worktree/reports/evidence/r11-source-freeze-browser-20261001T144404Z-1.source-after.manifest.json
+source_drift: none
+log:        /tmp/frontend-browser-run.7KSXHA/worktree/reports/evidence/r11-source-freeze-browser-20261001T144404Z-1.log

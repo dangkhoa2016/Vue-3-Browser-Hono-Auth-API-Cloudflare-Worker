@@ -1,0 +1,15 @@
+label:      baseline-browser
+command:    npm --prefix tests run test:browser
+cwd:        /tmp/opencode/r7/repo
+repo_root:  /tmp/opencode/r7/repo
+source:     head=a1db43b7e432795c41c727324d87c66f63c22cbb tree=55033e41514957bbd7c13289661018aa6980a91c branch=remediation/round6-wip status_sha256=444754d78a51d73c1361e3c82a49f750e214e0fbddf47babd8b5f518ca01912a
+timeout_s:  3000
+started_at: 2026-09-28T01:18:42Z
+node:       v20.19.0
+npm:        10.8.2
+os:         Linux x86_64
+---- producer output below ----
+ended_at:   2026-09-28T01:29:46Z
+exit:       0
+result:     RAN
+log:        /tmp/opencode/r7/repo/reports/evidence/baseline-browser-20260928T011842Z.log

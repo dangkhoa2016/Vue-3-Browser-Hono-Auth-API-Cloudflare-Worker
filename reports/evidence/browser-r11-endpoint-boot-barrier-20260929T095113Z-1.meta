@@ -1,0 +1,24 @@
+run-frontend-gate: evidence for one producer run
+label:      r11-endpoint-boot-barrier
+argv:       npm run test:browser -- --grep N6\ endpoint 
+command:    npm run test:browser -- --grep N6 endpoint
+cwd:        /workspaces/frontend-r11-session/browser-runs/frontend-browser-run.75lN9C/worktree/tests
+repo_root:  /workspaces/frontend-r11-session/browser-runs/frontend-browser-run.75lN9C/worktree
+source_digest:      facdbbf28a2097d84121c4ca0d7d6cc01fab36b74e1e1462ffc564c90518f2ed
+source_manifest:    /workspaces/frontend-r11-session/browser-runs/frontend-browser-run.75lN9C/worktree/reports/evidence/r11-endpoint-boot-barrier-20260929T095113Z-1.source-before.manifest.json
+source_snapshot:    /workspaces/frontend-r11-session/browser-runs/frontend-browser-run.75lN9C/worktree/reports/evidence/r11-endpoint-boot-barrier-20260929T095113Z-1.source.tar.gz
+git:        branch=remediation/r11 head=d523d07d423d415ccb341049a1d007ad2b84d3eb base_tree=a327ec340766b1c9254aecde375a83c4a06fb41b status_sha256=4efa4963eea2cefc761d44a44697bcde77655ff9c54d08eda0cb2bd42c352210
+timeout_s:  <none>
+started_at: 2026-09-29T09:51:13Z
+node:       v24.20.0
+npm:        11.19.0
+git:        git version 2.43.0
+os:         Linux x86_64
+---- producer output below ----
+ended_at:   2026-09-29T09:51:56Z
+exit:       0
+result:     RAN
+source_digest_after:  facdbbf28a2097d84121c4ca0d7d6cc01fab36b74e1e1462ffc564c90518f2ed
+source_manifest_after: /workspaces/frontend-r11-session/browser-runs/frontend-browser-run.75lN9C/worktree/reports/evidence/r11-endpoint-boot-barrier-20260929T095113Z-1.source-after.manifest.json
+source_drift: none
+log:        /workspaces/frontend-r11-session/browser-runs/frontend-browser-run.75lN9C/worktree/reports/evidence/r11-endpoint-boot-barrier-20260929T095113Z-1.log

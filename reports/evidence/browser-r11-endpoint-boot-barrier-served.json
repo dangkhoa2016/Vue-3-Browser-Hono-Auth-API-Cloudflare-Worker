@@ -1,0 +1,11 @@
+{
+  "label": "r11-endpoint-boot-barrier",
+  "sourceDigest": "facdbbf28a2097d84121c4ca0d7d6cc01fab36b74e1e1462ffc564c90518f2ed",
+  "staticPort": 45351,
+  "apiPort": 45531,
+  "installKey": "676ae3c2f6fcbf551971a6b753e1b0c18ba6ce5aac0e419c5a50d480a724a327",
+  "installCache": "/workspaces/frontend-r11-session/deps-cache/676ae3c2f6fcbf551971a6b753e1b0c18ba6ce5aac0e419c5a50d480a724a327",
+  "scratchBase": "/workspaces/frontend-r11-session/browser-runs",
+  "servedRoot": "/workspaces/frontend-r11-session/browser-runs/frontend-browser-run.75lN9C/worktree",
+  "startedAt": "2026-09-29T09:51:09Z"
+}

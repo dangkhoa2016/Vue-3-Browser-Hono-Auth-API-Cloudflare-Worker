@@ -1,0 +1,11 @@
+{
+  "label": "r11-review-close-start",
+  "sourceDigest": "b50bd872d7996eab66ad5e0c5d4ecf0e94c8f1f3f03f78ac516aca64713fbb88",
+  "staticPort": 40089,
+  "apiPort": 39615,
+  "installKey": "676ae3c2f6fcbf551971a6b753e1b0c18ba6ce5aac0e419c5a50d480a724a327",
+  "installCache": "/workspaces/frontend-r11-session/deps-cache-reviewed/676ae3c2f6fcbf551971a6b753e1b0c18ba6ce5aac0e419c5a50d480a724a327",
+  "scratchBase": "/tmp",
+  "servedRoot": "/tmp/frontend-browser-run.psJuGW/worktree",
+  "startedAt": "2026-10-01T07:33:35Z"
+}

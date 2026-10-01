@@ -1,0 +1,32 @@
+[run-frontend-gate] $ node --test regression/audit-export.test.mjs 
+✔ audit export json accepts actual representation (9.013598ms)
+✔ audit export csv accepts actual representation (3.618609ms)
+✔ audit export refuses HTML200 without download (2.562527ms)
+✔ audit export refuses HTML disguised as CSV without download (3.021073ms)
+✔ audit export refuses malformed JSON without download (2.529035ms)
+✔ audit export refuses semantic error without download (2.708901ms)
+✔ audit export refuses empty CSV without download (3.232028ms)
+✖ N6 an export paused during body decoding cannot download into a replacement context (4.590165ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 7
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 117.964307
+
+✖ failing tests:
+
+test at regression/audit-export.test.mjs:34:1
+✖ N6 an export paused during body decoding cannot download into a replacement context (4.590165ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at async TestContext.<anonymous> (file:///workspaces/frontend-r11-work/tests/regression/audit-export.test.mjs:42:3)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    operator: 'rejects',
+    diff: 'simple'
+  }

@@ -1,0 +1,11 @@
+{
+  "label": "r11-export-cors",
+  "sourceDigest": "4d1399c53e552dc0904b2c0627d7e53c282f2fcbc3e88e993938814b49210be9",
+  "staticPort": 46413,
+  "apiPort": 36249,
+  "installKey": "676ae3c2f6fcbf551971a6b753e1b0c18ba6ce5aac0e419c5a50d480a724a327",
+  "installCache": "/workspaces/frontend-r11-session/deps-cache-reviewed/676ae3c2f6fcbf551971a6b753e1b0c18ba6ce5aac0e419c5a50d480a724a327",
+  "scratchBase": "/workspaces/frontend-r11-session/browser-runs",
+  "servedRoot": "/workspaces/frontend-r11-session/browser-runs/frontend-browser-run.4hYkuq/worktree",
+  "startedAt": "2026-09-29T10:02:03Z"
+}

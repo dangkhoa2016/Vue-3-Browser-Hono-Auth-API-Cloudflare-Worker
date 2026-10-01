@@ -1,0 +1,97 @@
+[run-frontend-gate] $ npm run test:browser -- --grep N5\ redirects\|N6\ stale\ export 
+
+> frontend-remediation-verification@1.0.0 test:browser
+> playwright test --config browser/playwright.config.mjs --grep N5 redirects|N6 stale export
+
+[2m[WebServer] [22m(node:176875) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[2m[WebServer] [22m(Use `node --trace-warnings ...` to show where the warning was created)
+[2m[WebServer] [22mfake API on http://127.0.0.1:40493, static on http://127.0.0.1:36681
+
+Running 2 tests using 1 worker
+
+(node:176893) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:176893) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 [chromium] › browser/backend-contract-mock.spec.mjs:717:1 › N6 stale export decoding produces no download or caller toast (31.2s)
+(node:177192) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:177192) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  2 [chromium] › browser/harness-egress.spec.mjs:246:1 › N5 redirects cannot send a request to a policy-denied target (173ms)
+
+
+  1) [chromium] › browser/backend-contract-mock.spec.mjs:717:1 › N6 stale export decoding produces no download or caller toast 
+
+    TimeoutError: locator.waitFor: Timeout 30000ms exceeded.
+    Call log:
+    [2m  - waiting for locator('button[title]').filter({ hasText: /login|đăng nhập/i }).first() to be visible[22m
+
+
+      65 |
+      66 |   const loginButton = page.locator('button[title]', { hasText: /login|đăng nhập/i }).first();
+    > 67 |   await loginButton.waitFor({ state: 'visible', timeout: 30_000 });
+         |                     ^
+      68 |   await loginButton.click();
+      69 |   await page.locator('#email').fill('browser@example.test');
+      70 |   await page.locator('#password').fill('fake-password');
+        at signIn (/tmp/frontend-browser-run.FvpC5R/worktree/tests/browser/backend-contract-mock.spec.mjs:67:21)
+        at /tmp/frontend-browser-run.FvpC5R/worktree/tests/browser/backend-contract-mock.spec.mjs:485:34
+
+    Error: the guard refused 1 request(s) in "N6 stale export decoding produces no download or caller toast"; a case that means to provoke egress must declare each one with guard.expectBlocked({ url, method, reason, count })
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+
+    [32m- Expected  - 1[39m
+    [31m+ Received  + 8[39m
+
+    [32m- Array [][39m
+    [31m+ Array [[39m
+    [31m+   Object {[39m
+    [31m+     "declared": false,[39m
+    [31m+     "method": "GET",[39m
+    [31m+     "reason": "redirect refused: isolated harness accepts direct responses only",[39m
+    [31m+     "url": "https://cdn.tailwindcss.com/3.4.17",[39m
+    [31m+   },[39m
+    [31m+ ][39m
+
+       at fixtures.js:81
+
+      79 |         + 'a case that means to provoke egress must declare each one with '
+      80 |         + 'guard.expectBlocked({ url, method, reason, count })')
+    > 81 |         .toEqual([]);
+         |          ^
+      82 |     }
+      83 |   }
+      84 | });
+        at Object.context (/tmp/frontend-browser-run.FvpC5R/worktree/tests/browser/fixtures.js:81:10)
+
+    Error: N6 stale export decoding produces no download or caller toast left 1 boundary problem(s)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+
+    [32m- Expected  - 1[39m
+    [31m+ Received  + 3[39m
+
+    [32m- Array [][39m
+    [31m+ Array [[39m
+    [31m+   "context refused 1 request(s) the case did not declare: GET https://cdn.tailwindcss.com/3.4.17 (redirect refused: isolated harness accepts direct responses only)",[39m
+    [31m+ ][39m
+
+       at helpers/browser-fixture.mjs:812
+
+      810 |
+      811 |       if (problems.length > 0) {
+    > 812 |         expect(problems, `${title} left ${problems.length} boundary problem(s)`).toEqual([]);
+          |                                                                                  ^
+      813 |       }
+      814 |       return problems;
+      815 |     }
+        at Object.dispose (/tmp/frontend-browser-run.FvpC5R/worktree/tests/browser/helpers/browser-fixture.mjs:812:82)
+        at Object.base.extend._boundary.auto (/tmp/frontend-browser-run.FvpC5R/worktree/tests/browser/fixtures.js:58:7)
+
+    Error Context: test-results/backend-contract-mock-N6-s-6c828-no-download-or-caller-toast-chromium/error-context.md
+
+  1 failed
+    [chromium] › browser/backend-contract-mock.spec.mjs:717:1 › N6 stale export decoding produces no download or caller toast 
+  1 passed (33.9s)

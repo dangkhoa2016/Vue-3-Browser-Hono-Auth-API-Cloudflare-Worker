@@ -1,0 +1,11 @@
+{
+  "label": "r11-review-route-drain",
+  "sourceDigest": "b9ceca699b124f3a6aee7bf7aa1f3d111ce88674a65ddfe0b01af109cdda417b",
+  "staticPort": 34965,
+  "apiPort": 43161,
+  "installKey": "676ae3c2f6fcbf551971a6b753e1b0c18ba6ce5aac0e419c5a50d480a724a327",
+  "installCache": "/workspaces/frontend-r11-session/deps-cache-reviewed/676ae3c2f6fcbf551971a6b753e1b0c18ba6ce5aac0e419c5a50d480a724a327",
+  "scratchBase": "/tmp",
+  "servedRoot": "/tmp/frontend-browser-run.RLypSu/worktree",
+  "startedAt": "2026-10-01T07:32:07Z"
+}

@@ -1,0 +1,22 @@
+[run-frontend-gate] $ npm run test:browser -- --grep egress\|FR9-03 
+
+> frontend-remediation-verification@1.0.0 test:browser
+> playwright test --config browser/playwright.config.mjs --grep egress|FR9-03
+
+[2m[WebServer] [22m(node:49724) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[2m[WebServer] [22m(Use `node --trace-warnings ...` to show where the warning was created)
+[2m[WebServer] [22mfake API on http://127.0.0.1:45917, static on http://127.0.0.1:44709
+
+Running 5 tests using 1 worker
+
+(node:49749) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:49749) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 [chromium] › browser/harness-egress.spec.mjs:28:3 › the egress boundary, proved rather than assumed › the shared context refuses an unpinned artifact on a host the app legitimately uses (2.8s)
+  ✓  2 [chromium] › browser/harness-egress.spec.mjs:110:3 › the egress boundary, proved rather than assumed › a spec that never asks for a guard still gets one (221ms)
+  ✓  3 [chromium] › browser/harness-egress.spec.mjs:156:3 › FR9-03 — a context or page the case did not ask about is still covered › a context opened with a bare newContext is guarded, watched and closed (243ms)
+  ✓  4 [chromium] › browser/harness-egress.spec.mjs:186:3 › FR9-03 — a context or page the case did not ask about is still covered › a page that throws and is nobody's to answer for fails the run (327ms)
+  ✓  5 [chromium] › browser/harness-egress.spec.mjs:222:3 › FR9-03 — a context or page the case did not ask about is still covered › every context the run created is closed at teardown (212ms)
+
+  5 passed (8.9s)

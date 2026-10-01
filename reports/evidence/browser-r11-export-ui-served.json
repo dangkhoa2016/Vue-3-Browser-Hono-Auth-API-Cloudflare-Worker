@@ -1,0 +1,11 @@
+{
+  "label": "r11-export-ui",
+  "sourceDigest": "3002084685554046b9b24d4a24ad20a158d0d28b2908f76854cdd563f9dba5b6",
+  "staticPort": 46275,
+  "apiPort": 44781,
+  "installKey": "676ae3c2f6fcbf551971a6b753e1b0c18ba6ce5aac0e419c5a50d480a724a327",
+  "installCache": "/workspaces/frontend-r11-session/deps-cache-reviewed/676ae3c2f6fcbf551971a6b753e1b0c18ba6ce5aac0e419c5a50d480a724a327",
+  "scratchBase": "/workspaces/frontend-r11-session/browser-runs",
+  "servedRoot": "/workspaces/frontend-r11-session/browser-runs/frontend-browser-run.ax73lM/worktree",
+  "startedAt": "2026-09-29T13:50:07Z"
+}

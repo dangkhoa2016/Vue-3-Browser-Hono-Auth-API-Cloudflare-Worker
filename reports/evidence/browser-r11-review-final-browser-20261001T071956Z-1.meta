@@ -1,0 +1,24 @@
+run-frontend-gate: evidence for one producer run
+label:      r11-review-final-browser
+argv:       npm run test:browser -- 
+command:    npm run test:browser --
+cwd:        /tmp/frontend-browser-run.b7nxzl/worktree/tests
+repo_root:  /tmp/frontend-browser-run.b7nxzl/worktree
+source_digest:      2b62ef6498109166a31592c518cabaa0f4e1a519f11f30541718c99beea9b193
+source_manifest:    /tmp/frontend-browser-run.b7nxzl/worktree/reports/evidence/r11-review-final-browser-20261001T071956Z-1.source-before.manifest.json
+source_snapshot:    /tmp/frontend-browser-run.b7nxzl/worktree/reports/evidence/r11-review-final-browser-20261001T071956Z-1.source.tar.gz
+git:        branch=remediation/r11 head=681ae2071951fbf1a3776e884c45b524f833ba77 base_tree=778512ca8307df56036d2a1b06340bb0e300e77a status_sha256=a94994e3c9d7660072932785c94347bf4f53761164d38e961ae3f1d05fa648e3
+timeout_s:  <none>
+started_at: 2026-10-01T07:19:57Z
+node:       v24.20.0
+npm:        11.19.0
+git:        git version 2.43.0
+os:         Linux x86_64
+---- producer output below ----
+ended_at:   2026-10-01T07:27:31Z
+exit:       1
+result:     RAN
+source_digest_after:  2b62ef6498109166a31592c518cabaa0f4e1a519f11f30541718c99beea9b193
+source_manifest_after: /tmp/frontend-browser-run.b7nxzl/worktree/reports/evidence/r11-review-final-browser-20261001T071956Z-1.source-after.manifest.json
+source_drift: none
+log:        /tmp/frontend-browser-run.b7nxzl/worktree/reports/evidence/r11-review-final-browser-20261001T071956Z-1.log

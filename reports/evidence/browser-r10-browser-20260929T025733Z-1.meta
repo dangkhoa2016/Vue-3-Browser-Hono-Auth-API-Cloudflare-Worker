@@ -1,0 +1,24 @@
+run-frontend-gate: evidence for one producer run
+label:      r10-browser
+argv:       npm run test:browser -- 
+command:    npm run test:browser --
+cwd:        /tmp/frontend-browser-run.GI8PNa/worktree/tests
+repo_root:  /tmp/frontend-browser-run.GI8PNa/worktree
+source_digest:      8679021ddb0c6a694c9a687decf6c86cab191137a41b7b5fb906d1f18f65e452
+source_manifest:    /tmp/frontend-browser-run.GI8PNa/worktree/reports/evidence/r10-browser-20260929T025733Z-1.source-before.manifest.json
+source_snapshot:    /tmp/frontend-browser-run.GI8PNa/worktree/reports/evidence/r10-browser-20260929T025733Z-1.source.tar.gz
+git:        branch=remediation/r10-recovered head=6f21c863b16f4f82dc3cb688a1b4cc7e9384300a base_tree=e92ce4c0980de8270986fad4e561e3e5be4874cf status_sha256=7b15fe19815a8b7757e6dde7c2ba2a2374cc54ec98fa3a87ecb8879dffe9f4b7
+timeout_s:  <none>
+started_at: 2026-09-29T02:57:35Z
+node:       v20.19.0
+npm:        10.8.2
+git:        git version 2.43.0
+os:         Linux x86_64
+---- producer output below ----
+ended_at:   2026-09-29T03:10:59Z
+exit:       0
+result:     RAN
+source_digest_after:  8679021ddb0c6a694c9a687decf6c86cab191137a41b7b5fb906d1f18f65e452
+source_manifest_after: /tmp/frontend-browser-run.GI8PNa/worktree/reports/evidence/r10-browser-20260929T025733Z-1.source-after.manifest.json
+source_drift: none
+log:        /tmp/frontend-browser-run.GI8PNa/worktree/reports/evidence/r10-browser-20260929T025733Z-1.log
