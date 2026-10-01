@@ -89,6 +89,33 @@ async function initMainApp() {
   options.moduleCache['/assets/js/stores/authStore.js'] = authStoreModule;
   options.moduleCache['/assets/js/stores/modalStore.js'] = modalStoreModule;
 
+  // Two more, and they are not interchangeable with `api.js` above. The settings page reaches the
+  // endpoint preference through `mainStore`, which imports the HTTP client *directly* rather than
+  // through the barrel, and the HTTP client is the module that owns the API identity — the singleton
+  // the auth store subscribes to in order to drop a session when the server changes (F03).
+  //
+  // Any module a `.vue` file imports by URL is a *second evaluation* of that module unless the
+  // instance the app already loaded is handed to the loader here, and a second evaluation is a second
+  // identity singleton: it holds its own listeners and its own `currentIdentity`. With two of them,
+  // saving a new endpoint wrote the shared storage keys and notified nobody, so the old tab kept its
+  // session and the guarantee that a credential issued by one server is never sent to another did not
+  // hold. The symptom was invisible in the request log, because both copies write the same keys.
+  const httpClientModule = await import('/assets/js/api/httpClient.js');
+  const mainStoreModule = await import('/assets/js/stores/mainStore.js');
+  options.moduleCache['/assets/js/api/httpClient.js'] = httpClientModule;
+  options.moduleCache['/assets/js/stores/mainStore.js'] = mainStoreModule;
+
+  // Lazy SFC stores import these stateful modules directly. Give the loader the native
+  // instances before any consumer mounts, so session fences and protected resets agree.
+  for (const path of [
+    '/assets/js/api/apiIdentity.js',
+    '/assets/js/api/protectedState.js',
+    '/assets/js/api/sessionCoordinator.js',
+    '/assets/js/api/sessionStorage.js',
+    '/assets/js/appServices.js'
+  ]) options.moduleCache[path] = await import(path);
+
+
   try {
     const App = await loadModule('/vue/App.vue', options);
     const app = createApp(App);

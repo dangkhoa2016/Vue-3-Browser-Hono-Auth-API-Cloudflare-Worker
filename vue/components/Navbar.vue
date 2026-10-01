@@ -70,6 +70,7 @@
           <template v-if="isAuthenticated">
             <div class="relative hidden min-[1100px]:block ml-1 pl-1" ref="userDropdownRef">
               <button @click="toggleUserDropdown"
+                data-testid="user-menu-toggle"
                 :class="desktopUserToggleButtonClass"
                 :title="userDisplayName">
                 <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 text-xs font-bold text-white shadow-sm">
@@ -112,6 +113,7 @@
                       {{ $t('message.navbar.settings') }}
                     </router-link>
                     <button @click="handleLogout"
+                      data-testid="logout-menu-item"
                       class="w-full flex items-center px-3 py-2 rounded-xl text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
                       <i class="bi bi-box-arrow-right text-base mr-2"></i>
                       {{ $t('message.auth.logout') }}
@@ -280,6 +282,13 @@
       </transition>
     </div>
 
+    <!-- Sign-out warning: the local session is gone, but the server may not have revoked it. -->
+    <LogoutWarning
+      v-if="logoutWarningMessage"
+      :message="logoutWarningMessage"
+      :close-label="$t('message.auth.close')"
+      @dismiss="dismissLogoutWarning" />
+
     <!-- Login Modal -->
     <LoginModal 
       :show="showLoginModal" 
@@ -312,6 +321,7 @@
 
 <script setup>
 import LoginModal from './LoginModal.vue';
+import LogoutWarning from './LogoutWarning.vue';
 import RegisterModal from './RegisterModal.vue';
 import ConfirmModal from './ConfirmModal.vue';
 import { useNavbar } from '/vue/composables/useNavbar.js';
@@ -379,9 +389,12 @@ const {
   openAdminDropdown,
   closeAdminDropdown,
   toggleAdminDropdown,
+  handleLogin,
   handleLoginSuccess,
   handleLogout,
   confirmLogout,
+  logoutWarningMessage,
+  dismissLogoutWarning,
   openLoginModal,
   openRegisterModal,
   closeModals,
