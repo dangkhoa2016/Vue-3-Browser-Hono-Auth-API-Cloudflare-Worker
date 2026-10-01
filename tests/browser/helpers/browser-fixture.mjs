@@ -241,21 +241,8 @@ export const SHAPED_ALLOWANCES = [
   }
 ];
 
-/**
- * The CDNs the app reaches that cannot be pinned the way a package can, named as exact resources.
- *
- * Tailwind is served as a build from a bare host with no versioned path, so there is no artifact to
- * pin; the loader installs it at boot and the app does not render without it. It is therefore pinned
- * to the *exact* request the loader makes — the host root, with no query — rather than to the origin.
- * The previous rule allowed `${origin}/anything-at-all`, so a host the app uses for one script could
- * serve anything at all to every page in the suite.
- */
-export const ORIGIN_SCOPED_ALLOWANCES = [
-  {
-    url: 'https://cdn.tailwindcss.com/',
-    reason: 'Tailwind is served as a runtime build from a bare host with no versioned path, so there is no artifact to pin; the loader installs it at boot and the app does not render without it. Pinned to the host root with no query, which is the whole of what the loader requests.'
-  }
-];
+// No origin-scoped package exceptions: Tailwind is a direct versioned resource.
+export const ORIGIN_SCOPED_ALLOWANCES = [];
 
 /**
  * The fixture servers, on every name the loopback answers to.
@@ -433,6 +420,17 @@ export async function installEgressGuard(context, { policy = egressPolicy } = {}
 
   const blocked = [];
   const requests = [];
+  let contextClosing = false;
+  context.once?.('close', () => { contextClosing = true; });
+  // Playwright disposes context.request before emitting 'close'. Record the
+  // start of our own close call so only its expected cancellation is accepted.
+  const closeContext = context.close;
+  if (typeof closeContext === 'function') {
+    context.close = function (...args) {
+      contextClosing = true;
+      return closeContext.apply(this, args);
+    };
+  }
 
   await context.route('**/*', async (route) => {
     const request = route.request();
@@ -449,7 +447,34 @@ export async function installEgressGuard(context, { policy = egressPolicy } = {}
     });
 
     if (reason === null) {
-      await route.continue();
+      // Playwright does not route redirect destinations again. Fetch only the direct
+      // response and never hand a Location to the browser; every fixture/CDN URL must
+      // name its final resource. This HTTP boundary does not cover WebSockets.
+      const page = request.frame?.()?.page?.();
+      const closedDuringRoute = error => (contextClosing || page?.isClosed())
+        && /Target page, context or browser has been closed|^route\.fulfill: Fetch response has been disposed$/.test(String(error?.message));
+      let response;
+      try {
+        response = await route.fetch({maxRedirects: 0});
+        if ([301, 302, 303, 307, 308].includes(response.status())) {
+          const location = response.headers().location || '';
+          let target = location;
+          try { target = new URL(location, request.url()).href; } catch { /* Record malformed targets without following them. */ }
+          const redirectReason = 'redirect refused: isolated harness accepts direct responses only';
+          requests.push({url: target, method: request.method(), resourceType: request.resourceType(),
+            allowed: false, reason: redirectReason, redirectFrom: request.url()});
+          blocked.push({url: target, method: request.method(), reason: redirectReason, declared: false});
+          await route.abort('blockedbyclient');
+        } else {
+          await route.fulfill({response});
+        }
+      } catch (error) {
+        if (!closedDuringRoute(error)) throw error;
+      } finally {
+        if (response) {
+          try { await response.dispose(); } catch (error) { if (!closedDuringRoute(error)) throw error; }
+        }
+      }
       return;
     }
 
@@ -1364,7 +1389,7 @@ export async function holdBrowserResponse(context, pathFragment) {
     async release() {
       releasing = true;
       const held = parked.splice(0, parked.length);
-      for (const route of held) await route.continue();
+      for (const route of held) await route.fallback();
       return held.length;
     }
   };

@@ -81,6 +81,41 @@ node tools/vue-file-size-check.cjs --page-limit=600 --component-limit=450
 - Workflow CI: `.github/workflows/vue-quality-check.yml` (chế độ strict, fail khi vi phạm).
 - Tài liệu boundary kiến trúc: `documents/FRONTEND_ARCHITECTURE_BOUNDARIES.vi.md`.
 
+## Kiểm chứng (harness test-only)
+
+Ứng dụng không phụ thuộc và không có bước build. Harness kiểm chứng nằm ở **manifest riêng** trong
+`tests/`, nên bản ứng dụng vẫn hoàn toàn không có dependency.
+
+Đã kiểm chứng trên **Node v20.19.0**; các lệnh dùng glob tường minh `regression/*.test.mjs`, nên việc
+tìm suite không phụ thuộc vào cách runner discover thư mục.
+
+```bash
+# một lần, chạy từ thư mục gốc repository
+npm --prefix tests ci --ignore-scripts --no-audit --no-fund
+npx --prefix tests playwright install chromium
+
+# từng gate (cũng chạy riêng được)
+npm --prefix tests run test:static    # size / lint / script-setup / i18n / CDN pins
+npm --prefix tests run test:unit      # toàn bộ tests/regression/*.test.mjs
+npm --prefix tests run test:loopback  # Axios thật với server loopback
+npm --prefix tests run test:browser   # Playwright + Chromium, chỉ mock API
+
+# toàn bộ gate trên, theo thứ tự, dừng ở lỗi đầu tiên
+npm --prefix tests run test:all
+
+# cùng discovery của unit, thêm tuỳ chọn probe CDN online
+bash tools/test-browser.sh
+bash tools/test-browser.sh --online
+bash tools/test-browser.sh --browser    # bắt buộc chạy suite Playwright thay vì báo PENDING
+```
+
+`test:unit` là đường discovery duy nhất: `tools/test-browser.sh` gọi chính script đó, nên wrapper
+không thể âm thầm chạy ít suite hơn manifest. Đối chiếu từ thư mục gốc bằng
+`node --test tests/regression/*.test.mjs`.
+
+`test:integration` (`npm --prefix tests run test:integration`) là bước riêng và phải bật thủ công: cần
+backend mà owner đã cấp revision để test. Không có thì báo PENDING, không phải PASS.
+
 ## Tài liệu review
 
 - Mục lục tài liệu: `documents/DOCUMENTATION_INDEX_vi.md`

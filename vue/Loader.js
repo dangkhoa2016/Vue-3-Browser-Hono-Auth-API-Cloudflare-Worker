@@ -61,11 +61,11 @@ export default {
         items: [
           { 
             label: t('message.loader.items.tailwind_css'), 
-            url: 'https://cdn.tailwindcss.com',
+            url: 'https://cdn.tailwindcss.com/3.4.17',
             run: async (stageLabel) => {
               // Load Tailwind
               const script = document.createElement('script');
-              script.src = 'https://cdn.tailwindcss.com';
+              script.src = 'https://cdn.tailwindcss.com/3.4.17';
               
               await new Promise((resolve, reject) => {
                 script.onload = resolve;
@@ -89,12 +89,12 @@ export default {
               await sleep(300);
             }
           },
-          { label: t('message.loader.items.vue_demi'), url: 'https://unpkg.com/vue-demi', crossOrigin: 'anonymous' },
+          { label: t('message.loader.items.vue_demi'), url: 'https://unpkg.com/vue-demi@0.14.10/lib/index.iife.js', crossOrigin: 'anonymous' },
           { label: t('message.loader.items.pinia'), url: 'https://cdn.jsdelivr.net/npm/pinia@3.0.4/dist/pinia.iife.prod.js', crossOrigin: 'anonymous' },
           { label: t('message.loader.items.nprogress_js'), url: 'https://unpkg.com/nprogress@0.2.0/nprogress.js', crossOrigin: 'anonymous' },
-          { label: t('message.loader.items.axios'), url: 'https://unpkg.com/axios/dist/axios.min.js', crossOrigin: 'anonymous' },
-          { label: t('message.loader.items.axios_mock'), url: 'https://unpkg.com/axios-mock-adapter/dist/axios-mock-adapter.min.js', crossOrigin: 'anonymous' },
-          { label: t('message.loader.items.vue_router'), url: 'https://unpkg.com/vue-router@4/dist/vue-router.global.js', crossOrigin: 'anonymous' },
+          { label: t('message.loader.items.axios'), url: 'https://unpkg.com/axios@1.20.0/dist/axios.min.js', crossOrigin: 'anonymous' },
+          { label: t('message.loader.items.axios_mock'), url: 'https://unpkg.com/axios-mock-adapter@2.1.0/dist/axios-mock-adapter.min.js', crossOrigin: 'anonymous' },
+          { label: t('message.loader.items.vue_router'), url: 'https://unpkg.com/vue-router@4.6.4/dist/vue-router.global.js', crossOrigin: 'anonymous' },
         ]
       }),
       makeStage({

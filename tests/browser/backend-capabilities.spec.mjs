@@ -156,6 +156,8 @@ test.describe('backend capability contract surfaced in the UI', () => {
     const startButton = page.locator('button:has(i.bi-play-fill)').first();
     const stopButton = page.locator('button:has(i.bi-stop-fill)').first();
 
+    // Route components load asynchronously: absence before mount does not mean active monitoring.
+    await expect(startButton.or(stopButton).first()).toBeVisible();
     if (await startButton.count()) {
       await expect(startButton).toBeDisabled();
       expect(await startButton.getAttribute('title'), 'a refused start must say why').toBeTruthy();

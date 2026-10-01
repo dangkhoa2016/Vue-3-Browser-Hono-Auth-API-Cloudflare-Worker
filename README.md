@@ -81,6 +81,42 @@ node tools/vue-file-size-check.cjs --page-limit=600 --component-limit=450
 - CI workflow: `.github/workflows/vue-quality-check.yml` (strict mode, fail on violations).
 - Architecture boundaries: `documents/FRONTEND_ARCHITECTURE_BOUNDARIES.md`.
 
+## Verification (test-only harness)
+
+The application ships no dependencies and no build step. The verification harness is a **separate
+manifest** in `tests/`, so the app itself stays dependency-free.
+
+Tested on **Node v20.19.0**; the commands use an explicit `regression/*.test.mjs` glob, so suite
+discovery does not depend on the runner's directory-discovery behaviour.
+
+```bash
+# one-time, from the repository root
+npm --prefix tests ci --ignore-scripts --no-audit --no-fund
+npx --prefix tests playwright install chromium
+
+# gates (each is also available on its own)
+npm --prefix tests run test:static    # size / lint / script-setup / i18n / CDN pins
+npm --prefix tests run test:unit      # every tests/regression/*.test.mjs suite
+npm --prefix tests run test:loopback  # real Axios against a loopback server
+npm --prefix tests run test:browser   # Playwright + Chromium, mock API only
+
+# every gate above, in order, failing on the first problem
+npm --prefix tests run test:all
+
+# the same unit discovery plus an optional online CDN probe
+bash tools/test-browser.sh
+bash tools/test-browser.sh --online
+bash tools/test-browser.sh --browser    # require the Playwright suite instead of reporting PENDING
+```
+
+`test:unit` is the only discovery path: `tools/test-browser.sh` calls it, so the wrapper cannot
+silently run fewer suites than the manifest. Cross-check from the repository root with
+`node --test tests/regression/*.test.mjs`.
+
+`test:integration` (`npm --prefix tests run test:integration`) is separate and opt-in: it needs a
+backend whose revision the owner has released for testing. Without one it is reported PENDING, not
+passed.
+
 ## Review Documentation
 
 - Documentation index: `documents/DOCUMENTATION_INDEX.md`

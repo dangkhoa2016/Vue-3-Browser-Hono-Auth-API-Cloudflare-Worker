@@ -364,6 +364,14 @@ const handleFakeApi = async (request, response) => {
     return;
   }
 
+  if (url.pathname === '/__fake/redirect' && request.method === 'GET') {
+    const target = new URL(url.searchParams.get('target'));
+    if (target.protocol !== 'http:' || target.hostname !== '127.0.0.1') {
+      sendJson(response, 400, {error: 'redirect probe must remain loopback'}); return;
+    }
+    response.writeHead(302, {Location: target.href}); response.end(); return;
+  }
+
   if (url.pathname === '/__fake/reset' && request.method === 'POST') {
     // Release anything a previous test parked, so a held response cannot outlive the test that asked
     // for it and hang the next one.
