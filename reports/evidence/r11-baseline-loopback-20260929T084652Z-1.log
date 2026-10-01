@@ -1,0 +1,23 @@
+[run-frontend-gate] $ npm run test:loopback 
+
+> frontend-remediation-verification@1.0.0 test:loopback
+> node --test regression/loopback-transport.test.mjs
+
+▶ loopback transport (real axios 1.20.0)
+  ✔ a 401 rotates the session once and replays the request with the new bearer (60.616615ms)
+  ✔ several requests that 401 at once share one refresh and one rotation (38.615896ms)
+  ✔ a 401 of a request that was already superseded neither refreshes nor replays (25.621683ms)
+  ✔ a rotation the server answers with an ended session ends this one and replays nothing (15.962221ms)
+  ✔ a busy backend keeps the session instead of logging the user out (19.826914ms)
+  ✔ a mutation rejected with 401 is not replayed (18.402039ms)
+  ✔ a request to a foreign origin is refused and no bearer leaves the tab (17.302881ms)
+  ✔ a refused connection is reported without ending the session (2021.937379ms)
+✔ loopback transport (real axios 1.20.0) (2226.19572ms)
+ℹ tests 8
+ℹ suites 1
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2475.133497

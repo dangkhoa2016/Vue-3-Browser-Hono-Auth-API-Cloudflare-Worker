@@ -1,0 +1,68 @@
+[run-frontend-gate] $ npm run test:browser -- --grep audit\ \(json\|csv\)\ download\|audit\ export\ HTML200 
+
+> frontend-remediation-verification@1.0.0 test:browser
+> playwright test --config browser/playwright.config.mjs --grep audit (json|csv) download|audit export HTML200
+
+[2m[WebServer] [22m(node:62395) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[2m[WebServer] [22m(Use `node --trace-warnings ...` to show where the warning was created)
+[2m[WebServer] [22mfake API on http://127.0.0.1:40489, static on http://127.0.0.1:35805
+
+Running 3 tests using 1 worker
+
+(node:62409) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:62409) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 [chromium] › browser/backend-contract-mock.spec.mjs:532:166 › audit json download preserves actual response bytes (6.4s)
+(node:62533) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:62533) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 [chromium] › browser/backend-contract-mock.spec.mjs:532:166 › audit csv download preserves actual response bytes (6.0s)
+(node:62631) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:62631) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  3 [chromium] › browser/backend-contract-mock.spec.mjs:559:1 › audit export HTML200 produces neither a download nor a success (5.6s)
+
+
+  1) [chromium] › browser/backend-contract-mock.spec.mjs:532:166 › audit json download preserves actual response bytes 
+
+    Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBe[2m([22m[32mexpected[39m[2m) // Object.is equality[22m
+
+    Expected: [32m"[7mfixture[27m.json"[39m
+    Received: [31m"[7maudit_export[27m.json"[39m
+
+      390 |   },format);
+      391 |   const download=await downloaded;
+    > 392 |   expect(download.suggestedFilename()).toBe(`fixture.${format}`);
+          |                                        ^
+      393 |   const stream=await download.createReadStream();const chunks=[];
+      394 |   for await(const chunk of stream) chunks.push(chunk);
+      395 |   expect(Buffer.concat(chunks).toString('utf8')).toBe(body);
+        at /workspaces/frontend-r11-session/browser-runs/frontend-browser-run.ImPmBY/worktree/tests/browser/backend-contract-mock.spec.mjs:392:40
+
+    Error Context: test-results/backend-contract-mock-audi-63200-erves-actual-response-bytes-chromium/error-context.md
+
+  2) [chromium] › browser/backend-contract-mock.spec.mjs:532:166 › audit csv download preserves actual response bytes 
+
+    Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBe[2m([22m[32mexpected[39m[2m) // Object.is equality[22m
+
+    Expected: [32m"[7mfixture[27m.csv"[39m
+    Received: [31m"[7maudit_export[27m.csv"[39m
+
+      390 |   },format);
+      391 |   const download=await downloaded;
+    > 392 |   expect(download.suggestedFilename()).toBe(`fixture.${format}`);
+          |                                        ^
+      393 |   const stream=await download.createReadStream();const chunks=[];
+      394 |   for await(const chunk of stream) chunks.push(chunk);
+      395 |   expect(Buffer.concat(chunks).toString('utf8')).toBe(body);
+        at /workspaces/frontend-r11-session/browser-runs/frontend-browser-run.ImPmBY/worktree/tests/browser/backend-contract-mock.spec.mjs:392:40
+
+    Error Context: test-results/backend-contract-mock-audi-db220-erves-actual-response-bytes-chromium/error-context.md
+
+  2 failed
+    [chromium] › browser/backend-contract-mock.spec.mjs:532:166 › audit json download preserves actual response bytes 
+    [chromium] › browser/backend-contract-mock.spec.mjs:532:166 › audit csv download preserves actual response bytes 
+  1 passed (22.0s)

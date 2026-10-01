@@ -1,0 +1,11 @@
+{
+  "label": "r11-review-route-lifecycle",
+  "sourceDigest": "fef2f9a7e32e1664378f46c51b295e5bc20c31016649bff621da03bf041ad033",
+  "staticPort": 39249,
+  "apiPort": 46615,
+  "installKey": "676ae3c2f6fcbf551971a6b753e1b0c18ba6ce5aac0e419c5a50d480a724a327",
+  "installCache": "/workspaces/frontend-r11-session/deps-cache-reviewed/676ae3c2f6fcbf551971a6b753e1b0c18ba6ce5aac0e419c5a50d480a724a327",
+  "scratchBase": "/tmp",
+  "servedRoot": "/tmp/frontend-browser-run.HZ73lp/worktree",
+  "startedAt": "2026-10-01T07:28:25Z"
+}

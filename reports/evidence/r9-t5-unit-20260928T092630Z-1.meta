@@ -1,0 +1,24 @@
+run-frontend-gate: evidence for one producer run
+label:      r9-t5-unit
+argv:       npm run test:unit 
+command:    npm run test:unit
+cwd:        /content/frontend-r9-work
+repo_root:  /content/frontend-r9-work
+source_digest:      2fe19b8f0572ca8a60637bf5ccce163d834670979b799587891873d648a1ece7
+source_manifest:    /content/frontend-r9-work/reports/evidence/r9-t5-unit-20260928T092630Z-1.source-before.manifest.json
+source_snapshot:    /content/frontend-r9-work/reports/evidence/r9-t5-unit-20260928T092630Z-1.source.tar.gz
+git:        branch=remediation/round6-wip head=a1db43b7e432795c41c727324d87c66f63c22cbb base_tree=55033e41514957bbd7c13289661018aa6980a91c status_sha256=aacfa738c639240ecbfe753dc9a0eca7a0c4d68fda0e7bd2054088004e0de6c6
+timeout_s:  2400
+started_at: 2026-09-28T09:26:31Z
+node:       v20.19.0
+npm:        10.8.2
+git:        git version 2.43.0
+os:         Linux x86_64
+---- producer output below ----
+ended_at:   2026-09-28T09:26:31Z
+exit:       254
+result:     RAN
+source_digest_after:  2fe19b8f0572ca8a60637bf5ccce163d834670979b799587891873d648a1ece7
+source_manifest_after: /content/frontend-r9-work/reports/evidence/r9-t5-unit-20260928T092630Z-1.source-after.manifest.json
+source_drift: none
+log:        /content/frontend-r9-work/reports/evidence/r9-t5-unit-20260928T092630Z-1.log

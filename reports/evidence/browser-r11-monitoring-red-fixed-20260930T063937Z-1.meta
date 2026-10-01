@@ -1,0 +1,24 @@
+run-frontend-gate: evidence for one producer run
+label:      r11-monitoring-red-fixed
+argv:       npm run test:browser -- --grep monitoring\ form\ submits\|monitoring\ rule\ channel 
+command:    npm run test:browser -- --grep monitoring form submits|monitoring rule channel
+cwd:        /tmp/frontend-browser-run.4ngxd7/worktree/tests
+repo_root:  /tmp/frontend-browser-run.4ngxd7/worktree
+source_digest:      94850ff03fd1dba079303c918217cefef6345f93455923b54b0b008903152433
+source_manifest:    /tmp/frontend-browser-run.4ngxd7/worktree/reports/evidence/r11-monitoring-red-fixed-20260930T063937Z-1.source-before.manifest.json
+source_snapshot:    /tmp/frontend-browser-run.4ngxd7/worktree/reports/evidence/r11-monitoring-red-fixed-20260930T063937Z-1.source.tar.gz
+git:        branch=remediation/r11 head=6e185df127d9ce3c59ee97f61064f34abcca985d base_tree=ba028372a15db377626ee1e984f80ec6f66d4bd4 status_sha256=7bf7f996d14c2477a7cab3ba78b1ad5d8eab2115477c8838ea49a13f2cce07f5
+timeout_s:  <none>
+started_at: 2026-09-30T06:39:37Z
+node:       v24.20.0
+npm:        11.19.0
+git:        git version 2.43.0
+os:         Linux x86_64
+---- producer output below ----
+ended_at:   2026-09-30T06:42:17Z
+exit:       1
+result:     RAN
+source_digest_after:  94850ff03fd1dba079303c918217cefef6345f93455923b54b0b008903152433
+source_manifest_after: /tmp/frontend-browser-run.4ngxd7/worktree/reports/evidence/r11-monitoring-red-fixed-20260930T063937Z-1.source-after.manifest.json
+source_drift: none
+log:        /tmp/frontend-browser-run.4ngxd7/worktree/reports/evidence/r11-monitoring-red-fixed-20260930T063937Z-1.log

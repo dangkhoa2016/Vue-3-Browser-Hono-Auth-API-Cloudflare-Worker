@@ -1,0 +1,11 @@
+{
+  "label": "r11-monitoring-browser",
+  "sourceDigest": "d6ff2bbcf13a3fb0833be5651e3a2a80f6673a5e9b85769547bc0f25e548814c",
+  "staticPort": 37185,
+  "apiPort": 36733,
+  "installKey": "676ae3c2f6fcbf551971a6b753e1b0c18ba6ce5aac0e419c5a50d480a724a327",
+  "installCache": "/workspaces/frontend-r11-session/deps-cache-reviewed/676ae3c2f6fcbf551971a6b753e1b0c18ba6ce5aac0e419c5a50d480a724a327",
+  "scratchBase": "/tmp",
+  "servedRoot": "/tmp/frontend-browser-run.3s0b0F/worktree",
+  "startedAt": "2026-09-30T06:44:39Z"
+}

@@ -1,0 +1,11 @@
+{
+  "label": "r11-n9-freeze-browser",
+  "sourceDigest": "8d406ec39aab302589e099ebfdaa065a83f0403c57d6ce5871a72ec09dd56d68",
+  "staticPort": 40371,
+  "apiPort": 43437,
+  "installKey": "676ae3c2f6fcbf551971a6b753e1b0c18ba6ce5aac0e419c5a50d480a724a327",
+  "installCache": "/workspaces/frontend-r11-session/deps-cache-reviewed/676ae3c2f6fcbf551971a6b753e1b0c18ba6ce5aac0e419c5a50d480a724a327",
+  "scratchBase": "/tmp",
+  "servedRoot": "/tmp/frontend-browser-run.Wng8ZX/worktree",
+  "startedAt": "2026-10-01T08:07:20Z"
+}

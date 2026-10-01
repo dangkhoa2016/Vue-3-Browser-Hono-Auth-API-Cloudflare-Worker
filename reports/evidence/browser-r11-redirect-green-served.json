@@ -1,0 +1,11 @@
+{
+  "label": "r11-redirect-green",
+  "sourceDigest": "4b2a30aadc0ecee639eccdbc9da0318a404e333c5b2ca6c1ffd24a48253f1817",
+  "staticPort": 32847,
+  "apiPort": 44029,
+  "installKey": "676ae3c2f6fcbf551971a6b753e1b0c18ba6ce5aac0e419c5a50d480a724a327",
+  "installCache": "/workspaces/frontend-r11-session/deps-cache-reviewed/676ae3c2f6fcbf551971a6b753e1b0c18ba6ce5aac0e419c5a50d480a724a327",
+  "scratchBase": "/tmp",
+  "servedRoot": "/tmp/frontend-browser-run.MnS2he/worktree",
+  "startedAt": "2026-10-01T07:10:33Z"
+}

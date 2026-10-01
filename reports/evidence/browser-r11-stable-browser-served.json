@@ -1,0 +1,11 @@
+{
+  "label": "r11-stable-browser",
+  "sourceDigest": "ad27f2a93eb2a02ed84d1abafe72baac226682cf76cce866bdf10640f2bd245f",
+  "staticPort": 38431,
+  "apiPort": 46119,
+  "installKey": "676ae3c2f6fcbf551971a6b753e1b0c18ba6ce5aac0e419c5a50d480a724a327",
+  "installCache": "/workspaces/frontend-r11-session/deps-cache-reviewed/676ae3c2f6fcbf551971a6b753e1b0c18ba6ce5aac0e419c5a50d480a724a327",
+  "scratchBase": "/workspaces/frontend-r11-session/browser-runs",
+  "servedRoot": "/workspaces/frontend-r11-session/browser-runs/frontend-browser-run.d9KUX4/worktree",
+  "startedAt": "2026-09-29T13:47:19Z"
+}

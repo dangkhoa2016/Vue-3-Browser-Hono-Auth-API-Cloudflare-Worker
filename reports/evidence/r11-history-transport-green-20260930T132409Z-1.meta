@@ -1,0 +1,24 @@
+run-frontend-gate: evidence for one producer run
+label:      r11-history-transport-green
+argv:       node --test regression/loopback-transport.test.mjs 
+command:    node --test regression/loopback-transport.test.mjs
+cwd:        /workspaces/frontend-r11-work/tests
+repo_root:  /workspaces/frontend-r11-work
+source_digest:      13ef8627e7a0acfa896f223269d01d55f10561d990d9998026eae7634ad4283d
+source_manifest:    /workspaces/frontend-r11-work/reports/evidence/r11-history-transport-green-20260930T132409Z-1.source-before.manifest.json
+source_snapshot:    /workspaces/frontend-r11-work/reports/evidence/r11-history-transport-green-20260930T132409Z-1.source.tar.gz
+git:        branch=remediation/r11 head=5b9bd80796bc535aca50b2f1ee12cd47cb205828 base_tree=8e0eae47436522f97b3cdfbd5b7681ecb36b6654 status_sha256=34cd9468c7064f10bb7195e2c83bc55e302bb01712a3e8063c39e06c770b7c01
+timeout_s:  120
+started_at: 2026-09-30T13:24:10Z
+node:       v24.20.0
+npm:        11.19.0
+git:        git version 2.43.0
+os:         Linux x86_64
+---- producer output below ----
+ended_at:   2026-09-30T13:24:13Z
+exit:       0
+result:     RAN
+source_digest_after:  13ef8627e7a0acfa896f223269d01d55f10561d990d9998026eae7634ad4283d
+source_manifest_after: /workspaces/frontend-r11-work/reports/evidence/r11-history-transport-green-20260930T132409Z-1.source-after.manifest.json
+source_drift: none
+log:        /workspaces/frontend-r11-work/reports/evidence/r11-history-transport-green-20260930T132409Z-1.log

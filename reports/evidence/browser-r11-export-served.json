@@ -1,0 +1,11 @@
+{
+  "label": "r11-export",
+  "sourceDigest": "4aaf9b1eb7b8337b6c0908d306e7f3e5f04c7398119426f97775ee40b98cf799",
+  "staticPort": 35805,
+  "apiPort": 40489,
+  "installKey": "676ae3c2f6fcbf551971a6b753e1b0c18ba6ce5aac0e419c5a50d480a724a327",
+  "installCache": "/workspaces/frontend-r11-session/deps-cache-reviewed/676ae3c2f6fcbf551971a6b753e1b0c18ba6ce5aac0e419c5a50d480a724a327",
+  "scratchBase": "/workspaces/frontend-r11-session/browser-runs",
+  "servedRoot": "/workspaces/frontend-r11-session/browser-runs/frontend-browser-run.ImPmBY/worktree",
+  "startedAt": "2026-09-29T10:01:13Z"
+}

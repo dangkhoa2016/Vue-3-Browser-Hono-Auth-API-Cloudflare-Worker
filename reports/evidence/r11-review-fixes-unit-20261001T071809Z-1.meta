@@ -1,0 +1,24 @@
+run-frontend-gate: evidence for one producer run
+label:      r11-review-fixes-unit
+argv:       npm run test:unit 
+command:    npm run test:unit
+cwd:        /workspaces/frontend-r11-work/tests
+repo_root:  /workspaces/frontend-r11-work
+source_digest:      7a9075c9aba9124d0571b2053fd1f706cb9cbe3fc858fb24c9578d2790e73269
+source_manifest:    /workspaces/frontend-r11-work/reports/evidence/r11-review-fixes-unit-20261001T071809Z-1.source-before.manifest.json
+source_snapshot:    /workspaces/frontend-r11-work/reports/evidence/r11-review-fixes-unit-20261001T071809Z-1.source.tar.gz
+git:        branch=remediation/r11 head=681ae2071951fbf1a3776e884c45b524f833ba77 base_tree=778512ca8307df56036d2a1b06340bb0e300e77a status_sha256=bee8357b33692ec569327391a367b75a2ce859681db4d4c023ffef6cd845c59b
+timeout_s:  <none>
+started_at: 2026-10-01T07:18:10Z
+node:       v24.20.0
+npm:        11.19.0
+git:        git version 2.43.0
+os:         Linux x86_64
+---- producer output below ----
+ended_at:   2026-10-01T07:18:48Z
+exit:       1
+result:     RAN
+source_digest_after:  7a9075c9aba9124d0571b2053fd1f706cb9cbe3fc858fb24c9578d2790e73269
+source_manifest_after: /workspaces/frontend-r11-work/reports/evidence/r11-review-fixes-unit-20261001T071809Z-1.source-after.manifest.json
+source_drift: none
+log:        /workspaces/frontend-r11-work/reports/evidence/r11-review-fixes-unit-20261001T071809Z-1.log

@@ -1,0 +1,24 @@
+run-frontend-gate: evidence for one producer run
+label:      r11-harness-direct-pin-green
+argv:       node --test regression/harness-boundaries.test.mjs 
+command:    node --test regression/harness-boundaries.test.mjs
+cwd:        /workspaces/frontend-r11-work/tests
+repo_root:  /workspaces/frontend-r11-work
+source_digest:      2b62ef6498109166a31592c518cabaa0f4e1a519f11f30541718c99beea9b193
+source_manifest:    /workspaces/frontend-r11-work/reports/evidence/r11-harness-direct-pin-green-20261001T071911Z-1.source-before.manifest.json
+source_snapshot:    /workspaces/frontend-r11-work/reports/evidence/r11-harness-direct-pin-green-20261001T071911Z-1.source.tar.gz
+git:        branch=remediation/r11 head=681ae2071951fbf1a3776e884c45b524f833ba77 base_tree=778512ca8307df56036d2a1b06340bb0e300e77a status_sha256=50b917c8d675cfe20ee33a841920db2e0c211411d8ec6aa43851a274c599a405
+timeout_s:  <none>
+started_at: 2026-10-01T07:19:11Z
+node:       v24.20.0
+npm:        11.19.0
+git:        git version 2.43.0
+os:         Linux x86_64
+---- producer output below ----
+ended_at:   2026-10-01T07:19:12Z
+exit:       0
+result:     RAN
+source_digest_after:  2b62ef6498109166a31592c518cabaa0f4e1a519f11f30541718c99beea9b193
+source_manifest_after: /workspaces/frontend-r11-work/reports/evidence/r11-harness-direct-pin-green-20261001T071911Z-1.source-after.manifest.json
+source_drift: none
+log:        /workspaces/frontend-r11-work/reports/evidence/r11-harness-direct-pin-green-20261001T071911Z-1.log

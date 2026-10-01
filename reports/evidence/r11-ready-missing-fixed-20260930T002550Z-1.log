@@ -1,0 +1,19 @@
+[run-frontend-gate] $ npm run test:integration 
+
+> frontend-remediation-verification@1.0.0 test:integration
+> playwright test --config browser/playwright.integration.config.mjs
+
+[2m[WebServer] [22m(node:10632) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[2m[WebServer] [22m(Use `node --trace-warnings ...` to show where the warning was created)
+[2m[WebServer] [22mstatic only (no fake API) on http://127.0.0.1:4173
+
+Running 6 tests using 1 worker
+
+  -  1 [chromium] › browser/backend-capabilities.spec.mjs:79:3 › backend capability contract surfaced in the UI › the integration fixture is usable
+  -  2 [chromium] › browser/backend-capabilities.spec.mjs:96:3 › backend capability contract surfaced in the UI › the seeded session is one the app actually adopts
+  -  3 [chromium] › browser/backend-capabilities.spec.mjs:113:3 › backend capability contract surfaced in the UI › app boots with pinned CDN dependencies and no runtime error
+  -  4 [chromium] › browser/backend-capabilities.spec.mjs:123:3 › backend capability contract surfaced in the UI › unsupported PDF export is disabled with a reason instead of a false success
+  -  5 [chromium] › browser/backend-capabilities.spec.mjs:134:3 › backend capability contract surfaced in the UI › env comparison never renders an undisclosed secret value
+  -  6 [chromium] › browser/backend-capabilities.spec.mjs:143:3 › backend capability contract surfaced in the UI › continuous monitoring stays unconfirmed when the backend does not confirm it
+
+  6 skipped

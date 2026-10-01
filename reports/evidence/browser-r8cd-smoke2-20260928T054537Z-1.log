@@ -1,0 +1,16 @@
+[run-frontend-gate] $ npm run test:browser -- --grep FR9-03\|the\ egress\ boundary\|a\ spec\ that\ never\ asks 
+
+> frontend-remediation-verification@1.0.0 test:browser
+> playwright test --config browser/playwright.config.mjs --grep FR9-03|the egress boundary|a spec that never asks
+
+[2m[WebServer] [22mfake API on http://127.0.0.1:18788, static on http://127.0.0.1:4173
+
+Running 5 tests using 1 worker
+
+  ✓  1 [chromium] › browser/harness-egress.spec.mjs:29:3 › the egress boundary, proved rather than assumed › the shared context refuses an unpinned artifact on a host the app legitimately uses (2.4s)
+  ✓  2 [chromium] › browser/harness-egress.spec.mjs:87:3 › the egress boundary, proved rather than assumed › a spec that never asks for a guard still gets one (200ms)
+  ✓  3 [chromium] › browser/harness-egress.spec.mjs:128:3 › FR9-03 — a context or page the case did not ask about is still covered › a context opened with a bare newContext is guarded, watched and closed (150ms)
+  ✓  4 [chromium] › browser/harness-egress.spec.mjs:153:3 › FR9-03 — a context or page the case did not ask about is still covered › a page that throws and is nobody's to answer for fails the run (272ms)
+  ✓  5 [chromium] › browser/harness-egress.spec.mjs:183:3 › FR9-03 — a context or page the case did not ask about is still covered › every context the run created is closed at teardown (117ms)
+
+  5 passed (8.9s)

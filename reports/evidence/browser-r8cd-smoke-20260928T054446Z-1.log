@@ -1,0 +1,114 @@
+[run-frontend-gate] $ npm run test:browser -- --grep FR9-03\|the\ egress\ boundary\|a\ spec\ that\ never\ asks 
+
+> frontend-remediation-verification@1.0.0 test:browser
+> playwright test --config browser/playwright.config.mjs --grep FR9-03|the egress boundary|a spec that never asks
+
+[2m[WebServer] [22mfake API on http://127.0.0.1:18788, static on http://127.0.0.1:4173
+
+Running 5 tests using 1 worker
+
+  ✘  1 [chromium] › browser/harness-egress.spec.mjs:29:3 › the egress boundary, proved rather than assumed › the shared context refuses an unpinned artifact on a host the app legitimately uses (2.8s)
+  ✓  2 [chromium] › browser/harness-egress.spec.mjs:80:3 › the egress boundary, proved rather than assumed › a spec that never asks for a guard still gets one (314ms)
+  ✓  3 [chromium] › browser/harness-egress.spec.mjs:121:3 › FR9-03 — a context or page the case did not ask about is still covered › a context opened with a bare newContext is guarded, watched and closed (163ms)
+  ✓  4 [chromium] › browser/harness-egress.spec.mjs:146:3 › FR9-03 — a context or page the case did not ask about is still covered › a page that throws and is nobody's to answer for fails the run (283ms)
+  ✘  5 [chromium] › browser/harness-egress.spec.mjs:176:3 › FR9-03 — a context or page the case did not ask about is still covered › every context the run created is closed at teardown (143ms)
+
+
+  1) [chromium] › browser/harness-egress.spec.mjs:29:3 › the egress boundary, proved rather than assumed › the shared context refuses an unpinned artifact on a host the app legitimately uses 
+
+    Error: https://unpkg.com/not-a-pinned-dependency@latest/index.js?FAKE_marker=1 was refused without a reason
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoMatch[2m([22m[32mexpected[39m[2m)[22m
+
+    Expected pattern: [32m/not one of the pinned artifacts/[39m
+    Received string:  [31m"https://unpkg.com/not-a-pinned-dependency@latest/index.js?FAKE_marker=1 is not a resource this app names; https://unpkg.com is used only for /axios-mock-adapter@2.1.0/dist/axios-mock-adapter.min.js, /axios@1.20.0/dist/axios.min.js, /nprogress@0.2.0/nprogress.css, /nprogress@0.2.0/nprogress.js, /vue-demi@0.14.10/lib/index.iife.js, /vue-i18n@11.4.12/dist/vue-i18n.global.js, /vue-router@4.6.4/dist/vue-router.global.js, /vue3-sfc-loader@0.9.5/dist/vue3-sfc-loader.js, /vue@3.5.43/dist/vue.global.js"[39m
+
+      55 |     expect(refusedUrls).toContain(WRONG_VERSION_OF_A_REAL_DEPENDENCY);
+      56 |     for (const entry of guard.blocked) {
+    > 57 |       expect(entry.reason, `${entry.url} was refused without a reason`).toMatch(/not one of the pinned artifacts/);
+         |                                                                         ^
+      58 |     }
+      59 |
+      60 |     // A guard that refuses everything would have produced the same two refusals, so the allow half of
+        at /tmp/opencode/frontend-browser-run/worktree/tests/browser/harness-egress.spec.mjs:57:73
+
+    Error: the guard refused 2 request(s) in "the shared context refuses an unpinned artifact on a host the app legitimately uses"; a case that means to provoke egress must call guard.expectBlocked() instead
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+
+    [32m- Expected  -  1[39m
+    [31m+ Received  + 12[39m
+
+    [32m- Array [][39m
+    [31m+ Array [[39m
+    [31m+   Object {[39m
+    [31m+     "method": "GET",[39m
+    [31m+     "reason": "https://unpkg.com/not-a-pinned-dependency@latest/index.js?FAKE_marker=1 is not a resource this app names; https://unpkg.com is used only for /axios-mock-adapter@2.1.0/dist/axios-mock-adapter.min.js, /axios@1.20.0/dist/axios.min.js, /nprogress@0.2.0/nprogress.css, /nprogress@0.2.0/nprogress.js, /vue-demi@0.14.10/lib/index.iife.js, /vue-i18n@11.4.12/dist/vue-i18n.global.js, /vue-router@4.6.4/dist/vue-router.global.js, /vue3-sfc-loader@0.9.5/dist/vue3-sfc-loader.js, /vue@3.5.43/dist/vue.global.js",[39m
+    [31m+     "url": "https://unpkg.com/not-a-pinned-dependency@latest/index.js?FAKE_marker=1",[39m
+    [31m+   },[39m
+    [31m+   Object {[39m
+    [31m+     "method": "GET",[39m
+    [31m+     "reason": "https://unpkg.com/axios@1.21.0/dist/axios.min.js is not a resource this app names; https://unpkg.com is used only for /axios-mock-adapter@2.1.0/dist/axios-mock-adapter.min.js, /axios@1.20.0/dist/axios.min.js, /nprogress@0.2.0/nprogress.css, /nprogress@0.2.0/nprogress.js, /vue-demi@0.14.10/lib/index.iife.js, /vue-i18n@11.4.12/dist/vue-i18n.global.js, /vue-router@4.6.4/dist/vue-router.global.js, /vue3-sfc-loader@0.9.5/dist/vue3-sfc-loader.js, /vue@3.5.43/dist/vue.global.js",[39m
+    [31m+     "url": "https://unpkg.com/axios@1.21.0/dist/axios.min.js",[39m
+    [31m+   },[39m
+    [31m+ ][39m
+
+       at fixtures.js:79
+
+      77 |       expect(guard.blocked, `the guard refused ${guard.blocked.length} request(s) in "${testInfo.title}"; `
+      78 |         + 'a case that means to provoke egress must call guard.expectBlocked() instead')
+    > 79 |         .toEqual([]);
+         |          ^
+      80 |     }
+      81 |   }
+      82 | });
+        at Object.context (/tmp/opencode/frontend-browser-run/worktree/tests/browser/fixtures.js:79:10)
+
+    Error: this test left 1 boundary problem(s)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+
+    [32m- Expected  - 1[39m
+    [31m+ Received  + 3[39m
+
+    [32m- Array [][39m
+    [31m+ Array [[39m
+    [31m+   "context refused 2 request(s) the case did not declare: GET https://unpkg.com/not-a-pinned-dependency@latest/index.js?FAKE_marker=1 (https://unpkg.com/not-a-pinned-dependency@latest/index.js?FAKE_marker=1 is not a resource this app names; https://unpkg.com is used only for /axios-mock-adapter@2.1.0/dist/axios-mock-adapter.min.js, /axios@1.20.0/dist/axios.min.js, /nprogress@0.2.0/nprogress.css, /nprogress@0.2.0/nprogress.js, /vue-demi@0.14.10/lib/index.iife.js, /vue-i18n@11.4.12/dist/vue-i18n.global.js, /vue-router@4.6.4/dist/vue-router.global.js, /vue3-sfc-loader@0.9.5/dist/vue3-sfc-loader.js, /vue@3.5.43/dist/vue.global.js); GET https://unpkg.com/axios@1.21.0/dist/axios.min.js (https://unpkg.com/axios@1.21.0/dist/axios.min.js is not a resource this app names; https://unpkg.com is used only for /axios-mock-adapter@2.1.0/dist/axios-mock-adapter.min.js, /axios@1.20.0/dist/axios.min.js, /nprogress@0.2.0/nprogress.css, /nprogress@0.2.0/nprogress.js, /vue-demi@0.14.10/lib/index.iife.js, /vue-i18n@11.4.12/dist/vue-i18n.global.js, /vue-router@4.6.4/dist/vue-router.global.js, /vue3-sfc-loader@0.9.5/dist/vue3-sfc-loader.js, /vue@3.5.43/dist/vue.global.js)",[39m
+    [31m+ ][39m
+
+       at helpers/browser-fixture.mjs:495
+
+      493 |
+      494 |       if (problems.length > 0) {
+    > 495 |         expect(problems, `${title} left ${problems.length} boundary problem(s)`).toEqual([]);
+          |                                                                                  ^
+      496 |       }
+      497 |       return problems;
+      498 |     }
+        at Object.dispose (/tmp/opencode/frontend-browser-run/worktree/tests/browser/helpers/browser-fixture.mjs:495:82)
+        at Object.browser (/tmp/opencode/frontend-browser-run/worktree/tests/browser/fixtures.js:58:7)
+
+    Error Context: test-results/harness-egress-the-egress--e7484-t-the-app-legitimately-uses-chromium/error-context.md
+
+  2) [chromium] › browser/harness-egress.spec.mjs:176:3 › FR9-03 — a context or page the case did not ask about is still covered › every context the run created is closed at teardown 
+
+    Error: and the closed one really is
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBe[2m([22m[32mexpected[39m[2m) // Object.is equality[22m
+
+    Expected: [32mtrue[39m
+    Received: [31mfalse[39m
+
+      192 |     await first.close();
+      193 |     expect(second.pages, 'the surviving context still has its own pages').toBeDefined();
+    > 194 |     expect(guardIsClosed(first), 'and the closed one really is').toBe(true);
+          |                                                                  ^
+      195 |   });
+      196 | });
+      197 |
+        at /tmp/opencode/frontend-browser-run/worktree/tests/browser/harness-egress.spec.mjs:194:66
+
+  2 failed
+    [chromium] › browser/harness-egress.spec.mjs:29:3 › the egress boundary, proved rather than assumed › the shared context refuses an unpinned artifact on a host the app legitimately uses 
+    [chromium] › browser/harness-egress.spec.mjs:176:3 › FR9-03 — a context or page the case did not ask about is still covered › every context the run created is closed at teardown 
+  3 passed (8.9s)

@@ -1,0 +1,66 @@
+[run-frontend-gate] $ npm run test:browser -- --grep shared\ context\ refuses\|rotation\ queued\ behind\|rotation\ answer\ computed 
+
+> frontend-remediation-verification@1.0.0 test:browser
+> playwright test --config browser/playwright.config.mjs --grep shared context refuses|rotation queued behind|rotation answer computed
+
+[2m[WebServer] [22m(node:193916) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[2m[WebServer] [22m(Use `node --trace-warnings ...` to show where the warning was created)
+[2m[WebServer] [22mfake API on http://127.0.0.1:43161, static on http://127.0.0.1:34965
+
+Running 3 tests using 1 worker
+
+(node:193931) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:193931) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 [chromium] › browser/harness-egress.spec.mjs:28:3 › the egress boundary, proved rather than assumed › the shared context refuses an unpinned artifact on a host the app legitimately uses (1.5s)
+(node:194040) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:194040) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 [chromium] › browser/session-invariants.spec.mjs:247:3 › session invariants in a real browser › a rotation queued behind another tab's writer lock lands once, after the lock (11.5s)
+(node:194238) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:194238) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  3 [chromium] › browser/session-invariants.spec.mjs:523:3 › session invariants in a real browser › a rotation answer computed for the old session never overwrites the session that replaced it (15.1s)
+
+
+  1) [chromium] › browser/harness-egress.spec.mjs:28:3 › the egress boundary, proved rather than assumed › the shared context refuses an unpinned artifact on a host the app legitimately uses 
+
+    Error: route.fulfill: Route is already handled!
+
+       at helpers/browser-fixture.mjs:460
+
+      458 |           await route.abort('blockedbyclient');
+      459 |         } else {
+    > 460 |           await route.fulfill({response});
+          |                       ^
+      461 |         }
+      462 |       } catch (error) {
+      463 |         if (!closedDuringRoute(error)) throw error;
+        at /tmp/frontend-browser-run.RLypSu/worktree/tests/browser/helpers/browser-fixture.mjs:460:23
+
+    Error Context: test-results/harness-egress-the-egress--e7484-t-the-app-legitimately-uses-chromium/error-context.md
+
+  2) [chromium] › browser/session-invariants.spec.mjs:247:3 › session invariants in a real browser › a rotation queued behind another tab's writer lock lands once, after the lock 
+
+    Error: "apiResponse.dispose: Target page, context or browser has been closed" while running route callback.
+    Consider awaiting `await page.unrouteAll({ behavior: 'ignoreErrors' })`
+    before the end of the test to ignore remaining routes in flight.
+
+       at helpers/browser-fixture.mjs:466
+
+      464 |       } finally {
+      465 |         if (response) {
+    > 466 |           try { await response.dispose(); } catch (error) { if (!closedDuringRoute(error)) throw error; }
+          |                                ^
+      467 |         }
+      468 |       }
+      469 |       return;
+        at /tmp/frontend-browser-run.RLypSu/worktree/tests/browser/helpers/browser-fixture.mjs:466:32
+
+  2 failed
+    [chromium] › browser/harness-egress.spec.mjs:28:3 › the egress boundary, proved rather than assumed › the shared context refuses an unpinned artifact on a host the app legitimately uses 
+    [chromium] › browser/session-invariants.spec.mjs:247:3 › session invariants in a real browser › a rotation queued behind another tab's writer lock lands once, after the lock 
+  1 passed (32.7s)

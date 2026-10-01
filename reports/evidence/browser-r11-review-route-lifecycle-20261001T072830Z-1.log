@@ -1,0 +1,75 @@
+[run-frontend-gate] $ npm run test:browser -- --grep shared\ context\ refuses\|rotation\ queued\ behind\|rotation\ answer\ computed 
+
+> frontend-remediation-verification@1.0.0 test:browser
+> playwright test --config browser/playwright.config.mjs --grep shared context refuses|rotation queued behind|rotation answer computed
+
+[2m[WebServer] [22m(node:191370) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[2m[WebServer] [22m(Use `node --trace-warnings ...` to show where the warning was created)
+[2m[WebServer] [22mfake API on http://127.0.0.1:46615, static on http://127.0.0.1:39249
+
+Running 3 tests using 1 worker
+
+(node:191379) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:191379) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 [chromium] › browser/harness-egress.spec.mjs:28:3 › the egress boundary, proved rather than assumed › the shared context refuses an unpinned artifact on a host the app legitimately uses (1.3s)
+(node:191463) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:191463) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  2 [chromium] › browser/session-invariants.spec.mjs:247:3 › session invariants in a real browser › a rotation queued behind another tab's writer lock lands once, after the lock (9.5s)
+  ✓  3 [chromium] › browser/session-invariants.spec.mjs:523:3 › session invariants in a real browser › a rotation answer computed for the old session never overwrites the session that replaced it (14.0s)
+
+
+  1) [chromium] › browser/harness-egress.spec.mjs:28:3 › the egress boundary, proved rather than assumed › the shared context refuses an unpinned artifact on a host the app legitimately uses 
+
+    Error: "route.fetch: Target page, context or browser has been closed
+    Call log:
+    [2m  - → GET https://fonts.googleapis.com/css2?family=Noto+Sans:wght@500;700&family=Noto+Sans+KR:wght@500;700&family=Noto+Sans+JP:wght@500;700&display=swap[22m
+    [2m    - user-agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.7390.37 Safari/537.36[22m
+    [2m    - accept: text/css,*/*;q=0.1[22m
+    [2m    - accept-encoding: gzip,deflate,br[22m
+    [2m    - accept-language: en-US[22m
+    [2m    - referer: http://127.0.0.1:39249/[22m
+    [2m    - sec-ch-ua: "HeadlessChrome";v="141", "Not?A_Brand";v="8", "Chromium";v="141"[22m
+    [2m    - sec-ch-ua-mobile: ?0[22m
+    [2m    - sec-ch-ua-platform: "Linux"[22m
+    [2m  - ← 200 OK[22m
+    [2m    - content-type: text/css; charset=utf-8[22m
+    [2m    - vary: Sec-Fetch-Dest, Sec-Fetch-Mode, Sec-Fetch-Site[22m
+    [2m    - access-control-allow-origin: *[22m
+    [2m    - timing-allow-origin: *[22m
+    [2m    - link: <https://fonts.gstatic.com>; rel=preconnect; crossorigin[22m
+    [2m    - strict-transport-security: max-age=31536000[22m
+    [2m    - expires: Thu, 01 Oct 2026 07:28:34 GMT[22m
+    [2m    - date: Thu, 01 Oct 2026 07:28:34 GMT[22m
+    [2m    - cache-control: private, max-age=86400, stale-while-revalidate=604800[22m
+    [2m    - last-modified: Thu, 01 Oct 2026 07:28:34 GMT[22m
+    [2m    - cross-origin-opener-policy: same-origin-allow-popups[22m
+    [2m    - cross-origin-resource-policy: cross-origin[22m
+    [2m    - content-encoding: gzip[22m
+    [2m    - server: ESF[22m
+    [2m    - x-xss-protection: 0[22m
+    [2m    - x-frame-options: SAMEORIGIN[22m
+    [2m    - x-content-type-options: nosniff[22m
+    [2m    - alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000[22m
+    [2m    - transfer-encoding: chunked[22m
+    " while running route callback.
+    Consider awaiting `await page.unrouteAll({ behavior: 'ignoreErrors' })`
+    before the end of the test to ignore remaining routes in flight.
+
+       at helpers/browser-fixture.mjs:449
+
+      447 |       let response;
+      448 |       try {
+    > 449 |         response = await route.fetch({maxRedirects: 0});
+          |                                ^
+      450 |         if ([301, 302, 303, 307, 308].includes(response.status())) {
+      451 |           const location = response.headers().location || '';
+      452 |           let target = location;
+        at /tmp/frontend-browser-run.HZ73lp/worktree/tests/browser/helpers/browser-fixture.mjs:449:32
+
+  1 failed
+    [chromium] › browser/harness-egress.spec.mjs:28:3 › the egress boundary, proved rather than assumed › the shared context refuses an unpinned artifact on a host the app legitimately uses 
+  2 passed (27.4s)

@@ -1,0 +1,36 @@
+{
+  "schema": "frontend-history-checkpoints/1",
+  "bundle": "reports/evidence/historical-checkpoints.bundle",
+  "sha256": "50ee17465e78d134628b50c9995224a2a48716730212d6c89bc337aa5a7012bf",
+  "purpose": "Original checkpoint objects referenced by unchanged historical logs; not curated-head test results.",
+  "checkpoints": [
+    {
+      "ref": "refs/heads/checkpoint-5b9bd80796bc",
+      "sha": "5b9bd80796bc535aca50b2f1ee12cd47cb205828"
+    },
+    {
+      "ref": "refs/heads/checkpoint-681ae2071951",
+      "sha": "681ae2071951fbf1a3776e884c45b524f833ba77"
+    },
+    {
+      "ref": "refs/heads/checkpoint-6e185df127d9",
+      "sha": "6e185df127d9ce3c59ee97f61064f34abcca985d"
+    },
+    {
+      "ref": "refs/heads/checkpoint-6f21c863b16f",
+      "sha": "6f21c863b16f4f82dc3cb688a1b4cc7e9384300a"
+    },
+    {
+      "ref": "refs/heads/checkpoint-a1db43b7e432",
+      "sha": "a1db43b7e432795c41c727324d87c66f63c22cbb"
+    },
+    {
+      "ref": "refs/heads/checkpoint-d523d07d423d",
+      "sha": "d523d07d423d415ccb341049a1d007ad2b84d3eb"
+    },
+    {
+      "ref": "refs/heads/checkpoint-fc9393aa9782",
+      "sha": "fc9393aa978287fdd1ee46ea921a2441f14a7c32"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+[run-frontend-gate] $ npm run test:unit 
+[run-frontend-gate] (timeout 2400s enforced)
+npm error code ENOENT
+npm error syscall open
+npm error path /content/frontend-r9-work/package.json
+npm error errno -2
+npm error enoent Could not read package.json: Error: ENOENT: no such file or directory, open '/content/frontend-r9-work/package.json'
+npm error enoent This is related to npm not being able to find a file.
+npm error enoent
+npm error A complete log of this run can be found in: /root/.npm/_logs/2026-09-28T09_26_31_608Z-debug-0.log

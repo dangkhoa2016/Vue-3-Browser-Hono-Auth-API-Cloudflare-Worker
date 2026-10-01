@@ -1,0 +1,40 @@
+[run-frontend-gate] $ npm run test:browser -- --grep N5\ redirects 
+
+> frontend-remediation-verification@1.0.0 test:browser
+> playwright test --config browser/playwright.config.mjs --grep N5 redirects
+
+[2m[WebServer] [22m(node:174920) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[2m[WebServer] [22m(Use `node --trace-warnings ...` to show where the warning was created)
+[2m[WebServer] [22mfake API on http://127.0.0.1:35717, static on http://127.0.0.1:45701
+
+Running 1 test using 1 worker
+
+(node:174928) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:174928) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 [chromium] › browser/harness-egress.spec.mjs:246:1 › N5 redirects cannot send a request to a policy-denied target (268ms)
+
+
+  1) [chromium] › browser/harness-egress.spec.mjs:246:1 › N5 redirects cannot send a request to a policy-denied target 
+
+    Error: the denied hop must never reach its loopback receiver
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBe[2m([22m[32mexpected[39m[2m) // Object.is equality[22m
+
+    Expected: [32m0[39m
+    Received: [31m1[39m
+
+      230 |   try {
+      231 |     await page.goto(source).catch(() => {});
+    > 232 |     expect(arrivals,'the denied hop must never reach its loopback receiver').toBe(0);
+          |                                                                              ^
+      233 |     guard.expectBlocked({url:target,method:'GET',reason:'redirect'});
+      234 |     problems.allowError({kind:'requestfailed',count:1,url:'/__fake/redirect'}, /ERR_BLOCKED_BY_CLIENT/,
+      235 |       'the direct-only harness refuses the initial redirect before any next hop');
+        at /tmp/frontend-browser-run.vf7j2D/worktree/tests/browser/harness-egress.spec.mjs:232:78
+
+    Error Context: test-results/harness-egress-N5-redirect-26c1d-t-to-a-policy-denied-target-chromium/error-context.md
+
+  1 failed
+    [chromium] › browser/harness-egress.spec.mjs:246:1 › N5 redirects cannot send a request to a policy-denied target 

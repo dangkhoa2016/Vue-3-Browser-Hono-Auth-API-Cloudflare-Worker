@@ -1,0 +1,11 @@
+{
+  "label": "r11-canaries",
+  "sourceDigest": "1c2d1fa7ea684f361854a217f13b2802fd3c887a8672695de63c92c2a85235aa",
+  "staticPort": 38969,
+  "apiPort": 39981,
+  "installKey": "676ae3c2f6fcbf551971a6b753e1b0c18ba6ce5aac0e419c5a50d480a724a327",
+  "installCache": "/workspaces/frontend-r11-session/deps-cache/676ae3c2f6fcbf551971a6b753e1b0c18ba6ce5aac0e419c5a50d480a724a327",
+  "scratchBase": "/workspaces/frontend-r11-session/browser-runs",
+  "servedRoot": "/workspaces/frontend-r11-session/browser-runs/frontend-browser-run.s9GyW0/worktree",
+  "startedAt": "2026-09-29T09:01:53Z"
+}

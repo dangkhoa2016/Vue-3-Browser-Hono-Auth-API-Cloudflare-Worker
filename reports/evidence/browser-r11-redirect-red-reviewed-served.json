@@ -1,0 +1,11 @@
+{
+  "label": "r11-redirect-red-reviewed",
+  "sourceDigest": "c913d8acda5ad3f1feb8926d992028bbfef06a17f8e7ba071a904b3ff3e6c334",
+  "staticPort": 45701,
+  "apiPort": 35717,
+  "installKey": "676ae3c2f6fcbf551971a6b753e1b0c18ba6ce5aac0e419c5a50d480a724a327",
+  "installCache": "/workspaces/frontend-r11-session/deps-cache-reviewed/676ae3c2f6fcbf551971a6b753e1b0c18ba6ce5aac0e419c5a50d480a724a327",
+  "scratchBase": "/tmp",
+  "servedRoot": "/tmp/frontend-browser-run.vf7j2D/worktree",
+  "startedAt": "2026-10-01T07:09:27Z"
+}

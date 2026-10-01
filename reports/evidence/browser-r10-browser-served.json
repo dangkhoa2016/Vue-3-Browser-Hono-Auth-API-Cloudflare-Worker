@@ -1,0 +1,11 @@
+{
+  "label": "r10-browser",
+  "sourceDigest": "8679021ddb0c6a694c9a687decf6c86cab191137a41b7b5fb906d1f18f65e452",
+  "staticPort": 38015,
+  "apiPort": 45283,
+  "installKey": "82d8ec472a6d4b2a9e464cd6a7421c4f7c16af768b55e35c1a93cfe5867010d0",
+  "installCache": "/root/.cache/frontend-browser-install/82d8ec472a6d4b2a9e464cd6a7421c4f7c16af768b55e35c1a93cfe5867010d0",
+  "scratchBase": "/tmp",
+  "servedRoot": "/tmp/frontend-browser-run.GI8PNa/worktree",
+  "startedAt": "2026-09-29T02:57:26Z"
+}

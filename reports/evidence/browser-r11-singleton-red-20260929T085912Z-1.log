@@ -1,0 +1,61 @@
+[run-frontend-gate] $ npm run test:browser -- --grep FR12\ N6 
+
+> frontend-remediation-verification@1.0.0 test:browser
+> playwright test --config browser/playwright.config.mjs --grep FR12 N6
+
+[2m[WebServer] [22m(node:23434) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[2m[WebServer] [22m(Use `node --trace-warnings ...` to show where the warning was created)
+[2m[WebServer] [22mfake API on http://127.0.0.1:34629, static on http://127.0.0.1:35273
+
+Running 1 test using 1 worker
+
+(node:23443) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:23443) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 [chromium] › browser/backend-contract-mock.spec.mjs:367:1 › FR12 N6: native reset clears the AdvancedAudit SFC store and late A cannot refill login B (13.0s)
+
+
+  1) [chromium] › browser/backend-contract-mock.spec.mjs:367:1 › FR12 N6: native reset clears the AdvancedAudit SFC store and late A cannot refill login B 
+
+    Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+
+    [32m- Expected  -  3[39m
+    [31m+ Received  + 16[39m
+
+    [2m  Object {[22m
+    [32m-   "capabilities": null,[39m
+    [32m-   "compliance": null,[39m
+    [31m+   "capabilities": Object {[39m
+    [31m+     "exportPdf": true,[39m
+    [31m+   },[39m
+    [31m+   "compliance": Object {[39m
+    [31m+     "capabilities": Object {[39m
+    [31m+       "exportPdf": true,[39m
+    [31m+     },[39m
+    [31m+     "frameworks": Array [[39m
+    [31m+       Object {[39m
+    [31m+         "name": "SOC2",[39m
+    [31m+         "score": 91,[39m
+    [31m+       },[39m
+    [31m+     ],[39m
+    [31m+     "openFindings": 3,[39m
+    [31m+   },[39m
+    [2m    "error": null,[22m
+    [32m-   "loading": false,[39m
+    [31m+   "loading": true,[39m
+    [2m  }[22m
+
+      314 |     const reset=await page.evaluate(async()=> (await import('/assets/js/api/protectedState.js')).resetProtectedState('r11-native-reset'));
+      315 |     expect(reset.failures).toEqual([]);
+    > 316 |     expect(await state()).toEqual({compliance:null,capabilities:null,error:null,loading:false});
+          |                           ^
+      317 |     await page.getByTestId('user-menu-toggle').first().click();
+      318 |     await page.getByTestId('logout-menu-item').first().click();
+      319 |     await page.getByTestId('confirm-modal-confirm').click();
+        at /workspaces/frontend-r11-session/browser-runs/frontend-browser-run.M0MpeP/worktree/tests/browser/backend-contract-mock.spec.mjs:316:27
+
+    Error Context: test-results/backend-contract-mock-FR12-d860e-ate-A-cannot-refill-login-B-chromium/error-context.md
+
+  1 failed
+    [chromium] › browser/backend-contract-mock.spec.mjs:367:1 › FR12 N6: native reset clears the AdvancedAudit SFC store and late A cannot refill login B 

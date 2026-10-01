@@ -1,0 +1,17 @@
+[run-frontend-gate] $ node --test regression/audit-export.test.mjs 
+✔ audit export json accepts actual representation (8.686307ms)
+✔ audit export csv accepts actual representation (3.684684ms)
+✔ audit export refuses HTML200 without download (2.55848ms)
+✔ audit export refuses HTML disguised as CSV without download (2.272265ms)
+✔ audit export refuses malformed JSON without download (2.557558ms)
+✔ audit export refuses semantic error without download (2.335726ms)
+✔ audit export refuses empty CSV without download (2.362193ms)
+✔ N6 an export paused during body decoding cannot download into a replacement context (2.993362ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 111.54809

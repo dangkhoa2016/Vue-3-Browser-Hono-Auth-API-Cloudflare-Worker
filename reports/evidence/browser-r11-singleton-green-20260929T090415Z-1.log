@@ -1,0 +1,18 @@
+[run-frontend-gate] $ npm run test:browser -- --grep FR12\ N6 
+
+> frontend-remediation-verification@1.0.0 test:browser
+> playwright test --config browser/playwright.config.mjs --grep FR12 N6
+
+[2m[WebServer] [22m(node:28927) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[2m[WebServer] [22m(Use `node --trace-warnings ...` to show where the warning was created)
+[2m[WebServer] [22mfake API on http://127.0.0.1:40453, static on http://127.0.0.1:41713
+
+Running 1 test using 1 worker
+
+(node:28993) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:28993) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 [chromium] › browser/backend-contract-mock.spec.mjs:367:1 › FR12 N6: native reset clears the AdvancedAudit SFC store and late A cannot refill login B (14.5s)
+
+  1 passed (17.8s)

@@ -1,0 +1,24 @@
+run-frontend-gate: evidence for one producer run
+label:      r8-final6-unit
+argv:       npm run test:unit 
+command:    npm run test:unit
+cwd:        /tmp/opencode/r8/work/tests
+repo_root:  /tmp/opencode/r8/work
+source_digest:      0156f92c0a4550008c6396e4d9a5846a41508ffb41b47e29dffddc0c5dc14180
+source_manifest:    /tmp/opencode/r8/work/reports/evidence/r8-final6-unit-20260928T062224Z-1.source-before.manifest.json
+source_snapshot:    /tmp/opencode/r8/work/reports/evidence/r8-final6-unit-20260928T062224Z-1.source.tar.gz
+git:        branch=remediation/round6-wip head=a1db43b7e432795c41c727324d87c66f63c22cbb base_tree=55033e41514957bbd7c13289661018aa6980a91c status_sha256=8fb2522e5bc0d7513cf4e8b669005f475a963ed7ce3d3df9fcdf8ad62899b137
+timeout_s:  <none>
+started_at: 2026-09-28T06:22:25Z
+node:       v20.19.0
+npm:        10.8.2
+git:        git version 2.43.0
+os:         Linux x86_64
+---- producer output below ----
+ended_at:   2026-09-28T06:22:42Z
+exit:       0
+result:     RAN
+source_digest_after:  0156f92c0a4550008c6396e4d9a5846a41508ffb41b47e29dffddc0c5dc14180
+source_manifest_after: /tmp/opencode/r8/work/reports/evidence/r8-final6-unit-20260928T062224Z-1.source-after.manifest.json
+source_drift: none
+log:        /tmp/opencode/r8/work/reports/evidence/r8-final6-unit-20260928T062224Z-1.log

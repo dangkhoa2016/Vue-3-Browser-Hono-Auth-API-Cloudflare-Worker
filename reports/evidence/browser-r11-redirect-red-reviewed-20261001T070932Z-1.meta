@@ -1,0 +1,24 @@
+run-frontend-gate: evidence for one producer run
+label:      r11-redirect-red-reviewed
+argv:       npm run test:browser -- --grep N5\ redirects 
+command:    npm run test:browser -- --grep N5 redirects
+cwd:        /tmp/frontend-browser-run.vf7j2D/worktree/tests
+repo_root:  /tmp/frontend-browser-run.vf7j2D/worktree
+source_digest:      c913d8acda5ad3f1feb8926d992028bbfef06a17f8e7ba071a904b3ff3e6c334
+source_manifest:    /tmp/frontend-browser-run.vf7j2D/worktree/reports/evidence/r11-redirect-red-reviewed-20261001T070932Z-1.source-before.manifest.json
+source_snapshot:    /tmp/frontend-browser-run.vf7j2D/worktree/reports/evidence/r11-redirect-red-reviewed-20261001T070932Z-1.source.tar.gz
+git:        branch=remediation/r11 head=681ae2071951fbf1a3776e884c45b524f833ba77 base_tree=778512ca8307df56036d2a1b06340bb0e300e77a status_sha256=5fcaae6270fa6bf45d66e42cdaae370c9ed6e3b62144f6bc2502e564d514ecb5
+timeout_s:  <none>
+started_at: 2026-10-01T07:09:32Z
+node:       v24.20.0
+npm:        11.19.0
+git:        git version 2.43.0
+os:         Linux x86_64
+---- producer output below ----
+ended_at:   2026-10-01T07:09:35Z
+exit:       1
+result:     RAN
+source_digest_after:  c913d8acda5ad3f1feb8926d992028bbfef06a17f8e7ba071a904b3ff3e6c334
+source_manifest_after: /tmp/frontend-browser-run.vf7j2D/worktree/reports/evidence/r11-redirect-red-reviewed-20261001T070932Z-1.source-after.manifest.json
+source_drift: none
+log:        /tmp/frontend-browser-run.vf7j2D/worktree/reports/evidence/r11-redirect-red-reviewed-20261001T070932Z-1.log

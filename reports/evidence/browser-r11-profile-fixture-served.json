@@ -1,0 +1,11 @@
+{
+  "label": "r11-profile-fixture",
+  "sourceDigest": "0930d9772cfb73fe737f8b2c47b90c3f6d926f26ff23b1ae266b36fa6c19cb3a",
+  "staticPort": 44485,
+  "apiPort": 34649,
+  "installKey": "676ae3c2f6fcbf551971a6b753e1b0c18ba6ce5aac0e419c5a50d480a724a327",
+  "installCache": "/workspaces/frontend-r11-session/deps-cache-reviewed/676ae3c2f6fcbf551971a6b753e1b0c18ba6ce5aac0e419c5a50d480a724a327",
+  "scratchBase": "/tmp",
+  "servedRoot": "/tmp/frontend-browser-run.k9NuPb/worktree",
+  "startedAt": "2026-09-30T07:19:23Z"
+}

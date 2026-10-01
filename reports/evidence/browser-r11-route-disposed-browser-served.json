@@ -1,0 +1,11 @@
+{
+  "label": "r11-route-disposed-browser",
+  "sourceDigest": "add591bd2ab02152504e1f17753ce41708bf4f3f8a7963913213c13391b0966f",
+  "staticPort": 32809,
+  "apiPort": 43729,
+  "installKey": "676ae3c2f6fcbf551971a6b753e1b0c18ba6ce5aac0e419c5a50d480a724a327",
+  "installCache": "/workspaces/frontend-r11-session/deps-cache-reviewed/676ae3c2f6fcbf551971a6b753e1b0c18ba6ce5aac0e419c5a50d480a724a327",
+  "scratchBase": "/tmp",
+  "servedRoot": "/tmp/frontend-browser-run.vvyNYt/worktree",
+  "startedAt": "2026-10-01T14:42:21Z"
+}

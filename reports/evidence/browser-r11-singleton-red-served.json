@@ -1,0 +1,11 @@
+{
+  "label": "r11-singleton-red",
+  "sourceDigest": "92235a98bfdff5f95980fde393348417cdd03532f0169e4fddc274c9937fc515",
+  "staticPort": 35273,
+  "apiPort": 34629,
+  "installKey": "676ae3c2f6fcbf551971a6b753e1b0c18ba6ce5aac0e419c5a50d480a724a327",
+  "installCache": "/workspaces/frontend-r11-session/deps-cache/676ae3c2f6fcbf551971a6b753e1b0c18ba6ce5aac0e419c5a50d480a724a327",
+  "scratchBase": "/workspaces/frontend-r11-session/browser-runs",
+  "servedRoot": "/workspaces/frontend-r11-session/browser-runs/frontend-browser-run.M0MpeP/worktree",
+  "startedAt": "2026-09-29T08:59:07Z"
+}

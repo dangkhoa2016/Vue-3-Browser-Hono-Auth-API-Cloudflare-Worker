@@ -1,0 +1,20 @@
+[run-frontend-gate] $ npm run test:browser -- --grep shared\ context\ refuses\|rotation\ queued\ behind\|rotation\ answer\ computed 
+
+> frontend-remediation-verification@1.0.0 test:browser
+> playwright test --config browser/playwright.config.mjs --grep shared context refuses|rotation queued behind|rotation answer computed
+
+[2m[WebServer] [22m(node:195252) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[2m[WebServer] [22m(Use `node --trace-warnings ...` to show where the warning was created)
+[2m[WebServer] [22mfake API on http://127.0.0.1:39615, static on http://127.0.0.1:40089
+
+Running 3 tests using 1 worker
+
+(node:195268) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:195268) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 [chromium] › browser/harness-egress.spec.mjs:28:3 › the egress boundary, proved rather than assumed › the shared context refuses an unpinned artifact on a host the app legitimately uses (1.1s)
+  ✓  2 [chromium] › browser/session-invariants.spec.mjs:247:3 › session invariants in a real browser › a rotation queued behind another tab's writer lock lands once, after the lock (9.6s)
+  ✓  3 [chromium] › browser/session-invariants.spec.mjs:523:3 › session invariants in a real browser › a rotation answer computed for the old session never overwrites the session that replaced it (13.6s)
+
+  3 passed (26.2s)

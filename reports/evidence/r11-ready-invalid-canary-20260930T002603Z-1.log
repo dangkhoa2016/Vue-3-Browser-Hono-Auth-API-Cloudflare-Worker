@@ -1,0 +1,188 @@
+[run-frontend-gate] $ npm run test:integration 
+
+> frontend-remediation-verification@1.0.0 test:integration
+> playwright test --config browser/playwright.integration.config.mjs
+
+[2m[WebServer] [22m(node:10881) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[2m[WebServer] [22m(Use `node --trace-warnings ...` to show where the warning was created)
+[2m[WebServer] [22mstatic only (no fake API) on http://127.0.0.1:4173
+
+Running 6 tests using 1 worker
+
+(node:10893) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:10893) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 [chromium] › browser/backend-capabilities.spec.mjs:79:3 › backend capability contract surfaced in the UI › the integration fixture is usable (2.0s)
+(node:11113) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:11113) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 [chromium] › browser/backend-capabilities.spec.mjs:96:3 › backend capability contract surfaced in the UI › the seeded session is one the app actually adopts (140ms)
+(node:11189) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:11189) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  3 [chromium] › browser/backend-capabilities.spec.mjs:113:3 › backend capability contract surfaced in the UI › app boots with pinned CDN dependencies and no runtime error (143ms)
+(node:11259) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:11259) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  4 [chromium] › browser/backend-capabilities.spec.mjs:123:3 › backend capability contract surfaced in the UI › unsupported PDF export is disabled with a reason instead of a false success (157ms)
+(node:11341) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:11341) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  5 [chromium] › browser/backend-capabilities.spec.mjs:134:3 › backend capability contract surfaced in the UI › env comparison never renders an undisclosed secret value (168ms)
+(node:11420) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:11420) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  6 [chromium] › browser/backend-capabilities.spec.mjs:143:3 › backend capability contract surfaced in the UI › continuous monitoring stays unconfirmed when the backend does not confirm it (137ms)
+
+
+  1) [chromium] › browser/backend-capabilities.spec.mjs:79:3 › backend capability contract surfaced in the UI › the integration fixture is usable 
+
+    Error: invalid READY manifest: FRONTEND_BACKEND_REVISION must be a full immutable Git SHA
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+
+    [32m- Expected  - 1[39m
+    [31m+ Received  + 3[39m
+
+    [32m- Array [][39m
+    [31m+ Array [[39m
+    [31m+   "FRONTEND_BACKEND_REVISION must be a full immutable Git SHA",[39m
+    [31m+ ][39m
+
+      93 |
+      94 |   test.beforeEach(async ({ page }) => {
+    > 95 |     expect(READY.invalid, `invalid READY manifest: ${READY.invalid.join(' | ')}`).toEqual([]);
+         |                                                                                   ^
+      96 |     expect(READY.ready, `incomplete READY manifest: ${READY.missing.join(', ')}`).toBe(true);
+      97 |     const consoleErrors = [];
+      98 |     page.on('console', (message) => {
+        at /workspaces/frontend-r11-work/tests/browser/backend-capabilities.spec.mjs:95:83
+
+  2) [chromium] › browser/backend-capabilities.spec.mjs:96:3 › backend capability contract surfaced in the UI › the seeded session is one the app actually adopts 
+
+    Error: invalid READY manifest: FRONTEND_BACKEND_REVISION must be a full immutable Git SHA
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+
+    [32m- Expected  - 1[39m
+    [31m+ Received  + 3[39m
+
+    [32m- Array [][39m
+    [31m+ Array [[39m
+    [31m+   "FRONTEND_BACKEND_REVISION must be a full immutable Git SHA",[39m
+    [31m+ ][39m
+
+      93 |
+      94 |   test.beforeEach(async ({ page }) => {
+    > 95 |     expect(READY.invalid, `invalid READY manifest: ${READY.invalid.join(' | ')}`).toEqual([]);
+         |                                                                                   ^
+      96 |     expect(READY.ready, `incomplete READY manifest: ${READY.missing.join(', ')}`).toBe(true);
+      97 |     const consoleErrors = [];
+      98 |     page.on('console', (message) => {
+        at /workspaces/frontend-r11-work/tests/browser/backend-capabilities.spec.mjs:95:83
+
+  3) [chromium] › browser/backend-capabilities.spec.mjs:113:3 › backend capability contract surfaced in the UI › app boots with pinned CDN dependencies and no runtime error 
+
+    Error: invalid READY manifest: FRONTEND_BACKEND_REVISION must be a full immutable Git SHA
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+
+    [32m- Expected  - 1[39m
+    [31m+ Received  + 3[39m
+
+    [32m- Array [][39m
+    [31m+ Array [[39m
+    [31m+   "FRONTEND_BACKEND_REVISION must be a full immutable Git SHA",[39m
+    [31m+ ][39m
+
+      93 |
+      94 |   test.beforeEach(async ({ page }) => {
+    > 95 |     expect(READY.invalid, `invalid READY manifest: ${READY.invalid.join(' | ')}`).toEqual([]);
+         |                                                                                   ^
+      96 |     expect(READY.ready, `incomplete READY manifest: ${READY.missing.join(', ')}`).toBe(true);
+      97 |     const consoleErrors = [];
+      98 |     page.on('console', (message) => {
+        at /workspaces/frontend-r11-work/tests/browser/backend-capabilities.spec.mjs:95:83
+
+  4) [chromium] › browser/backend-capabilities.spec.mjs:123:3 › backend capability contract surfaced in the UI › unsupported PDF export is disabled with a reason instead of a false success 
+
+    Error: invalid READY manifest: FRONTEND_BACKEND_REVISION must be a full immutable Git SHA
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+
+    [32m- Expected  - 1[39m
+    [31m+ Received  + 3[39m
+
+    [32m- Array [][39m
+    [31m+ Array [[39m
+    [31m+   "FRONTEND_BACKEND_REVISION must be a full immutable Git SHA",[39m
+    [31m+ ][39m
+
+      93 |
+      94 |   test.beforeEach(async ({ page }) => {
+    > 95 |     expect(READY.invalid, `invalid READY manifest: ${READY.invalid.join(' | ')}`).toEqual([]);
+         |                                                                                   ^
+      96 |     expect(READY.ready, `incomplete READY manifest: ${READY.missing.join(', ')}`).toBe(true);
+      97 |     const consoleErrors = [];
+      98 |     page.on('console', (message) => {
+        at /workspaces/frontend-r11-work/tests/browser/backend-capabilities.spec.mjs:95:83
+
+  5) [chromium] › browser/backend-capabilities.spec.mjs:134:3 › backend capability contract surfaced in the UI › env comparison never renders an undisclosed secret value 
+
+    Error: invalid READY manifest: FRONTEND_BACKEND_REVISION must be a full immutable Git SHA
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+
+    [32m- Expected  - 1[39m
+    [31m+ Received  + 3[39m
+
+    [32m- Array [][39m
+    [31m+ Array [[39m
+    [31m+   "FRONTEND_BACKEND_REVISION must be a full immutable Git SHA",[39m
+    [31m+ ][39m
+
+      93 |
+      94 |   test.beforeEach(async ({ page }) => {
+    > 95 |     expect(READY.invalid, `invalid READY manifest: ${READY.invalid.join(' | ')}`).toEqual([]);
+         |                                                                                   ^
+      96 |     expect(READY.ready, `incomplete READY manifest: ${READY.missing.join(', ')}`).toBe(true);
+      97 |     const consoleErrors = [];
+      98 |     page.on('console', (message) => {
+        at /workspaces/frontend-r11-work/tests/browser/backend-capabilities.spec.mjs:95:83
+
+  6) [chromium] › browser/backend-capabilities.spec.mjs:143:3 › backend capability contract surfaced in the UI › continuous monitoring stays unconfirmed when the backend does not confirm it 
+
+    Error: invalid READY manifest: FRONTEND_BACKEND_REVISION must be a full immutable Git SHA
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+
+    [32m- Expected  - 1[39m
+    [31m+ Received  + 3[39m
+
+    [32m- Array [][39m
+    [31m+ Array [[39m
+    [31m+   "FRONTEND_BACKEND_REVISION must be a full immutable Git SHA",[39m
+    [31m+ ][39m
+
+      93 |
+      94 |   test.beforeEach(async ({ page }) => {
+    > 95 |     expect(READY.invalid, `invalid READY manifest: ${READY.invalid.join(' | ')}`).toEqual([]);
+         |                                                                                   ^
+      96 |     expect(READY.ready, `incomplete READY manifest: ${READY.missing.join(', ')}`).toBe(true);
+      97 |     const consoleErrors = [];
+      98 |     page.on('console', (message) => {
+        at /workspaces/frontend-r11-work/tests/browser/backend-capabilities.spec.mjs:95:83
+
+  6 failed
+    [chromium] › browser/backend-capabilities.spec.mjs:79:3 › backend capability contract surfaced in the UI › the integration fixture is usable 
+    [chromium] › browser/backend-capabilities.spec.mjs:96:3 › backend capability contract surfaced in the UI › the seeded session is one the app actually adopts 
+    [chromium] › browser/backend-capabilities.spec.mjs:113:3 › backend capability contract surfaced in the UI › app boots with pinned CDN dependencies and no runtime error 
+    [chromium] › browser/backend-capabilities.spec.mjs:123:3 › backend capability contract surfaced in the UI › unsupported PDF export is disabled with a reason instead of a false success 
+    [chromium] › browser/backend-capabilities.spec.mjs:134:3 › backend capability contract surfaced in the UI › env comparison never renders an undisclosed secret value 
+    [chromium] › browser/backend-capabilities.spec.mjs:143:3 › backend capability contract surfaced in the UI › continuous monitoring stays unconfirmed when the backend does not confirm it 

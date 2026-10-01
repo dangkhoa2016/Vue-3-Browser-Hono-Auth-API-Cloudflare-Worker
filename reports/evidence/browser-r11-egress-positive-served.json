@@ -1,0 +1,11 @@
+{
+  "label": "r11-egress-positive",
+  "sourceDigest": "0b1dc809efc9e3d429b6ba28d50785623a346ff6818a86d6e25b22f271524575",
+  "staticPort": 44709,
+  "apiPort": 45917,
+  "installKey": "676ae3c2f6fcbf551971a6b753e1b0c18ba6ce5aac0e419c5a50d480a724a327",
+  "installCache": "/workspaces/frontend-r11-session/deps-cache/676ae3c2f6fcbf551971a6b753e1b0c18ba6ce5aac0e419c5a50d480a724a327",
+  "scratchBase": "/workspaces/frontend-r11-session/browser-runs",
+  "servedRoot": "/workspaces/frontend-r11-session/browser-runs/frontend-browser-run.yFAIim/worktree",
+  "startedAt": "2026-09-29T09:50:08Z"
+}

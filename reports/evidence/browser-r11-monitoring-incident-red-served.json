@@ -1,0 +1,11 @@
+{
+  "label": "r11-monitoring-incident-red",
+  "sourceDigest": "e5ec7ce32c0877806e50320f4e5e8c393c850fcc5afc5c431c074ee16e904261",
+  "staticPort": 44839,
+  "apiPort": 44381,
+  "installKey": "676ae3c2f6fcbf551971a6b753e1b0c18ba6ce5aac0e419c5a50d480a724a327",
+  "installCache": "/workspaces/frontend-r11-session/deps-cache-reviewed/676ae3c2f6fcbf551971a6b753e1b0c18ba6ce5aac0e419c5a50d480a724a327",
+  "scratchBase": "/tmp",
+  "servedRoot": "/tmp/frontend-browser-run.ZEVzQ4/worktree",
+  "startedAt": "2026-09-30T06:42:26Z"
+}

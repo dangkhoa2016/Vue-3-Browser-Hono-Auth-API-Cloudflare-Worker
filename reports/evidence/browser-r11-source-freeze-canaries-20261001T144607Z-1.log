@@ -1,0 +1,219 @@
+[run-frontend-gate] $ npm run test:browser -- --config browser/playwright.canary.config.mjs 
+
+> frontend-remediation-verification@1.0.0 test:browser
+> playwright test --config browser/playwright.config.mjs --config browser/playwright.canary.config.mjs
+
+[2m[WebServer] [22m(node:11332) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[2m[WebServer] [22m(Use `node --trace-warnings ...` to show where the warning was created)
+[2m[WebServer] [22mfake API on http://127.0.0.1:39489, static on http://127.0.0.1:38713
+
+Running 6 tests using 1 worker
+
+(node:11341) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:11341) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 [chromium] › browser/canaries/teardown.canary.mjs:11:1 › CANARY_FORGOT_CLEAN (171ms)
+(node:11414) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:11414) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 [chromium] › browser/canaries/teardown.canary.mjs:17:1 › CANARY_LATE_AFTER_CLEAN (232ms)
+(node:11536) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:11536) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  3 [chromium] › browser/canaries/teardown.canary.mjs:24:1 › CANARY_BODY_THROW (407ms)
+(node:11622) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:11622) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  4 [chromium] › browser/canaries/teardown.canary.mjs:30:1 › CANARY_MANUAL_CONTEXT (349ms)
+(node:11725) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:11725) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  5 [chromium] › browser/canaries/teardown.canary.mjs:37:1 › CANARY_POPUP (472ms)
+(node:11806) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:11806) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  6 [chromium] › browser/canaries/teardown.canary.mjs:45:1 › CANARY_TYPED_ALLOWANCE (275ms)
+
+
+  1) [chromium] › browser/canaries/teardown.canary.mjs:11:1 › CANARY_FORGOT_CLEAN ──────────────────
+
+    Error: CANARY_FORGOT_CLEAN left 1 boundary problem(s)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+
+    [32m- Expected  - 1[39m
+    [31m+ Received  + 3[39m
+
+    [32m- Array [][39m
+    [31m+ Array [[39m
+    [31m+   "context-page has a collector and the page produced 1 problem(s) the case never declared: pageerror: context-page: CANARY_FORGOT_CLEAN",[39m
+    [31m+ ][39m
+
+       at helpers/browser-fixture.mjs:820
+
+      818 |
+      819 |       if (problems.length > 0) {
+    > 820 |         expect(problems, `${title} left ${problems.length} boundary problem(s)`).toEqual([]);
+          |                                                                                  ^
+      821 |       }
+      822 |       return problems;
+      823 |     }
+        at Object.dispose (/tmp/frontend-browser-run.oyskAm/worktree/tests/browser/helpers/browser-fixture.mjs:820:82)
+        at Object.base.extend._boundary.auto (/tmp/frontend-browser-run.oyskAm/worktree/tests/browser/fixtures.js:58:7)
+
+  2) [chromium] › browser/canaries/teardown.canary.mjs:17:1 › CANARY_LATE_AFTER_CLEAN ──────────────
+
+    Error: CANARY_LATE_AFTER_CLEAN left 1 boundary problem(s)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+
+    [32m- Expected  - 1[39m
+    [31m+ Received  + 3[39m
+
+    [32m- Array [][39m
+    [31m+ Array [[39m
+    [31m+   "context-page has a collector and the page produced 1 problem(s) the case never declared: pageerror: context-page: CANARY_LATE_AFTER_CLEAN",[39m
+    [31m+ ][39m
+
+       at helpers/browser-fixture.mjs:820
+
+      818 |
+      819 |       if (problems.length > 0) {
+    > 820 |         expect(problems, `${title} left ${problems.length} boundary problem(s)`).toEqual([]);
+          |                                                                                  ^
+      821 |       }
+      822 |       return problems;
+      823 |     }
+        at Object.dispose (/tmp/frontend-browser-run.oyskAm/worktree/tests/browser/helpers/browser-fixture.mjs:820:82)
+        at Object.base.extend._boundary.auto (/tmp/frontend-browser-run.oyskAm/worktree/tests/browser/fixtures.js:58:7)
+
+  3) [chromium] › browser/canaries/teardown.canary.mjs:24:1 › CANARY_BODY_THROW ────────────────────
+
+    Error: CANARY_BODY_THROW
+
+       9 | test('CANARY_FORGOT_CLEAN',async({page})=>{collectPageProblems(page);await pageError(page,'CANARY_FORGOT_CLEAN');});
+      10 | test('CANARY_LATE_AFTER_CLEAN',async({page})=>{const p=collectPageProblems(page);p.expectClean();await pageError(page,'CANARY_LATE_AFTER_CLEAN');});
+    > 11 | test('CANARY_BODY_THROW',async({page})=>{await pageError(page,'CANARY_BODY_THROW_COLLECTED');throw Error('CANARY_BODY_THROW');});
+         |                                                                                                    ^
+      12 | test('CANARY_MANUAL_CONTEXT',async({browser})=>{const c=await browser.newContext();const p=await c.newPage();await pageError(p,'CANARY_MANUAL_CONTEXT');});
+      13 | test('CANARY_POPUP',async({page})=>{await page.goto('about:blank');const next=page.waitForEvent('popup');await page.evaluate(()=>window.open('about:blank'));await pageError(await next,'CANARY_POPUP');});
+      14 | test('CANARY_TYPED_ALLOWANCE',async({page})=>{const p=collectPageProblems(page);p.allowError({kind:'console',count:1},/CANARY_TYPED_ALLOWANCE/,'wrong type deliberately');await pageError(page,'CANARY_TYPED_ALLOWANCE');});
+        at /tmp/frontend-browser-run.oyskAm/worktree/tests/browser/canaries/teardown.canary.mjs:11:100
+
+    Error: CANARY_BODY_THROW left 1 boundary problem(s)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+
+    [32m- Expected  - 1[39m
+    [31m+ Received  + 3[39m
+
+    [32m- Array [][39m
+    [31m+ Array [[39m
+    [31m+   "context-page raised 1 uncaught error(s) and no case was watching it: context-page: CANARY_BODY_THROW_COLLECTED",[39m
+    [31m+ ][39m
+
+       at helpers/browser-fixture.mjs:820
+
+      818 |
+      819 |       if (problems.length > 0) {
+    > 820 |         expect(problems, `${title} left ${problems.length} boundary problem(s)`).toEqual([]);
+          |                                                                                  ^
+      821 |       }
+      822 |       return problems;
+      823 |     }
+        at Object.dispose (/tmp/frontend-browser-run.oyskAm/worktree/tests/browser/helpers/browser-fixture.mjs:820:82)
+        at Object.base.extend._boundary.auto (/tmp/frontend-browser-run.oyskAm/worktree/tests/browser/fixtures.js:58:7)
+
+  4) [chromium] › browser/canaries/teardown.canary.mjs:30:1 › CANARY_MANUAL_CONTEXT ────────────────
+
+    Error: CANARY_MANUAL_CONTEXT left 1 boundary problem(s)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+
+    [32m- Expected  - 1[39m
+    [31m+ Received  + 3[39m
+
+    [32m- Array [][39m
+    [31m+ Array [[39m
+    [31m+   "context-page raised 1 uncaught error(s) and no case was watching it: context-page: CANARY_MANUAL_CONTEXT",[39m
+    [31m+ ][39m
+
+       at helpers/browser-fixture.mjs:820
+
+      818 |
+      819 |       if (problems.length > 0) {
+    > 820 |         expect(problems, `${title} left ${problems.length} boundary problem(s)`).toEqual([]);
+          |                                                                                  ^
+      821 |       }
+      822 |       return problems;
+      823 |     }
+        at Object.dispose (/tmp/frontend-browser-run.oyskAm/worktree/tests/browser/helpers/browser-fixture.mjs:820:82)
+        at Object.base.extend._boundary.auto (/tmp/frontend-browser-run.oyskAm/worktree/tests/browser/fixtures.js:58:7)
+
+  5) [chromium] › browser/canaries/teardown.canary.mjs:37:1 › CANARY_POPUP ─────────────────────────
+
+    Error: CANARY_POPUP left 1 boundary problem(s)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+
+    [32m- Expected  - 1[39m
+    [31m+ Received  + 3[39m
+
+    [32m- Array [][39m
+    [31m+ Array [[39m
+    [31m+   "context-page raised 1 uncaught error(s) and no case was watching it: context-page: CANARY_POPUP",[39m
+    [31m+ ][39m
+
+       at helpers/browser-fixture.mjs:820
+
+      818 |
+      819 |       if (problems.length > 0) {
+    > 820 |         expect(problems, `${title} left ${problems.length} boundary problem(s)`).toEqual([]);
+          |                                                                                  ^
+      821 |       }
+      822 |       return problems;
+      823 |     }
+        at Object.dispose (/tmp/frontend-browser-run.oyskAm/worktree/tests/browser/helpers/browser-fixture.mjs:820:82)
+        at Object.base.extend._boundary.auto (/tmp/frontend-browser-run.oyskAm/worktree/tests/browser/fixtures.js:58:7)
+
+  6) [chromium] › browser/canaries/teardown.canary.mjs:45:1 › CANARY_TYPED_ALLOWANCE ───────────────
+
+    Error: CANARY_TYPED_ALLOWANCE left 3 boundary problem(s)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+
+    [32m- Expected  - 1[39m
+    [31m+ Received  + 5[39m
+
+    [32m- Array [][39m
+    [31m+ Array [[39m
+    [31m+   "context-page has a collector and the page produced 1 problem(s) the case never declared: pageerror: context-page: CANARY_TYPED_ALLOWANCE",[39m
+    [31m+   "allowance for console expected [1, 1] but matched 0 (wrong type deliberately)",[39m
+    [31m+   "allowance for console never matched anything: /CANARY_TYPED_ALLOWANCE/ (wrong type deliberately)",[39m
+    [31m+ ][39m
+
+       at helpers/browser-fixture.mjs:820
+
+      818 |
+      819 |       if (problems.length > 0) {
+    > 820 |         expect(problems, `${title} left ${problems.length} boundary problem(s)`).toEqual([]);
+          |                                                                                  ^
+      821 |       }
+      822 |       return problems;
+      823 |     }
+        at Object.dispose (/tmp/frontend-browser-run.oyskAm/worktree/tests/browser/helpers/browser-fixture.mjs:820:82)
+        at Object.base.extend._boundary.auto (/tmp/frontend-browser-run.oyskAm/worktree/tests/browser/fixtures.js:58:7)
+
+  6 failed
+    [chromium] › browser/canaries/teardown.canary.mjs:11:1 › CANARY_FORGOT_CLEAN ───────────────────
+    [chromium] › browser/canaries/teardown.canary.mjs:17:1 › CANARY_LATE_AFTER_CLEAN ───────────────
+    [chromium] › browser/canaries/teardown.canary.mjs:24:1 › CANARY_BODY_THROW ─────────────────────
+    [chromium] › browser/canaries/teardown.canary.mjs:30:1 › CANARY_MANUAL_CONTEXT ─────────────────
+    [chromium] › browser/canaries/teardown.canary.mjs:37:1 › CANARY_POPUP ──────────────────────────
+    [chromium] › browser/canaries/teardown.canary.mjs:45:1 › CANARY_TYPED_ALLOWANCE ────────────────

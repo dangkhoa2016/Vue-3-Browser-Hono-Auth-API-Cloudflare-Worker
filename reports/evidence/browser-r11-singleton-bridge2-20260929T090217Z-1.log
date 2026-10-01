@@ -1,0 +1,61 @@
+[run-frontend-gate] $ npm run test:browser -- --grep FR12\ N6 
+
+> frontend-remediation-verification@1.0.0 test:browser
+> playwright test --config browser/playwright.config.mjs --grep FR12 N6
+
+[2m[WebServer] [22m(node:26792) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[2m[WebServer] [22m(Use `node --trace-warnings ...` to show where the warning was created)
+[2m[WebServer] [22mfake API on http://127.0.0.1:34959, static on http://127.0.0.1:41161
+
+Running 1 test using 1 worker
+
+(node:26818) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:26818) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 [chromium] › browser/backend-contract-mock.spec.mjs:367:1 › FR12 N6: native reset clears the AdvancedAudit SFC store and late A cannot refill login B (15.5s)
+
+
+  1) [chromium] › browser/backend-contract-mock.spec.mjs:367:1 › FR12 N6: native reset clears the AdvancedAudit SFC store and late A cannot refill login B 
+
+    Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+
+    [32m- Expected  -  3[39m
+    [31m+ Received  + 16[39m
+
+    [2m  Object {[22m
+    [32m-   "capabilities": null,[39m
+    [32m-   "compliance": null,[39m
+    [32m-   "error": null,[39m
+    [31m+   "capabilities": Object {[39m
+    [31m+     "exportPdf": true,[39m
+    [31m+   },[39m
+    [31m+   "compliance": Object {[39m
+    [31m+     "capabilities": Object {[39m
+    [31m+       "exportPdf": true,[39m
+    [31m+     },[39m
+    [31m+     "frameworks": Array [[39m
+    [31m+       Object {[39m
+    [31m+         "name": "SOC2",[39m
+    [31m+         "score": 91,[39m
+    [31m+       },[39m
+    [31m+     ],[39m
+    [31m+     "openFindings": 3,[39m
+    [31m+   },[39m
+    [31m+   "error": "Discarded a response that belongs to a session that is no longer current",[39m
+    [2m    "loading": false,[22m
+    [2m  }[22m
+
+      328 |     release();
+      329 |     await page.waitForFunction(()=>window.__r11Settled===1);
+    > 330 |     expect(await state()).toEqual(before);
+          |                           ^
+      331 |     expect((await state()).capabilities?.exportPdf).not.toBe(true);
+      332 |   } finally {release();}
+      333 | });
+        at /workspaces/frontend-r11-session/browser-runs/frontend-browser-run.iQbETd/worktree/tests/browser/backend-contract-mock.spec.mjs:330:27
+
+    Error Context: test-results/backend-contract-mock-FR12-d860e-ate-A-cannot-refill-login-B-chromium/error-context.md
+
+  1 failed
+    [chromium] › browser/backend-contract-mock.spec.mjs:367:1 › FR12 N6: native reset clears the AdvancedAudit SFC store and late A cannot refill login B 

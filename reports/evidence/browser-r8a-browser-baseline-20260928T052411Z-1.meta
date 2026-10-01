@@ -1,0 +1,24 @@
+run-frontend-gate: evidence for one producer run
+label:      r8a-browser-baseline
+argv:       npm run test:browser -- 
+command:    npm run test:browser --
+cwd:        /tmp/opencode/frontend-browser-run/worktree/tests
+repo_root:  /tmp/opencode/frontend-browser-run/worktree
+source_digest:      339ef1de8c6c86b0fc49deff03574493ba0eae8576d5d7c964e5d69c18d061f1
+source_manifest:    /tmp/opencode/frontend-browser-run/worktree/reports/evidence/r8a-browser-baseline-20260928T052411Z-1.source-before.manifest.json
+source_snapshot:    /tmp/opencode/frontend-browser-run/worktree/reports/evidence/r8a-browser-baseline-20260928T052411Z-1.source.tar.gz
+git:        branch=NO-GIT head=NO-GIT base_tree=NO-GIT status_sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+timeout_s:  <none>
+started_at: 2026-09-28T05:24:11Z
+node:       v20.19.0
+npm:        10.8.2
+git:        git version 2.43.0
+os:         Linux x86_64
+---- producer output below ----
+ended_at:   2026-09-28T05:37:03Z
+exit:       0
+result:     RAN
+source_digest_after:  339ef1de8c6c86b0fc49deff03574493ba0eae8576d5d7c964e5d69c18d061f1
+source_manifest_after: /tmp/opencode/frontend-browser-run/worktree/reports/evidence/r8a-browser-baseline-20260928T052411Z-1.source-after.manifest.json
+source_drift: none
+log:        /tmp/opencode/frontend-browser-run/worktree/reports/evidence/r8a-browser-baseline-20260928T052411Z-1.log

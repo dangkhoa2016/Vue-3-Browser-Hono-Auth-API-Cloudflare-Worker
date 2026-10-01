@@ -1,0 +1,11 @@
+{
+  "label": "r11-profile-remount-fixed-fixture",
+  "sourceDigest": "e4d82a7adffa623cbe9423a98acf906b3b32cb0dc03216d42782e7bdfdc42155",
+  "staticPort": 40983,
+  "apiPort": 39343,
+  "installKey": "676ae3c2f6fcbf551971a6b753e1b0c18ba6ce5aac0e419c5a50d480a724a327",
+  "installCache": "/workspaces/frontend-r11-session/deps-cache-reviewed/676ae3c2f6fcbf551971a6b753e1b0c18ba6ce5aac0e419c5a50d480a724a327",
+  "scratchBase": "/tmp",
+  "servedRoot": "/tmp/frontend-browser-run.9AMUvS/worktree",
+  "startedAt": "2026-09-30T06:49:27Z"
+}

@@ -1,0 +1,100 @@
+[run-frontend-gate] $ npm run test:browser -- --config browser/playwright.canary.config.mjs 
+
+> frontend-remediation-verification@1.0.0 test:browser
+> playwright test --config browser/playwright.config.mjs --config browser/playwright.canary.config.mjs
+
+[2m[WebServer] [22m(node:26084) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[2m[WebServer] [22m(Use `node --trace-warnings ...` to show where the warning was created)
+[2m[WebServer] [22mfake API on http://127.0.0.1:39981, static on http://127.0.0.1:38969
+
+Running 6 tests using 1 worker
+
+(node:26111) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:26111) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 [chromium] › browser/canaries/teardown.canary.mjs:11:1 › CANARY_FORGOT_CLEAN (381ms)
+  ✓  2 [chromium] › browser/canaries/teardown.canary.mjs:17:1 › CANARY_LATE_AFTER_CLEAN (137ms)
+  ✘  3 [chromium] › browser/canaries/teardown.canary.mjs:24:1 › CANARY_BODY_THROW (194ms)
+(node:26268) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:26268) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  4 [chromium] › browser/canaries/teardown.canary.mjs:30:1 › CANARY_MANUAL_CONTEXT (303ms)
+  ✓  5 [chromium] › browser/canaries/teardown.canary.mjs:37:1 › CANARY_POPUP (1.4s)
+  ✓  6 [chromium] › browser/canaries/teardown.canary.mjs:45:1 › CANARY_TYPED_ALLOWANCE (200ms)
+Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+
+[32m- Expected  - 1[39m
+[31m+ Received  + 7[39m
+
+[32m- Array [][39m
+[31m+ Array [[39m
+[31m+   "context-page raised 1 uncaught error(s) and no case was watching it: context-page: CANARY_MANUAL_CONTEXT",[39m
+[31m+   "context-page raised 1 uncaught error(s) and no case was watching it: context-page: CANARY_POPUP",[39m
+[31m+   "context-page has a collector and the page produced 1 problem(s) the case never declared: pageerror: context-page: CANARY_TYPED_ALLOWANCE",[39m
+[31m+   "allowance for console expected [1, 1] but matched 0 (wrong type deliberately)",[39m
+[31m+   "allowance for console never matched anything: /CANARY_TYPED_ALLOWANCE/ (wrong type deliberately)",[39m
+[31m+ ][39m
+
+[31mFailed worker ran 3 tests:[39m
+[chromium] › browser/canaries/teardown.canary.mjs:12:1 › CANARY_MANUAL_CONTEXT
+[chromium] › browser/canaries/teardown.canary.mjs:13:1 › CANARY_POPUP
+[chromium] › browser/canaries/teardown.canary.mjs:14:1 › CANARY_TYPED_ALLOWANCE
+
+   at helpers/browser-fixture.mjs:795
+
+  793 |
+  794 |       if (problems.length > 0) {
+> 795 |         expect(problems, `${title} left ${problems.length} boundary problem(s)`).toEqual([]);
+      |                                                                                  ^
+  796 |       }
+  797 |       return problems;
+  798 |     }
+    at Object.dispose (/workspaces/frontend-r11-session/browser-runs/frontend-browser-run.s9GyW0/worktree/tests/browser/helpers/browser-fixture.mjs:795:82)
+    at Object.browser (/workspaces/frontend-r11-session/browser-runs/frontend-browser-run.s9GyW0/worktree/tests/browser/fixtures.js:58:7)
+
+
+  1) [chromium] › browser/canaries/teardown.canary.mjs:24:1 › CANARY_BODY_THROW ────────────────────
+
+    Error: CANARY_BODY_THROW
+
+       9 | test('CANARY_FORGOT_CLEAN',async({page})=>{collectPageProblems(page);await pageError(page,'CANARY_FORGOT_CLEAN');});
+      10 | test('CANARY_LATE_AFTER_CLEAN',async({page})=>{const p=collectPageProblems(page);p.expectClean();await pageError(page,'CANARY_LATE_AFTER_CLEAN');});
+    > 11 | test('CANARY_BODY_THROW',async({page})=>{await pageError(page,'CANARY_BODY_THROW_COLLECTED');throw Error('CANARY_BODY_THROW');});
+         |                                                                                                    ^
+      12 | test('CANARY_MANUAL_CONTEXT',async({browser})=>{const c=await browser.newContext();const p=await c.newPage();await pageError(p,'CANARY_MANUAL_CONTEXT');});
+      13 | test('CANARY_POPUP',async({page})=>{await page.goto('about:blank');const next=page.waitForEvent('popup');await page.evaluate(()=>window.open('about:blank'));await pageError(await next,'CANARY_POPUP');});
+      14 | test('CANARY_TYPED_ALLOWANCE',async({page})=>{const p=collectPageProblems(page);p.allowError({kind:'console',count:1},/CANARY_TYPED_ALLOWANCE/,'wrong type deliberately');await pageError(page,'CANARY_TYPED_ALLOWANCE');});
+        at /workspaces/frontend-r11-session/browser-runs/frontend-browser-run.s9GyW0/worktree/tests/browser/canaries/teardown.canary.mjs:11:100
+
+    Error: this test left 3 boundary problem(s)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+
+    [32m- Expected  - 1[39m
+    [31m+ Received  + 5[39m
+
+    [32m- Array [][39m
+    [31m+ Array [[39m
+    [31m+   "context-page has a collector and the page produced 1 problem(s) the case never declared: pageerror: context-page: CANARY_FORGOT_CLEAN",[39m
+    [31m+   "context-page has a collector and the page produced 1 problem(s) the case never declared: pageerror: context-page: CANARY_LATE_AFTER_CLEAN",[39m
+    [31m+   "context-page raised 1 uncaught error(s) and no case was watching it: context-page: CANARY_BODY_THROW_COLLECTED",[39m
+    [31m+ ][39m
+
+       at helpers/browser-fixture.mjs:795
+
+      793 |
+      794 |       if (problems.length > 0) {
+    > 795 |         expect(problems, `${title} left ${problems.length} boundary problem(s)`).toEqual([]);
+          |                                                                                  ^
+      796 |       }
+      797 |       return problems;
+      798 |     }
+        at Object.dispose (/workspaces/frontend-r11-session/browser-runs/frontend-browser-run.s9GyW0/worktree/tests/browser/helpers/browser-fixture.mjs:795:82)
+        at Object.browser (/workspaces/frontend-r11-session/browser-runs/frontend-browser-run.s9GyW0/worktree/tests/browser/fixtures.js:58:7)
+
+  1 failed
+    [chromium] › browser/canaries/teardown.canary.mjs:24:1 › CANARY_BODY_THROW ─────────────────────
+  5 passed (9.6s)
+  1 error was not a part of any test, see above for details

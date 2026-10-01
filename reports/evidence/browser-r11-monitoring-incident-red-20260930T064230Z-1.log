@@ -1,0 +1,41 @@
+[run-frontend-gate] $ npm run test:browser -- --grep monitoring\ form\ submits\ entered\ data:\ Create\ Incident 
+
+> frontend-remediation-verification@1.0.0 test:browser
+> playwright test --config browser/playwright.config.mjs --grep monitoring form submits entered data: Create Incident
+
+[2m[WebServer] [22m(node:169570) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[2m[WebServer] [22m(Use `node --trace-warnings ...` to show where the warning was created)
+[2m[WebServer] [22mfake API on http://127.0.0.1:44381, static on http://127.0.0.1:44839
+
+Running 1 test using 1 worker
+
+(node:169579) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:169579) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 [chromium] › browser/backend-contract-mock.spec.mjs:584:269 › monitoring form submits entered data: Create Incident (22.2s)
+
+
+  1) [chromium] › browser/backend-contract-mock.spec.mjs:584:269 › monitoring form submits entered data: Create Incident 
+
+    Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBe[2m([22m[32mexpected[39m[2m) // Object.is equality[22m
+
+    Expected: [32m1[39m
+    Received: [31m0[39m
+
+    Call Log:
+    - Timeout 15000ms exceeded while waiting on the predicate
+
+      432 |   await form.locator(field === 'description' ? 'textarea' : 'input[type="text"]').first().fill('r11-entered-value');
+      433 |   await form.locator('button[type="submit"]').click();
+    > 434 |   await expect.poll(()=>received.length).toBe(1);
+          |   ^
+      435 |   expect(received[0][field]).toBe('r11-entered-value');
+      436 |   await expect(form).toHaveCount(0);
+      437 | });
+        at /tmp/frontend-browser-run.ZEVzQ4/worktree/tests/browser/backend-contract-mock.spec.mjs:434:3
+
+    Error Context: test-results/backend-contract-mock-moni-361ff-ntered-data-Create-Incident-chromium/error-context.md
+
+  1 failed
+    [chromium] › browser/backend-contract-mock.spec.mjs:584:269 › monitoring form submits entered data: Create Incident 

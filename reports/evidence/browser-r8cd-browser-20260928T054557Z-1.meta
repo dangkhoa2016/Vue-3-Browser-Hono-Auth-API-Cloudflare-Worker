@@ -1,0 +1,24 @@
+run-frontend-gate: evidence for one producer run
+label:      r8cd-browser
+argv:       npm run test:browser -- 
+command:    npm run test:browser --
+cwd:        /tmp/opencode/frontend-browser-run/worktree/tests
+repo_root:  /tmp/opencode/frontend-browser-run/worktree
+source_digest:      2f40311f0a53dce182a9eccdec15bb5c7c94e9a90ac589fb7145e12f36b76a93
+source_manifest:    /tmp/opencode/frontend-browser-run/worktree/reports/evidence/r8cd-browser-20260928T054557Z-1.source-before.manifest.json
+source_snapshot:    /tmp/opencode/frontend-browser-run/worktree/reports/evidence/r8cd-browser-20260928T054557Z-1.source.tar.gz
+git:        branch=remediation/round6-wip head=a1db43b7e432795c41c727324d87c66f63c22cbb base_tree=55033e41514957bbd7c13289661018aa6980a91c status_sha256=28462cf4c9175093ca3b47404196270cde92db4cc5b2fd8b92e88e274a773507
+timeout_s:  <none>
+started_at: 2026-09-28T05:45:58Z
+node:       v20.19.0
+npm:        10.8.2
+git:        git version 2.43.0
+os:         Linux x86_64
+---- producer output below ----
+ended_at:   2026-09-28T05:59:40Z
+exit:       0
+result:     RAN
+source_digest_after:  2f40311f0a53dce182a9eccdec15bb5c7c94e9a90ac589fb7145e12f36b76a93
+source_manifest_after: /tmp/opencode/frontend-browser-run/worktree/reports/evidence/r8cd-browser-20260928T054557Z-1.source-after.manifest.json
+source_drift: none
+log:        /tmp/opencode/frontend-browser-run/worktree/reports/evidence/r8cd-browser-20260928T054557Z-1.log

@@ -1,0 +1,46 @@
+[run-frontend-gate] $ npm run test:browser -- --grep N6\ endpoint 
+
+> frontend-remediation-verification@1.0.0 test:browser
+> playwright test --config browser/playwright.config.mjs --grep N6 endpoint
+
+[2m[WebServer] [22m(node:48957) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[2m[WebServer] [22m(Use `node --trace-warnings ...` to show where the warning was created)
+[2m[WebServer] [22mfake API on http://127.0.0.1:39561, static on http://127.0.0.1:39641
+
+Running 2 tests using 1 worker
+
+(node:48972) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:48972) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 [chromium] › browser/backend-contract-mock.spec.mjs:443:67 › N6 endpoint transition holds accepted A through Settings Save: same-origin-basepath (17.5s)
+(node:49207) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:49207) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 [chromium] › browser/backend-contract-mock.spec.mjs:443:67 › N6 endpoint transition holds accepted A through Settings Save: localhost-alias (23.8s)
+
+
+  1) [chromium] › browser/backend-contract-mock.spec.mjs:443:67 › N6 endpoint transition holds accepted A through Settings Save: same-origin-basepath 
+
+    Error: page.evaluate: TypeError: Cannot read properties of undefined (reading 'create')
+        at http://127.0.0.1:39641/assets/js/api/httpClient.js:292:32
+        at http://127.0.0.1:39641/assets/js/api/httpClient.js:292:32
+        at identity (/workspaces/frontend-r11-session/browser-runs/frontend-browser-run.7JmvLa/worktree/tests/browser/backend-contract-mock.spec.mjs:363:25)
+        at Object.generator (/workspaces/frontend-r11-session/browser-runs/frontend-browser-run.7JmvLa/worktree/tests/browser/backend-contract-mock.spec.mjs:373:47)
+
+    Error Context: test-results/backend-contract-mock-N6-e-244a3-s-Save-same-origin-basepath-chromium/error-context.md
+
+  2) [chromium] › browser/backend-contract-mock.spec.mjs:443:67 › N6 endpoint transition holds accepted A through Settings Save: localhost-alias 
+
+    Error: page.evaluate: TypeError: Cannot read properties of undefined (reading 'create')
+        at http://127.0.0.1:39641/assets/js/api/httpClient.js:292:32
+        at http://127.0.0.1:39641/assets/js/api/httpClient.js:292:32
+        at identity (/workspaces/frontend-r11-session/browser-runs/frontend-browser-run.7JmvLa/worktree/tests/browser/backend-contract-mock.spec.mjs:363:25)
+        at Object.generator (/workspaces/frontend-r11-session/browser-runs/frontend-browser-run.7JmvLa/worktree/tests/browser/backend-contract-mock.spec.mjs:373:47)
+
+    Error Context: test-results/backend-contract-mock-N6-e-95c6d-ttings-Save-localhost-alias-chromium/error-context.md
+
+  2 failed
+    [chromium] › browser/backend-contract-mock.spec.mjs:443:67 › N6 endpoint transition holds accepted A through Settings Save: same-origin-basepath 
+    [chromium] › browser/backend-contract-mock.spec.mjs:443:67 › N6 endpoint transition holds accepted A through Settings Save: localhost-alias 

@@ -1,0 +1,11 @@
+{
+  "label": "r11-browser-baseline",
+  "sourceDigest": "0a740bc32eb3a29c6e70e1515a673b5b7a7b9283017003d52df36ac0d802c2af",
+  "staticPort": 35391,
+  "apiPort": 35117,
+  "installKey": "676ae3c2f6fcbf551971a6b753e1b0c18ba6ce5aac0e419c5a50d480a724a327",
+  "installCache": "/workspaces/frontend-r11-session/deps-cache/676ae3c2f6fcbf551971a6b753e1b0c18ba6ce5aac0e419c5a50d480a724a327",
+  "scratchBase": "/workspaces/frontend-r11-session/browser-runs",
+  "servedRoot": "/workspaces/frontend-r11-session/browser-runs/frontend-browser-run.imXezS/worktree",
+  "startedAt": "2026-09-29T08:58:00Z"
+}

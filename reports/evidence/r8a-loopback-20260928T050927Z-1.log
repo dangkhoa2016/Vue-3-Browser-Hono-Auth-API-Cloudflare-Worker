@@ -1,0 +1,62 @@
+[run-frontend-gate] $ npm run test:loopback 
+
+> frontend-remediation-verification@1.0.0 test:loopback
+> node --test regression/loopback-transport.test.mjs
+
+TAP version 13
+# Subtest: loopback transport (real axios 1.20.0)
+    # Subtest: a 401 rotates the session once and replays the request with the new bearer
+    ok 1 - a 401 rotates the session once and replays the request with the new bearer
+      ---
+      duration_ms: 156.796568
+      ...
+    # Subtest: several requests that 401 at once share one refresh and one rotation
+    ok 2 - several requests that 401 at once share one refresh and one rotation
+      ---
+      duration_ms: 103.130359
+      ...
+    # Subtest: a 401 of a request that was already superseded neither refreshes nor replays
+    ok 3 - a 401 of a request that was already superseded neither refreshes nor replays
+      ---
+      duration_ms: 50.918341
+      ...
+    # Subtest: a rotation the server answers with an ended session ends this one and replays nothing
+    ok 4 - a rotation the server answers with an ended session ends this one and replays nothing
+      ---
+      duration_ms: 60.799555
+      ...
+    # Subtest: a busy backend keeps the session instead of logging the user out
+    ok 5 - a busy backend keeps the session instead of logging the user out
+      ---
+      duration_ms: 61.856313
+      ...
+    # Subtest: a mutation rejected with 401 is not replayed
+    ok 6 - a mutation rejected with 401 is not replayed
+      ---
+      duration_ms: 44.899474
+      ...
+    # Subtest: a request to a foreign origin is refused and no bearer leaves the tab
+    ok 7 - a request to a foreign origin is refused and no bearer leaves the tab
+      ---
+      duration_ms: 45.023123
+      ...
+    # Subtest: a refused connection is reported without ending the session
+    ok 8 - a refused connection is reported without ending the session
+      ---
+      duration_ms: 2072.211575
+      ...
+    1..8
+ok 1 - loopback transport (real axios 1.20.0)
+  ---
+  duration_ms: 2605.931095
+  type: 'suite'
+  ...
+1..1
+# tests 8
+# suites 1
+# pass 8
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3000.969982
