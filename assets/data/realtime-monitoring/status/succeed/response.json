@@ -55,5 +55,12 @@
       "recentThreats": []
     }
   },
-  "message": "Real-time monitoring started successfully"
+  "message": "Real-time monitoring started successfully",
+  "capabilities": {
+    "continuousMonitoring": true,
+    "supportedMonitoringModes": [
+      "snapshot",
+      "continuous"
+    ]
+  }
 }

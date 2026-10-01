@@ -4,6 +4,7 @@ import { useRealtimeMonitoringStore } from '/assets/js/stores/realtimeMonitoring
 import { useAuthStore } from '/assets/js/stores/authStore.js';
 import { useModalStore } from '/assets/js/stores/modalStore.js';
 import { useMainStore } from '/assets/js/stores/mainStore.js';
+import { useToastStore } from '/assets/js/stores/toastStore.js';
 import { useModalState } from '/vue/composables/useModalState.js';
 import { useAuthGate } from '/vue/composables/useAuthGate.js';
 import { createAuthGateCallbacks } from '/vue/composables/createAuthGateCallbacks.js';
@@ -18,6 +19,7 @@ export function useAdminRealtimeMonitoringPage() {
   const authStore = useAuthStore();
   const modalStore = useModalStore();
   const mainStore = useMainStore();
+  const toastStore = useToastStore();
   const heroSectionClass = 'relative overflow-hidden rounded-[32px] border border-slate-200/70 dark:border-slate-800 bg-gradient-to-br from-white via-violet-50/40 to-cyan-50/40 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 p-8 shadow-[0_24px_80px_-60px_rgba(15,23,42,0.8)]';
 
   const createDefaultRuleForm = () => ({
@@ -71,6 +73,17 @@ export function useAdminRealtimeMonitoringPage() {
   const isAdmin = computed(() => role.value === 'admin' || role.value === 'super_admin');
   const isSuperAdmin = computed(() => role.value === 'super_admin');
   const isMonitoringActive = computed(() => monitoringStore.isMonitoringActive);
+  const isContinuousMonitoringSupported = computed(() => monitoringStore.isContinuousMonitoringSupported);
+
+  const startMonitoringDisabledReason = computed(() => {
+    if (isContinuousMonitoringSupported.value) return '';
+
+    if (monitoringStore.isContinuousMonitoringConfirmed) {
+      return tf('message.realtime_monitoring.continuous_disabled', 'Continuous monitoring is disabled by the backend.');
+    }
+
+    return tf('message.realtime_monitoring.continuous_unconfirmed', 'Continuous monitoring is not confirmed by this backend.');
+  });
 
   const overviewTotals = computed(() => ({
     allTime: Number(overview.value?.totals?.allTime) || 0,
@@ -202,6 +215,15 @@ export function useAdminRealtimeMonitoringPage() {
   const showToggleRuleModal = toggleRuleModal.isOpen;
   const pendingToggleRule = ref(null);
 
+  const applyFormField = (formRef) => ({ key, value }) => {
+    formRef.value = { ...formRef.value, [key]: value };
+  };
+
+  const updateCreateRuleField = applyFormField(createRuleForm);
+  const updateCreateChannelField = applyFormField(createChannelForm);
+  const updateClearCacheField = applyFormField(clearCacheForm);
+  const updateCreateIncidentField = applyFormField(createIncidentForm);
+
   const formatDate = (value) => {
     if (!value) return '-';
     const date = new Date(value);
@@ -258,9 +280,18 @@ export function useAdminRealtimeMonitoringPage() {
 
   const startMonitoring = async () => {
     if (!isAuthenticated.value || !isSuperAdmin.value) return;
+
+    if (!isContinuousMonitoringSupported.value) {
+      toastStore.error(startMonitoringDisabledReason.value);
+      return;
+    }
+
     try {
       await monitoringStore.startMonitoring(5000, true);
-    } catch (_error) {
+    } catch (error) {
+      if (error?.isUnsupported) {
+        toastStore.error(startMonitoringDisabledReason.value);
+      }
     }
   };
 
@@ -554,6 +585,7 @@ export function useAdminRealtimeMonitoringPage() {
     heroSectionClass,
     isAdmin,
     isSuperAdmin,
+    isContinuousMonitoringSupported,
     isMonitoringActive,
     latestIncident,
     latestAnalysis,
@@ -582,12 +614,17 @@ export function useAdminRealtimeMonitoringPage() {
     showToggleRuleModal,
     simulateEvent,
     startMonitoring,
+    startMonitoringDisabledReason,
     stopMonitoring,
     submitClearCache,
     submitCreateAlertChannel,
     submitCreateIncident,
     submitCreateAlertRule,
     testAlerts,
+    updateClearCacheField,
+    updateCreateChannelField,
+    updateCreateIncidentField,
+    updateCreateRuleField,
     tf,
     timelineItems,
     timelineSummary,

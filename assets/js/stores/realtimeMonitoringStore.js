@@ -7,6 +7,16 @@ import {
   buildRealtimeMonitoringAlertRuleToggleEndpoint
 } from '../api.js';
 import { getToastStore } from '../appServices.js';
+import {
+  API_ERROR_CODES,
+  CAPABILITY_KEYS,
+  createUnsupportedError,
+  isCapabilitySupported,
+  isUnsupportedError,
+  readCapability,
+  mergeCapabilityMap,
+  readErrorCode
+} from '../api/backendContract.js';
 import { i18n } from '../i18n.js';
 import { useMainStore } from './mainStore.js';
 
@@ -53,6 +63,9 @@ export const useRealtimeMonitoringStore = defineStore('realtimeMonitoring', {
     latestSimulation: null,
     latestIncident: null,
     statusRequestedOnce: false,
+    capabilities: null,
+    monitoringUnsupportedCode: null,
+    exportUnsupportedCode: null,
     loading: false,
     actionLoading: false,
     error: null,
@@ -81,10 +94,17 @@ export const useRealtimeMonitoringStore = defineStore('realtimeMonitoring', {
       ?? state.status?.monitoring?.active
       ?? state.realtime?.isActive
       ?? state.overview?.monitoringActive
-    )
+    ),
+    isContinuousMonitoringSupported: (state) => isCapabilitySupported(state.capabilities, CAPABILITY_KEYS.CONTINUOUS_MONITORING),
+    isContinuousMonitoringConfirmed: (state) => readCapability(state.capabilities, CAPABILITY_KEYS.CONTINUOUS_MONITORING) !== null
   },
 
   actions: {
+    captureCapabilities(payload) {
+      this.capabilities = mergeCapabilityMap(this.capabilities, payload);
+      return this.capabilities;
+    },
+
     normalizeError(err) {
       return err?.response?.data?.message
         || err?.response?.data?.error
@@ -132,6 +152,7 @@ export const useRealtimeMonitoringStore = defineStore('realtimeMonitoring', {
 
       try {
         const response = await apiClient.get(API_ENDPOINTS.REALTIME_MONITORING_STATUS);
+        this.captureCapabilities(response?.data);
         const payload = response?.data?.data || {};
         const resolvedIsActive = typeof payload?.isActive === 'boolean'
           ? payload.isActive
@@ -336,17 +357,33 @@ export const useRealtimeMonitoringStore = defineStore('realtimeMonitoring', {
     async startMonitoring(intervalMs = 5000, enableThreatDetection = true) {
       this.actionLoading = true;
       this.error = null;
+      this.monitoringUnsupportedCode = null;
+
+      if (!isCapabilitySupported(this.capabilities, CAPABILITY_KEYS.CONTINUOUS_MONITORING)) {
+        this.monitoringUnsupportedCode = API_ERROR_CODES.UNSUPPORTED_MONITORING_MODE;
+        this.actionLoading = false;
+
+        throw createUnsupportedError(API_ERROR_CODES.UNSUPPORTED_MONITORING_MODE, {
+          capability: CAPABILITY_KEYS.CONTINUOUS_MONITORING,
+          status: 422
+        });
+      }
 
       try {
         const response = await apiClient.post(API_ENDPOINTS.REALTIME_MONITORING_START, {
           intervalMs,
           enableThreatDetection
         });
+        this.captureCapabilities(response?.data);
         const payload = response?.data?.data || {};
+        const confirmedActive = typeof payload?.isActive === 'boolean'
+          ? payload.isActive
+          : (typeof payload?.monitoring?.active === 'boolean' ? payload.monitoring.active : null);
+
         this.status = {
           ...(this.status || {}),
           ...(payload && typeof payload === 'object' ? payload : {}),
-          isActive: typeof payload?.isActive === 'boolean' ? payload.isActive : true
+          ...(confirmedActive === null ? {} : { isActive: confirmedActive })
         };
 
         if (!this.realtime || typeof this.realtime !== 'object') {
@@ -354,12 +391,18 @@ export const useRealtimeMonitoringStore = defineStore('realtimeMonitoring', {
         }
         this.realtime = {
           ...this.realtime,
-          isActive: true,
+          ...(confirmedActive === null ? {} : { isActive: confirmedActive }),
           lastUpdated: payload?.startedAt || new Date().toISOString()
         };
         this.lastUpdated = new Date().toISOString();
         return response?.data || null;
       } catch (error) {
+        if (isUnsupportedError(error)) {
+          this.monitoringUnsupportedCode = API_ERROR_CODES.UNSUPPORTED_MONITORING_MODE;
+          this.error = this.normalizeError(error);
+          return null;
+        }
+
         this.error = this.normalizeError(error);
         return null;
       } finally {
@@ -772,6 +815,24 @@ export const useRealtimeMonitoringStore = defineStore('realtimeMonitoring', {
         const fileMeta = payload?.meta || {};
         const content = payload?.data;
 
+        const failureEnvelope = payload?.success === false
+          || Boolean(payload?.error)
+          || Boolean(payload?.data?.error)
+          || Boolean(readErrorCode(payload));
+
+        if (failureEnvelope) {
+          this.exportUnsupportedCode = isUnsupportedError(payload)
+            ? API_ERROR_CODES.UNSUPPORTED_EXPORT_OPTION
+            : null;
+          this.error = this.normalizeError({ response: { data: payload } });
+          return null;
+        }
+
+        if (content === null || content === undefined || (typeof content === 'object' && !Array.isArray(content) && Object.keys(content).length === 0)) {
+          this.error = this.normalizeError({ response: { data: { error: { message: 'Export returned no data' } } } });
+          return null;
+        }
+
         let fileContent = '';
         let mimeType = 'application/json;charset=utf-8';
         let extension = format === 'csv' ? 'csv' : 'json';
@@ -802,6 +863,9 @@ export const useRealtimeMonitoringStore = defineStore('realtimeMonitoring', {
         this.lastUpdated = new Date().toISOString();
         return payload;
       } catch (error) {
+        if (isUnsupportedError(error)) {
+          this.exportUnsupportedCode = API_ERROR_CODES.UNSUPPORTED_EXPORT_OPTION;
+        }
         this.error = this.normalizeError(error);
         return null;
       } finally {

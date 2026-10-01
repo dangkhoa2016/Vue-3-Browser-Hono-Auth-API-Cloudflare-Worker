@@ -106,3 +106,56 @@ test('profile remount fetches the current response after its store counter has a
 });
 
 
+for (const [title, suffix, method, field] of [
+  ['Create Rule', 'alerts/rules', 'POST', 'name'],
+  ['Create Channel', 'alerts/channels', 'POST', 'name'],
+  ['Clear Cache', 'dashboard/cache', 'DELETE', 'key'],
+  ['Create Incident', 'incidents/create', 'POST', 'description']
+]) test(`monitoring form submits entered data: ${title}`, async ({page}) => {
+  await control('/__fake/reset');
+  await signIn(page, {role:'super_admin'});
+  await page.goto(`/#${PAGES.monitoring}`);
+  const path = `/api/realtime-monitoring/${suffix}`;
+  const received=[];
+  await page.route(`**${path}*`, async route => {
+    if(route.request().method() !== method) return route.continue();
+    received.push(method === 'DELETE'
+      ? {key:new URL(route.request().url()).searchParams.get('key')}
+      : route.request().postDataJSON());
+    await route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({success:true,data:{id:'r11-fixture'}})});
+  });
+  await page.getByRole('button',{name:new RegExp(`${title}$`)}).first().click();
+  const form=page.locator('form:visible');
+  await expect(form).toHaveCount(1);
+  await form.locator(field === 'description' ? 'textarea' : 'input[type="text"]').first().fill('r11-entered-value');
+  await form.locator('button[type="submit"]').click();
+  await expect.poll(()=>received.length).toBe(1);
+  expect(received[0][field]).toBe('r11-entered-value');
+  await expect(form).toHaveCount(0);
+});
+
+test('monitoring rule channel checkboxes emit selected channels without resetting other fields',async({page})=>{
+  await control('/__fake/reset');await signIn(page,{role:'super_admin'});
+  await page.goto(`/#${PAGES.monitoring}`);
+  await page.getByRole('button',{name:'Create Rule',exact:true}).first().click();
+  const form=page.locator('form:visible');
+  await form.locator('input[type="text"]').first().fill('r11-channel-selection');
+  await expect(form.getByRole('checkbox')).toHaveCount(3);
+  await form.getByRole('checkbox',{name:'email',exact:true}).uncheck();
+  await form.getByRole('checkbox',{name:'webhook',exact:true}).check();
+  await form.getByRole('checkbox',{name:'slack',exact:true}).check();
+  await form.getByRole('checkbox',{name:'webhook',exact:true}).uncheck();
+  await expect(form.getByRole('checkbox',{name:'slack',exact:true})).toBeChecked();
+  await expect(form.getByRole('checkbox',{name:'email',exact:true})).not.toBeChecked();
+  await expect(form.locator('input[type="text"]').first()).toHaveValue('r11-channel-selection');
+  const received=[];
+  await page.route('**/api/realtime-monitoring/alerts/rules',async route=>{
+    if(route.request().method()!=='POST')return route.continue();
+    received.push(route.request().postDataJSON());
+    await route.fulfill({status:200,contentType:'application/json',body:'{"success":true,"data":{"id":"r11-channels"}}'});
+  });
+  await form.locator('button[type="submit"]').click();
+  await expect.poll(()=>received.length).toBe(1);
+  expect(received[0].channels).toEqual(['slack']);
+});
+
