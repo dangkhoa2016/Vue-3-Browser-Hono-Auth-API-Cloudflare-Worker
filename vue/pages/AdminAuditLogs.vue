@@ -41,59 +41,12 @@
 
         <template #right>
           <div class="grid gap-4">
-            <!-- Stats Skeleton -->
-            <template v-if="auditStore.loading">
-              <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm animate-pulse">
-                <div class="h-3 w-24 bg-slate-200 dark:bg-slate-700/50 rounded mb-4"></div>
-                <div class="flex items-center justify-between">
-                  <div class="h-8 w-16 bg-slate-200 dark:bg-slate-700/50 rounded"></div>
-                  <div class="h-8 w-8 bg-slate-200 dark:bg-slate-700/50 rounded-full"></div>
-                </div>
-              </div>
-              <div class="grid grid-cols-2 gap-4">
-                <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm animate-pulse">
-                  <div class="h-3 w-20 bg-slate-200 dark:bg-slate-700/50 rounded mb-4"></div>
-                  <div class="flex items-center justify-between">
-                    <div class="h-6 w-12 bg-slate-200 dark:bg-slate-700/50 rounded"></div>
-                    <div class="h-6 w-6 bg-slate-200 dark:bg-slate-700/50 rounded-full"></div>
-                  </div>
-                </div>
-                <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm animate-pulse">
-                  <div class="h-3 w-20 bg-slate-200 dark:bg-slate-700/50 rounded mb-4"></div>
-                  <div class="flex items-center justify-between">
-                    <div class="h-6 w-12 bg-slate-200 dark:bg-slate-700/50 rounded"></div>
-                    <div class="h-6 w-6 bg-slate-200 dark:bg-slate-700/50 rounded-full"></div>
-                  </div>
-                </div>
-              </div>
-            </template>
-
-            <!-- Real Stats -->
-            <template v-else>
-              <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm">
-                <p class="text-xs uppercase tracking-[0.3em] text-slate-500">{{ tf('message.audit.stats_total', 'Total Logs') }}</p>
-                <div class="mt-3 flex items-center justify-between">
-                  <span class="text-3xl font-black text-slate-900 dark:text-white">{{ totalLogCount }}</span>
-                  <i class="bi bi-journal-text text-2xl text-cyan-500"></i>
-                </div>
-              </div>
-              <div class="grid grid-cols-2 gap-4">
-                <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm">
-                  <p class="text-xs uppercase tracking-[0.3em] text-slate-500">{{ tf('message.audit.stats_success', 'Success') }}</p>
-                  <div class="mt-3 flex items-center justify-between">
-                    <span class="text-2xl font-black text-slate-900 dark:text-white">{{ successCount }}</span>
-                    <i class="bi bi-check-circle text-xl text-emerald-500"></i>
-                  </div>
-                </div>
-                <div class="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white/80 dark:bg-slate-900/70 p-5 shadow-sm">
-                  <p class="text-xs uppercase tracking-[0.3em] text-slate-500">{{ tf('message.audit.stats_issues', 'Issues') }}</p>
-                  <div class="mt-3 flex items-center justify-between">
-                    <span class="text-2xl font-black text-slate-900 dark:text-white">{{ issueCount }}</span>
-                    <i class="bi bi-exclamation-triangle text-xl text-amber-500"></i>
-                  </div>
-                </div>
-              </div>
-            </template>
+            <AuditStatsGrid
+              :loading="auditStore.loading"
+              :total-count="totalLogCount"
+              :success-count="successCount"
+              :issue-count="issueCount"
+            />
           </div>
         </template>
       </PageHeroSection>
@@ -233,136 +186,19 @@
         </div>
       </div>
 
-      <section
+      <AuditTruncatePanel
         v-if="isSuperAdmin"
-        class="mb-6 rounded-2xl border border-amber-200/70 dark:border-amber-900/40 bg-gradient-to-br from-amber-50/90 via-white to-rose-50/80 dark:from-slate-900 dark:via-slate-900 dark:to-rose-950/20 p-6 shadow-sm"
-      >
-        <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-          <div class="max-w-3xl">
-            <div class="inline-flex items-center gap-2 rounded-full bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-200 px-3 py-1 text-xs font-semibold tracking-[0.2em] uppercase">
-              <i class="bi bi-scissors"></i>
-              {{ tf('message.audit.truncate_title', 'Safe Audit Truncate') }}
-            </div>
-            <h2 class="mt-4 text-xl font-black text-slate-900 dark:text-white">
-              {{ tf('message.audit.truncate_heading', 'Archive live audit logs before deleting them') }}
-            </h2>
-            <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">
-              {{ tf('message.audit.truncate_description', 'This action runs against the server endpoint that archives matching live audit logs into audit_logs_archive before deleting them from audit_logs. Always run a dry run first.') }}
-            </p>
-          </div>
-
-          <div class="rounded-2xl border border-amber-200/80 dark:border-amber-900/40 bg-white/80 dark:bg-slate-950/60 px-4 py-3 text-xs text-slate-600 dark:text-slate-300 lg:max-w-sm">
-            <p class="font-semibold text-slate-900 dark:text-slate-100">
-              {{ tf('message.audit.truncate_archive_required', 'Archive-first mode is always enforced by the API.') }}
-            </p>
-            <p class="mt-1">
-              {{ tf('message.audit.truncate_confirm_note', 'Execution requires a successful preview and an explicit confirmation before data is removed from live storage.') }}
-            </p>
-          </div>
-        </div>
-
-        <div class="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-[1fr_1fr_180px_auto]">
-          <div>
-            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-              {{ tf('message.audit.truncate_range_start', 'Start Date') }}
-            </label>
-            <input
-              v-model="truncateForm.startDate"
-              type="date"
-              class="w-full px-3 py-2.5 rounded-xl border border-slate-200/80 dark:border-slate-600 bg-white dark:bg-slate-800 text-sm text-slate-700 dark:text-slate-200 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition"
-            />
-          </div>
-
-          <div>
-            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-              {{ tf('message.audit.truncate_range_end', 'End Date') }}
-            </label>
-            <input
-              v-model="truncateForm.endDate"
-              type="date"
-              class="w-full px-3 py-2.5 rounded-xl border border-slate-200/80 dark:border-slate-600 bg-white dark:bg-slate-800 text-sm text-slate-700 dark:text-slate-200 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition"
-            />
-          </div>
-
-          <div>
-            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-              {{ tf('message.audit.truncate_batch_size', 'Batch Size') }}
-            </label>
-            <input
-              v-model.number="truncateForm.batchSize"
-              type="number"
-              min="1"
-              max="10000"
-              class="w-full px-3 py-2.5 rounded-xl border border-slate-200/80 dark:border-slate-600 bg-white dark:bg-slate-800 text-sm text-slate-700 dark:text-slate-200 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition"
-            />
-          </div>
-
-          <div class="flex flex-col justify-end gap-3 lg:items-end">
-            <ActionTextButton
-              tone="amber"
-              shape="xl"
-              :icon="truncateLoading ? 'bi bi-arrow-repeat animate-spin' : 'bi bi-search'"
-              :disabled="truncateLoading"
-              @click="previewTruncate"
-            >
-              {{ tf('message.audit.truncate_preview', 'Preview Dry Run') }}
-            </ActionTextButton>
-            <ActionTextButton
-              tone="rose"
-              shape="xl"
-              icon="bi bi-exclamation-triangle"
-              :disabled="truncateLoading || !truncatePreview || !truncatePreview.total_found"
-              @click="openTruncateConfirm"
-            >
-              {{ tf('message.audit.truncate_execute', 'Execute Truncate') }}
-            </ActionTextButton>
-          </div>
-        </div>
-
-        <div v-if="truncatePreview" class="mt-5 rounded-2xl border border-slate-200/80 dark:border-slate-700 bg-white/85 dark:bg-slate-950/70 p-5">
-          <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-            <div>
-              <p class="text-sm font-semibold text-slate-900 dark:text-slate-100">
-                {{ tf('message.audit.truncate_preview_result', 'Latest Truncate Preview') }}
-              </p>
-              <p class="text-xs text-slate-500 dark:text-slate-400">
-                {{ truncatePreview.start_date }} - {{ truncatePreview.end_date }}
-              </p>
-            </div>
-            <span class="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold"
-              :class="truncatePreview.dry_run ? 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-200' : 'bg-rose-100 text-rose-800 dark:bg-rose-900/30 dark:text-rose-200'"
-            >
-              <i :class="truncatePreview.dry_run ? 'bi bi-eye' : 'bi bi-trash3'"></i>
-              {{ truncatePreview.dry_run
-                ? tf('message.audit.truncate_mode_dry_run', 'Dry Run')
-                : tf('message.audit.truncate_mode_executed', 'Executed') }}
-            </span>
-          </div>
-
-          <div class="mt-4 grid grid-cols-2 gap-3 lg:grid-cols-5">
-            <div class="rounded-xl bg-slate-50 dark:bg-slate-900/70 p-3">
-              <p class="text-xs uppercase tracking-[0.2em] text-slate-500">{{ tf('message.audit.truncate_matches', 'Matched') }}</p>
-              <p class="mt-2 text-2xl font-black text-slate-900 dark:text-slate-100">{{ truncatePreview.total_found || 0 }}</p>
-            </div>
-            <div class="rounded-xl bg-slate-50 dark:bg-slate-900/70 p-3">
-              <p class="text-xs uppercase tracking-[0.2em] text-slate-500">{{ tf('message.audit.truncate_archived', 'Archived') }}</p>
-              <p class="mt-2 text-2xl font-black text-slate-900 dark:text-slate-100">{{ truncatePreview.archived_count || 0 }}</p>
-            </div>
-            <div class="rounded-xl bg-slate-50 dark:bg-slate-900/70 p-3">
-              <p class="text-xs uppercase tracking-[0.2em] text-slate-500">{{ tf('message.audit.truncate_deleted', 'Deleted') }}</p>
-              <p class="mt-2 text-2xl font-black text-slate-900 dark:text-slate-100">{{ truncatePreview.deleted_count || 0 }}</p>
-            </div>
-            <div class="rounded-xl bg-slate-50 dark:bg-slate-900/70 p-3">
-              <p class="text-xs uppercase tracking-[0.2em] text-slate-500">{{ tf('message.audit.truncate_batch_size', 'Batch Size') }}</p>
-              <p class="mt-2 text-2xl font-black text-slate-900 dark:text-slate-100">{{ truncatePreview.batch_size || 0 }}</p>
-            </div>
-            <div class="rounded-xl bg-slate-50 dark:bg-slate-900/70 p-3">
-              <p class="text-xs uppercase tracking-[0.2em] text-slate-500">{{ tf('message.audit.truncate_duration', 'Duration') }}</p>
-              <p class="mt-2 text-2xl font-black text-slate-900 dark:text-slate-100">{{ truncatePreview.duration_ms || 0 }}ms</p>
-            </div>
-          </div>
-        </div>
-      </section>
+        :start-date="truncateForm.startDate"
+        :end-date="truncateForm.endDate"
+        :batch-size="truncateForm.batchSize"
+        :preview="truncatePreview"
+        :loading="truncateLoading"
+        @update:start-date="truncateForm.startDate = $event"
+        @update:end-date="truncateForm.endDate = $event"
+        @update:batch-size="truncateForm.batchSize = $event"
+        @preview="previewTruncate"
+        @execute="openTruncateConfirm"
+      />
 
       <!-- Summary and Export -->
       <div class="flex items-center justify-between mb-6">
@@ -485,7 +321,7 @@
     <ConfirmModal
       :show="showTruncateConfirm"
       :title="tf('message.audit.truncate_confirm_title', 'Execute audit log truncate?')"
-      :message="tf('message.audit.truncate_confirm_message', 'This will archive and permanently delete {count} live audit logs in the selected date range.', { count: Number(truncatePreview?.total_found) || 0 })"
+      :message="tf('message.audit.truncate_confirm_message', 'This will archive and permanently delete {count} live audit logs in the selected date range.', { count: truncateTotalCount })"
       :confirm-text="truncateLoading ? tf('message.audit.truncate_running', 'Running...') : tf('message.audit.truncate_execute', 'Execute Truncate')"
       :cancel-text="tf('message.common.cancel', 'Cancel')"
       icon="bi bi-exclamation-octagon"
@@ -496,89 +332,14 @@
       @cancel="closeTruncateConfirm"
     />
 
-    <!-- Log Details Modal -->
-
-    <ModalWindow :show="showModal" :title="tf('message.audit.log_details', 'Log Details')" @close="closeLog" :panel-class="'max-w-3xl sm:max-w-4xl w-full'">
-      <div class="space-y-4 modal-detail-body">
-        <!-- Header: Action, Date, ID, Actions -->
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-          <div>
-            <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-100 break-words">{{ $t('message.audit.action') }}: {{ selectedLog?.action || tf('message.audit.log_details', 'Log Details') }}</h3>
-            <div class="text-xs text-slate-500 dark:text-slate-400 mt-1">{{ formatDate(selectedLog?.timestamp || selectedLog?.created_at) }} • #{{ selectedLog?.id }}</div>
-          </div>
-          <div class="flex items-center gap-2 mt-2 sm:mt-0">
-            <ActionTextButton
-              variant="soft"
-              shape="xl"
-              size="sm"
-              icon="bi bi-clipboard"
-              class="text-xs"
-              @click="copySelectedLog"
-            >
-              {{ tf('message.audit.copy_json', 'Copy JSON') }}
-            </ActionTextButton>
-            <ActionTextButton
-              variant="soft"
-              shape="xl"
-              size="sm"
-              icon="bi bi-x-lg"
-              class="text-xs"
-              @click="closeLog"
-            >
-              {{ tf('message.common.close', 'Close') }}
-            </ActionTextButton>
-          </div>
-        </div>
-
-        <!-- Responsive Info Grid -->
-        <div class="grid grid-cols-1 min-[700px]:grid-cols-2 gap-4 overflow-auto max-h-[600px]">
-          <div class="space-y-3 text-sm text-slate-700 dark:text-slate-200">
-            <div class="flex flex-col sm:flex-row items-start gap-1.5 sm:gap-2 py-2 px-3 rounded-md bg-slate-50 border border-slate-200 mb-1 break-words dark:bg-slate-800 dark:border-slate-700">
-              <span class="min-w-0 sm:min-w-[110px] text-[0.82em] sm:text-[0.85em] text-slate-500 font-medium flex-shrink-0 dark:text-slate-300">{{ tf('message.audit.actor', 'Actor') }}</span>
-              <span class="font-semibold text-slate-900 flex-1 break-words dark:text-slate-100">{{ selectedLog?.actor_name || selectedLog?.actor_email || selectedLog?.user_email || '-' }}</span>
-            </div>
-            <div class="flex flex-col sm:flex-row items-start gap-1.5 sm:gap-2 py-2 px-3 rounded-md bg-slate-50 border border-slate-200 mb-1 break-words dark:bg-slate-800 dark:border-slate-700">
-              <span class="min-w-0 sm:min-w-[110px] text-[0.82em] sm:text-[0.85em] text-slate-500 font-medium flex-shrink-0 dark:text-slate-300">{{ tf('message.audit.actor_role', 'Actor Role') }}</span>
-              <span class="font-semibold text-slate-900 flex-1 break-words dark:text-slate-100">{{ selectedLog?.actor_role || '-' }}</span>
-            </div>
-            <div class="flex flex-col sm:flex-row items-start gap-1.5 sm:gap-2 py-2 px-3 rounded-md bg-slate-50 border border-slate-200 mb-1 break-words dark:bg-slate-800 dark:border-slate-700">
-              <span class="min-w-0 sm:min-w-[110px] text-[0.82em] sm:text-[0.85em] text-slate-500 font-medium flex-shrink-0 dark:text-slate-300">{{ tf('message.audit.action', 'Action') }}</span>
-              <span class="font-semibold text-slate-900 flex-1 break-words dark:text-slate-100">{{ selectedLog?.action || '-' }}</span>
-            </div>
-            <div class="flex flex-col sm:flex-row items-start gap-1.5 sm:gap-2 py-2 px-3 rounded-md bg-slate-50 border border-slate-200 mb-1 break-words dark:bg-slate-800 dark:border-slate-700">
-              <span class="min-w-0 sm:min-w-[110px] text-[0.82em] sm:text-[0.85em] text-slate-500 font-medium flex-shrink-0 dark:text-slate-300">{{ tf('message.audit.target', 'Target') }}</span>
-              <span class="font-semibold text-slate-900 flex-1 break-words dark:text-slate-100">{{ selectedLog?.target_type || selectedLog?.resource || selectedLog?.target || '-' }}</span>
-            </div>
-            <div class="flex flex-col sm:flex-row items-start gap-1.5 sm:gap-2 py-2 px-3 rounded-md bg-slate-50 border border-slate-200 mb-1 break-words dark:bg-slate-800 dark:border-slate-700">
-              <span class="min-w-0 sm:min-w-[110px] text-[0.82em] sm:text-[0.85em] text-slate-500 font-medium flex-shrink-0 dark:text-slate-300">{{ tf('message.audit.timestamp', 'Timestamp') }}</span>
-              <span class="font-semibold text-slate-900 flex-1 break-words dark:text-slate-100">{{ formatDate(selectedLog?.timestamp || selectedLog?.created_at) }}</span>
-            </div>
-            <div class="flex flex-col sm:flex-row items-start gap-1.5 sm:gap-2 py-2 px-3 rounded-md bg-slate-50 border border-slate-200 mb-1 break-words dark:bg-slate-800 dark:border-slate-700">
-              <span class="min-w-0 sm:min-w-[110px] text-[0.82em] sm:text-[0.85em] text-slate-500 font-medium flex-shrink-0 dark:text-slate-300">{{ tf('message.audit.request_id', 'Request ID') }}</span>
-              <span class="font-semibold text-slate-900 flex-1 break-words dark:text-slate-100">{{ selectedLog?.request_id || '-' }}</span>
-            </div>
-            <div class="flex flex-col sm:flex-row items-start gap-1.5 sm:gap-2 py-2 px-3 rounded-md bg-slate-50 border border-slate-200 mb-1 break-words dark:bg-slate-800 dark:border-slate-700">
-              <span class="min-w-0 sm:min-w-[110px] text-[0.82em] sm:text-[0.85em] text-slate-500 font-medium flex-shrink-0 dark:text-slate-300">{{ tf('message.audit.ip_address', 'IP') }}</span>
-              <span class="font-semibold text-slate-900 flex-1 break-words dark:text-slate-100">{{ selectedLog?.ip_address || '-' }}</span>
-            </div>
-            <div class="flex flex-col sm:flex-row items-start gap-1.5 sm:gap-2 py-2 px-3 rounded-md bg-slate-50 border border-slate-200 mb-1 break-words dark:bg-slate-800 dark:border-slate-700">
-              <span class="min-w-0 sm:min-w-[110px] text-[0.82em] sm:text-[0.85em] text-slate-500 font-medium flex-shrink-0 dark:text-slate-300">{{ tf('message.audit.user_agent', 'User Agent') }}</span>
-              <span class="font-semibold text-slate-900 flex-1 break-words dark:text-slate-100">{{ selectedLog?.user_agent || selectedLog?.userAgent || '-' }}</span>
-            </div>
-            <div class="flex flex-col sm:flex-row items-start gap-1.5 sm:gap-2 py-2 px-3 rounded-md bg-slate-50 border border-slate-200 mb-1 break-words dark:bg-slate-800 dark:border-slate-700">
-              <span class="min-w-0 sm:min-w-[110px] text-[0.82em] sm:text-[0.85em] text-slate-500 font-medium flex-shrink-0 dark:text-slate-300">{{ tf('message.audit.status', 'Status') }}</span>
-              <span class="font-semibold text-slate-900 flex-1 break-words dark:text-slate-100">{{ selectedLog?.status || '-' }}</span>
-            </div>
-          </div>
-          <div class="flex flex-col">
-            <div class="mb-2 text-xs text-slate-500">{{ tf('message.audit.full_payload', 'Full Payload') }}</div>
-            <div class="relative">
-              <pre class="whitespace-pre-wrap bg-slate-50 dark:bg-slate-900 p-4 rounded-md text-xs font-mono break-all">{{ formatDetails(selectedLog) }}</pre>
-            </div>
-          </div>
-        </div>
-      </div>
-    </ModalWindow>
+    <AuditLogDetailsModal
+      :show="showModal"
+      :log="selectedLog"
+      :date-text="formatDate(selectedLog?.timestamp || selectedLog?.created_at)"
+      :payload-text="formatDetails(selectedLog)"
+      @close="closeLog"
+      @copy="copySelectedLog"
+    />
   </div>
 </template>
 
@@ -595,6 +356,9 @@ import PaginationControls from '/vue/components/PaginationControls.vue';
 import ActionIconButton from '/vue/components/ActionIconButton.vue';
 import ActionTextButton from '/vue/components/ActionTextButton.vue';
 import LoginRequiredPrompt from '/vue/components/LoginRequiredPrompt.vue';
+import AuditStatsGrid from '/vue/components/AuditStatsGrid.vue';
+import AuditLogDetailsModal from '/vue/components/AuditLogDetailsModal.vue';
+import AuditTruncatePanel from '/vue/components/AuditTruncatePanel.vue';
 import PageHeroSection from '/vue/components/PageHeroSection.vue';
 import { useAdminAuditLogsPage } from '/vue/composables/useAdminAuditLogsPage.js';
 
@@ -629,6 +393,7 @@ const {
   actorAvatarClass,
   truncateForm,
   truncatePreview,
+  truncateTotalCount,
   truncateLoading,
   showTruncateConfirm,
   previewTruncate,
