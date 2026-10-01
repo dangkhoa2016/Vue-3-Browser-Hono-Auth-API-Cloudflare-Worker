@@ -287,6 +287,9 @@ export function useAdminAuditLogsPage() {
     }
   );
 
+  /** Number of live logs the truncate preview would delete; kept out of the template expression. */
+  const truncateTotalCount = computed(() => Number(truncatePreview.value?.total_found) || 0);
+
   const onExport = async (format = 'csv') => {
     try {
       await auditStore.export(format);
@@ -408,6 +411,7 @@ export function useAdminAuditLogsPage() {
     actorAvatarClass,
     truncateForm,
     truncatePreview,
+    truncateTotalCount,
     truncateLoading,
     showTruncateConfirm,
     previewTruncate,
