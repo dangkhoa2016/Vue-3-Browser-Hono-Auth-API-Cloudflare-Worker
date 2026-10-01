@@ -27,6 +27,9 @@ export const API_ENDPOINTS = {
   PUBLIC_LANGUAGE: '/language',
   LOGIN: '/api/auth/login',
   REFRESH_TOKEN: '/api/auth/refresh_token',
+  // Server-side session revocation. Route name is an open assumption until
+  // BACKEND-API-CONTRACT.vi.md confirms it (see FRONTEND-CONTRACT-ASSUMPTIONS.vi.md).
+  LOGOUT: '/api/auth/logout',
   REGISTER: '/api/user/register',
   PROFILE: '/api/user/profile',
   CHANGE_PASSWORD: '/api/user/change-password',

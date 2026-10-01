@@ -14,6 +14,8 @@ export function useNavbar() {
   const showLanguageDropdown = ref(false);
   const showMobileMenu = ref(false);
   const showLogoutConfirm = ref(false);
+  const isLoggingOut = ref(false);
+  const lastLogoutResult = ref(null);
   const showUserDropdown = ref(false);
   const languageDropdownRef = ref(null);
   const userDropdownRef = ref(null);
@@ -301,18 +303,34 @@ export function useNavbar() {
     showUserDropdown.value = !showUserDropdown.value;
   };
 
-  const handleLoginSuccess = async (response) => {
-    if (response.data) {
-      const { user, access_token, refresh_token, expires_at, refresh_expires_at } = response.data;
+  const handleLogin = () => {
+    // The intent is registered before the request leaves, so a later login always wins over an
+    // earlier one whose response happens to arrive last (review OF-01).
+    return authStore.beginLoginAttempt();
+  };
 
-      authStore.login(user, access_token, refresh_token, expires_at, refresh_expires_at);
-
-      sessionStorage.removeItem('authRequired');
-      sessionStorage.removeItem('intendedRoute');
-      showUserDropdown.value = false;
-
-      modalStore.handleLoginSuccess(response);
+  /**
+   * Reacts to a login the modal already committed.
+   *
+   * The commit itself belongs to the modal, because the modal is what has to wait for it: closing
+   * on a successful HTTP response is what reported a sign-in the session record never accepted. By
+   * the time this runs, `committed` is the store's real `CommitResult`.
+   */
+  const handleLoginSuccess = async (response, context, committed = null) => {
+    if (committed && committed.status !== 'applied' && !committed.memoryOnly) {
+      console.warn('[Navbar] the login response was not committed to the session record', {
+        status: committed.status,
+        reason: committed.reason || authStore.lastCommitReason || null
+      });
+      return false;
     }
+
+    sessionStorage.removeItem('authRequired');
+    sessionStorage.removeItem('intendedRoute');
+    showUserDropdown.value = false;
+
+    modalStore.handleLoginSuccess(response?.data ?? response);
+    return true;
   };
 
   const handleLogout = () => {
@@ -320,12 +338,44 @@ export function useNavbar() {
     showLogoutConfirm.value = true;
   };
 
-  const confirmLogout = () => {
-    authStore.logout();
+  /**
+   * Revokes the session on the backend and always clears local state. The outcome is exposed so
+   * the UI can tell the truth when revocation could not be confirmed (F01).
+   */
+  const confirmLogout = async () => {
+    if (isLoggingOut.value) return null;
+
+    isLoggingOut.value = true;
     showUserDropdown.value = false;
     showLogoutConfirm.value = false;
     showMobileMenu.value = false;
+    sessionStorage.removeItem('authRequired');
+    sessionStorage.removeItem('intendedRoute');
+
+    try {
+      const result = await authStore.logoutRemote();
+      lastLogoutResult.value = result;
+      return result;
+    } finally {
+      isLoggingOut.value = false;
+    }
   };
+
+  const dismissLogoutWarning = () => {
+    lastLogoutResult.value = null;
+  };
+
+  /** Non-empty only when the server session could not be revoked. */
+  const logoutWarningMessage = computed(() => {
+    const result = lastLogoutResult.value;
+
+    if (!result || result.revoked) return '';
+
+    return t(
+      'message.auth.logout_not_revoked',
+      'Signed out on this device only: the server session could not be revoked.'
+    );
+  });
 
   const openLoginModal = () => {
     modalStore.openLogin();
@@ -371,6 +421,9 @@ export function useNavbar() {
     showLanguageDropdown,
     showMobileMenu,
     showLogoutConfirm,
+    isLoggingOut,
+    lastLogoutResult,
+    logoutWarningMessage,
     showUserDropdown,
     showAboutDropdown,
     showMobileAboutMenu,
@@ -428,9 +481,11 @@ export function useNavbar() {
     openAdminDropdown,
     closeAdminDropdown,
     toggleAdminDropdown,
+    handleLogin,
     handleLoginSuccess,
     handleLogout,
     confirmLogout,
+    dismissLogoutWarning,
     openLoginModal,
     openRegisterModal,
     closeModals,

@@ -54,6 +54,23 @@ export function useProfilePage() {
   });
   const { profile, loadingProfile, errorMessage } = storeToRefs(profileStore);
 
+  // Per-kind attempt counters. A response may only touch the page if it still belongs to the
+  // newest request of its kind *and* to the session that issued it (FR6-I). The session check alone
+  // is not enough: two saves of one session would still race, and the second one is the truth.
+  let saveAttempt = 0;
+  let clearPendingEmailAttempt = 0;
+  let passwordAttempt = 0;
+  let fetchAttempt = 0;
+
+  /** True when this response still belongs to the page that asked for it. */
+  const owns = (context) => {
+    try {
+      return authStore.isCurrentContext(context);
+    } catch (_error) {
+      return false;
+    }
+  };
+
   const normalizeText = (value) => String(value || '').trim();
 
   const syncEditFormWithProfile = () => {
@@ -183,6 +200,11 @@ export function useProfilePage() {
       return;
     }
 
+    const attempt = ++saveAttempt;
+    // Everything this operation is allowed to touch is decided here, before the request leaves.
+    const context = authStore.captureContext();
+    const token = authStore.token;
+
     isSavingProfile.value = true;
 
     try {
@@ -191,35 +213,82 @@ export function useProfilePage() {
         email: normalizeText(editForm.value.email)
       };
 
-      const saveResult = await profileStore.saveProfile(authStore.token, payload);
+      const saveResult = await profileStore.saveProfile(token, payload, {
+        isCurrent: () => owns(context),
+        operationId: attempt,
+        currentOperationId: () => attempt
+      });
+
+      if (saveResult.stale) {
+        // The session or the request was replaced while the server was working. Nothing is applied
+        // and nothing is announced: the page the user is looking at now had nothing to do with it.
+        return { applied: false, reason: saveResult.reason || 'superseded-request' };
+      }
+
       if (!saveResult.success) {
         throw new Error(saveResult.error || t('message.errors.something_went_wrong'));
       }
 
-      if (authStore.user) {
-        authStore.user = {
+      if (!owns(context) || attempt !== saveAttempt) {
+        return { applied: false, reason: 'superseded-request' };
+      }
+
+      // The profile goes through the canonical record as a `profile` write, not as a direct
+      // assignment. Writing `user` on its own left the record stale, so the next rotation rebuilt
+      // the session from the old profile and silently undid the change (review R5-B).
+      //
+      // The `user` is built from the *response*, not from the cache and not from whatever the store
+      // holds now: a later response may already have changed it.
+      const saved = saveResult.data || {};
+      const commit = authStore.user
+        ? await authStore.updateSessionUser({
           ...authStore.user,
-          full_name: profile.value.full_name,
-          email: profile.value.email,
-          new_email: profile.value.new_email
-        };
-        localStorage.setItem('user', JSON.stringify(authStore.user));
+          full_name: saved.full_name ?? payload.full_name,
+          email: saved.email ?? payload.email,
+          new_email: saved.new_email ?? null
+        }, context)
+        : { status: 'skipped', reason: 'no-session' };
+
+      if (!owns(context) || attempt !== saveAttempt) {
+        return { applied: false, reason: 'superseded-request' };
       }
 
       isEditing.value = false;
+
+      // The server and the device are two different systems, and the UI must not claim they agree
+      // when only one of them did. A commit that was refused or degraded is reported as its own
+      // outcome instead of as success (FR6-I).
+      const commitApplied = commit.status === 'applied' || commit.memoryOnly === true;
+
+      if (!commitApplied) {
+        toastStore.error(t('message.profile.update_success_local_failed'));
+        return { applied: false, serverSaved: true, commit, reason: commit.reason || 'local-commit-refused' };
+      }
+
       const serverMessage = saveResult?.message;
       toastStore.success(serverMessage || t('message.profile.update_success'));
+      return { applied: true, serverSaved: true, commit };
     } catch (err) {
+      if (!owns(context) || attempt !== saveAttempt) {
+        // An error for a request the page has already replaced is not this page's error to show.
+        return { applied: false, reason: 'superseded-request' };
+      }
+
       const message = extractErrorMessage(err, t('message.errors.something_went_wrong'));
       toastStore.error(message);
 
       if (err?.response?.status === 401) {
-        authStore.logout();
+        void authStore.logout();
         markUnauthenticated();
         openLoginModal();
       }
+
+      return { applied: false, reason: 'error', error: err };
     } finally {
-      isSavingProfile.value = false;
+      // Only the attempt that still owns the flag may clear it.
+      if (attempt === saveAttempt) {
+        isSavingProfile.value = false;
+      }
     }
   };
 
@@ -228,35 +297,73 @@ export function useProfilePage() {
       return;
     }
 
+    const attempt = ++clearPendingEmailAttempt;
+    const context = authStore.captureContext();
+    const token = authStore.token;
+    const pendingEmail = profile.value.new_email;
+
     isClearingPendingEmail.value = true;
 
     try {
-      const clearResult = await profileStore.clearPendingEmail(authStore.token);
+      const clearResult = await profileStore.clearPendingEmail(token, {
+        isCurrent: () => owns(context),
+        operationId: attempt,
+        currentOperationId: () => attempt
+      });
+
+      if (clearResult.stale) {
+        return { applied: false, reason: clearResult.reason || 'superseded-request' };
+      }
+
       if (!clearResult.success) {
         throw new Error(clearResult.error || t('message.errors.something_went_wrong'));
       }
 
-      if (authStore.user) {
-        authStore.user = {
+      if (!owns(context) || attempt !== clearPendingEmailAttempt) {
+        return { applied: false, reason: 'superseded-request' };
+      }
+
+      const cleared = clearResult.data || {};
+      const commit = authStore.user
+        ? await authStore.updateSessionUser({
           ...authStore.user,
-          new_email: profile.value.new_email
-        };
-        localStorage.setItem('user', JSON.stringify(authStore.user));
+          new_email: Object.prototype.hasOwnProperty.call(cleared, 'new_email') ? cleared.new_email : null
+        }, context)
+        : { status: 'skipped', reason: 'no-session' };
+
+      if (!owns(context) || attempt !== clearPendingEmailAttempt) {
+        return { applied: false, reason: 'superseded-request' };
+      }
+
+      const commitApplied = commit.status === 'applied' || commit.memoryOnly === true;
+
+      if (!commitApplied) {
+        toastStore.error(t('message.profile.clear_pending_email_local_failed'));
+        return { applied: false, serverSaved: true, commit, reason: commit.reason || 'local-commit-refused' };
       }
 
       const serverMessage = clearResult?.message;
       toastStore.success(serverMessage || t('message.profile.pending_email_cleared'));
+      return { applied: true, serverSaved: true, commit };
     } catch (err) {
+      if (!owns(context) || attempt !== clearPendingEmailAttempt) {
+        return { applied: false, reason: 'superseded-request' };
+      }
+
       const message = extractErrorMessage(err, t('message.profile.clear_pending_email_failed'));
       toastStore.error(message);
 
       if (err?.response?.status === 401) {
-        authStore.logout();
+        void authStore.logout();
         markUnauthenticated();
         openLoginModal();
       }
+
+      return { applied: false, reason: 'error', error: err };
     } finally {
-      isClearingPendingEmail.value = false;
+      if (attempt === clearPendingEmailAttempt) {
+        isClearingPendingEmail.value = false;
+      }
     }
   };
 
@@ -274,38 +381,77 @@ export function useProfilePage() {
       return;
     }
 
+    const attempt = ++passwordAttempt;
+    const context = authStore.captureContext();
+    const token = authStore.token;
+
     isSavingPassword.value = true;
 
     try {
-      const passwordResult = await profileStore.changePassword(authStore.token, {
+      const passwordResult = await profileStore.changePassword(token, {
         currentPassword,
         newPassword,
         confirmPassword
+      }, {
+        isCurrent: () => owns(context),
+        operationId: attempt,
+        currentOperationId: () => attempt
       });
+
+      if (passwordResult.stale) {
+        return { applied: false, reason: passwordResult.reason || 'superseded-request' };
+      }
 
       if (!passwordResult.success) {
         throw new Error(passwordResult.error || t('message.errors.something_went_wrong'));
       }
 
+      if (!owns(context) || attempt !== passwordAttempt) {
+        return { applied: false, reason: 'superseded-request' };
+      }
+
       const serverMessage = passwordResult?.message;
       toastStore.success(serverMessage || t('message.profile.password_change_success'));
       cancelChangingPassword();
+      return { applied: true, serverSaved: true };
     } catch (err) {
+      if (!owns(context) || attempt !== passwordAttempt) {
+        return { applied: false, reason: 'superseded-request' };
+      }
+
       const message = extractErrorMessage(err, t('message.profile.password_change_failed'));
       toastStore.error(message);
 
       if (err?.response?.status === 401) {
-        authStore.logout();
+        void authStore.logout();
         markUnauthenticated();
         openLoginModal();
       }
+
+      return { applied: false, reason: 'error', error: err };
     } finally {
-      isSavingPassword.value = false;
+      if (attempt === passwordAttempt) {
+        isSavingPassword.value = false;
+      }
     }
   };
 
   const fetchProfileData = async () => {
-    const fetchResult = await profileStore.fetchProfile(authStore.token);
+    const attempt = ++fetchAttempt;
+    const context = authStore.captureContext();
+    const token = authStore.token;
+
+    const fetchResult = await profileStore.fetchProfile(token, {
+      isCurrent: () => owns(context),
+      operationId: attempt,
+      currentOperationId: () => attempt
+    });
+
+    if (fetchResult.stale || !owns(context) || attempt !== fetchAttempt) {
+      // A profile that belongs to a session this page no longer has must not land in this page's
+      // form. The stale guard in the transport already stopped the request; this stops the *result*.
+      return;
+    }
 
     if (fetchResult.success) {
       syncEditFormWithProfile();
@@ -324,14 +470,14 @@ export function useProfilePage() {
           responseData?.message === 'Invalid or malformed authentication token'
         )
       ) {
-        errorMessage.value = t('message.auth.relogin_required_reason', 'Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.');
-        authStore.logout();
+        errorMessage.value = t('message.auth.relogin_required_reason');
+        void authStore.logout();
         markUnauthenticated();
         openLoginModal();
       } else {
-        errorMessage.value = errorValue || 'Failed to load profile';
+        errorMessage.value = errorValue || t('message.profile.load_failed');
         if (responseStatus === 401) {
-          authStore.logout();
+          void authStore.logout();
           markUnauthenticated();
           openLoginModal();
         }

@@ -84,6 +84,7 @@
       <!-- Submit Button -->
       <button
         type="submit"
+        data-testid="login-submit"
         :disabled="isLoading"
         :class="submitButtonClass"
       >

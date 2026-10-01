@@ -1,0 +1,19 @@
+{
+  "name": "frontend-remediation-verification",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Verification-only manifest. The application itself ships no build step and no npm dependencies; this file exists so the harness can use the exact third-party versions the browser loads from the CDN (tools/check-cdn-pins.cjs enforces that they stay in step).",
+  "type": "module",
+  "scripts": {
+    "test:static": "node ../tools/vue-file-size-check.cjs && node ../tools/vue-custom-lint.cjs && node ../tools/vue-script-setup-coverage.cjs && node ../tools/i18n.js check",
+    "test:unit": "node --test regression/*.test.mjs",
+    "test:loopback": "node --test regression/loopback-transport.test.mjs",
+    "test:browser": "playwright test --config browser/playwright.config.mjs",
+    "test:browser:install": "playwright install chromium",
+    "test:all": "npm run test:static && npm run test:unit && npm run test:browser && npm run test:loopback"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.64.1",
+    "axios": "1.20.0"
+  }
+}

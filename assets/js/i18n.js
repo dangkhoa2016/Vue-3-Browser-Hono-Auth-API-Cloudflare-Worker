@@ -40,7 +40,7 @@ function setI18nLanguage(lang) {
     i18n.global.locale.value = lang;
   }
   document.querySelector('html').setAttribute('lang', lang);
-  localStorage.setItem('user-locale', lang);
+  try { localStorage.setItem('user-locale', lang); } catch (_error) { /* Language remains usable without persistence. */ }
   return lang;
 }
 
@@ -87,7 +87,8 @@ export async function loadLanguageAsync(lang) {
   }
 }
 export function detectBrowserLanguage() {
-  const savedLang = localStorage.getItem('user-locale');
+  let savedLang = null;
+  try { savedLang = localStorage.getItem('user-locale'); } catch (_error) { /* Use browser language. */ }
   if (savedLang) {
     return savedLang;
   }
