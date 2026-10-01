@@ -3,6 +3,7 @@ import { DEFAULT_ADMIN_PAGE_SIZE, resolveAdminPageSize } from '../constants/pagi
 import { apiClient, API_ENDPOINTS, DATA_PATHS } from '../api.js';
 import { useMainStore } from './mainStore.js';
 import { i18n } from '../i18n.js';
+import { captureContext, isCurrentContext } from '../api/apiIdentity.js';
 
 const getDefaultAdminLimit = () => {
   try {
@@ -154,6 +155,10 @@ export const useAuditStore = defineStore('audit', {
     },
 
     async export(format = 'csv') {
+      const context = captureContext();
+      const requireCurrent = () => {
+        if (!isCurrentContext(context)) throw Object.assign(new Error('Stale audit export'), {stale:true});
+      };
       try {
         const mainStore = useMainStore();
         if (mainStore.mockApi) {
@@ -173,15 +178,32 @@ export const useAuditStore = defineStore('audit', {
         };
 
         const res = await apiClient.get(API_ENDPOINTS.AUDIT_EXPORT, { params, responseType: 'blob' });
-        const blob = new Blob([res.data], { type: res.headers['content-type'] || 'text/csv' });
-        const filename = res.headers['content-disposition'] ? res.headers['content-disposition'].split('filename=')[1] : `audit_export.${format}`;
+        requireCurrent();
+        const type = String(res.headers?.['content-type'] || '').split(';')[0].trim().toLowerCase();
+        const allowed = format === 'json' ? ['application/json'] : format === 'csv' ? ['text/csv', 'application/csv'] : [];
+        if (!allowed.includes(type)) throw new Error('Unexpected audit export content type');
+        const blob = new Blob([res.data], { type });
+        const text = await blob.text();
+        requireCurrent();
+        if (!text.trim() || /^\s*</.test(text)) throw new Error('Invalid audit export body');
+        if (format === 'json') {
+          const payload = JSON.parse(text);
+          if (!payload || typeof payload !== 'object' || payload.success === false || payload.error) {
+            throw new Error('Invalid audit export JSON');
+          }
+        }
+        const disposition = String(res.headers?.['content-disposition'] || '');
+        const suppliedName = /filename\s*=\s*(?:"([^"]+)"|([^;]+))/i.exec(disposition);
+        const filename = (suppliedName?.[1] || suppliedName?.[2] || `audit_export.${format}`).trim().split(/[\\/]/).pop();
         const link = document.createElement('a');
         link.href = window.URL.createObjectURL(blob);
-        link.download = filename.replace(/"/g, '');
+        link.download = filename || `audit_export.${format}`;
         document.body.appendChild(link);
         link.click();
         link.remove();
+        setTimeout(() => window.URL.revokeObjectURL(link.href), 0);
       } catch (err) {
+        if (!isCurrentContext(context)) throw Object.assign(new Error('Stale audit export'), {stale:true});
         console.error('[AuditStore] export failed', err);
         throw err;
       }

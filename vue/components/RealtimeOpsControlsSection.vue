@@ -13,28 +13,28 @@
           <button
             type="button"
             class="rounded-xl border border-slate-200 dark:border-slate-700 px-4 py-3 text-left text-sm font-semibold text-slate-700 dark:text-slate-200 hover:border-cyan-400 hover:text-cyan-600 dark:hover:text-cyan-300 transition"
-            $emit('create-rule')
+            @click="$emit('create-rule')"
           >
             {{ tf('message.realtime_monitoring.create_rule', 'Create Rule') }}
           </button>
           <button
             type="button"
             class="rounded-xl border border-slate-200 dark:border-slate-700 px-4 py-3 text-left text-sm font-semibold text-slate-700 dark:text-slate-200 hover:border-cyan-400 hover:text-cyan-600 dark:hover:text-cyan-300 transition"
-            $emit('create-channel')
+            @click="$emit('create-channel')"
           >
             {{ tf('message.realtime_monitoring.create_channel', 'Create Channel') }}
           </button>
           <button
             type="button"
             class="rounded-xl border border-slate-200 dark:border-slate-700 px-4 py-3 text-left text-sm font-semibold text-slate-700 dark:text-slate-200 hover:border-cyan-400 hover:text-cyan-600 dark:hover:text-cyan-300 transition"
-            $emit('test-alerts')
+            @click="$emit('test-alerts')"
           >
             {{ tf('message.realtime_monitoring.test_alerts', 'Test Alerts') }}
           </button>
           <button
             type="button"
             class="rounded-xl border border-slate-200 dark:border-slate-700 px-4 py-3 text-left text-sm font-semibold text-slate-700 dark:text-slate-200 hover:border-cyan-400 hover:text-cyan-600 dark:hover:text-cyan-300 transition"
-            $emit('clear-cache')
+            @click="$emit('clear-cache')"
           >
             {{ tf('message.realtime_monitoring.clear_cache', 'Clear Cache') }}
           </button>

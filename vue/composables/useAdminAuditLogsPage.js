@@ -1,4 +1,5 @@
 import { watch, ref, computed } from 'vue';
+import { captureContext, isCurrentContext } from '/assets/js/api/apiIdentity.js';
 import { DEFAULT_ADMIN_PAGE_SIZE, resolveAdminPageSize } from '/assets/js/constants/pagination.js';
 import { useAuditStore } from '/assets/js/stores/auditStore.js';
 import { useMainStore } from '/assets/js/stores/mainStore.js';
@@ -291,10 +292,13 @@ export function useAdminAuditLogsPage() {
   const truncateTotalCount = computed(() => Number(truncatePreview.value?.total_found) || 0);
 
   const onExport = async (format = 'csv') => {
+    const context = captureContext();
     try {
       await auditStore.export(format);
+      if (!isCurrentContext(context)) return;
       showToast('Export started', 'success');
     } catch (err) {
+      if (!isCurrentContext(context) || err?.stale) return;
       console.error('Export failed', err);
       showToast('Export failed', 'error');
     }

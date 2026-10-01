@@ -52,7 +52,7 @@
                     class="rounded-full px-3 py-1 text-xs font-bold uppercase transition"
                     :class="item.enabled ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300' : 'bg-slate-200 text-slate-700 dark:bg-slate-700 dark:text-slate-200'"
                     :disabled="rulesLoading || actionLoading"
-                    $emit('toggle', item)
+                    @click="$emit('toggle', item)"
                   >
                     {{ item.enabled ? tf('message.realtime_monitoring.enabled', 'Enabled') : tf('message.realtime_monitoring.disabled', 'Disabled') }}
                   </button>

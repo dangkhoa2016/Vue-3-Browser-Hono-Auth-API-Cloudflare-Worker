@@ -12,7 +12,7 @@
     <button @click="$emit('refresh')" :disabled="isLoading || isExtrasLoading" class="inline-flex items-center gap-2 px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 text-sm font-medium transition-all disabled:opacity-50">
           <i class="bi bi-arrow-clockwise" :class="{'animate-spin': isLoading}"></i> <span class="hidden sm:inline">{{ $t('message.advanced_audit.common.reload') }}</span>
         </button>
-        <button @click="$emit('request-pdf')" :disabled="isLoading" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl text-sm font-bold transition-colors shadow-lg shadow-indigo-200 dark:shadow-none inline-flex items-center gap-2 disabled:opacity-50">
+        <button @click="$emit('request-pdf')" :disabled="isLoading || !store.isPdfExportSupported" :title="store.isPdfExportSupported ? '' : $t('message.advanced_audit.export_pdf_unsupported')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl text-sm font-bold transition-colors shadow-lg shadow-indigo-200 dark:shadow-none inline-flex items-center gap-2 disabled:opacity-50">
           <i class="bi bi-file-earmark-pdf"></i>{{ $t('message.advanced_audit.compliance.request_full_pdf') }}</button>
       </div>
     </div>

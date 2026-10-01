@@ -1,5 +1,6 @@
 const { defineStore } = Pinia;
 import { apiClient } from '../api.js';
+import { sanitizeEnvComparison } from '../api/backendContract.js';
 
 export const useKvAdminEnvComparisonStore = defineStore('kvAdminEnvComparison', {
   state: () => ({
@@ -35,8 +36,8 @@ export const useKvAdminEnvComparisonStore = defineStore('kvAdminEnvComparison', 
           };
         }
 
-        this.comparison = response.data?.data?.comparison || {};
-        this.summary = response.data?.data?.summary || {};
+        this.comparison = sanitizeEnvComparison(response.data?.data?.comparison);
+        this.summary = this.buildSummary(response.data?.data?.summary);
         this.lastUpdated = new Date().toISOString();
 
         return {
@@ -55,6 +56,18 @@ export const useKvAdminEnvComparisonStore = defineStore('kvAdminEnvComparison', 
       } finally {
         this.isLoading = false;
       }
+    },
+
+    buildSummary(summary) {
+      const source = summary && typeof summary === 'object' && !Array.isArray(summary) ? summary : {};
+      const entries = Object.entries(this.comparison);
+
+      return {
+        total: Number.isFinite(source.total) ? source.total : entries.length,
+        fromKV: Number.isFinite(source.fromKV) ? source.fromKV : entries.filter(([, item]) => item.source === 'kv').length,
+        fromEnv: Number.isFinite(source.fromEnv) ? source.fromEnv : entries.filter(([, item]) => item.source === 'env').length,
+        fromDefault: Number.isFinite(source.fromDefault) ? source.fromDefault : entries.filter(([, item]) => item.source === 'default').length
+      };
     }
   }
 });
