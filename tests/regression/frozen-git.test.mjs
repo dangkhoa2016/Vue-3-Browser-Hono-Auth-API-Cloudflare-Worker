@@ -1,0 +1,20 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {mkdtempSync,mkdirSync,writeFileSync,existsSync,rmSync} from 'node:fs';
+import {tmpdir} from 'node:os';
+import {join} from 'node:path';
+import {execFileSync} from 'node:child_process';
+import * as gate from '../../tools/browser-gate-env.mjs';
+test('frozen Git metadata ignores transient source index locks and owns its index',t=>{
+ const root=mkdtempSync(join(tmpdir(),'frozen-git-'));t.after(()=>rmSync(root,{recursive:true,force:true}));
+ const source=join(root,'source'),target=join(root,'copy');mkdirSync(source);mkdirSync(target);
+ const git=(...args)=>execFileSync('git',['-C',source,...args],{encoding:'utf8'}).trim();
+ git('init','-q');writeFileSync(join(source,'file'),'baseline');git('add','file');
+ git('-c','user.name=fixture','-c','user.email=fixture@example.test','commit','-qm','baseline');
+ writeFileSync(join(source,'.git/index.lock'),'another process');
+ assert.equal(typeof gate.copyGitMetadata,'function');gate.copyGitMetadata(source,target);
+ assert.equal(existsSync(join(target,'.git/index.lock')),false);
+ assert.equal(execFileSync('git',['-C',target,'rev-parse','HEAD'],{encoding:'utf8'}).trim(),git('rev-parse','HEAD'));
+ execFileSync('git',['-C',target,'status','--porcelain']);
+ assert.equal(existsSync(join(source,'.git/index.lock')),true);
+});

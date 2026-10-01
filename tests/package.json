@@ -5,12 +5,18 @@
   "description": "Verification-only manifest. The application itself ships no build step and no npm dependencies; this file exists so the harness can use the exact third-party versions the browser loads from the CDN (tools/check-cdn-pins.cjs enforces that they stay in step).",
   "type": "module",
   "scripts": {
-    "test:static": "node ../tools/vue-file-size-check.cjs && node ../tools/vue-custom-lint.cjs && node ../tools/vue-script-setup-coverage.cjs && node ../tools/i18n.js check",
+    "test:static": "node ../tools/vue-file-size-check.cjs && node ../tools/vue-custom-lint.cjs && node ../tools/vue-script-setup-coverage.cjs && node ../tools/i18n.js check && node ../tools/check-cdn-pins.cjs && node ../tools/validate-reports.mjs",
     "test:unit": "node --test regression/*.test.mjs",
     "test:loopback": "node --test regression/loopback-transport.test.mjs",
     "test:browser": "playwright test --config browser/playwright.config.mjs",
     "test:browser:install": "playwright install chromium",
-    "test:all": "npm run test:static && npm run test:unit && npm run test:browser && npm run test:loopback"
+    "test:integration": "playwright test --config browser/playwright.integration.config.mjs",
+    "test:all": "npm run test:static && npm run test:unit && npm run test:browser && npm run test:history",
+    "setup:verification": "node ../tools/prepare-history-checkpoints.mjs",
+    "pretest:unit": "npm run setup:verification",
+    "pretest:static": "npm run setup:verification",
+    "reports:refresh": "node ../tools/refresh-source-comparisons.mjs",
+    "test:history": "node ../tools/check-history.mjs"
   },
   "devDependencies": {
     "@playwright/test": "1.64.1",
