@@ -60,9 +60,7 @@ export function useAdminAdvancedAuditPage() {
   };
 
   const resetCachedData = () => {
-    auditStore.analytics = null;
-    auditStore.compliance = null;
-    auditStore.archival = null;
+    auditStore.resetContext('audit-page-reset');
   };
 
   const { showLoginRequired, openLoginModal, ensureAuthenticated, handleAuthStateChange } = useAuthGate({
@@ -146,12 +144,22 @@ export function useAdminAdvancedAuditPage() {
   };
 
   const handleRequestPdf = async () => {
+    if (!auditStore.isPdfExportSupported) {
+      toastStore.error(tf('message.advanced_audit.export_pdf_unsupported', 'PDF export is not verified by this backend.'));
+      return;
+    }
+
     try {
       await auditStore.exportAdvanced({ format: 'pdf', type: 'compliance' });
-      alert('Compliance PDF export initiated successfully!');
+      toastStore.success(tf('message.advanced_audit.export_pdf_started', 'Compliance PDF export requested.'));
+      await refreshData();
     } catch (error) {
-      console.error('Export failed:', error);
-      alert(`PDF Export failed: ${error.response?.data?.error || error.message}`);
+      if (error?.isUnsupported) {
+        toastStore.error(tf('message.advanced_audit.export_pdf_unsupported', 'PDF export is not verified by this backend.'));
+        return;
+      }
+
+      toastStore.error(buildApiErrorMessage(error, 'PDF export failed'));
     }
   };
 

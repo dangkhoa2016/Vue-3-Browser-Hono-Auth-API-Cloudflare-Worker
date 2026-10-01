@@ -1,4 +1,5 @@
-import { ref } from 'vue';
+import { computed, ref, watch } from 'vue';
+import { useSessionContextWatch } from './useSessionContextWatch.js';
 
 /**
  * Custom composable to handle route/page level authentication gating.
@@ -33,6 +34,21 @@ export function useAuthGate(options) {
   if (autoInit && authStore && typeof authStore.init === 'function') {
     authStore.init();
   }
+
+  /**
+   * Watches the session context, not the `isAuthenticated` boolean. A→B while both are signed in
+   * never flips that boolean, so a page would otherwise keep the protected caches of the previous
+   * user or of the previous API server (review OF-01/OF-08).
+   */
+  const sessionContextKey = computed(() => authStore
+    ? [authStore.apiIdentity || '', authStore.sessionId || '', authStore.sessionGeneration ?? 0].join('|')
+    : '');
+
+  useSessionContextWatch(() => {
+    if (typeof resetProtectedState === 'function') {
+      resetProtectedState();
+    }
+  }, { authStore });
 
   /**
    * Internal mechanism to explicitly shift the user context back to unauthenticated.
@@ -134,6 +150,7 @@ export function useAuthGate(options) {
     openLoginModal,
     ensureAuthenticated,
     handleAuthStateChange,
-    markUnauthenticated
+    markUnauthenticated,
+    sessionContextKey
   };
 }

@@ -36,11 +36,20 @@ export function useKvAdminEnvComparisonPage() {
     })
   });
 
-  const formatValue = (val) => {
-    if (val === null || val === undefined) return t('message.kv_admin_page.env_comparison.value_none') || '- none -';
-    if (typeof val === 'object') return JSON.stringify(val);
-    if (val === '') return t('message.kv_admin_page.env_comparison.value_empty_string') || '"" (Empty string)';
-    return String(val);
+  const formatValue = (entry) => {
+    if (!entry || typeof entry !== 'object') return t('message.kv_admin_page.env_comparison.value_none') || '- none -';
+
+    if (entry.configured === false) {
+      return t('message.kv_admin_page.env_comparison.value_empty_string') || '"" (Empty string)';
+    }
+
+    if (entry.masked) return entry.masked;
+
+    if (entry.configured === true) {
+      return tf('message.kv_admin_page.env_comparison.value_not_disclosed', 'Configured (value not disclosed)');
+    }
+
+    return t('message.kv_admin_page.env_comparison.value_none') || '- none -';
   };
 
   const filteredKeys = computed(() => {
@@ -56,10 +65,9 @@ export function useKvAdminEnvComparisonPage() {
         if (key.toLowerCase().includes(term)) return true;
 
         const item = comparison.value[key];
-        const kvStr = typeof item.kv === 'object' && item.kv !== null ? JSON.stringify(item.kv) : String(item.kv ?? '');
-        const envStr = typeof item.env === 'object' && item.env !== null ? JSON.stringify(item.env) : String(item.env ?? '');
+        const searchable = [item.source, formatValue(item.kv), formatValue(item.env)].join(' ').toLowerCase();
 
-        return kvStr.toLowerCase().includes(term) || envStr.toLowerCase().includes(term);
+        return searchable.includes(term);
       });
     }
 

@@ -1,5 +1,13 @@
 {
   "success": true,
+  "capabilities": {
+    "exportJson": true,
+    "exportCsv": true,
+    "exportPdf": false,
+    "exportExcel": false,
+    "exportEncryption": false,
+    "exportCompression": false
+  },
   "data": {
     "overview": {
       "timeframe": "24h",

@@ -17,8 +17,8 @@
       :confirm-button-class="enabled
         ? 'bg-rose-600 hover:bg-rose-700 focus:ring-rose-500'
         : 'bg-emerald-600 hover:bg-emerald-700 focus:ring-emerald-500'"
-      $emit('confirm')
-      $emit('cancel')
+      @confirm="$emit('confirm')"
+      @cancel="$emit('cancel')"
     />
 </template>
 
