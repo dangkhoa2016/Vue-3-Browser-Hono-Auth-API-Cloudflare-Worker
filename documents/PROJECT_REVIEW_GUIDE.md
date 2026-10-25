@@ -102,6 +102,6 @@ Use this checklist before approving a non-trivial change:
 
 ---
 
-[Read this document in Vietnamese](PROJECT_REVIEW_GUIDE_vi.md)
+[Read this document in Vietnamese](PROJECT_REVIEW_GUIDE.vi.md)
 
 [Back to Documentation Index](DOCUMENTATION_INDEX.md)

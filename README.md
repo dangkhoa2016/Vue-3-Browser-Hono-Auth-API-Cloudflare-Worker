@@ -26,15 +26,25 @@ This project is a Vue 3 web application that provides an admin interface for aut
 ## Technologies Used
 - [Vue 3](https://vuejs.org/)
 - [Vue Router](https://router.vuejs.org/)
-- [Pinia](https://pinia.vuejs.org/) (if used)
-- [Axios](https://axios-http.com/) (if used)
+- [Pinia](https://pinia.vuejs.org/)
+- [Axios](https://axios-http.com/)
 - [Cloudflare Workers](https://workers.cloudflare.com/)
 - [Hono](https://hono.dev/)
 
 ## Getting Started
-1. No build step is required (browser-only project).
-2. Open `index.html` with Live Server or any static server to run the app.
-3. Configure API endpoints and authentication as needed.
+
+Use Node.js 24 for the optional local server and verification tools. The Vue application has no build step.
+
+```bash
+# Start the Hono backend separately on localhost:8787, then:
+node tools/dev-local.mjs
+```
+
+Open **http://localhost:4173**. This server selects the real local API through `/backend/` and disables mock mode for that origin. Your backend provisions accounts; fixture credentials are not deployment credentials.
+
+For UI exploration with sample data, serve this directory with a static server and use the API settings to select mock mode. The runtime loads pinned libraries from CDN, so the browser needs Internet access. Authentication requires Web Locks and readable/writable localStorage in an HTTPS secure context or localhost.
+
+Read [support and verification](documents/VERIFICATION_AND_RELEASES.md), [staging deployment](STAGING.vi.md), [contribution rules](CONTRIBUTING.md) and [curated history](HISTORY.md).
 
 ## i18n Tools (EN/VI Supported)
 The app runtime is browser-only. Node.js is only needed optionally for CLI quality scripts in `tools/` (not for building/running the UI).
@@ -59,7 +69,7 @@ node tools/i18n.js usage --locale=vi
 node tools/i18n.js check
 ```
 
-Optional CI (GitHub Actions only) is available at `.github/workflows/i18n-check.yml` and runs `node tools/i18n.js check` on push/PR when i18n-related files change. This is separate from local browser runtime.
+Locale CI (GitHub Actions) is available at `.github/workflows/i18n-check.yml` and runs `node tools/i18n.js check` on push/PR when i18n-related files change. This is separate from local browser runtime.
 
 ## Quality Guard
 
@@ -86,18 +96,20 @@ node tools/vue-file-size-check.cjs --page-limit=600 --component-limit=450
 The application ships no dependencies and no build step. The verification harness is a **separate
 manifest** in `tests/`, so the app itself stays dependency-free.
 
-Tested on **Node v20.19.0**; the commands use an explicit `regression/*.test.mjs` glob, so suite
+Use **Node.js 24** for verification (the CI runtime); the commands use an explicit `regression/*.test.mjs` glob, so suite
 discovery does not depend on the runner's directory-discovery behaviour.
 
 ```bash
 # one-time, from the repository root
 npm --prefix tests ci --ignore-scripts --no-audit --no-fund
-npx --prefix tests playwright install chromium
+npm --prefix tests run setup:verification
+npm --prefix tests exec -- playwright install chromium
 
 # gates (each is also available on its own)
 npm --prefix tests run test:static    # size / lint / script-setup / i18n / CDN pins
 npm --prefix tests run test:unit      # every tests/regression/*.test.mjs suite
 npm --prefix tests run test:loopback  # real Axios against a loopback server
+npm --prefix tests run test:history   # dependencies in every curated snapshot
 npm --prefix tests run test:browser   # Playwright + Chromium, mock API only
 
 # every gate above, in order, failing on the first problem
@@ -130,7 +142,7 @@ passed.
 - Settings, i18n, and quality: `documents/SETTINGS_I18N_AND_QUALITY.md`
 
 ## Contribution
-This is a sample admin project. You can fork and develop additional features or improve the project structure.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for branch, test and review requirements. The complete GitHub Actions gate covers static checks, unit/loopback, Chromium and history integrity. Historical evidence is restored offline from a pinned bundle; see [HISTORY.md](HISTORY.md).
 
 ## Icon License and Attribution
 

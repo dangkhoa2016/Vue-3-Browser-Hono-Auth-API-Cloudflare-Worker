@@ -78,6 +78,6 @@ Before merging modernization changes:
 
 ---
 
-[Read this document in Vietnamese](FRONTEND_ARCHITECTURE_BOUNDARIES_vi.md)
+[Read this document in Vietnamese](FRONTEND_ARCHITECTURE_BOUNDARIES.vi.md)
 
 [Back to Documentation Index](DOCUMENTATION_INDEX.md)

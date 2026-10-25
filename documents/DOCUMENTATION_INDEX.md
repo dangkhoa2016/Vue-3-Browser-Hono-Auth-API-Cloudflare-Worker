@@ -45,4 +45,4 @@ This is the main entry point for documentation inside `documents/`. Use it when 
 
 ---
 
-[Read this document in Vietnamese](DOCUMENTATION_INDEX_vi.md)
+[Read this document in Vietnamese](DOCUMENTATION_INDEX.vi.md)

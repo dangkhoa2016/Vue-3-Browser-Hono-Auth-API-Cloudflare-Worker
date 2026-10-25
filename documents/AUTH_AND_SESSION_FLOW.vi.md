@@ -2,7 +2,7 @@
 
 > 🌐 Language / Ngôn ngữ: [English](AUTH_AND_SESSION_FLOW.md) | **Tiếng Việt**
 
-[Quay lại Mục Lục Tài Liệu](DOCUMENTATION_INDEX_vi.md)
+[Quay lại Mục Lục Tài Liệu](DOCUMENTATION_INDEX.vi.md)
 
 Tài liệu này giải thích cách login state, refresh token, route protection, và reauthentication hoạt động xuyên suốt ứng dụng.
 
@@ -108,4 +108,4 @@ Thiết kế này ngăn việc gọi lặp lại các request với token không
 
 [Đọc tài liệu này bằng tiếng Anh](AUTH_AND_SESSION_FLOW.md)
 
-[Quay lại Mục Lục Tài Liệu](DOCUMENTATION_INDEX_vi.md)
+[Quay lại Mục Lục Tài Liệu](DOCUMENTATION_INDEX.vi.md)

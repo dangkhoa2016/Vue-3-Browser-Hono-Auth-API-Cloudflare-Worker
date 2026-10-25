@@ -1,0 +1,86 @@
+name: Frontend quality
+
+on:
+  push:
+    branches: [main, master, 'review/**']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: frontend-quality-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  static-unit:
+    name: Static and unit
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: tests/package-lock.json
+      - run: npm --prefix tests ci --ignore-scripts --no-audit --no-fund
+      - name: Static checks and historical evidence
+        run: npm --prefix tests run test:static > "$RUNNER_TEMP/frontend-static.log" 2>&1
+      - name: Unit and loopback transport tests
+        run: npm --prefix tests run test:unit > "$RUNNER_TEMP/frontend-unit.log" 2>&1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: static-unit-${{ github.sha }}
+          path: ${{ runner.temp }}/frontend-*.log
+          retention-days: 14
+
+  history:
+    name: History integrity
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: node tools/check-history.mjs
+      - run: git fsck --full --no-dangling
+
+  browser:
+    name: Chromium
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: tests/package-lock.json
+      - run: npm --prefix tests ci --ignore-scripts --no-audit --no-fund
+      - run: npm --prefix tests exec -- playwright install --with-deps chromium
+      - name: Pin expected served source
+        run: |
+          node --input-type=module <<'JS' >> "$GITHUB_ENV"
+          import { buildManifest } from './tools/frontend-source-identity.mjs';
+          console.log(`FRONTEND_SERVED_DIGEST=${buildManifest(process.cwd()).digest}`);
+          JS
+      - run: npm --prefix tests run test:browser > "$RUNNER_TEMP/frontend-browser.log" 2>&1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: chromium-${{ github.sha }}
+          path: ${{ runner.temp }}/frontend-browser.log
+          retention-days: 14

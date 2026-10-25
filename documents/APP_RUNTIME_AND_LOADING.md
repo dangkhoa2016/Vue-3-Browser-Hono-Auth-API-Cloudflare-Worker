@@ -98,6 +98,6 @@ This pattern reduces direct `window.*` coupling, but it still depends on correct
 
 ---
 
-[Read this document in Vietnamese](APP_RUNTIME_AND_LOADING_vi.md)
+[Read this document in Vietnamese](APP_RUNTIME_AND_LOADING.vi.md)
 
 [Back to Documentation Index](DOCUMENTATION_INDEX.md)

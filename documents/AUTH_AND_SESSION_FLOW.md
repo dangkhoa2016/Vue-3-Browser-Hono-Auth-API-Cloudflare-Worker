@@ -106,6 +106,6 @@ This design prevents repeated invalid-token calls after the session is no longer
 
 ---
 
-[Read this document in Vietnamese](AUTH_AND_SESSION_FLOW_vi.md)
+[Read this document in Vietnamese](AUTH_AND_SESSION_FLOW.vi.md)
 
 [Back to Documentation Index](DOCUMENTATION_INDEX.md)

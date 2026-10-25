@@ -108,6 +108,6 @@ Bulk edit mode supports:
 
 ---
 
-[Read this document in Vietnamese](KV_ADMIN_CONFIGS_WORKFLOW_vi.md)
+[Read this document in Vietnamese](KV_ADMIN_CONFIGS_WORKFLOW.vi.md)
 
 [Back to Documentation Index](DOCUMENTATION_INDEX.md)

@@ -110,6 +110,6 @@ It is easy for review to focus only on templates and miss the store and orchestr
 
 ---
 
-[Read this document in Vietnamese](ADMIN_AUDIT_AND_ADVANCED_AUDIT_vi.md)
+[Read this document in Vietnamese](ADMIN_AUDIT_AND_ADVANCED_AUDIT.vi.md)
 
 [Back to Documentation Index](DOCUMENTATION_INDEX.md)

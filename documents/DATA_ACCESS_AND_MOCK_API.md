@@ -123,6 +123,6 @@ This parity matters because the admin realtime monitoring page now depends on fe
 
 ---
 
-[Read this document in Vietnamese](DATA_ACCESS_AND_MOCK_API_vi.md)
+[Read this document in Vietnamese](DATA_ACCESS_AND_MOCK_API.vi.md)
 
 [Back to Documentation Index](DOCUMENTATION_INDEX.md)

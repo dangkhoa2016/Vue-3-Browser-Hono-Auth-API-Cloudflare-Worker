@@ -125,6 +125,6 @@ This makes the dashboard useful, but it also means the page can grow quickly bec
 
 ---
 
-[Read this document in Vietnamese](REALTIME_MONITORING_AND_DASHBOARD_vi.md)
+[Read this document in Vietnamese](REALTIME_MONITORING_AND_DASHBOARD.vi.md)
 
 [Back to Documentation Index](DOCUMENTATION_INDEX.md)

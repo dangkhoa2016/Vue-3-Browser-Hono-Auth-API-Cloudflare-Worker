@@ -121,6 +121,6 @@ These are lightweight guardrails, not full lint or type systems. They are especi
 
 ---
 
-[Read this document in Vietnamese](SETTINGS_I18N_AND_QUALITY_vi.md)
+[Read this document in Vietnamese](SETTINGS_I18N_AND_QUALITY.vi.md)
 
 [Back to Documentation Index](DOCUMENTATION_INDEX.md)

@@ -2,7 +2,7 @@
 
 > 🌐 Language / Ngôn ngữ: [English](DATA_ACCESS_AND_MOCK_API.md) | **Tiếng Việt**
 
-[Quay lại Mục Lục Tài Liệu](DOCUMENTATION_INDEX_vi.md)
+[Quay lại Mục Lục Tài Liệu](DOCUMENTATION_INDEX.vi.md)
 
 Tài liệu này mô tả lớp vận chuyển API dùng chung, cấu hình endpoint runtime, hành vi retry, và mock backend được frontend sử dụng.
 
@@ -117,12 +117,12 @@ Riêng với realtime monitoring, mock mode hiện bao phủ cả nhóm endpoint
 
 ## 9. Tài Liệu Nên Đọc Kèm
 
-1. [Luồng Xác Thực Và Phiên Làm Việc](AUTH_AND_SESSION_FLOW_vi.md)
-2. [Cài Đặt, I18n, Và Công Cụ Chất Lượng](SETTINGS_I18N_AND_QUALITY_vi.md)
-3. [Giám Sát Thời Gian Thực Và Dashboard](REALTIME_MONITORING_AND_DASHBOARD_vi.md)
+1. [Luồng Xác Thực Và Phiên Làm Việc](AUTH_AND_SESSION_FLOW.vi.md)
+2. [Cài Đặt, I18n, Và Công Cụ Chất Lượng](SETTINGS_I18N_AND_QUALITY.vi.md)
+3. [Giám Sát Thời Gian Thực Và Dashboard](REALTIME_MONITORING_AND_DASHBOARD.vi.md)
 
 ---
 
 [Đọc tài liệu này bằng tiếng Anh](DATA_ACCESS_AND_MOCK_API.md)
 
-[Quay lại Mục Lục Tài Liệu](DOCUMENTATION_INDEX_vi.md)
+[Quay lại Mục Lục Tài Liệu](DOCUMENTATION_INDEX.vi.md)

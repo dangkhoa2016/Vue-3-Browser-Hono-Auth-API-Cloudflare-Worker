@@ -2,7 +2,7 @@
 
 > 🌐 Language / Ngôn ngữ: [English](ADMIN_AUDIT_AND_ADVANCED_AUDIT.md) | **Tiếng Việt**
 
-[Quay lại Mục Lục Tài Liệu](DOCUMENTATION_INDEX_vi.md)
+[Quay lại Mục Lục Tài Liệu](DOCUMENTATION_INDEX.vi.md)
 
 Tài liệu này mô tả cụm tính năng audit dưới hai lớp: trang thao tác audit log chuẩn và khu vực advanced audit cho analytics, compliance, và archival action.
 
@@ -104,12 +104,12 @@ Rất dễ khi review chỉ nhìn template mà bỏ sót rủi ro ở lớp stor
 
 ## 9. Tài Liệu Liên Quan
 
-1. [Luồng Xác Thực Và Phiên Làm Việc](AUTH_AND_SESSION_FLOW_vi.md)
-2. [Truy Cập Dữ Liệu Và Mock API](DATA_ACCESS_AND_MOCK_API_vi.md)
-3. [Hướng Dẫn Review Dự Án](PROJECT_REVIEW_GUIDE_vi.md)
+1. [Luồng Xác Thực Và Phiên Làm Việc](AUTH_AND_SESSION_FLOW.vi.md)
+2. [Truy Cập Dữ Liệu Và Mock API](DATA_ACCESS_AND_MOCK_API.vi.md)
+3. [Hướng Dẫn Review Dự Án](PROJECT_REVIEW_GUIDE.vi.md)
 
 ---
 
 [Đọc tài liệu này bằng tiếng Anh](ADMIN_AUDIT_AND_ADVANCED_AUDIT.md)
 
-[Quay lại Mục Lục Tài Liệu](DOCUMENTATION_INDEX_vi.md)
+[Quay lại Mục Lục Tài Liệu](DOCUMENTATION_INDEX.vi.md)

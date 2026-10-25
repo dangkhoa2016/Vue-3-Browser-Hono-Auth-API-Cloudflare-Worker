@@ -1,0 +1,80 @@
+name: Báo lỗi (Tiếng Việt)
+description: Báo lỗi frontend có thể tái hiện.
+title: '[Bug] '
+body:
+- type: markdown
+  attributes:
+    value: Issue là công khai. Không gửi mật khẩu, token, dữ liệu tài khoản thật, localStorage hoặc HAR chưa che dữ liệu. Báo lỗ hổng riêng theo [SECURITY.md](https://github.com/dangkhoa2016/Vue-3-Browser-Hono-Auth-API-Cloudflare-Worker/blob/main/.github/SECURITY.md).
+- type: input
+  id: revision
+  attributes:
+    label: Commit hoặc tag
+  validations:
+    required: true
+- type: input
+  id: browser
+  attributes:
+    label: Trình duyệt, phiên bản và hệ điều hành
+  validations:
+    required: true
+- type: input
+  id: route
+  attributes:
+    label: Route bị ảnh hưởng
+    description: Chỉ gửi path/hash, không kèm query token hoặc dữ liệu riêng tư.
+  validations:
+    required: true
+- type: dropdown
+  id: environment
+  attributes:
+    label: Môi trường
+    options:
+    - Local
+    - CI
+    - Staging
+    - Production
+    - Khác
+  validations:
+    required: true
+- type: dropdown
+  id: api_mode
+  attributes:
+    label: Chế độ API
+    options:
+    - Mock API
+    - Backend thật
+    - Chưa rõ
+  validations:
+    required: true
+- type: input
+  id: backend_revision
+  attributes:
+    label: Revision backend (nếu biết)
+  validations:
+    required: false
+- type: textarea
+  id: reproduction
+  attributes:
+    label: Các bước tái hiện
+    description: Dùng tài khoản giả; ghi quyền, theme và ngôn ngữ nếu liên quan.
+  validations:
+    required: true
+- type: textarea
+  id: expected
+  attributes:
+    label: Hành vi mong đợi
+  validations:
+    required: true
+- type: textarea
+  id: actual
+  attributes:
+    label: Hành vi thực tế
+  validations:
+    required: true
+- type: textarea
+  id: diagnostics
+  attributes:
+    label: Chẩn đoán và kiểm tra đã chạy
+    description: Chỉ gửi log/ảnh đã che dữ liệu riêng tư. Ghi lệnh, kết quả và phần chưa kiểm chứng.
+  validations:
+    required: false

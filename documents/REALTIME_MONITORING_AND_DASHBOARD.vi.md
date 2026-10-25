@@ -2,7 +2,7 @@
 
 > 🌐 Language / Ngôn ngữ: [English](REALTIME_MONITORING_AND_DASHBOARD.md) | **Tiếng Việt**
 
-[Quay lại Mục Lục Tài Liệu](DOCUMENTATION_INDEX_vi.md)
+[Quay lại Mục Lục Tài Liệu](DOCUMENTATION_INDEX.vi.md)
 
 Tài liệu này mô tả cách tính năng realtime monitoring và admin dashboard lắp ráp dữ liệu, store nào sở hữu state, và những điểm nên tập trung khi review hoặc tối ưu.
 
@@ -120,11 +120,11 @@ Tính năng này vừa quan trọng về vận hành, vừa phức tạp về c�
 
 ## 9. Tài Liệu Liên Quan
 
-1. [Truy Cập Dữ Liệu Và Mock API](DATA_ACCESS_AND_MOCK_API_vi.md)
-2. [Hướng Dẫn Review Dự Án](PROJECT_REVIEW_GUIDE_vi.md)
+1. [Truy Cập Dữ Liệu Và Mock API](DATA_ACCESS_AND_MOCK_API.vi.md)
+2. [Hướng Dẫn Review Dự Án](PROJECT_REVIEW_GUIDE.vi.md)
 
 ---
 
 [Đọc tài liệu này bằng tiếng Anh](REALTIME_MONITORING_AND_DASHBOARD.md)
 
-[Quay lại Mục Lục Tài Liệu](DOCUMENTATION_INDEX_vi.md)
+[Quay lại Mục Lục Tài Liệu](DOCUMENTATION_INDEX.vi.md)
