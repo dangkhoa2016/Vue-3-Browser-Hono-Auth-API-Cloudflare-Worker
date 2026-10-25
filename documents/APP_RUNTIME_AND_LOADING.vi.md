@@ -42,8 +42,9 @@ Nếu đổi thứ tự này, app có thể lỗi sớm do thiếu module hoặc
 ### Hành Vi Cache
 
 - Runtime module cache được xử lý bởi `vue3-sfc-loader`.
-- Browser Cache Storage được dùng trong `init.js` thông qua `SFC_CACHE_NAME`.
-- Cache bị bỏ qua khi chạy localhost và khi URL có `__reload`.
+- Source của component và module do loader tải được kiểm tra lại qua HTTP (`cache: 'no-cache'`) trên mọi origin, kể cả localhost. Retry có `__reload` dùng `no-store`.
+- Nội dung cũ trong `vue-sfc-cache-v2` không được dùng để tải source hoặc dự phòng khi mất mạng. Cách này tránh ghép component cũ với locale/module native mới sau deploy. Tên cache chỉ còn được giữ để dọn cache cũ khi người dùng chủ động retry.
+- Module cache và keep-alive trong bộ nhớ tồn tại trong tài liệu đang mở. Tải lại tab để nhận bản deploy mới; chính sách source này không xóa tùy chọn hay phiên đăng nhập đã lưu. Lỗi mạng/HTTP được hiển thị qua giao diện loader/retry hiện có.
 
 ### Keep-Alive Cấp App
 

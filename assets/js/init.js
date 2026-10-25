@@ -5,6 +5,8 @@ import * as AppServices from '/assets/js/appServices.js';
 const { loadLanguageAsync, detectBrowserLanguage } = I18nModule;
 const { setSfcOptions, setAppServices } = AppServices;
 
+// Kept only for explicit retry cleanup of legacy entries. Source reads never
+// consume this persistent cache: a deployment can change components and locales.
 const SFC_CACHE_NAME = 'vue-sfc-cache-v2';
 
 const options = {
@@ -17,28 +19,17 @@ const options = {
     '/assets/js/appServices.js': AppServices,
   },
   async getFile(url) {
-    let cache, cachedRes;
-
-    const isDevMode = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
     const resolvedUrl = new URL(url, window.location.href);
     const bypassCache = resolvedUrl.searchParams.has('__reload');
 
-    if (window.caches && !isDevMode && !bypassCache) {
-      cache = await caches.open(SFC_CACHE_NAME);
-      cachedRes = await cache.match(url);
-    }
-
-    // Fallback to fetch if not cached, dev mode, or explicit reload.
-    const res = cachedRes || await fetch(url, {
-      cache: isDevMode || bypassCache ? 'no-store' : 'default'
+    // Apply the same freshness policy locally and on deployed origins. Revalidate
+    // HTTP-cached source so a returning browser cannot pair an old SFC with new
+    // native JS/locales. Network failures must surface rather than mix releases.
+    const res = await fetch(url, {
+      cache: bypassCache ? 'no-store' : 'no-cache'
     });
     if (!res.ok)
       throw Object.assign(new Error(res.status + ' ' + res.statusText + ' ' + url), { res });
-
-    // Store successful response to Cache (needs clone() to be read later)
-    if (cache && !cachedRes && !bypassCache) {
-      cache.put(url, res.clone());
-    }
 
     if (url.match(/\.(png|jpe?g|gif|svg|ico|webp)$/i)) {
       return {

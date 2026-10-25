@@ -6,6 +6,26 @@ const BACKEND = 'https://github.com/dangkhoa2016/Hono-Auth-API-Cloudflare-Worker
 
 test.beforeEach(async () => { await control.reset(); });
 
+test('returning browser ignores an obsolete SFC cache without losing preferences', async ({ page }) => {
+  await useLiveApi(page);
+  await page.addInitScript(() => {
+    localStorage.setItem('user-locale', 'en');
+    localStorage.setItem('theme', 'dark');
+  });
+  await page.goto('/');
+  await expect(page.locator('main h1')).toContainText('browser-first');
+  await page.evaluate(async () => {
+    const cache = await caches.open('vue-sfc-cache-v2');
+    await cache.put('/vue/pages/Home.vue', new Response('<template><h1>{{ $t("message.home.hero.title_start") }}</h1></template>'));
+    localStorage.setItem('returning-browser-preference', 'keep');
+  });
+  await page.reload();
+  await expect(page.locator('main h1')).toContainText('browser-first');
+  await expect(page.locator('main')).not.toContainText('message.home.');
+  expect(await page.evaluate(() => localStorage.getItem('returning-browser-preference'))).toBe('keep');
+  await expect(page.locator('html')).toHaveClass(/dark/);
+});
+
 test('architecture and source links explain the two real projects', async ({ page }) => {
   await useLiveApi(page);
   await page.addInitScript(() => localStorage.setItem('user-locale', 'en'));
