@@ -442,25 +442,83 @@ export default {
       unknown_error: 'Lỗi không xác định'
     },
     home: {
-      badge: 'Hono Auth Worker v1.0',
-      cta: {
-        documentation: 'Tài liệu',
-        documentation_title: 'Đọc tài liệu hướng dẫn',
-        get_started: 'Bắt đầu',
-        get_started_title: 'Bắt đầu xây dựng hệ thống xác thực'
+      "eyebrow": "Vue 3 + Hono · Tổng quan kỹ thuật",
+      "hero": {
+        "title": "Giao diện quản trị trên trình duyệt",
+        "emphasis": "Cho Hono và Cloudflare.",
+        "description": "Khám phá giao diện Vue 3 kết nối với API xác thực Hono trên Cloudflare Workers. Tìm hiểu kiến trúc, đọc mã nguồn và trải nghiệm các luồng chức năng của ứng dụng.",
+        "note": "Hai kho mã nguồn. Frontend chạy trên trình duyệt. API triển khai riêng trên Workers."
       },
-      hero: {
-        subtitle: 'Bản mẫu sẵn sàng sản xuất kết hợp Hono.js, cơ sở dữ liệu D1 và xác thực JWT cho các ứng dụng biên hiệu năng cao.',
-        title_emphasis: 'Xác thực tối ưu',
-        title_end: 'cho Cloudflare Workers',
-        title_start: 'Giải pháp'
+      "links": {
+        "frontend": "Mã nguồn frontend",
+        "backend": "Mã nguồn backend",
+        "architecture": "Khám phá kiến trúc"
       },
-      tech: {
-        d1_title: 'Cơ sở dữ liệu SQL không server',
-        edge_title: 'Triển khai mạng biên toàn cầu',
-        heading: 'Vận hành bởi nền tảng hiện đại',
-        hono_title: 'Framework web siêu nhanh',
-        jwt_title: 'Xác thực bảo mật dựa trên token'
+      "diagram": {
+        "title": "Đường đi của yêu cầu",
+        "description": "Kiến trúc: trình duyệt Vue 3 gửi yêu cầu HTTPS dạng JSON đến API Hono trên Cloudflare Workers. API dùng D1 cho dữ liệu quan hệ và Workers KV cho cấu hình.",
+        "browser": "Giao diện trình duyệt",
+        "api": "API và xác thực",
+        "bindings": "Kết nối tài nguyên Workers",
+        "data": "Dữ liệu quan hệ của ứng dụng",
+        "config": "Cấu hình và điều khiển",
+        "note": "Sơ đồ kiến trúc · không phải trạng thái dịch vụ trực tiếp."
+      },
+      "technology": {
+        "title": "Công nghệ và vai trò",
+        "note": "Frontend không cần bước build",
+        "vue": "Thành phần giao diện",
+        "pinia": "Trạng thái ứng dụng",
+        "hono": "Định tuyến API",
+        "workers": "Môi trường chạy tại biên",
+        "d1": "Lưu trữ dữ liệu quan hệ",
+        "kv": "Cấu hình khi vận hành"
+      },
+      "architecture": {
+        "eyebrow": "01 / Kiến trúc",
+        "title": "Từ trình duyệt đến nền tảng biên.",
+        "description": "Ba lớp trách nhiệm kết nối qua HTTP API. Giao diện trình bày các thao tác; backend kiểm soát truy cập và quản lý dữ liệu.",
+        "client_title": "Ứng dụng trình duyệt",
+        "client_body": "Các component Vue được tải ngay trên trình duyệt. Vue Router điều hướng, Pinia quản lý trạng thái và Axios kết nối giao diện với API đã chọn.",
+        "api_title": "API xác thực",
+        "api_body": "Các route Hono chạy trên Cloudflare Workers. API kiểm tra yêu cầu, áp dụng quyền theo vai trò và quản lý phiên với access token, refresh token JWT.",
+        "data_title": "Dữ liệu và cấu hình",
+        "data_body": "D1 lưu dữ liệu quan hệ của ứng dụng. Workers KV cung cấp cấu hình khi vận hành, với các thao tác quản trị được thực hiện qua API."
+      },
+      "capabilities": {
+        "eyebrow": "02 / Chức năng",
+        "title": "Các luồng chức năng đã có.",
+        "description": "Khám phá từng nhóm chức năng qua các trang chuyên biệt. Các tính năng quản trị yêu cầu quyền tài khoản tương ứng.",
+        "users_title": "Người dùng và vai trò",
+        "users_body": "Quản lý hồ sơ người dùng, xem thông tin tài khoản và sử dụng các mức quyền user, admin, super_admin.",
+        "audit_title": "Nhật ký và bảo mật",
+        "audit_body": "Xem nhật ký kiểm toán, hoạt động token và sự cố bảo mật qua bộ lọc và màn hình chi tiết.",
+        "monitoring_title": "Giám sát và chẩn đoán",
+        "monitoring_body": "Theo dõi tình trạng hệ thống, thống kê, giám sát thời gian thực và cấu hình cảnh báo tại các trang quản trị riêng.",
+        "config_title": "Quản lý cấu hình",
+        "config_body": "Xem cấu hình KV, so sánh môi trường và quản lý giới hạn tần suất với quyền super_admin."
+      },
+      "source": {
+        "eyebrow": "03 / Khám phá mã nguồn",
+        "title": "Hai kho mã nguồn. Trách nhiệm rõ ràng.",
+        "description": "Bắt đầu từ giao diện hoặc theo một yêu cầu xuống backend. Tài liệu trình bày cách ứng dụng chạy, luồng xác thực và cấu trúc dự án.",
+        "client_label": "Client / Trình duyệt",
+        "client_body": "Các trang, component dùng lại, store trạng thái, bản dịch và bộ công cụ kiểm chứng riêng.",
+        "server_label": "Server / Workers",
+        "server_body": "Route xác thực, phân quyền, dịch vụ dữ liệu, cấu hình và kết nối tài nguyên Cloudflare.",
+        "docs": "Mục lục tài liệu",
+        "runtime": "Cách frontend vận hành",
+        "auth": "Luồng xác thực"
+      },
+      "explore": {
+        "eyebrow": "04 / Trải nghiệm",
+        "title": "Từ mã nguồn đến ứng dụng.",
+        "description": "Xem thông tin API công khai hoặc thiết lập kết nối. Đăng nhập để mở các trang được bảo vệ; thao tác khả dụng phụ thuộc vai trò tài khoản.",
+        "health": "Tình trạng API",
+        "version": "Phiên bản API",
+        "settings": "Thiết lập API",
+        "profile": "Mở hồ sơ của bạn",
+        "sign_in": "Đăng nhập"
       }
     },
     auth: {

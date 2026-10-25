@@ -34,7 +34,9 @@ The checkpoint bundle and raw evidence are intentionally excluded from source sn
 
 ## Publication boundary
 
-The root commit message was rewritten, so this curated branch has a different root from the current published main. Review it directly as a replacement history. A normal merge would retain both old and curated histories, and is not the publication method for this rewrite. Replacing main requires a separate explicit owner decision, backup verification and a controlled protection-rule change; this maintenance leaves main unchanged. Use ordinary PRs for subsequent work after choosing the maintained lineage.
+The root commit message was rewritten, so this curated lineage has a different root from the previous main. A normal merge would retain both histories and is not the publication method for this rewrite.
+
+On **2026-10-25**, the owner authorized replacing main after the technical home redesign and verification. The exact previous main, `240165f756afd156f150f4722e309c1beeabb7ad`, is preserved on [`archive/frontend-main-before-cutover-20261025`](https://github.com/dangkhoa2016/Vue-3-Browser-Hono-Auth-API-Cloudflare-Worker/tree/archive/frontend-main-before-cutover-20261025). Publication uses an explicit expected-SHA lease and a controlled protection-rule change, followed by protection restoration and verification. Use ordinary PRs for subsequent work on the maintained lineage.
 
 ## Maintenance policy
 

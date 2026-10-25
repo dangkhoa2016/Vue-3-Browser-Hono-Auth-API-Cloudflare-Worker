@@ -1,5 +1,7 @@
 <template>
   <ModalWindow
+    manage-focus
+    initial-focus="#email"
     :show="show"
     :title="$t('message.auth.login')"
     :subtitle="$t('message.auth.login_subtitle')"

@@ -442,25 +442,83 @@ export default {
       unknown_error: '알 수 없는 오류'
     },
     home: {
-      badge: 'Hono Auth Worker v1.0',
-      cta: {
-        documentation: '문서',
-        documentation_title: '문서 읽기',
-        get_started: '시작하기',
-        get_started_title: '인증 시스템 구축 시작'
+      "eyebrow": "Vue 3 + Hono · 기술 개요",
+      "hero": {
+        "title": "브라우저에서 사용하는 관리 콘솔",
+        "emphasis": "Hono와 Cloudflare를 위해.",
+        "description": "Cloudflare Workers의 Hono 인증 API에 연결된 Vue 3 관리 화면을 살펴보세요. 아키텍처를 이해하고 소스 코드를 읽으며 실제 기능 흐름을 체험할 수 있습니다.",
+        "note": "두 개의 저장소. 브라우저에서 실행되는 프런트엔드. 별도로 배포되는 Workers API."
       },
-      hero: {
-        subtitle: 'Hono.js, D1 데이터베이스, JWT 인증을 결합한 고성능 엣지 애플리케이션용 프로덕션 지원 보일러플레이트.',
-        title_emphasis: '인증 솔루션',
-        title_end: '클라우드플레어 Workers용',
-        title_start: '최고의'
+      "links": {
+        "frontend": "프런트엔드 소스",
+        "backend": "백엔드 소스",
+        "architecture": "아키텍처 살펴보기"
       },
-      tech: {
-        d1_title: '서버리스 SQL 데이터베이스',
-        edge_title: '글로벌 엣지 네트워크 배포',
-        heading: '최신 스택으로 구동',
-        hono_title: '초고속 웹 프레임워크',
-        jwt_title: '보안 토큰 기반 인증'
+      "diagram": {
+        "title": "요청 경로",
+        "description": "아키텍처: Vue 3 브라우저가 HTTPS JSON 요청을 Cloudflare Workers의 Hono API에 보냅니다. API는 관계형 데이터에 D1을, 설정에 Workers KV를 사용합니다.",
+        "browser": "브라우저 인터페이스",
+        "api": "API 및 인증",
+        "bindings": "Workers 바인딩",
+        "data": "애플리케이션 관계형 데이터",
+        "config": "설정 및 제어",
+        "note": "아키텍처 개요이며 실시간 서비스 상태 표시는 아닙니다."
+      },
+      "technology": {
+        "title": "기술과 역할",
+        "note": "프런트엔드 빌드 단계 없음",
+        "vue": "인터페이스 컴포넌트",
+        "pinia": "애플리케이션 상태",
+        "hono": "API 라우팅",
+        "workers": "엣지 실행 환경",
+        "d1": "관계형 저장소",
+        "kv": "런타임 설정"
+      },
+      "architecture": {
+        "eyebrow": "01 / 아키텍처",
+        "title": "브라우저에서 엣지까지.",
+        "description": "HTTP API로 연결된 세 가지 역할입니다. 화면은 작업 흐름을 제공하고 백엔드는 접근 제어와 데이터 관리를 담당합니다.",
+        "client_title": "브라우저 애플리케이션",
+        "client_body": "Vue 단일 파일 컴포넌트를 브라우저에서 불러옵니다. Vue Router는 탐색을, Pinia는 상태를 관리하며 Axios는 선택한 API에 연결합니다.",
+        "api_title": "인증 API",
+        "api_body": "Hono 라우트가 Cloudflare Workers에서 실행됩니다. API는 요청 검증, 역할 기반 접근 제어, JWT 액세스 및 갱신 세션을 관리합니다.",
+        "data_title": "데이터와 설정",
+        "data_body": "D1은 애플리케이션의 관계형 데이터를 저장합니다. Workers KV는 런타임 설정을 제공하며 관리 작업은 API를 통해 수행됩니다."
+      },
+      "capabilities": {
+        "eyebrow": "02 / 기능",
+        "title": "인터페이스가 연결하는 기능.",
+        "description": "구현된 기능을 전용 화면에서 살펴보세요. 관리 기능에는 해당 계정 권한이 필요합니다.",
+        "users_title": "사용자와 역할",
+        "users_body": "사용자 정보와 프로필을 관리하고 user, admin, super_admin 접근 수준을 다룹니다.",
+        "audit_title": "감사와 보안",
+        "audit_body": "필터와 상세 화면으로 감사 기록, 토큰 활동, 보안 사고를 확인합니다.",
+        "monitoring_title": "모니터링과 진단",
+        "monitoring_body": "전용 관리 화면에서 시스템 상태, 통계, 실시간 모니터링과 알림 제어를 살펴봅니다.",
+        "config_title": "설정 관리",
+        "config_body": "super_admin 권한으로 KV 설정을 확인하고 환경을 비교하며 요청 빈도 제한을 관리합니다."
+      },
+      "source": {
+        "eyebrow": "03 / 소스 살펴보기",
+        "title": "두 개의 저장소. 명확한 역할.",
+        "description": "인터페이스부터 시작하거나 요청을 따라 백엔드까지 살펴보세요. 문서는 실행 환경, 인증 흐름과 프로젝트 구조를 설명합니다.",
+        "client_label": "클라이언트 / 브라우저",
+        "client_body": "페이지, 재사용 컴포넌트, 상태 스토어, 번역과 별도의 검증 도구를 포함합니다.",
+        "server_label": "서버 / Workers",
+        "server_body": "인증 라우트, 권한 제어, 데이터 서비스, 설정과 Cloudflare 바인딩을 포함합니다.",
+        "docs": "문서 목록",
+        "runtime": "브라우저 실행 환경",
+        "auth": "인증 흐름"
+      },
+      "explore": {
+        "eyebrow": "04 / 체험하기",
+        "title": "코드에서 콘솔로.",
+        "description": "공개 API 정보를 살펴보거나 연결을 설정하세요. 보호된 페이지는 로그인이 필요하며 사용 가능한 작업은 계정 역할에 따라 달라집니다.",
+        "health": "API 상태",
+        "version": "API 버전",
+        "settings": "API 설정",
+        "profile": "내 프로필 열기",
+        "sign_in": "로그인"
       }
     },
     auth: {

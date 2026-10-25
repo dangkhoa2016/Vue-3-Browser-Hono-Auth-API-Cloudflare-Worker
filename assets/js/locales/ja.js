@@ -442,25 +442,83 @@ export default {
       unknown_error: '不明なエラー'
     },
     home: {
-      badge: 'Hono Auth Worker v1.0',
-      cta: {
-        documentation: 'ドキュメント',
-        documentation_title: 'ドキュメントを読む',
-        get_started: 'はじめる',
-        get_started_title: '認証システムの構築を開始'
+      "eyebrow": "Vue 3 + Hono · 技術概要",
+      "hero": {
+        "title": "ブラウザで使う管理コンソール",
+        "emphasis": "Hono と Cloudflare のために。",
+        "description": "Cloudflare Workers 上の Hono 認証 API と連携する Vue 3 管理画面です。アーキテクチャを確認し、ソースコードを読み、各機能の流れを体験できます。",
+        "note": "2つのリポジトリ。ブラウザで動くフロントエンド。独立した Workers API。"
       },
-      hero: {
-        subtitle: 'Hono.js、D1データベース、JWT認証を組み合わせた、高性能エッジアプリケーション用の本番対応ボイラープレート。',
-        title_emphasis: '認証ソリューション',
-        title_end: 'クラウドフレア Workers向け',
-        title_start: '究極の'
+      "links": {
+        "frontend": "フロントエンドのソース",
+        "backend": "バックエンドのソース",
+        "architecture": "アーキテクチャを見る"
       },
-      tech: {
-        d1_title: 'サーバーレスSQLデータベース',
-        edge_title: 'グローバルエッジネットワーク展開',
-        heading: '最新スタックで動作',
-        hono_title: '超高速ウェブフレームワーク',
-        jwt_title: 'セキュアトークンベース認証'
+      "diagram": {
+        "title": "リクエストの経路",
+        "description": "構成図：Vue 3 ブラウザから HTTPS の JSON リクエストを Cloudflare Workers 上の Hono API に送信し、API はリレーショナルデータに D1、設定に Workers KV を使用します。",
+        "browser": "ブラウザ画面",
+        "api": "API と認証",
+        "bindings": "Workers のバインディング",
+        "data": "アプリのリレーショナルデータ",
+        "config": "設定と制御",
+        "note": "アーキテクチャ概要です。稼働状況のリアルタイム表示ではありません。"
+      },
+      "technology": {
+        "title": "技術と役割",
+        "note": "フロントエンドのビルド不要",
+        "vue": "画面コンポーネント",
+        "pinia": "アプリの状態管理",
+        "hono": "API ルーティング",
+        "workers": "エッジ実行環境",
+        "d1": "リレーショナルストレージ",
+        "kv": "実行時設定"
+      },
+      "architecture": {
+        "eyebrow": "01 / アーキテクチャ",
+        "title": "ブラウザからエッジへ。",
+        "description": "HTTP API でつながる3つの役割。画面は操作を提供し、バックエンドはアクセス制御とデータ管理を担います。",
+        "client_title": "ブラウザアプリ",
+        "client_body": "Vue の単一ファイルコンポーネントをブラウザで読み込みます。Vue Router が画面遷移を、Pinia が状態を管理し、Axios が選択した API に接続します。",
+        "api_title": "認証 API",
+        "api_body": "Hono のルートを Cloudflare Workers 上で実行します。API はリクエスト検証、ロールによるアクセス制御、JWT のアクセス・リフレッシュセッションを管理します。",
+        "data_title": "データと設定",
+        "data_body": "D1 はアプリのリレーショナルデータを保存します。Workers KV は実行時設定を提供し、管理操作は API を通して行います。"
+      },
+      "capabilities": {
+        "eyebrow": "02 / 機能",
+        "title": "画面からつながる機能。",
+        "description": "実装済みの機能を専用画面で確認できます。管理機能には対応するアカウント権限が必要です。",
+        "users_title": "ユーザーとロール",
+        "users_body": "ユーザー情報やプロフィールを管理し、user、admin、super_admin の権限レベルを扱います。",
+        "audit_title": "監査とセキュリティ",
+        "audit_body": "フィルターと詳細画面で監査履歴、トークンの操作、セキュリティインシデントを確認します。",
+        "monitoring_title": "監視と診断",
+        "monitoring_body": "専用の管理画面でシステムの稼働情報、統計、リアルタイム監視、アラート設定を確認します。",
+        "config_title": "設定管理",
+        "config_body": "super_admin 権限で KV 設定を確認し、環境を比較し、レート制限を管理します。"
+      },
+      "source": {
+        "eyebrow": "03 / ソースコード",
+        "title": "2つのリポジトリ。明確な役割。",
+        "description": "画面から読み始めることも、リクエストをバックエンドまでたどることもできます。ドキュメントでは実行環境、認証フロー、構成を説明しています。",
+        "client_label": "クライアント / ブラウザ",
+        "client_body": "ページ、再利用コンポーネント、状態ストア、翻訳、独立した検証ツールを収録しています。",
+        "server_label": "サーバー / Workers",
+        "server_body": "認証ルート、認可、データサービス、設定、Cloudflare バインディングを収録しています。",
+        "docs": "ドキュメント一覧",
+        "runtime": "ブラウザ実行環境",
+        "auth": "認証フロー"
+      },
+      "explore": {
+        "eyebrow": "04 / 体験する",
+        "title": "コードからコンソールへ。",
+        "description": "公開 API 情報の確認や接続設定から始められます。保護されたページにはログインが必要で、操作はアカウントのロールに応じて利用できます。",
+        "health": "API の稼働情報",
+        "version": "API バージョン",
+        "settings": "API 設定",
+        "profile": "プロフィールを開く",
+        "sign_in": "ログイン"
       }
     },
     auth: {

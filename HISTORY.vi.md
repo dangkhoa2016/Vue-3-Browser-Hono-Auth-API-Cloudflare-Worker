@@ -34,7 +34,9 @@ Bundle và raw evidence được loại khỏi source snapshot để tránh hash
 
 ## Ranh giới công bố
 
-Message của commit gốc đã được biên tập nên nhánh này có root khác main hiện tại. Hãy review trực tiếp như một lịch sử thay thế. Merge thông thường sẽ giữ cả lịch sử cũ lẫn mới, không phải cách công bố bản rewrite này. Thay main cần quyết định riêng của owner, kiểm tra backup và điều chỉnh bảo vệ nhánh có kiểm soát; lượt bảo trì này giữ nguyên main. Sau khi chọn lineage được duy trì, các thay đổi tiếp theo dùng PR bình thường.
+Message của commit gốc đã được biên tập nên lịch sử này có root khác main trước đây. Merge thông thường sẽ giữ cả hai lịch sử, không phải cách công bố bản rewrite này.
+
+Ngày **25/10/2026**, owner đã đồng ý thay main sau khi hoàn thiện và kiểm chứng trang chủ kỹ thuật. Main trước đó, chính xác tại `240165f756afd156f150f4722e309c1beeabb7ad`, được giữ ở [`archive/frontend-main-before-cutover-20261025`](https://github.com/dangkhoa2016/Vue-3-Browser-Hono-Auth-API-Cloudflare-Worker/tree/archive/frontend-main-before-cutover-20261025). Việc công bố dùng lease ghim SHA cũ và điều chỉnh bảo vệ nhánh có kiểm soát, sau đó khôi phục và kiểm tra lại bảo vệ. Các thay đổi tiếp theo trên lịch sử được duy trì dùng PR bình thường.
 
 ## Duy trì về sau
 
