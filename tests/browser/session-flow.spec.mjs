@@ -76,6 +76,35 @@ test.describe('the session record in a real browser', () => {
     await control.reset();
   });
 
+  test('API explorer replaces loading with a sign-in prompt after login is dismissed', async ({ page }) => {
+    await useLiveApi(page);
+    await page.addInitScript(() => localStorage.setItem('user-locale', 'en'));
+    await page.goto('/#/api-info');
+    const dialog = page.getByRole('dialog', { name: 'Login', exact: true });
+    await expect(dialog).toBeVisible();
+    await dialog.getByRole('button', { name: 'Close', exact: true }).click();
+    await expect(dialog).toHaveCount(0);
+
+    const main = page.locator('main');
+    await expect(main.getByRole('heading', { name: 'Login required', exact: true })).toBeVisible();
+    await expect(main.getByText('Please login to view role-based endpoints.', { exact: true })).toBeVisible();
+    await expect(main.locator('.animate-pulse')).toHaveCount(0);
+    const signInButton = main.getByRole('button', { name: /Login/ });
+    await expect(signInButton).toBeVisible();
+    expect((await apiRequests()).filter(request => request.path === '/api')).toHaveLength(0);
+
+    await signInButton.click();
+    await expect(dialog).toBeVisible();
+    await dialog.getByRole('button', { name: 'Close', exact: true }).click();
+    await expect(main.getByRole('heading', { name: 'Login required', exact: true })).toBeVisible();
+    await signInButton.click();
+    await submitLoginForm(page);
+    await expect(main.getByRole('heading', { name: 'Role-based API Explorer', exact: true })).toBeVisible();
+    await expect(main.getByRole('heading', { name: 'Login required', exact: true })).toHaveCount(0);
+    await expect(main.locator('.animate-pulse')).toHaveCount(0);
+    expect((await apiRequests()).some(request => request.path === '/api')).toBe(true);
+  });
+
   test('a login through the real form writes one canonical record and a matching mirror', async ({ browser }) => {
     const { context, guard } = await newGuardedContext(browser);
     const page = await context.newPage();

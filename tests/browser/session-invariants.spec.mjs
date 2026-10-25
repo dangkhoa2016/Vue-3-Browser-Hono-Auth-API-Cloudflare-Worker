@@ -247,6 +247,11 @@ test.describe('session invariants in a real browser', () => {
     await logoutViaUi(first);
     await waitForRecord(first, isState('ended'), 'ended');
 
+    // The writer has committed, but the other renderer can still be receiving the
+    // storage update. Observe that tab's record before checking its deliberately
+    // disconnected in-memory session; this read does not reconcile the auth store.
+    await waitForRecord(second, isState('ended'), 'ended');
+
     // The record on disk is a tombstone ...
     expect((await readRecord(second)).state).toBe('ended');
     // ... but this tab still shows a session, because nothing told it. That is the proof the previous

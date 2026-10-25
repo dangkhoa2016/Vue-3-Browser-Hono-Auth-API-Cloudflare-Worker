@@ -1,7 +1,7 @@
 <template>
   <div class="max-w-6xl mx-auto space-y-8 py-6">
     <!-- Loading State -->
-    <div v-if="isLoading" class="space-y-4 animate-pulse">
+    <div v-if="isLoading && !showLoginRequired" class="space-y-4 animate-pulse">
       <div class="h-12 bg-gray-200 dark:bg-gray-700 rounded-xl"></div>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div class="h-36 bg-gray-200 dark:bg-gray-700 rounded-2xl"></div>

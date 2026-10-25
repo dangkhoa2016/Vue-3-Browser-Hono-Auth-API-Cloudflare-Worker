@@ -11,7 +11,7 @@ import { useEnsureAuthenticatedLifecycle } from '/vue/composables/useEnsureAuthe
 
 export function useApiExplorerPage() {
   const apiInfo = ref(null);
-  const isLoading = ref(true);
+  const isLoading = ref(false);
   const errorMessage = ref(null);
   const collapsed = ref({});
 
