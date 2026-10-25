@@ -7,7 +7,7 @@
     {
       "fromRunId": "browser-r11-browser-baseline-20260929T085803Z-1",
       "fromDigest": "0a740bc32eb3a29c6e70e1515a673b5b7a7b9283017003d52df36ac0d802c2af",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -76,6 +76,7 @@
         "tests/regression/run-reference.test.mjs",
         "tests/regression/session-rollback.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tests/regression/snapshot-integrity.test.mjs",
         "tests/regression/source-comparisons.test.mjs",
         "tests/regression/validate-reports.test.mjs",
@@ -109,7 +110,7 @@
     {
       "fromRunId": "browser-r11-canaries-20260929T090200Z-1",
       "fromDigest": "1c2d1fa7ea684f361854a217f13b2802fd3c887a8672695de63c92c2a85235aa",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -118,6 +119,7 @@
         "assets/js/api/sessionCoordinator.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -174,6 +176,7 @@
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/run-reference.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tests/regression/snapshot-integrity.test.mjs",
         "tests/regression/source-comparisons.test.mjs",
         "tests/regression/validate-reports.test.mjs",
@@ -207,7 +210,7 @@
     {
       "fromRunId": "browser-r11-canaries-fixed-20260929T090417Z-1",
       "fromDigest": "3408e23b945f8ba320a13649f6c9505e2f6ccb2a004cad0bcbb626570e3d79c3",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -216,6 +219,7 @@
         "assets/js/api/sessionCoordinator.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -269,6 +273,7 @@
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/run-reference.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tests/regression/snapshot-integrity.test.mjs",
         "tests/regression/source-comparisons.test.mjs",
         "tests/regression/validate-reports.test.mjs",
@@ -302,7 +307,7 @@
     {
       "fromRunId": "browser-r11-current-browser-20260929T095227Z-1",
       "fromDigest": "243e8f79acf53cd3dfc1c1417781fbabe4c95b4c4d60b48b10737a60c838a2c5",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -311,6 +316,7 @@
         "assets/js/api/sessionCoordinator.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -363,6 +369,7 @@
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/run-reference.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tests/regression/source-comparisons.test.mjs",
         "tests/regression/validate-reports.test.mjs",
         "tools/browser-gate-env.mjs",
@@ -394,7 +401,7 @@
     {
       "fromRunId": "browser-r11-egress-positive-20260929T095015Z-1",
       "fromDigest": "0b1dc809efc9e3d429b6ba28d50785623a346ff6818a86d6e25b22f271524575",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -403,6 +410,7 @@
         "assets/js/api/sessionCoordinator.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -456,6 +464,7 @@
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/run-reference.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tests/regression/snapshot-integrity.test.mjs",
         "tests/regression/source-comparisons.test.mjs",
         "tests/regression/validate-reports.test.mjs",
@@ -489,7 +498,7 @@
     {
       "fromRunId": "browser-r11-endpoint-20260929T094946Z-1",
       "fromDigest": "0b1dc809efc9e3d429b6ba28d50785623a346ff6818a86d6e25b22f271524575",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -498,6 +507,7 @@
         "assets/js/api/sessionCoordinator.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -551,6 +561,7 @@
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/run-reference.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tests/regression/snapshot-integrity.test.mjs",
         "tests/regression/source-comparisons.test.mjs",
         "tests/regression/validate-reports.test.mjs",
@@ -584,7 +595,7 @@
     {
       "fromRunId": "browser-r11-endpoint-boot-barrier-20260929T095113Z-1",
       "fromDigest": "facdbbf28a2097d84121c4ca0d7d6cc01fab36b74e1e1462ffc564c90518f2ed",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -593,6 +604,7 @@
         "assets/js/api/sessionCoordinator.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -645,6 +657,7 @@
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/run-reference.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tests/regression/source-comparisons.test.mjs",
         "tests/regression/validate-reports.test.mjs",
         "tools/browser-gate-env.mjs",
@@ -676,7 +689,7 @@
     {
       "fromRunId": "browser-r11-export-20260929T100117Z-1",
       "fromDigest": "4aaf9b1eb7b8337b6c0908d306e7f3e5f04c7398119426f97775ee40b98cf799",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -685,6 +698,7 @@
         "assets/js/api/sessionCoordinator.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -736,6 +750,7 @@
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/run-reference.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tests/regression/source-comparisons.test.mjs",
         "tests/regression/validate-reports.test.mjs",
         "tools/browser-gate-env.mjs",
@@ -766,7 +781,7 @@
     {
       "fromRunId": "browser-r11-export-cors-20260929T100206Z-1",
       "fromDigest": "4d1399c53e552dc0904b2c0627d7e53c282f2fcbc3e88e993938814b49210be9",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -775,6 +790,7 @@
         "assets/js/api/sessionCoordinator.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -826,6 +842,7 @@
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/run-reference.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tests/regression/source-comparisons.test.mjs",
         "tests/regression/validate-reports.test.mjs",
         "tools/browser-gate-env.mjs",
@@ -856,7 +873,7 @@
     {
       "fromRunId": "browser-r11-export-ui-20260929T135014Z-1",
       "fromDigest": "3002084685554046b9b24d4a24ad20a158d0d28b2908f76854cdd563f9dba5b6",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -865,6 +882,7 @@
         "assets/js/api/sessionCoordinator.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -909,6 +927,7 @@
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/run-reference.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-cdn-pins.cjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
@@ -932,7 +951,7 @@
     {
       "fromRunId": "browser-r11-history-transport-browser-20260930T132446Z-1",
       "fromDigest": "13ef8627e7a0acfa896f223269d01d55f10561d990d9998026eae7634ad4283d",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -941,6 +960,7 @@
         "assets/js/api/sessionCoordinator.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -978,6 +998,7 @@
         "tests/regression/lock-deadline-contract.test.mjs",
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-cdn-pins.cjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
@@ -998,7 +1019,7 @@
     {
       "fromRunId": "browser-r11-monitoring-browser-20260930T064445Z-1",
       "fromDigest": "d6ff2bbcf13a3fb0833be5651e3a2a80f6673a5e9b85769547bc0f25e548814c",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -1007,6 +1028,7 @@
         "assets/js/api/sessionCoordinator.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -1046,6 +1068,7 @@
         "tests/regression/loopback-transport.test.mjs",
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-cdn-pins.cjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
@@ -1066,7 +1089,7 @@
     {
       "fromRunId": "browser-r11-monitoring-green-20260930T064319Z-1",
       "fromDigest": "9c501b6874477519fb127e1872568c62efba3f968dbc812a56204d7215b6a2a4",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -1075,6 +1098,7 @@
         "assets/js/api/sessionCoordinator.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -1114,6 +1138,7 @@
         "tests/regression/loopback-transport.test.mjs",
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-cdn-pins.cjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
@@ -1134,7 +1159,7 @@
     {
       "fromRunId": "browser-r11-monitoring-incident-red-20260930T064230Z-1",
       "fromDigest": "e5ec7ce32c0877806e50320f4e5e8c393c850fcc5afc5c431c074ee16e904261",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -1143,6 +1168,7 @@
         "assets/js/api/sessionCoordinator.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -1182,6 +1208,7 @@
         "tests/regression/loopback-transport.test.mjs",
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-cdn-pins.cjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
@@ -1204,7 +1231,7 @@
     {
       "fromRunId": "browser-r11-monitoring-red-fixed-20260930T063937Z-1",
       "fromDigest": "94850ff03fd1dba079303c918217cefef6345f93455923b54b0b008903152433",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -1213,6 +1240,7 @@
         "assets/js/api/sessionCoordinator.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -1252,6 +1280,7 @@
         "tests/regression/loopback-transport.test.mjs",
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-cdn-pins.cjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
@@ -1274,7 +1303,7 @@
     {
       "fromRunId": "browser-r11-n9-freeze-browser-20261001T080733Z-1",
       "fromDigest": "8d406ec39aab302589e099ebfdaa065a83f0403c57d6ce5871a72ec09dd56d68",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -1282,6 +1311,7 @@
         "assets/js/api/httpClient.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -1308,6 +1338,7 @@
         "tests/regression/history-links.test.mjs",
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
         "tools/prepare-history-checkpoints.mjs",
@@ -1325,7 +1356,7 @@
     {
       "fromRunId": "browser-r11-profile-browser-20260930T071322Z-1",
       "fromDigest": "1ef3bfcd1b9e82b5b500c63c5e2973ee02c4030c0b6f5287527d3f6baffc23c4",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -1334,6 +1365,7 @@
         "assets/js/api/sessionCoordinator.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -1372,6 +1404,7 @@
         "tests/regression/loopback-transport.test.mjs",
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-cdn-pins.cjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
@@ -1392,7 +1425,7 @@
     {
       "fromRunId": "browser-r11-profile-fixture-20260930T071931Z-1",
       "fromDigest": "0930d9772cfb73fe737f8b2c47b90c3f6d926f26ff23b1ae266b36fa6c19cb3a",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -1401,6 +1434,7 @@
         "assets/js/api/sessionCoordinator.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -1439,6 +1473,7 @@
         "tests/regression/loopback-transport.test.mjs",
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-cdn-pins.cjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
@@ -1459,7 +1494,7 @@
     {
       "fromRunId": "browser-r11-profile-fixture-full-20260930T072041Z-1",
       "fromDigest": "0930d9772cfb73fe737f8b2c47b90c3f6d926f26ff23b1ae266b36fa6c19cb3a",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -1468,6 +1503,7 @@
         "assets/js/api/sessionCoordinator.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -1506,6 +1542,7 @@
         "tests/regression/loopback-transport.test.mjs",
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-cdn-pins.cjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
@@ -1526,7 +1563,7 @@
     {
       "fromRunId": "browser-r11-profile-remount-20260930T064813Z-1",
       "fromDigest": "fcb2195ddb645869c96b733542b037c9427caaeb63e4c8fee7514c64605ad503",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -1535,6 +1572,7 @@
         "assets/js/api/sessionCoordinator.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -1573,6 +1611,7 @@
         "tests/regression/loopback-transport.test.mjs",
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-cdn-pins.cjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
@@ -1593,7 +1632,7 @@
     {
       "fromRunId": "browser-r11-profile-remount-fixed-fixture-20260930T064936Z-1",
       "fromDigest": "e4d82a7adffa623cbe9423a98acf906b3b32cb0dc03216d42782e7bdfdc42155",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -1602,6 +1641,7 @@
         "assets/js/api/sessionCoordinator.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -1640,6 +1680,7 @@
         "tests/regression/loopback-transport.test.mjs",
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-cdn-pins.cjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
@@ -1660,7 +1701,7 @@
     {
       "fromRunId": "browser-r11-ready-browser-20260930T002943Z-1",
       "fromDigest": "ac372d8fe04fc7b41df4d99b7a852bfbf0909f8a500f29e670ceb5bd3f8a015f",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -1669,6 +1710,7 @@
         "assets/js/api/sessionCoordinator.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -1708,6 +1750,7 @@
         "tests/regression/loopback-transport.test.mjs",
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-cdn-pins.cjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
@@ -1730,7 +1773,7 @@
     {
       "fromRunId": "browser-r11-redirect-green-20261001T071037Z-1",
       "fromDigest": "4b2a30aadc0ecee639eccdbc9da0318a404e333c5b2ca6c1ffd24a48253f1817",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -1738,6 +1781,7 @@
         "assets/js/api/httpClient.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -1770,6 +1814,7 @@
         "tests/regression/history-links.test.mjs",
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-cdn-pins.cjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
@@ -1789,7 +1834,7 @@
     {
       "fromRunId": "browser-r11-redirect-red-reviewed-20261001T070932Z-1",
       "fromDigest": "c913d8acda5ad3f1feb8926d992028bbfef06a17f8e7ba071a904b3ff3e6c334",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -1797,6 +1842,7 @@
         "assets/js/api/httpClient.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -1829,6 +1875,7 @@
         "tests/regression/history-links.test.mjs",
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-cdn-pins.cjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
@@ -1848,7 +1895,7 @@
     {
       "fromRunId": "browser-r11-review-browser-green-20261001T071139Z-1",
       "fromDigest": "c00d82a041c2b51da54ceaac6a9d56f9db757bf958cb136ed7ac507daf594fd4",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -1856,6 +1903,7 @@
         "assets/js/api/httpClient.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -1886,6 +1934,7 @@
         "tests/regression/history-links.test.mjs",
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-cdn-pins.cjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
@@ -1905,7 +1954,7 @@
     {
       "fromRunId": "browser-r11-review-browser-pinned-20261001T071802Z-1",
       "fromDigest": "7a9075c9aba9124d0571b2053fd1f706cb9cbe3fc858fb24c9578d2790e73269",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -1913,6 +1962,7 @@
         "assets/js/api/httpClient.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -1943,6 +1993,7 @@
         "tests/regression/history-links.test.mjs",
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
         "tools/prepare-history-checkpoints.mjs",
@@ -1960,7 +2011,7 @@
     {
       "fromRunId": "browser-r11-review-close-start-20261001T073340Z-1",
       "fromDigest": "b50bd872d7996eab66ad5e0c5d4ecf0e94c8f1f3f03f78ac516aca64713fbb88",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -1968,6 +2019,7 @@
         "assets/js/api/httpClient.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -1998,6 +2050,7 @@
         "tests/regression/history-links.test.mjs",
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
         "tools/prepare-history-checkpoints.mjs",
@@ -2015,7 +2068,7 @@
     {
       "fromRunId": "browser-r11-review-closed-browser-20261001T075431Z-1",
       "fromDigest": "b50bd872d7996eab66ad5e0c5d4ecf0e94c8f1f3f03f78ac516aca64713fbb88",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -2023,6 +2076,7 @@
         "assets/js/api/httpClient.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -2053,6 +2107,7 @@
         "tests/regression/history-links.test.mjs",
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
         "tools/prepare-history-checkpoints.mjs",
@@ -2070,7 +2125,7 @@
     {
       "fromRunId": "browser-r11-review-closed-canaries-20261001T075517Z-1",
       "fromDigest": "b50bd872d7996eab66ad5e0c5d4ecf0e94c8f1f3f03f78ac516aca64713fbb88",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -2078,6 +2133,7 @@
         "assets/js/api/httpClient.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -2108,6 +2164,7 @@
         "tests/regression/history-links.test.mjs",
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
         "tools/prepare-history-checkpoints.mjs",
@@ -2125,7 +2182,7 @@
     {
       "fromRunId": "browser-r11-review-final-browser-20261001T071956Z-1",
       "fromDigest": "2b62ef6498109166a31592c518cabaa0f4e1a519f11f30541718c99beea9b193",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -2133,6 +2190,7 @@
         "assets/js/api/httpClient.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -2163,6 +2221,7 @@
         "tests/regression/history-links.test.mjs",
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
         "tools/prepare-history-checkpoints.mjs",
@@ -2180,7 +2239,7 @@
     {
       "fromRunId": "browser-r11-review-final-canaries-20261001T072111Z-1",
       "fromDigest": "2b62ef6498109166a31592c518cabaa0f4e1a519f11f30541718c99beea9b193",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -2188,6 +2247,7 @@
         "assets/js/api/httpClient.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -2218,6 +2278,7 @@
         "tests/regression/history-links.test.mjs",
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
         "tools/prepare-history-checkpoints.mjs",
@@ -2235,7 +2296,7 @@
     {
       "fromRunId": "browser-r11-review-route-drain-20261001T073212Z-1",
       "fromDigest": "b9ceca699b124f3a6aee7bf7aa1f3d111ce88674a65ddfe0b01af109cdda417b",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -2243,6 +2304,7 @@
         "assets/js/api/httpClient.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -2274,6 +2336,7 @@
         "tests/regression/history-links.test.mjs",
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
         "tools/prepare-history-checkpoints.mjs",
@@ -2291,7 +2354,7 @@
     {
       "fromRunId": "browser-r11-review-route-lifecycle-20261001T072830Z-1",
       "fromDigest": "fef2f9a7e32e1664378f46c51b295e5bc20c31016649bff621da03bf041ad033",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -2299,6 +2362,7 @@
         "assets/js/api/httpClient.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -2329,6 +2393,7 @@
         "tests/regression/history-links.test.mjs",
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
         "tools/prepare-history-checkpoints.mjs",
@@ -2346,7 +2411,7 @@
     {
       "fromRunId": "browser-r11-route-disposed-browser-20261001T144235Z-1",
       "fromDigest": "add591bd2ab02152504e1f17753ce41708bf4f3f8a7963913213c13391b0966f",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -2354,6 +2419,7 @@
         "assets/js/api/httpClient.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -2380,6 +2446,7 @@
         "tests/regression/history-links.test.mjs",
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
         "tools/prepare-history-checkpoints.mjs",
@@ -2397,7 +2464,7 @@
     {
       "fromRunId": "browser-r11-singleton-bridge2-20260929T090217Z-1",
       "fromDigest": "1c2d1fa7ea684f361854a217f13b2802fd3c887a8672695de63c92c2a85235aa",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -2406,6 +2473,7 @@
         "assets/js/api/sessionCoordinator.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -2462,6 +2530,7 @@
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/run-reference.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tests/regression/snapshot-integrity.test.mjs",
         "tests/regression/source-comparisons.test.mjs",
         "tests/regression/validate-reports.test.mjs",
@@ -2495,7 +2564,7 @@
     {
       "fromRunId": "browser-r11-singleton-green-20260929T090415Z-1",
       "fromDigest": "3408e23b945f8ba320a13649f6c9505e2f6ccb2a004cad0bcbb626570e3d79c3",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -2504,6 +2573,7 @@
         "assets/js/api/sessionCoordinator.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -2557,6 +2627,7 @@
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/run-reference.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tests/regression/snapshot-integrity.test.mjs",
         "tests/regression/source-comparisons.test.mjs",
         "tests/regression/validate-reports.test.mjs",
@@ -2590,7 +2661,7 @@
     {
       "fromRunId": "browser-r11-singleton-red-20260929T085912Z-1",
       "fromDigest": "92235a98bfdff5f95980fde393348417cdd03532f0169e4fddc274c9937fc515",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -2659,6 +2730,7 @@
         "tests/regression/run-reference.test.mjs",
         "tests/regression/session-rollback.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tests/regression/snapshot-integrity.test.mjs",
         "tests/regression/source-comparisons.test.mjs",
         "tests/regression/validate-reports.test.mjs",
@@ -2692,7 +2764,7 @@
     {
       "fromRunId": "browser-r11-source-freeze-browser-20261001T144404Z-1",
       "fromDigest": "add591bd2ab02152504e1f17753ce41708bf4f3f8a7963913213c13391b0966f",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -2700,6 +2772,7 @@
         "assets/js/api/httpClient.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -2726,6 +2799,7 @@
         "tests/regression/history-links.test.mjs",
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
         "tools/prepare-history-checkpoints.mjs",
@@ -2743,7 +2817,7 @@
     {
       "fromRunId": "browser-r11-source-freeze-canaries-20261001T144607Z-1",
       "fromDigest": "add591bd2ab02152504e1f17753ce41708bf4f3f8a7963913213c13391b0966f",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -2751,6 +2825,7 @@
         "assets/js/api/httpClient.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -2777,6 +2852,7 @@
         "tests/regression/history-links.test.mjs",
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
         "tools/prepare-history-checkpoints.mjs",
@@ -2794,7 +2870,7 @@
     {
       "fromRunId": "browser-r11-stable-browser-20260929T134733Z-1",
       "fromDigest": "ad27f2a93eb2a02ed84d1abafe72baac226682cf76cce866bdf10640f2bd245f",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -2803,6 +2879,7 @@
         "assets/js/api/sessionCoordinator.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -2847,6 +2924,7 @@
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/run-reference.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-cdn-pins.cjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
@@ -2870,7 +2948,7 @@
     {
       "fromRunId": "r11-baseline-loopback-20260929T084652Z-1",
       "fromDigest": "808868816c83e4ecbd5b1a7a8429bcad64b7da698b57bb0d7b412e44515b6557",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -2939,6 +3017,7 @@
         "tests/regression/run-reference.test.mjs",
         "tests/regression/session-rollback.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tests/regression/snapshot-integrity.test.mjs",
         "tests/regression/source-comparisons.test.mjs",
         "tests/regression/source-identity.test.mjs",
@@ -2974,7 +3053,7 @@
     {
       "fromRunId": "r11-baseline-static-20260929T083538Z-1",
       "fromDigest": "808868816c83e4ecbd5b1a7a8429bcad64b7da698b57bb0d7b412e44515b6557",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -3043,6 +3122,7 @@
         "tests/regression/run-reference.test.mjs",
         "tests/regression/session-rollback.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tests/regression/snapshot-integrity.test.mjs",
         "tests/regression/source-comparisons.test.mjs",
         "tests/regression/source-identity.test.mjs",
@@ -3078,7 +3158,7 @@
     {
       "fromRunId": "r11-baseline-unit-20260929T083547Z-1",
       "fromDigest": "808868816c83e4ecbd5b1a7a8429bcad64b7da698b57bb0d7b412e44515b6557",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -3147,6 +3227,7 @@
         "tests/regression/run-reference.test.mjs",
         "tests/regression/session-rollback.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tests/regression/snapshot-integrity.test.mjs",
         "tests/regression/source-comparisons.test.mjs",
         "tests/regression/source-identity.test.mjs",
@@ -3182,7 +3263,7 @@
     {
       "fromRunId": "r11-candidate-loopback-20260929T134135Z-1",
       "fromDigest": "960964f13789d7d100b1970d3a7ccc51c1372d86f55ce752392c30cfc8964355",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -3191,6 +3272,7 @@
         "assets/js/api/sessionCoordinator.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -3238,6 +3320,7 @@
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/run-reference.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tests/regression/validate-reports.test.mjs",
         "tools/browser-gate-env.mjs",
         "tools/check-cdn-pins.cjs",
@@ -3266,7 +3349,7 @@
     {
       "fromRunId": "r11-candidate-static-20260929T134135Z-1",
       "fromDigest": "960964f13789d7d100b1970d3a7ccc51c1372d86f55ce752392c30cfc8964355",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -3275,6 +3358,7 @@
         "assets/js/api/sessionCoordinator.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -3322,6 +3406,7 @@
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/run-reference.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tests/regression/validate-reports.test.mjs",
         "tools/browser-gate-env.mjs",
         "tools/check-cdn-pins.cjs",
@@ -3350,7 +3435,7 @@
     {
       "fromRunId": "r11-candidate-unit-20260929T134135Z-1",
       "fromDigest": "960964f13789d7d100b1970d3a7ccc51c1372d86f55ce752392c30cfc8964355",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -3359,6 +3444,7 @@
         "assets/js/api/sessionCoordinator.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -3406,6 +3492,7 @@
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/run-reference.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tests/regression/validate-reports.test.mjs",
         "tools/browser-gate-env.mjs",
         "tools/check-cdn-pins.cjs",
@@ -3434,7 +3521,7 @@
     {
       "fromRunId": "r11-current-unit-20260929T095220Z-1",
       "fromDigest": "243e8f79acf53cd3dfc1c1417781fbabe4c95b4c4d60b48b10737a60c838a2c5",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -3443,6 +3530,7 @@
         "assets/js/api/sessionCoordinator.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -3495,6 +3583,7 @@
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/run-reference.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tests/regression/source-comparisons.test.mjs",
         "tests/regression/validate-reports.test.mjs",
         "tools/browser-gate-env.mjs",
@@ -3526,7 +3615,7 @@
     {
       "fromRunId": "r11-deadline-review-green-20261001T070456Z-1",
       "fromDigest": "2a41a4d84fa2e8e6efacaca99fa8997fd2370e7e4b5ece805cdb5b430a94e9d9",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -3535,6 +3624,7 @@
         "assets/js/api/sessionCoordinator.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -3571,6 +3661,7 @@
         "tests/regression/history-links.test.mjs",
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-cdn-pins.cjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
@@ -3591,7 +3682,7 @@
     {
       "fromRunId": "r11-deadline-review-green-fixed-20261001T070645Z-1",
       "fromDigest": "152b88b1a5ef8a17a32eaba5afaac8103eb3f749e0ccce295aed31fef323bdfd",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -3599,6 +3690,7 @@
         "assets/js/api/httpClient.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -3634,6 +3726,7 @@
         "tests/regression/history-links.test.mjs",
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-cdn-pins.cjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
@@ -3654,7 +3747,7 @@
     {
       "fromRunId": "r11-deadline-review-red-20261001T070353Z-1",
       "fromDigest": "ea522c3c60622fe147b377ba7e083c8218678200eec9ed06a15b1c36bfb8bed2",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -3663,6 +3756,7 @@
         "assets/js/api/sessionCoordinator.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -3699,6 +3793,7 @@
         "tests/regression/history-links.test.mjs",
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-cdn-pins.cjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
@@ -3719,7 +3814,7 @@
     {
       "fromRunId": "r11-export-context-green-20261001T070827Z-1",
       "fromDigest": "fc9c268536d29c81e7ba9c52a7183ed55fc4b73988a58e4bdef1b6051f6a0326",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -3727,6 +3822,7 @@
         "assets/js/api/httpClient.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -3760,6 +3856,7 @@
         "tests/regression/history-links.test.mjs",
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-cdn-pins.cjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
@@ -3779,7 +3876,7 @@
     {
       "fromRunId": "r11-export-context-red-20261001T070804Z-1",
       "fromDigest": "1c30405f7aac45e91df183adeb992344e208040b3f494c149c7b1c1ff56beb03",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -3787,6 +3884,7 @@
         "assets/js/api/httpClient.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -3821,6 +3919,7 @@
         "tests/regression/history-links.test.mjs",
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-cdn-pins.cjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
@@ -3841,7 +3940,7 @@
     {
       "fromRunId": "r11-harness-direct-pin-green-20261001T071911Z-1",
       "fromDigest": "2b62ef6498109166a31592c518cabaa0f4e1a519f11f30541718c99beea9b193",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -3849,6 +3948,7 @@
         "assets/js/api/httpClient.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -3879,6 +3979,7 @@
         "tests/regression/history-links.test.mjs",
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
         "tools/prepare-history-checkpoints.mjs",
@@ -3896,7 +3997,7 @@
     {
       "fromRunId": "r11-history-transport-green-20260930T132409Z-1",
       "fromDigest": "13ef8627e7a0acfa896f223269d01d55f10561d990d9998026eae7634ad4283d",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -3905,6 +4006,7 @@
         "assets/js/api/sessionCoordinator.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -3942,6 +4044,7 @@
         "tests/regression/lock-deadline-contract.test.mjs",
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-cdn-pins.cjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
@@ -3962,7 +4065,7 @@
     {
       "fromRunId": "r11-history-transport-red-20260930T132347Z-1",
       "fromDigest": "5176a12a0044c0140a4c06b30fd77fde55457fcb77396889b647bc126e0961e1",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -3971,6 +4074,7 @@
         "assets/js/api/sessionCoordinator.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -4008,6 +4112,7 @@
         "tests/regression/lock-deadline-contract.test.mjs",
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-cdn-pins.cjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
@@ -4028,7 +4133,7 @@
     {
       "fromRunId": "r11-history-transport-static-20260930T132446Z-1",
       "fromDigest": "13ef8627e7a0acfa896f223269d01d55f10561d990d9998026eae7634ad4283d",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -4037,6 +4142,7 @@
         "assets/js/api/sessionCoordinator.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -4074,6 +4180,7 @@
         "tests/regression/lock-deadline-contract.test.mjs",
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-cdn-pins.cjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
@@ -4094,7 +4201,7 @@
     {
       "fromRunId": "r11-history-transport-unit-20260930T132432Z-1",
       "fromDigest": "13ef8627e7a0acfa896f223269d01d55f10561d990d9998026eae7634ad4283d",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -4103,6 +4210,7 @@
         "assets/js/api/sessionCoordinator.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -4140,6 +4248,7 @@
         "tests/regression/lock-deadline-contract.test.mjs",
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-cdn-pins.cjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
@@ -4160,7 +4269,7 @@
     {
       "fromRunId": "r11-monitoring-unit-20260930T064438Z-1",
       "fromDigest": "d6ff2bbcf13a3fb0833be5651e3a2a80f6673a5e9b85769547bc0f25e548814c",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -4169,6 +4278,7 @@
         "assets/js/api/sessionCoordinator.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -4208,6 +4318,7 @@
         "tests/regression/loopback-transport.test.mjs",
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-cdn-pins.cjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
@@ -4228,7 +4339,7 @@
     {
       "fromRunId": "r11-n2-n5-unit-20260929T085712Z-1",
       "fromDigest": "0a740bc32eb3a29c6e70e1515a673b5b7a7b9283017003d52df36ac0d802c2af",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -4297,6 +4408,7 @@
         "tests/regression/run-reference.test.mjs",
         "tests/regression/session-rollback.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tests/regression/snapshot-integrity.test.mjs",
         "tests/regression/source-comparisons.test.mjs",
         "tests/regression/validate-reports.test.mjs",
@@ -4330,7 +4442,7 @@
     {
       "fromRunId": "r11-n9-freeze-loopback-20261001T080720Z-1",
       "fromDigest": "8d406ec39aab302589e099ebfdaa065a83f0403c57d6ce5871a72ec09dd56d68",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -4338,6 +4450,7 @@
         "assets/js/api/httpClient.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -4364,6 +4477,7 @@
         "tests/regression/history-links.test.mjs",
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
         "tools/prepare-history-checkpoints.mjs",
@@ -4381,7 +4495,7 @@
     {
       "fromRunId": "r11-n9-freeze-static-20261001T080720Z-1",
       "fromDigest": "8d406ec39aab302589e099ebfdaa065a83f0403c57d6ce5871a72ec09dd56d68",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -4389,6 +4503,7 @@
         "assets/js/api/httpClient.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -4415,6 +4530,7 @@
         "tests/regression/history-links.test.mjs",
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
         "tools/prepare-history-checkpoints.mjs",
@@ -4432,7 +4548,7 @@
     {
       "fromRunId": "r11-n9-freeze-unit-20261001T080720Z-1",
       "fromDigest": "8d406ec39aab302589e099ebfdaa065a83f0403c57d6ce5871a72ec09dd56d68",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -4440,6 +4556,7 @@
         "assets/js/api/httpClient.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -4466,6 +4583,7 @@
         "tests/regression/history-links.test.mjs",
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
         "tools/prepare-history-checkpoints.mjs",
@@ -4483,7 +4601,7 @@
     {
       "fromRunId": "r11-profile-checkpoint-loopback-20260930T124253Z-1",
       "fromDigest": "c8ffba6ea7f70968f5382b547e2a5d79993eed43eb758ab7e3c272bfa556499c",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -4492,6 +4610,7 @@
         "assets/js/api/sessionCoordinator.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -4530,6 +4649,7 @@
         "tests/regression/loopback-transport.test.mjs",
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-cdn-pins.cjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
@@ -4550,7 +4670,7 @@
     {
       "fromRunId": "r11-profile-fixture-static-20260930T072028Z-1",
       "fromDigest": "0930d9772cfb73fe737f8b2c47b90c3f6d926f26ff23b1ae266b36fa6c19cb3a",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -4559,6 +4679,7 @@
         "assets/js/api/sessionCoordinator.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -4597,6 +4718,7 @@
         "tests/regression/loopback-transport.test.mjs",
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-cdn-pins.cjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
@@ -4617,7 +4739,7 @@
     {
       "fromRunId": "r11-profile-fixture-unit-20260930T072205Z-1",
       "fromDigest": "0930d9772cfb73fe737f8b2c47b90c3f6d926f26ff23b1ae266b36fa6c19cb3a",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -4626,6 +4748,7 @@
         "assets/js/api/sessionCoordinator.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -4664,6 +4787,7 @@
         "tests/regression/loopback-transport.test.mjs",
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-cdn-pins.cjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
@@ -4684,7 +4808,7 @@
     {
       "fromRunId": "r11-profile-unit-20260930T071315Z-1",
       "fromDigest": "1ef3bfcd1b9e82b5b500c63c5e2973ee02c4030c0b6f5287527d3f6baffc23c4",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -4693,6 +4817,7 @@
         "assets/js/api/sessionCoordinator.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -4731,6 +4856,7 @@
         "tests/regression/loopback-transport.test.mjs",
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-cdn-pins.cjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
@@ -4751,7 +4877,7 @@
     {
       "fromRunId": "r11-r7-direct-diagnostic-20260929T150647Z-1",
       "fromDigest": "3002084685554046b9b24d4a24ad20a158d0d28b2908f76854cdd563f9dba5b6",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -4760,6 +4886,7 @@
         "assets/js/api/sessionCoordinator.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -4804,6 +4931,7 @@
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/run-reference.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-cdn-pins.cjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
@@ -4827,7 +4955,7 @@
     {
       "fromRunId": "r11-ready-invalid-canary-20260930T002603Z-1",
       "fromDigest": "5a344912b04758223547f1a16a6664bd0670272938a7ac4468a1ffce31c741c1",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -4836,6 +4964,7 @@
         "assets/js/api/sessionCoordinator.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -4877,6 +5006,7 @@
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/run-reference.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-cdn-pins.cjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
@@ -4900,7 +5030,7 @@
     {
       "fromRunId": "r11-ready-loopback-20260930T002919Z-1",
       "fromDigest": "ac372d8fe04fc7b41df4d99b7a852bfbf0909f8a500f29e670ceb5bd3f8a015f",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -4909,6 +5039,7 @@
         "assets/js/api/sessionCoordinator.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -4948,6 +5079,7 @@
         "tests/regression/loopback-transport.test.mjs",
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-cdn-pins.cjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
@@ -4970,7 +5102,7 @@
     {
       "fromRunId": "r11-ready-static-20260930T002919Z-1",
       "fromDigest": "ac372d8fe04fc7b41df4d99b7a852bfbf0909f8a500f29e670ceb5bd3f8a015f",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -4979,6 +5111,7 @@
         "assets/js/api/sessionCoordinator.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -5018,6 +5151,7 @@
         "tests/regression/loopback-transport.test.mjs",
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-cdn-pins.cjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
@@ -5040,7 +5174,7 @@
     {
       "fromRunId": "r11-ready-unit-20260930T002919Z-1",
       "fromDigest": "ac372d8fe04fc7b41df4d99b7a852bfbf0909f8a500f29e670ceb5bd3f8a015f",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -5049,6 +5183,7 @@
         "assets/js/api/sessionCoordinator.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -5088,6 +5223,7 @@
         "tests/regression/loopback-transport.test.mjs",
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-cdn-pins.cjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
@@ -5110,7 +5246,7 @@
     {
       "fromRunId": "r11-review-closed-loopback-20261001T075416Z-1",
       "fromDigest": "b50bd872d7996eab66ad5e0c5d4ecf0e94c8f1f3f03f78ac516aca64713fbb88",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -5118,6 +5254,7 @@
         "assets/js/api/httpClient.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -5148,6 +5285,7 @@
         "tests/regression/history-links.test.mjs",
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
         "tools/prepare-history-checkpoints.mjs",
@@ -5165,7 +5303,7 @@
     {
       "fromRunId": "r11-review-closed-static-20261001T075416Z-1",
       "fromDigest": "b50bd872d7996eab66ad5e0c5d4ecf0e94c8f1f3f03f78ac516aca64713fbb88",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -5173,6 +5311,7 @@
         "assets/js/api/httpClient.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -5203,6 +5342,7 @@
         "tests/regression/history-links.test.mjs",
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
         "tools/prepare-history-checkpoints.mjs",
@@ -5220,7 +5360,7 @@
     {
       "fromRunId": "r11-review-closed-unit-20261001T075416Z-1",
       "fromDigest": "b50bd872d7996eab66ad5e0c5d4ecf0e94c8f1f3f03f78ac516aca64713fbb88",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -5228,6 +5368,7 @@
         "assets/js/api/httpClient.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -5258,6 +5399,7 @@
         "tests/regression/history-links.test.mjs",
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
         "tools/prepare-history-checkpoints.mjs",
@@ -5275,7 +5417,7 @@
     {
       "fromRunId": "r11-review-final-loopback-20261001T071943Z-1",
       "fromDigest": "2b62ef6498109166a31592c518cabaa0f4e1a519f11f30541718c99beea9b193",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -5283,6 +5425,7 @@
         "assets/js/api/httpClient.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -5313,6 +5456,7 @@
         "tests/regression/history-links.test.mjs",
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
         "tools/prepare-history-checkpoints.mjs",
@@ -5330,7 +5474,7 @@
     {
       "fromRunId": "r11-review-final-static-20261001T071943Z-1",
       "fromDigest": "2b62ef6498109166a31592c518cabaa0f4e1a519f11f30541718c99beea9b193",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -5338,6 +5482,7 @@
         "assets/js/api/httpClient.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -5368,6 +5513,7 @@
         "tests/regression/history-links.test.mjs",
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
         "tools/prepare-history-checkpoints.mjs",
@@ -5385,7 +5531,7 @@
     {
       "fromRunId": "r11-review-final-unit-20261001T071943Z-1",
       "fromDigest": "2b62ef6498109166a31592c518cabaa0f4e1a519f11f30541718c99beea9b193",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -5393,6 +5539,7 @@
         "assets/js/api/httpClient.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -5423,6 +5570,7 @@
         "tests/regression/history-links.test.mjs",
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
         "tools/prepare-history-checkpoints.mjs",
@@ -5440,7 +5588,7 @@
     {
       "fromRunId": "r11-review-fixes-unit-20261001T071809Z-1",
       "fromDigest": "7a9075c9aba9124d0571b2053fd1f706cb9cbe3fc858fb24c9578d2790e73269",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -5448,6 +5596,7 @@
         "assets/js/api/httpClient.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -5478,6 +5627,7 @@
         "tests/regression/history-links.test.mjs",
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
         "tools/prepare-history-checkpoints.mjs",
@@ -5495,7 +5645,7 @@
     {
       "fromRunId": "r11-route-disposed-green-20261001T144154Z-1",
       "fromDigest": "add591bd2ab02152504e1f17753ce41708bf4f3f8a7963913213c13391b0966f",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -5503,6 +5653,7 @@
         "assets/js/api/httpClient.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -5529,6 +5680,7 @@
         "tests/regression/history-links.test.mjs",
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
         "tools/prepare-history-checkpoints.mjs",
@@ -5546,7 +5698,7 @@
     {
       "fromRunId": "r11-route-disposed-red-20261001T144138Z-1",
       "fromDigest": "51146c78d2f6d50b3a6ed182b268d74d026215f468110b709b7176277b7edb71",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -5554,6 +5706,7 @@
         "assets/js/api/httpClient.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -5580,6 +5733,7 @@
         "tests/regression/history-links.test.mjs",
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
         "tools/prepare-history-checkpoints.mjs",
@@ -5597,7 +5751,7 @@
     {
       "fromRunId": "r11-source-freeze-loopback-20261001T144346Z-1",
       "fromDigest": "add591bd2ab02152504e1f17753ce41708bf4f3f8a7963913213c13391b0966f",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -5605,6 +5759,7 @@
         "assets/js/api/httpClient.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -5631,6 +5786,7 @@
         "tests/regression/history-links.test.mjs",
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
         "tools/prepare-history-checkpoints.mjs",
@@ -5648,7 +5804,7 @@
     {
       "fromRunId": "r11-source-freeze-static-20261001T144346Z-1",
       "fromDigest": "add591bd2ab02152504e1f17753ce41708bf4f3f8a7963913213c13391b0966f",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -5656,6 +5812,7 @@
         "assets/js/api/httpClient.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -5682,6 +5839,7 @@
         "tests/regression/history-links.test.mjs",
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
         "tools/prepare-history-checkpoints.mjs",
@@ -5699,7 +5857,7 @@
     {
       "fromRunId": "r11-source-freeze-unit-20261001T144346Z-1",
       "fromDigest": "add591bd2ab02152504e1f17753ce41708bf4f3f8a7963913213c13391b0966f",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -5707,6 +5865,7 @@
         "assets/js/api/httpClient.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -5733,6 +5892,7 @@
         "tests/regression/history-links.test.mjs",
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
         "tools/prepare-history-checkpoints.mjs",
@@ -5750,7 +5910,7 @@
     {
       "fromRunId": "r11-stable-static-20260929T134719Z-1",
       "fromDigest": "ad27f2a93eb2a02ed84d1abafe72baac226682cf76cce866bdf10640f2bd245f",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -5759,6 +5919,7 @@
         "assets/js/api/sessionCoordinator.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -5803,6 +5964,7 @@
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/run-reference.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-cdn-pins.cjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
@@ -5826,7 +5988,7 @@
     {
       "fromRunId": "r11-stable-unit-20260929T134719Z-1",
       "fromDigest": "ad27f2a93eb2a02ed84d1abafe72baac226682cf76cce866bdf10640f2bd245f",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -5835,6 +5997,7 @@
         "assets/js/api/sessionCoordinator.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -5879,6 +6042,7 @@
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/run-reference.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-cdn-pins.cjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",
@@ -5902,7 +6066,7 @@
     {
       "fromRunId": "r11-transport-checkpoint-loopback-20260930T142659Z-1",
       "fromDigest": "c2bdb01545e65505dec8bcf50b0aab322e89ef05adc05fc5c50308ca40c246aa",
-      "toDigest": "5ad90d84442b58a629201a850d10794cc6b919c727fd6bfdcb07781999b6c979",
+      "toDigest": "b3bd6f78f77d0b63b9adac7d3bc0d2ab10526d0870083d45e7b52bb89fb1ce97",
       "changedPaths": [
         "assets/img/favicon.ico",
         "assets/img/favicon.png",
@@ -5911,6 +6075,7 @@
         "assets/js/api/sessionCoordinator.js",
         "assets/js/api/sessionStorage.js",
         "assets/js/i18n.js",
+        "assets/js/init.js",
         "assets/js/locales/de.js",
         "assets/js/locales/en.js",
         "assets/js/locales/ja.js",
@@ -5948,6 +6113,7 @@
         "tests/regression/lock-deadline-contract.test.mjs",
         "tests/regression/profile-caller.test.mjs",
         "tests/regression/session-write-order.test.mjs",
+        "tests/regression/sfc-source-freshness.test.mjs",
         "tools/check-cdn-pins.cjs",
         "tools/check-history.mjs",
         "tools/dev-local.mjs",

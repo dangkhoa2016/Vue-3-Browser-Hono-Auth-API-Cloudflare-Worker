@@ -42,8 +42,9 @@ If this order changes, the app can fail early with missing module or duplicated 
 ### Cache behavior
 
 - Runtime module cache is handled by `vue3-sfc-loader`.
-- Browser Cache Storage is used in `init.js` through `SFC_CACHE_NAME`.
-- Cache is bypassed in localhost mode and when `__reload` exists in the URL.
+- Component and loader-imported source is fetched with HTTP revalidation (`cache: 'no-cache'`) on every origin, including localhost. Explicit `__reload` retries use `no-store`.
+- Persistent `vue-sfc-cache-v2` entries are never used as source or as an offline fallback. This prevents a returning browser from pairing an old component with new locale/native modules after a deployment. The cache name remains only for explicit legacy cleanup on retry.
+- Existing in-memory module/keep-alive state lasts for the current document. Reload an already open tab to load a new deployment; preferences and stored sessions are not cleared by this source policy. Network or HTTP failures are shown by the existing loader/retry UI.
 
 ### App-level keep-alive
 
