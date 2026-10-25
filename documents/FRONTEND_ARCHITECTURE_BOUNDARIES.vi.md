@@ -80,4 +80,4 @@ Trước khi merge thay đổi modernization:
 
 [Đọc tài liệu này bằng tiếng Anh](FRONTEND_ARCHITECTURE_BOUNDARIES.md)
 
-[Quay lại Mục Lục Tài Liệu](DOCUMENTATION_INDEX_vi.md)
+[Quay lại Mục Lục Tài Liệu](DOCUMENTATION_INDEX.vi.md)

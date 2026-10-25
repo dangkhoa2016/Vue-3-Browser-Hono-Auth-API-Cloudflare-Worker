@@ -22,6 +22,11 @@ This is the main entry point for documentation inside `documents/`. Use it when 
 - [Realtime Monitoring And Dashboard](REALTIME_MONITORING_AND_DASHBOARD.md)
 - [KV Admin Configs Workflow](KV_ADMIN_CONFIGS_WORKFLOW.md)
 
+## Release and operations
+
+- [Verification and releases](VERIFICATION_AND_RELEASES.md)
+- [Session transitions and rollback](SESSION-ROLLBACK.md)
+
 ## 4. Suggested Reading Paths
 
 ### New reviewer path
@@ -45,4 +50,4 @@ This is the main entry point for documentation inside `documents/`. Use it when 
 
 ---
 
-[Read this document in Vietnamese](DOCUMENTATION_INDEX_vi.md)
+[Read this document in Vietnamese](DOCUMENTATION_INDEX.vi.md)

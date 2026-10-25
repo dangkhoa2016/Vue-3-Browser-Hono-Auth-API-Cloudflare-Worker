@@ -1,111 +1,42 @@
-# Auth And Session Flow
+# Auth and session flow
 
 > 🌐 Language / Ngôn ngữ: **English** | [Tiếng Việt](AUTH_AND_SESSION_FLOW.vi.md)
 
-[Back to Documentation Index](DOCUMENTATION_INDEX.md)
+[Documentation index](DOCUMENTATION_INDEX.md)
 
-This document explains how login state, token refresh, route protection, and reauthentication work across the app.
+## Session ownership
 
-## 1. Main Files
+Read `assets/js/stores/authStore.js`, `assets/js/api/sessionStorage.js`, `assets/js/api/sessionCoordinator.js` and `assets/js/api/httpClient.js` together. The canonical persisted session is `auth-session-record`; legacy token/user mirrors are compatibility data, not an independent source of truth. API identity and session context fence requests and asynchronous results so a response from an old account or backend cannot replace the current session.
 
-- `assets/js/stores/authStore.js`
-- `assets/js/api/httpClient.js`
-- `assets/js/router.js`
-- `vue/composables/useAuthGate.js`
-- `vue/components/LoginModal.vue`
+Authentication requires Web Locks, readable/writable/removable localStorage and a secure context (HTTPS or localhost). Login checks those capabilities before submitting credentials and refuses a token result that cannot be persisted safely. Unsupported startup environments do not adopt a saved session. There is no tab-only login fallback. Capability checks cannot guarantee that storage will never fail later.
 
-## 2. Auth State Model
+The coordinator serializes session writes and refresh rotation across tabs. Current records, revisions and ended-session tombstones prevent older results or legacy mirrors from reviving a logged-out session. Logout cleanup in the browser is distinct from server-side token revocation; test both when changing the protocol.
 
-The auth store keeps:
+## Route and page protection
 
-- `user`
-- `token`
-- `refreshToken`
-- `expiresAt`
-- `refreshExpiresAt`
-- `isRefreshing`
-- `requiresReauth`
-- `reauthNoticeShown`
+Protected routes declare `meta.requiresAuth` in `assets/js/router.js`. The router records `authRequired` and `intendedRoute` in sessionStorage and allows navigation; the destination page uses `vue/composables/useAuthGate.js` to display a login-required state and open `LoginModal.vue`. Closing the dialog must leave an actionable login prompt rather than an indefinite skeleton. Backend permissions remain authoritative.
 
-The state is persisted in `localStorage` and restored through `authStore.init()`.
+## Request configuration
 
-## 3. Route Protection Strategy
+Storage seeds the API URL at startup. The live Axios `apiClient.defaults.baseURL` is then authoritative. Settings and cross-tab preference adoption update it through `setApiClientBaseUrl`; requests do not reread and overwrite it from storage each time. Changing API identity invalidates the old session.
 
-Protected routes use `meta.requiresAuth` in `assets/js/router.js`.
+The request interceptor applies language, checks the current auth/session context, refreshes a near-expiry access token when eligible and attaches the bearer token. Non-public requests are blocked when reauthentication is required. Public/auth flows have their own exceptions in the transport contract.
 
-Important behavior:
+## Refresh and replay
 
-- The router guard does not hard-redirect anonymous users.
-- It stores `authRequired` and `intendedRoute` in `sessionStorage`.
-- Navigation is allowed to continue.
-- The destination page is responsible for showing a login-required prompt and opening the modal through `useAuthGate()`.
+`refreshAccessTokenOrThrow` coordinates refresh and can adopt a replacement token pair that another tab already committed. A first `401` can cause one refresh-and-replay only for a safe method (`GET`, `HEAD`, `OPTIONS`), a usable refresh session and a request still bound to the current API/session context. Refresh/logout requests are excluded. Mutations rejected with `401` are not replayed automatically.
 
-This gives the UI more control, but it means page-level auth handling must stay consistent.
+General retry/backoff follows the separate [transport policy](DATA_ACCESS_AND_MOCK_API.md): auth endpoints, cancelled requests, `429`, `503` and other `4xx` are excluded. Mutation retry requires an explicit `idempotentRetry` contract; do not enable it merely to hide a failed write.
 
-## 4. Token Refresh Flow
+Refresh outcomes are distinct:
 
-### Request phase
+- Invalid, revoked or expired sessions require reauthentication and centralized login messaging.
+- Rotation conflicts (`409`) trigger reconciliation with the current session rather than blindly logging out or overwriting another tab.
+- Network errors, `429` and server failures are temporary: reject the affected operation while preserving the existing session; do not equate them with invalid credentials.
+- Results from a superseded API/session context are discarded, including late refresh results after logout or account replacement.
 
-The shared Axios client does the following before protected requests:
+## Review and verification
 
-1. Re-sync runtime base URL from local storage.
-2. Inject `Accept-Language` from i18n.
-3. Read the auth store through app services.
-4. Block non-public requests if `requiresReauth` is already active.
-5. Refresh the access token if it is near expiry and refresh token is still valid.
-6. Attach `Authorization: Bearer ...`.
+Check logout versus in-flight refresh, concurrent tabs, account/API replacement, storage failures, safe-method replay and failed mutations. Page-level auth prompts must avoid duplicate dialogs and repeated loads after login. The focused suites include `auth-transport`, `browser-login-policy` and `session-rollback`.
 
-### Response phase
-
-If the server responds with `401`:
-
-1. The client checks whether that request has already been retried.
-2. If not, it tries `authStore.refreshAccessToken()`.
-3. If refresh succeeds, the original request is retried once.
-4. If refresh fails, the request is rejected and the app moves toward reauthentication.
-
-## 5. Reauthentication Path
-
-When the refresh token is expired or refresh fails with a client error:
-
-1. `authStore.requireReauthentication()` clears auth state.
-2. It sets `requiresReauth = true`.
-3. It shows a warning toast once.
-4. It tries to open the login modal.
-
-This design prevents repeated invalid-token calls after the session is no longer recoverable.
-
-## 6. Why This Area Is Sensitive
-
-### Good properties
-
-- Only one refresh attempt runs at a time.
-- Non-public requests are blocked after session failure.
-- Session-expired messaging is centralized.
-
-### Risks
-
-- Logic is split across router, store, interceptor, and composables.
-- Missing `authStore.init()` or service wiring can create confusing partial-auth states.
-- Pages that skip `useAuthGate()` can behave differently from the rest of the app.
-
-## 7. Review Checklist
-
-1. Does the change preserve one-refresh-at-a-time behavior?
-2. Can the page still recover after login and continue intended navigation?
-3. Are public endpoints excluded from auth blocking and refresh logic?
-4. Does the UI avoid duplicate re-login toasts or modal spam?
-5. Are `401`, `403`, and `REAUTH_REQUIRED` handled consistently?
-
-## 8. Optimization Ideas
-
-1. Move auth error classification into a small shared helper to reduce duplication.
-2. Standardize page-level unauthorized handling around one composable contract.
-3. Add lightweight logging around `intendedRoute` restore behavior for debugging.
-4. Consider separating token persistence from toast/modal side effects if auth logic grows further.
-
----
-
-[Read this document in Vietnamese](AUTH_AND_SESSION_FLOW_vi.md)
-
-[Back to Documentation Index](DOCUMENTATION_INDEX.md)
+Use [verification and releases](VERIFICATION_AND_RELEASES.md) for executable gates and [session rollback](SESSION-ROLLBACK.md) when switching versions. Browser cleanup does not migrate backend schema or prove that server credentials were revoked.

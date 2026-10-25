@@ -2,7 +2,7 @@
 
 > 🌐 Language / Ngôn ngữ: [English](APP_RUNTIME_AND_LOADING.md) | **Tiếng Việt**
 
-[Quay lại Mục Lục Tài Liệu](DOCUMENTATION_INDEX_vi.md)
+[Quay lại Mục Lục Tài Liệu](DOCUMENTATION_INDEX.vi.md)
 
 Tài liệu này giải thích cách runtime browser-only được khởi động, cách các module Vue SFC được tải, và những điểm nhạy cảm khi thay đổi.
 
@@ -100,4 +100,4 @@ Pattern này giảm coupling trực tiếp với `window.*`, nhưng vẫn phụ 
 
 [Đọc tài liệu này bằng tiếng Anh](APP_RUNTIME_AND_LOADING.md)
 
-[Quay lại Mục Lục Tài Liệu](DOCUMENTATION_INDEX_vi.md)
+[Quay lại Mục Lục Tài Liệu](DOCUMENTATION_INDEX.vi.md)

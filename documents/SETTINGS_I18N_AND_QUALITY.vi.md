@@ -2,7 +2,7 @@
 
 > 🌐 Language / Ngôn ngữ: [English](SETTINGS_I18N_AND_QUALITY.md) | **Tiếng Việt**
 
-[Quay lại Mục Lục Tài Liệu](DOCUMENTATION_INDEX_vi.md)
+[Quay lại Mục Lục Tài Liệu](DOCUMENTATION_INDEX.vi.md)
 
 Tài liệu này mô tả trang Settings, các browser preference được lưu, cơ chế load ngôn ngữ runtime, và những quality script nhẹ giúp dự án dễ bảo trì hơn.
 
@@ -115,12 +115,12 @@ Những script này giúp bắt missing key, usage drift, và các vấn đề b
 
 ## 9. Tài Liệu Liên Quan
 
-1. [Hướng Dẫn Review Dự Án](PROJECT_REVIEW_GUIDE_vi.md)
-2. [Truy Cập Dữ Liệu Và Mock API](DATA_ACCESS_AND_MOCK_API_vi.md)
-3. [Ranh Giới Kiến Trúc Frontend](FRONTEND_ARCHITECTURE_BOUNDARIES_vi.md)
+1. [Hướng Dẫn Review Dự Án](PROJECT_REVIEW_GUIDE.vi.md)
+2. [Truy Cập Dữ Liệu Và Mock API](DATA_ACCESS_AND_MOCK_API.vi.md)
+3. [Ranh Giới Kiến Trúc Frontend](FRONTEND_ARCHITECTURE_BOUNDARIES.vi.md)
 
 ---
 
 [Đọc tài liệu này bằng tiếng Anh](SETTINGS_I18N_AND_QUALITY.md)
 
-[Quay lại Mục Lục Tài Liệu](DOCUMENTATION_INDEX_vi.md)
+[Quay lại Mục Lục Tài Liệu](DOCUMENTATION_INDEX.vi.md)

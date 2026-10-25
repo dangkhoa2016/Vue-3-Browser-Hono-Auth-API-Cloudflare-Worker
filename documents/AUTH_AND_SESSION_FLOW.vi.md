@@ -1,111 +1,42 @@
-# Luồng Xác Thực Và Phiên Làm Việc
+# Luồng xác thực và phiên đăng nhập
 
 > 🌐 Language / Ngôn ngữ: [English](AUTH_AND_SESSION_FLOW.md) | **Tiếng Việt**
 
-[Quay lại Mục Lục Tài Liệu](DOCUMENTATION_INDEX_vi.md)
+[Mục lục tài liệu](DOCUMENTATION_INDEX.vi.md)
 
-Tài liệu này giải thích cách login state, refresh token, route protection, và reauthentication hoạt động xuyên suốt ứng dụng.
+## Quyền sở hữu phiên
 
-## 1. File Chính
+Đọc cùng `assets/js/stores/authStore.js`, `assets/js/api/sessionStorage.js`, `assets/js/api/sessionCoordinator.js` và `assets/js/api/httpClient.js`. Bản ghi phiên chuẩn là `auth-session-record`; các bản sao token/user kiểu cũ phục vụ tương thích, không phải nguồn trạng thái độc lập. Danh tính API và ngữ cảnh phiên ràng buộc request cùng kết quả bất đồng bộ, tránh để phản hồi của tài khoản hoặc backend cũ thay thế phiên hiện tại.
 
-- `assets/js/stores/authStore.js`
-- `assets/js/api/httpClient.js`
-- `assets/js/router.js`
-- `vue/composables/useAuthGate.js`
-- `vue/components/LoginModal.vue`
+Đăng nhập yêu cầu Web Locks, localStorage đọc/ghi/xóa được và secure context (HTTPS hoặc localhost). Kiểm tra các khả năng này trước khi gửi thông tin đăng nhập; từ chối kết quả token nếu không thể lưu phiên an toàn. Khi khởi động ở môi trường không đáp ứng, ứng dụng không nhận phiên đã lưu. Không có phương án đăng nhập chỉ trong tab. Kiểm tra ban đầu không bảo đảm storage sẽ không lỗi về sau.
 
-## 2. Mô Hình Auth State
+Coordinator tuần tự hóa thao tác ghi và xoay token giữa các tab. Bản ghi hiện tại, revision và tombstone kết thúc phiên ngăn kết quả cũ hoặc mirror legacy khôi phục phiên đã đăng xuất. Dọn dữ liệu trình duyệt và thu hồi token trên server là hai việc riêng; cần kiểm chứng cả hai khi đổi giao thức.
 
-Auth store lưu:
+## Bảo vệ route và page
 
-- `user`
-- `token`
-- `refreshToken`
-- `expiresAt`
-- `refreshExpiresAt`
-- `isRefreshing`
-- `requiresReauth`
-- `reauthNoticeShown`
+Route được bảo vệ khai báo `meta.requiresAuth` trong `assets/js/router.js`. Router ghi `authRequired` và `intendedRoute` vào sessionStorage rồi tiếp tục điều hướng; page đích dùng `vue/composables/useAuthGate.js` để hiển thị yêu cầu đăng nhập và mở `LoginModal.vue`. Khi đóng modal phải còn thông báo cùng nút đăng nhập, không để skeleton chạy mãi. Backend quyết định quyền truy cập thực tế.
 
-State được lưu trong `localStorage` và phục hồi qua `authStore.init()`.
+## Cấu hình request
 
-## 3. Chiến Lược Bảo Vệ Route
+Storage cung cấp URL API ban đầu. Sau đó `apiClient.defaults.baseURL` của Axios đang chạy là nguồn cấu hình chính. Settings và việc nhận thay đổi từ tab khác cập nhật qua `setApiClientBaseUrl`; mỗi request không đọc lại storage để ghi đè cấu hình. Thay danh tính API làm mất hiệu lực phiên cũ.
 
-Route được bảo vệ sử dụng `meta.requiresAuth` trong `assets/js/router.js`.
+Request interceptor áp dụng ngôn ngữ, kiểm tra ngữ cảnh auth/phiên, refresh access token gần hết hạn khi đủ điều kiện và gắn bearer token. Request không công khai bị chặn khi cần xác thực lại. Luồng public/auth có ngoại lệ riêng trong contract transport.
 
-Hành vi quan trọng:
+## Refresh và phát lại request
 
-- Router guard không hard-redirect user anonymous.
-- Nó lưu `authRequired` và `intendedRoute` vào `sessionStorage`.
-- Navigation vẫn được phép tiếp tục.
-- Page đích tự chịu trách nhiệm hiển thị prompt cần đăng nhập và mở modal thông qua `useAuthGate()`.
+`refreshAccessTokenOrThrow` điều phối refresh và có thể nhận cặp token thay thế mà tab khác vừa lưu. Lần `401` đầu chỉ có thể refresh rồi phát lại một lần với phương thức an toàn (`GET`, `HEAD`, `OPTIONS`), phiên refresh còn dùng được và request vẫn thuộc API/phiên hiện tại. Loại trừ request refresh/logout. Không tự phát lại mutation bị `401`.
 
-Cách này cho UI nhiều quyền điều khiển hơn, nhưng cũng có nghĩa là xử lý auth ở cấp page phải giữ đồng nhất.
+Retry/backoff thông thường tuân theo [chính sách transport](DATA_ACCESS_AND_MOCK_API.vi.md): loại trừ endpoint auth, request đã hủy, `429`, `503` và các `4xx` khác. Retry mutation cần contract `idempotentRetry` tường minh; không bật chỉ để che lỗi thao tác ghi.
 
-## 4. Luồng Refresh Token
+Phân biệt kết quả refresh:
 
-### Pha Request
+- Phiên không hợp lệ, bị thu hồi hoặc hết hạn yêu cầu xác thực lại và thông báo đăng nhập tập trung.
+- Xung đột xoay token (`409`) cần đối chiếu phiên hiện tại, không đăng xuất hoặc ghi đè tab khác một cách mù quáng.
+- Lỗi mạng, `429` và lỗi server là tạm thời: từ chối thao tác bị ảnh hưởng nhưng giữ phiên hiện có; không coi là thông tin đăng nhập sai.
+- Loại bỏ kết quả thuộc API/phiên đã bị thay thế, kể cả refresh trả về muộn sau đăng xuất hoặc đổi tài khoản.
 
-Axios client dùng chung sẽ làm các bước sau trước protected request:
+## Review và kiểm chứng
 
-1. Đồng bộ lại runtime base URL từ local storage.
-2. Chèn `Accept-Language` từ i18n.
-3. Đọc auth store thông qua app services.
-4. Chặn non-public request nếu `requiresReauth` đã được bật.
-5. Refresh access token nếu sắp hết hạn và refresh token vẫn còn hợp lệ.
-6. Gắn `Authorization: Bearer ...`.
+Kiểm tra đăng xuất trong lúc refresh, nhiều tab, đổi tài khoản/API, lỗi storage, phát lại phương thức an toàn và mutation thất bại. Auth prompt ở page phải tránh modal lặp và tải dữ liệu trùng sau đăng nhập. Các suite tập trung gồm `auth-transport`, `browser-login-policy` và `session-rollback`.
 
-### Pha Response
-
-Nếu server trả về `401`:
-
-1. Client kiểm tra request đó đã retry hay chưa.
-2. Nếu chưa, nó thử `authStore.refreshAccessToken()`.
-3. Nếu refresh thành công, request gốc được retry một lần.
-4. Nếu refresh thất bại, request bị reject và app chuyển sang trạng thái cần đăng nhập lại.
-
-## 5. Đường Dẫn Reauthentication
-
-Khi refresh token hết hạn hoặc refresh thất bại với client error:
-
-1. `authStore.requireReauthentication()` xóa auth state.
-2. Nó đặt `requiresReauth = true`.
-3. Nó hiển thị warning toast một lần.
-4. Nó cố gắng mở login modal.
-
-Thiết kế này ngăn việc gọi lặp lại các request với token không còn hợp lệ sau khi session không thể phục hồi.
-
-## 6. Vì Sao Khu Vực Này Nhạy Cảm
-
-### Điểm Tốt
-
-- Chỉ có một refresh attempt chạy tại một thời điểm.
-- Non-public request bị chặn sau khi session lỗi không phục hồi được.
-- Thông báo session hết hạn được tập trung hóa.
-
-### Rủi Ro
-
-- Logic bị tách ra giữa router, store, interceptor, và composable.
-- Nếu thiếu `authStore.init()` hoặc sai service wiring, sẽ sinh ra trạng thái auth nửa vời, khó đoán.
-- Page nào không dùng `useAuthGate()` có thể hành xử khác với phần còn lại của app.
-
-## 7. Checklist Review
-
-1. Thay đổi có giữ hành vi chỉ một refresh tại một thời điểm không?
-2. Sau login, page có vẫn phục hồi và tiếp tục hướng điều hướng dự định không?
-3. Public endpoint có vẫn được loại khỏi auth blocking và refresh logic không?
-4. UI có tránh được toast đăng nhập lại lặp hoặc modal spam không?
-5. `401`, `403`, và `REAUTH_REQUIRED` có được xử lý đồng nhất không?
-
-## 8. Ý Tưởng Tối Ưu
-
-1. Đưa phần phân loại auth error vào helper dùng chung nhỏ để giảm lặp logic.
-2. Chuẩn hóa xử lý unauthorized cấp page quanh một contract composable duy nhất.
-3. Thêm logging nhẹ quanh hành vi phục hồi `intendedRoute` để debug.
-4. Cân nhắc tách token persistence khỏi toast/modal side effect nếu auth logic còn lớn thêm.
-
----
-
-[Đọc tài liệu này bằng tiếng Anh](AUTH_AND_SESSION_FLOW.md)
-
-[Quay lại Mục Lục Tài Liệu](DOCUMENTATION_INDEX_vi.md)
+Dùng [kiểm chứng và phát hành](VERIFICATION_AND_RELEASES.vi.md) cho các lệnh kiểm tra và [rollback phiên](SESSION-ROLLBACK.vi.md) khi chuyển phiên bản. Dọn trình duyệt không chuyển schema backend và không chứng minh credentials server đã bị thu hồi.

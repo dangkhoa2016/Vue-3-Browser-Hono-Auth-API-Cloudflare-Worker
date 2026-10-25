@@ -1,0 +1,80 @@
+name: Bug report (English)
+description: Report a reproducible frontend failure.
+title: '[Bug] '
+body:
+- type: markdown
+  attributes:
+    value: Issues are public. Do not include passwords, tokens, real account data, localStorage dumps or unredacted HAR files. Report vulnerabilities privately through [SECURITY.md](https://github.com/dangkhoa2016/Vue-3-Browser-Hono-Auth-API-Cloudflare-Worker/blob/main/.github/SECURITY.md).
+- type: input
+  id: revision
+  attributes:
+    label: Commit or tag
+  validations:
+    required: true
+- type: input
+  id: browser
+  attributes:
+    label: Browser, version and operating system
+  validations:
+    required: true
+- type: input
+  id: route
+  attributes:
+    label: Affected route
+    description: Use the path/hash only, without query tokens or private data.
+  validations:
+    required: true
+- type: dropdown
+  id: environment
+  attributes:
+    label: Environment
+    options:
+    - Local
+    - CI
+    - Staging
+    - Production
+    - Other
+  validations:
+    required: true
+- type: dropdown
+  id: api_mode
+  attributes:
+    label: API mode
+    options:
+    - Mock API
+    - Real backend
+    - Not sure
+  validations:
+    required: true
+- type: input
+  id: backend_revision
+  attributes:
+    label: Backend revision (if known)
+  validations:
+    required: false
+- type: textarea
+  id: reproduction
+  attributes:
+    label: Reproduction steps
+    description: Use fake accounts; include role, theme and language when relevant.
+  validations:
+    required: true
+- type: textarea
+  id: expected
+  attributes:
+    label: Expected behavior
+  validations:
+    required: true
+- type: textarea
+  id: actual
+  attributes:
+    label: Actual behavior
+  validations:
+    required: true
+- type: textarea
+  id: diagnostics
+  attributes:
+    label: Diagnostics and checks run
+    description: Include only redacted logs/screenshots. State commands, results and unverified items.
+  validations:
+    required: false

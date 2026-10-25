@@ -26,15 +26,25 @@ Dự án này là một ứng dụng web Vue 3 cung cấp giao diện quản tr�
 ## Công nghệ sử dụng
 - [Vue 3](https://vuejs.org/)
 - [Vue Router](https://router.vuejs.org/)
-- [Pinia](https://pinia.vuejs.org/) (nếu có dùng)
-- [Axios](https://axios-http.com/) (nếu có dùng)
+- [Pinia](https://pinia.vuejs.org/)
+- [Axios](https://axios-http.com/)
 - [Cloudflare Workers](https://workers.cloudflare.com/)
 - [Hono](https://hono.dev/)
 
 ## Hướng dẫn chạy thử
-1. Không cần bước build (dự án chạy trực tiếp trên browser).
-2. Mở `index.html` bằng Live Server hoặc bất kỳ static server nào để chạy ứng dụng.
-3. Cấu hình endpoint API và xác thực nếu cần.
+
+Dùng Node.js 24 cho server local và công cụ kiểm chứng. Ứng dụng Vue không cần build.
+
+```bash
+# Khởi động backend Hono riêng tại localhost:8787, rồi chạy:
+node tools/dev-local.mjs
+```
+
+Mở **http://localhost:4173**. Server chọn API local thật qua `/backend/` và tắt mock cho origin đó. Tài khoản do backend cấp; thông tin trong fixture không phải credential triển khai.
+
+Để khám phá UI bằng dữ liệu mẫu, phục vụ thư mục bằng static server và chọn chế độ mock trong Settings. Trình duyệt cần Internet để tải thư viện CDN đã ghim phiên bản. Đăng nhập cần Web Locks và localStorage đọc/ghi được trong secure context HTTPS hoặc localhost.
+
+Xem [hỗ trợ và kiểm chứng](documents/VERIFICATION_AND_RELEASES.md), [triển khai staging](STAGING.vi.md), [hướng dẫn đóng góp](CONTRIBUTING.vi.md) và [lịch sử đã biên tập](HISTORY.vi.md).
 
 ## Công cụ i18n (hỗ trợ EN/VI)
 Runtime ứng dụng là browser-only. Node.js chỉ cần (tùy chọn) cho các script CLI trong `tools/` để kiểm tra chất lượng i18n, không dùng để build/chạy UI.
@@ -86,13 +96,14 @@ node tools/vue-file-size-check.cjs --page-limit=600 --component-limit=450
 Ứng dụng không phụ thuộc và không có bước build. Harness kiểm chứng nằm ở **manifest riêng** trong
 `tests/`, nên bản ứng dụng vẫn hoàn toàn không có dependency.
 
-Đã kiểm chứng trên **Node v20.19.0**; các lệnh dùng glob tường minh `regression/*.test.mjs`, nên việc
+Dùng **Node.js 24** để kiểm chứng (cùng phiên bản CI); các lệnh dùng glob tường minh `regression/*.test.mjs`, nên việc
 tìm suite không phụ thuộc vào cách runner discover thư mục.
 
 ```bash
 # một lần, chạy từ thư mục gốc repository
 npm --prefix tests ci --ignore-scripts --no-audit --no-fund
-npx --prefix tests playwright install chromium
+npm --prefix tests run setup:verification
+npm --prefix tests exec -- playwright install chromium
 
 # từng gate (cũng chạy riêng được)
 npm --prefix tests run test:static    # size / lint / script-setup / i18n / CDN pins
@@ -129,7 +140,7 @@ backend mà owner đã cấp revision để test. Không có thì báo PENDING, 
 - Cài đặt, i18n, và công cụ chất lượng: `documents/SETTINGS_I18N_AND_QUALITY_vi.md`
 
 ## Đóng góp
-Đây là dự án mẫu cho admin, bạn có thể fork và phát triển thêm các tính năng hoặc cải tiến cấu trúc dự án.
+Xem [CONTRIBUTING.vi.md](CONTRIBUTING.vi.md) về branch, kiểm thử và review. Gate GitHub Actions đầy đủ gồm static, unit/loopback, Chromium và lịch sử dependency. Checkpoint của báo cáo lịch sử được khôi phục offline từ bundle đã ghim; xem [HISTORY.vi.md](HISTORY.vi.md).
 
 ## Giấy phép và ghi công icon
 

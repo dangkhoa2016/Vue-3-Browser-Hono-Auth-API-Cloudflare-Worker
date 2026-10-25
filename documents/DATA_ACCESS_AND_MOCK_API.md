@@ -26,7 +26,7 @@ Key responsibilities:
 - Inject `Accept-Language`
 - Inject bearer token when available
 - Refresh access tokens when needed
-- Retry non-client failures with backoff
+- Apply bounded retries only to eligible requests
 
 This client is not just a transport utility. It also owns part of the app's session behavior, so changes here can affect most pages at once.
 
@@ -41,22 +41,15 @@ This client is not just a transport utility. It also owns part of the app's sess
 - `adminSearchDebounceMs`
 - `timeFormat`
 
-`httpClient.js` re-reads the base URL from storage on each relative request so Settings changes apply immediately without rebuilding the client.
+Storage seeds the base URL at startup. The live Axios defaults then remain authoritative. Settings and cross-tab preference changes apply through `setApiClientBaseUrl`; each request does not reread storage. Switching API identity invalidates the previous session.
 
 ## 4. Retry Rules
 
-### Retries are allowed for
+Safe methods (`GET`, `HEAD`, `OPTIONS`) may retry network/timeouts and eligible `5xx` failures within the configured attempt limit. Mutations require an explicit `idempotentRetry` contract before general replay is permitted.
 
-- Network failures
-- Server-side failures that are not classified as client errors
+Never retry cancelled requests, auth endpoints, `429`, `503`, other `4xx` or exhausted attempts. A first `401` has a separate refresh-and-replay path restricted to safe methods and the current API/session context; refresh/logout are excluded. Mutations rejected with `401` are not automatically replayed. Establish the outcome of an ambiguous write before a user repeats it.
 
-### Retries are skipped for
-
-- Auth endpoints with client errors
-- General `4xx` client errors
-- Requests that already exhausted the configured retry count
-
-This keeps login and validation failures from looking transient when they are actually user or contract errors.
+Temporary refresh failures preserve the session; invalid/expired sessions and rotation conflicts follow different recovery paths. See [auth and session flow](AUTH_AND_SESSION_FLOW.md).
 
 ## 5. Mock API Role
 
@@ -123,6 +116,6 @@ This parity matters because the admin realtime monitoring page now depends on fe
 
 ---
 
-[Read this document in Vietnamese](DATA_ACCESS_AND_MOCK_API_vi.md)
+[Read this document in Vietnamese](DATA_ACCESS_AND_MOCK_API.vi.md)
 
 [Back to Documentation Index](DOCUMENTATION_INDEX.md)

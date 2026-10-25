@@ -2,7 +2,7 @@
 
 > 🌐 Language / Ngôn ngữ: [English](REALTIME_MONITORING_AND_DASHBOARD.md) | **Tiếng Việt**
 
-[Quay lại Mục Lục Tài Liệu](DOCUMENTATION_INDEX_vi.md)
+[Quay lại Mục Lục Tài Liệu](DOCUMENTATION_INDEX.vi.md)
 
 Tài liệu này mô tả cách tính năng realtime monitoring và admin dashboard lắp ráp dữ liệu, store nào sở hữu state, và những điểm nên tập trung khi review hoặc tối ưu.
 
@@ -99,7 +99,7 @@ Tính năng này vừa quan trọng về vận hành, vừa phức tạp về c�
 - logic hiển thị loading skeleton và format summary lặp lại
 - template rất lớn
 - page biết trực tiếp quá nhiều field backend
-- các flow vận hành dựa trên prompt để tạo rule, channel, và incident
+- dialog riêng cho tạo rule/channel, incident, clear cache và xác nhận toggle rule
 
 ## 7. Checklist Review
 
@@ -116,15 +116,15 @@ Tính năng này vừa quan trọng về vận hành, vừa phức tạp về c�
 2. Tách command action khỏi read snapshot state nếu store tiếp tục tăng kích thước.
 3. Tách `AdminDashboard.vue` thành nhiều section được cấp bởi composable đặc thù feature.
 4. Cân nhắc helper derived-view nhỏ cho các metric sẵn sàng hiển thị thay vì format trực tiếp trong page.
-5. Thay các flow maintenance dựa trên prompt bằng dialog component riêng nếu monitoring surface tiếp tục mở rộng.
+5. Giữ validation, lỗi submit và xác nhận đồng nhất giữa các dialog vận hành hiện có.
 
 ## 9. Tài Liệu Liên Quan
 
-1. [Truy Cập Dữ Liệu Và Mock API](DATA_ACCESS_AND_MOCK_API_vi.md)
-2. [Hướng Dẫn Review Dự Án](PROJECT_REVIEW_GUIDE_vi.md)
+1. [Truy Cập Dữ Liệu Và Mock API](DATA_ACCESS_AND_MOCK_API.vi.md)
+2. [Hướng Dẫn Review Dự Án](PROJECT_REVIEW_GUIDE.vi.md)
 
 ---
 
 [Đọc tài liệu này bằng tiếng Anh](REALTIME_MONITORING_AND_DASHBOARD.md)
 
-[Quay lại Mục Lục Tài Liệu](DOCUMENTATION_INDEX_vi.md)
+[Quay lại Mục Lục Tài Liệu](DOCUMENTATION_INDEX.vi.md)

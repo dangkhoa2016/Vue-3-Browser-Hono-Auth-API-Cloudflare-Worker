@@ -2,7 +2,7 @@
 
 > 🌐 Language / Ngôn ngữ: [English](KV_ADMIN_CONFIGS_WORKFLOW.md) | **Tiếng Việt**
 
-[Quay lại Mục Lục Tài Liệu](DOCUMENTATION_INDEX_vi.md)
+[Quay lại Mục Lục Tài Liệu](DOCUMENTATION_INDEX.vi.md)
 
 Tài liệu này giải thích surface KV configuration dành cho super-admin, cách row được chuẩn hóa, và những điểm nhạy cảm khi chỉnh sửa.
 
@@ -103,11 +103,11 @@ Chế độ bulk edit hỗ trợ:
 
 ## 8. Tài Liệu Liên Quan
 
-1. [Luồng Xác Thực Và Phiên Làm Việc](AUTH_AND_SESSION_FLOW_vi.md)
-2. [Truy Cập Dữ Liệu Và Mock API](DATA_ACCESS_AND_MOCK_API_vi.md)
+1. [Luồng Xác Thực Và Phiên Làm Việc](AUTH_AND_SESSION_FLOW.vi.md)
+2. [Truy Cập Dữ Liệu Và Mock API](DATA_ACCESS_AND_MOCK_API.vi.md)
 
 ---
 
 [Đọc tài liệu này bằng tiếng Anh](KV_ADMIN_CONFIGS_WORKFLOW.md)
 
-[Quay lại Mục Lục Tài Liệu](DOCUMENTATION_INDEX_vi.md)
+[Quay lại Mục Lục Tài Liệu](DOCUMENTATION_INDEX.vi.md)

@@ -2,7 +2,7 @@
 
 > 🌐 Language / Ngôn ngữ: [English](DATA_ACCESS_AND_MOCK_API.md) | **Tiếng Việt**
 
-[Quay lại Mục Lục Tài Liệu](DOCUMENTATION_INDEX_vi.md)
+[Quay lại Mục Lục Tài Liệu](DOCUMENTATION_INDEX.vi.md)
 
 Tài liệu này mô tả lớp vận chuyển API dùng chung, cấu hình endpoint runtime, hành vi retry, và mock backend được frontend sử dụng.
 
@@ -26,7 +26,7 @@ Trách nhiệm chính:
 - Chèn `Accept-Language`
 - Chèn bearer token khi có
 - Refresh access token khi cần
-- Retry các lỗi không phải client error bằng backoff
+- Chỉ retry có giới hạn các request đủ điều kiện
 
 Client này không chỉ là utility vận chuyển. Nó còn sở hữu một phần hành vi session của app, nên thay đổi ở đây có thể ảnh hưởng đến đa số page cùng lúc.
 
@@ -41,22 +41,15 @@ Client này không chỉ là utility vận chuyển. Nó còn sở hữu một p
 - `adminSearchDebounceMs`
 - `timeFormat`
 
-`httpClient.js` đọc lại base URL từ storage ở mỗi relative request để thay đổi trong Settings có hiệu lực ngay mà không cần tạo lại client.
+Storage cung cấp URL ban đầu. Sau đó cấu hình Axios đang chạy là nguồn chính. Settings và thay đổi nhận từ tab khác áp dụng qua `setApiClientBaseUrl`; mỗi request không đọc lại storage. Đổi danh tính API làm mất hiệu lực phiên cũ.
 
-## 4. Quy Tắc Retry
+## 4. Quy tắc retry
 
-### Retry Được Phép Cho
+Phương thức an toàn (`GET`, `HEAD`, `OPTIONS`) có thể retry lỗi mạng/timeout và `5xx` đủ điều kiện trong giới hạn số lần cấu hình. Mutation chỉ được phát lại theo cơ chế retry chung khi có contract `idempotentRetry` tường minh.
 
-- Lỗi mạng
-- Lỗi phía server không bị xếp vào nhóm client error
+Không retry request đã hủy, endpoint auth, `429`, `503`, các `4xx` khác hoặc request đã hết lượt. Lần `401` đầu có nhánh refresh rồi phát lại riêng, chỉ dành cho phương thức an toàn và ngữ cảnh API/phiên hiện tại; loại trừ refresh/logout. Không tự phát lại mutation bị `401`. Xác định kết quả thao tác ghi chưa rõ trước khi người dùng thử lại.
 
-### Retry Bị Bỏ Qua Cho
-
-- Auth endpoint bị client error
-- Các `4xx` client error thông thường
-- Request đã dùng hết số lần retry cho phép
-
-Điều này giúp lỗi login và validation không bị nhìn nhầm là lỗi tạm thời trong khi thực tế là lỗi người dùng hoặc sai contract.
+Lỗi refresh tạm thời giữ phiên; phiên không hợp lệ/hết hạn và xung đột xoay token có cách phục hồi riêng. Xem [luồng xác thực và phiên](AUTH_AND_SESSION_FLOW.vi.md).
 
 ## 5. Vai Trò Của Mock API
 
@@ -117,12 +110,12 @@ Riêng với realtime monitoring, mock mode hiện bao phủ cả nhóm endpoint
 
 ## 9. Tài Liệu Nên Đọc Kèm
 
-1. [Luồng Xác Thực Và Phiên Làm Việc](AUTH_AND_SESSION_FLOW_vi.md)
-2. [Cài Đặt, I18n, Và Công Cụ Chất Lượng](SETTINGS_I18N_AND_QUALITY_vi.md)
-3. [Giám Sát Thời Gian Thực Và Dashboard](REALTIME_MONITORING_AND_DASHBOARD_vi.md)
+1. [Luồng Xác Thực Và Phiên Làm Việc](AUTH_AND_SESSION_FLOW.vi.md)
+2. [Cài Đặt, I18n, Và Công Cụ Chất Lượng](SETTINGS_I18N_AND_QUALITY.vi.md)
+3. [Giám Sát Thời Gian Thực Và Dashboard](REALTIME_MONITORING_AND_DASHBOARD.vi.md)
 
 ---
 
 [Đọc tài liệu này bằng tiếng Anh](DATA_ACCESS_AND_MOCK_API.md)
 
-[Quay lại Mục Lục Tài Liệu](DOCUMENTATION_INDEX_vi.md)
+[Quay lại Mục Lục Tài Liệu](DOCUMENTATION_INDEX.vi.md)

@@ -99,7 +99,7 @@ This makes the dashboard useful, but it also means the page can grow quickly bec
 - duplicated presentation logic for loading skeletons and summary formatting
 - large template size
 - direct knowledge of many backend fields
-- prompt-driven operational flows for creating rules, channels, and incidents
+- dedicated dialogs for rule/channel creation, incidents, cache clearing and rule-toggle confirmation
 
 ## 7. Review Checklist
 
@@ -116,7 +116,7 @@ This makes the dashboard useful, but it also means the page can grow quickly bec
 2. Separate command actions from read snapshot state if the store keeps growing.
 3. Split `AdminDashboard.vue` into view sections backed by feature-specific composables.
 4. Consider using a smaller derived-view helper for card-ready metrics instead of formatting inside pages.
-5. Replace prompt-based maintenance actions with dedicated dialog components if the monitoring surface keeps expanding.
+5. Keep validation, submission errors and confirmation behavior consistent across the existing operation dialogs.
 
 ## 9. Related Documents
 
@@ -125,6 +125,6 @@ This makes the dashboard useful, but it also means the page can grow quickly bec
 
 ---
 
-[Read this document in Vietnamese](REALTIME_MONITORING_AND_DASHBOARD_vi.md)
+[Read this document in Vietnamese](REALTIME_MONITORING_AND_DASHBOARD.vi.md)
 
 [Back to Documentation Index](DOCUMENTATION_INDEX.md)

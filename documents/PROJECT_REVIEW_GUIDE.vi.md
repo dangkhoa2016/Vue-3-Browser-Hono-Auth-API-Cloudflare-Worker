@@ -2,7 +2,7 @@
 
 > 🌐 Language / Ngôn ngữ: [English](PROJECT_REVIEW_GUIDE.md) | **Tiếng Việt**
 
-[Quay lại Mục Lục Tài Liệu](DOCUMENTATION_INDEX_vi.md)
+[Quay lại Mục Lục Tài Liệu](DOCUMENTATION_INDEX.vi.md)
 
 Tài liệu này là điểm bắt đầu để review `vue-hono-auth-api-cloudflare-worker`. Mục tiêu là chỉ ra những khu vực quan trọng nhất khi cần xem xét hành vi, giảm độ phức tạp, hoặc lập kế hoạch tối ưu về sau.
 
@@ -40,15 +40,15 @@ Những file này rất phù hợp để tách nhỏ thêm theo feature hoặc s
 
 ## 3. Bản Đồ Tài Liệu
 
-- [Mục Lục Tài Liệu](DOCUMENTATION_INDEX_vi.md)
-- [Runtime Ứng Dụng Và Cơ Chế Tải](APP_RUNTIME_AND_LOADING_vi.md)
-- [Luồng Xác Thực Và Phiên Làm Việc](AUTH_AND_SESSION_FLOW_vi.md)
-- [Audit Quản Trị Và Advanced Audit](ADMIN_AUDIT_AND_ADVANCED_AUDIT_vi.md)
-- [Truy Cập Dữ Liệu Và Mock API](DATA_ACCESS_AND_MOCK_API_vi.md)
-- [Giám Sát Thời Gian Thực Và Dashboard](REALTIME_MONITORING_AND_DASHBOARD_vi.md)
-- [Luồng KV Admin Configs](KV_ADMIN_CONFIGS_WORKFLOW_vi.md)
-- [Cài Đặt, I18n, Và Công Cụ Chất Lượng](SETTINGS_I18N_AND_QUALITY_vi.md)
-- [Ranh Giới Kiến Trúc Frontend](FRONTEND_ARCHITECTURE_BOUNDARIES_vi.md)
+- [Mục Lục Tài Liệu](DOCUMENTATION_INDEX.vi.md)
+- [Runtime Ứng Dụng Và Cơ Chế Tải](APP_RUNTIME_AND_LOADING.vi.md)
+- [Luồng Xác Thực Và Phiên Làm Việc](AUTH_AND_SESSION_FLOW.vi.md)
+- [Audit Quản Trị Và Advanced Audit](ADMIN_AUDIT_AND_ADVANCED_AUDIT.vi.md)
+- [Truy Cập Dữ Liệu Và Mock API](DATA_ACCESS_AND_MOCK_API.vi.md)
+- [Giám Sát Thời Gian Thực Và Dashboard](REALTIME_MONITORING_AND_DASHBOARD.vi.md)
+- [Luồng KV Admin Configs](KV_ADMIN_CONFIGS_WORKFLOW.vi.md)
+- [Cài Đặt, I18n, Và Công Cụ Chất Lượng](SETTINGS_I18N_AND_QUALITY.vi.md)
+- [Ranh Giới Kiến Trúc Frontend](FRONTEND_ARCHITECTURE_BOUNDARIES.vi.md)
 
 ## 4. Bản Đồ Tính Năng
 
@@ -94,14 +94,14 @@ Sử dụng checklist này trước khi approve một thay đổi không nhỏ:
 
 ## 7. Thứ Tự Nên Đọc
 
-1. Bắt đầu với [Runtime Ứng Dụng Và Cơ Chế Tải](APP_RUNTIME_AND_LOADING_vi.md)
-2. Đọc tiếp [Luồng Xác Thực Và Phiên Làm Việc](AUTH_AND_SESSION_FLOW_vi.md)
-3. Sau đó đọc [Truy Cập Dữ Liệu Và Mock API](DATA_ACCESS_AND_MOCK_API_vi.md)
-4. Đọc [Audit Quản Trị Và Advanced Audit](ADMIN_AUDIT_AND_ADVANCED_AUDIT_vi.md) khi thay đổi liên quan miền audit
+1. Bắt đầu với [Runtime Ứng Dụng Và Cơ Chế Tải](APP_RUNTIME_AND_LOADING.vi.md)
+2. Đọc tiếp [Luồng Xác Thực Và Phiên Làm Việc](AUTH_AND_SESSION_FLOW.vi.md)
+3. Sau đó đọc [Truy Cập Dữ Liệu Và Mock API](DATA_ACCESS_AND_MOCK_API.vi.md)
+4. Đọc [Audit Quản Trị Và Advanced Audit](ADMIN_AUDIT_AND_ADVANCED_AUDIT.vi.md) khi thay đổi liên quan miền audit
 5. Rồi mới xem tài liệu theo từng feature được sửa
 
 ---
 
 [Đọc tài liệu này bằng tiếng Anh](PROJECT_REVIEW_GUIDE.md)
 
-[Quay lại Mục Lục Tài Liệu](DOCUMENTATION_INDEX_vi.md)
+[Quay lại Mục Lục Tài Liệu](DOCUMENTATION_INDEX.vi.md)
