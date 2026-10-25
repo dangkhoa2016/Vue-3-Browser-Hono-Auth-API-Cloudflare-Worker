@@ -102,7 +102,29 @@ test.describe('the session record in a real browser', () => {
     await expect(main.getByRole('heading', { name: 'Role-based API Explorer', exact: true })).toBeVisible();
     await expect(main.getByRole('heading', { name: 'Login required', exact: true })).toHaveCount(0);
     await expect(main.locator('.animate-pulse')).toHaveCount(0);
-    expect((await apiRequests()).some(request => request.path === '/api')).toBe(true);
+    expect((await apiRequests()).filter(request => request.path === '/api' && request.method === 'GET')).toHaveLength(1);
+  });
+
+  test('API explorer loads once per login, including a later login after logout', async ({ page }) => {
+    await useLiveApi(page);
+    await page.addInitScript(() => localStorage.setItem('user-locale', 'en'));
+    await page.goto('/#/api-info');
+    const dialog = page.getByRole('dialog', { name: 'Login', exact: true });
+    const main = page.locator('main');
+    const content = main.getByRole('heading', { name: 'Role-based API Explorer', exact: true });
+    await expect(dialog).toBeVisible();
+    await submitLoginForm(page);
+    await expect(dialog).toHaveCount(0);
+    await expect(content).toBeVisible();
+    expect((await apiRequests()).filter(request => request.path === '/api' && request.method === 'GET')).toHaveLength(1);
+
+    await logoutViaUi(page);
+    await expect(main.getByRole('heading', { name: 'Login required', exact: true })).toBeVisible();
+    await main.getByRole('button', { name: /Login/ }).click();
+    await submitLoginForm(page);
+    await expect(dialog).toHaveCount(0);
+    await expect(content).toBeVisible();
+    expect((await apiRequests()).filter(request => request.path === '/api' && request.method === 'GET')).toHaveLength(2);
   });
 
   test('a login through the real form writes one canonical record and a matching mirror', async ({ browser }) => {
