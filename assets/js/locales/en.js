@@ -442,25 +442,83 @@ export default {
       unknown_error: 'Unknown error'
     },
     home: {
-      badge: 'Hono Auth Worker v1.0',
-      cta: {
-        documentation: 'Documentation',
-        documentation_title: 'Read the documentation',
-        get_started: 'Get Started',
-        get_started_title: 'Start building your auth system'
+      "eyebrow": "Vue 3 + Hono · Technical overview",
+      "hero": {
+        "title": "A browser-first console",
+        "emphasis": "For Hono on Cloudflare.",
+        "description": "Explore a Vue 3 admin interface connected to a Hono authentication API on Cloudflare Workers. Follow the architecture, inspect the source, and try the workflows behind the interface.",
+        "note": "Two repositories. A browser-loaded frontend. A separate Workers API."
       },
-      hero: {
-        subtitle: 'Production-ready boilerplate combining Hono.js, D1 Database, and JWT authentication for high-performance edge applications.',
-        title_emphasis: 'Auth Solution',
-        title_end: 'for Cloudflare Workers',
-        title_start: 'The Ultimate'
+      "links": {
+        "frontend": "Frontend source",
+        "backend": "Backend source",
+        "architecture": "Explore architecture"
       },
-      tech: {
-        d1_title: 'Serverless SQL database',
-        edge_title: 'Global edge network deployment',
-        heading: 'Powered by Modern Stack',
-        hono_title: 'Ultra-fast web framework',
-        jwt_title: 'Secure token-based authentication'
+      "diagram": {
+        "title": "The request path",
+        "description": "Architecture: a Vue 3 browser sends HTTPS JSON requests to a Hono API on Cloudflare Workers, which accesses D1 for relational data and Workers KV for configuration.",
+        "browser": "Browser interface",
+        "api": "API and authentication",
+        "bindings": "Worker bindings",
+        "data": "Relational application data",
+        "config": "Configuration and controls",
+        "note": "Architecture overview · not a live service-status display."
+      },
+      "technology": {
+        "title": "The stack, with a purpose",
+        "note": "No frontend build step",
+        "vue": "Interface components",
+        "pinia": "Application state",
+        "hono": "API routes",
+        "workers": "Edge runtime",
+        "d1": "Relational storage",
+        "kv": "Runtime configuration"
+      },
+      "architecture": {
+        "eyebrow": "01 / Architecture",
+        "title": "From browser to edge.",
+        "description": "Three responsibilities, connected through an HTTP API. The interface presents workflows; the backend enforces access and manages data.",
+        "client_title": "Browser application",
+        "client_body": "Vue single-file components load in the browser. Vue Router handles navigation, Pinia manages state, and Axios connects the interface to the selected API.",
+        "api_title": "Authentication API",
+        "api_body": "Hono routes run on Cloudflare Workers. The API validates requests, enforces role-based access, and manages JWT access and refresh sessions.",
+        "data_title": "Data and configuration",
+        "data_body": "D1 stores relational application data. Workers KV supplies runtime configuration, with administrative controls exposed through the API."
+      },
+      "capabilities": {
+        "eyebrow": "02 / Capabilities",
+        "title": "What the interface connects.",
+        "description": "Explore the implemented workflows through focused screens. Administrative features require the corresponding account permissions.",
+        "users_title": "Users and roles",
+        "users_body": "Manage user records, inspect profiles, and work with user, admin, and super-admin access levels.",
+        "audit_title": "Audit and security",
+        "audit_body": "Review audit trails, token activity, and security incidents with filters and detail views.",
+        "monitoring_title": "Monitoring and diagnostics",
+        "monitoring_body": "Inspect system health, statistics, real-time monitoring, and alert controls from dedicated administrative pages.",
+        "config_title": "Configuration controls",
+        "config_body": "Inspect KV configuration, compare environments, and manage rate-limit controls with super-admin access."
+      },
+      "source": {
+        "eyebrow": "03 / Explore the source",
+        "title": "Two repositories. Clear boundaries.",
+        "description": "Start with the interface or follow a request into the backend. Documentation covers the runtime, authentication flow, and project structure.",
+        "client_label": "Client / Browser",
+        "client_body": "Pages, reusable components, state stores, localization, and a separate verification harness.",
+        "server_label": "Server / Workers",
+        "server_body": "Authentication routes, authorization, data services, configuration, and Cloudflare bindings.",
+        "docs": "Documentation index",
+        "runtime": "Browser runtime",
+        "auth": "Authentication flow"
+      },
+      "explore": {
+        "eyebrow": "04 / Try it",
+        "title": "Move from the code to the console.",
+        "description": "Explore public API information or configure your connection. Sign in for protected pages; available actions depend on your account role.",
+        "health": "API health",
+        "version": "API version",
+        "settings": "API settings",
+        "profile": "Open your profile",
+        "sign_in": "Sign in"
       }
     },
     auth: {

@@ -41,6 +41,7 @@ const INTEGRATION_CONFIG = join(BROWSER_DIR, 'playwright.integration.config.mjs'
 
 /** The suites the mock run is required to discover, each with what it is there to prove. */
 const REQUIRED_SUITES = [
+  { name: 'home-overview', proves: 'the technical overview links, session entry, localization and mobile layout' },
   { name: 'session-flow', proves: 'the canonical session record and its legacy mirror, through the real form' },
   { name: 'session-invariants', proves: 'cross-tab and rotation invariants' },
   { name: 'backend-contract-mock', proves: 'the backend contract the frontend depends on, against the stand-in' },

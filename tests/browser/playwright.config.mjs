@@ -24,7 +24,7 @@ export default defineConfig({
   // an unexplained behavioural failure. `session-seed-smoke` validates the *fixture* against the real app
   // with fake credentials, so it
   // needs no backend and is the reason a broken seed cannot hide behind a skipped suite.
-  testMatch: /(session-flow|session-invariants|backend-contract-mock|session-seed-smoke|harness-egress|served-source-identity)\.spec\.mjs/,
+  testMatch: /(session-flow|session-invariants|backend-contract-mock|session-seed-smoke|harness-egress|served-source-identity|home-overview)\.spec\.mjs/,
   fullyParallel: false,
   workers: 1,
   forbidOnly: true,

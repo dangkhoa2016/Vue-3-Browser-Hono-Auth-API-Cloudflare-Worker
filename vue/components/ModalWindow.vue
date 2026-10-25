@@ -6,15 +6,17 @@
         <div class="fixed inset-0 transition-opacity bg-gray-500 dark:bg-gray-900 bg-opacity-75 dark:bg-opacity-75" @click="handleOutsideClick"></div>
 
         <!-- Modal panel -->
-        <div :class="['relative bg-white dark:bg-gray-800 rounded-lg px-4 pt-5 pb-4 text-left shadow-xl transform transition-all max-w-md w-full max-h-[90vh] overflow-y-auto', panelClass]">
+        <div ref="panel" role="dialog" aria-modal="true" :aria-label="title" tabindex="-1" :class="['relative bg-white dark:bg-gray-800 rounded-lg px-4 pt-5 pb-4 text-left shadow-xl transform transition-all max-w-md w-full max-h-[90vh] overflow-y-auto', panelClass]">
           <div>
             <!-- Close button -->
             <button 
+              type="button"
               @click="$emit('close')"
               class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
               :title="$t('message.common.close')"
+              :aria-label="$t('message.common.close')"
             >
-              <i class="bi bi-x-lg text-xl"></i>
+              <i class="bi bi-x-lg text-xl" aria-hidden="true"></i>
             </button>
 
             <!-- Icon -->
@@ -49,9 +51,12 @@
 </template>
 
 <script setup>
-import { onBeforeUnmount, onMounted, toRefs, watch } from 'vue';
+import { onBeforeUnmount, onMounted, ref, toRefs, watch } from 'vue';
+import { useDialogFocus } from '/vue/composables/useDialogFocus.js';
 
 const props = defineProps({
+  manageFocus: { type: Boolean, default: false },
+  initialFocus: { type: String, default: '' },
   show: {
     type: Boolean,
     default: false
@@ -91,7 +96,9 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['close']);
-const { show, closeOnClickOutside } = toRefs(props);
+const { show, closeOnClickOutside, manageFocus, initialFocus } = toRefs(props);
+const panel = ref(null);
+useDialogFocus({ show, enabled: manageFocus, panel, initialFocus });
 
 watch(show, (val) => {
   try {

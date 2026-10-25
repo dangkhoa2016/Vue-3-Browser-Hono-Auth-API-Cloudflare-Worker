@@ -442,25 +442,83 @@ export default {
       unknown_error: 'Unbekannter Fehler'
     },
     home: {
-      badge: 'Hono Auth Worker v1.0',
-      cta: {
-        documentation: 'Dokumentation',
-        documentation_title: 'Dokumentation lesen',
-        get_started: 'Loslegen',
-        get_started_title: 'Beginnen Sie mit dem Aufbau Ihres Auth-Systems'
+      "eyebrow": "Vue 3 + Hono · Technischer Überblick",
+      "hero": {
+        "title": "Eine Verwaltungskonsole im Browser",
+        "emphasis": "Für Hono auf Cloudflare.",
+        "description": "Entdecken Sie eine Vue-3-Verwaltungsoberfläche mit einer Hono-Authentifizierungs-API auf Cloudflare Workers. Erkunden Sie die Architektur, lesen Sie den Quellcode und testen Sie die Abläufe der Anwendung.",
+        "note": "Zwei Repositorys. Ein Frontend im Browser. Eine separate Workers-API."
       },
-      hero: {
-        subtitle: 'Produktionsreifes Boilerplate, das Hono.js, D1-Datenbank und JWT-Authentifizierung für leistungsstarke Edge-Anwendungen kombiniert.',
-        title_emphasis: 'Auth-Lösung',
-        title_end: 'für Cloudflare Workers',
-        title_start: 'Die ultimative'
+      "links": {
+        "frontend": "Frontend-Quellcode",
+        "backend": "Backend-Quellcode",
+        "architecture": "Architektur erkunden"
       },
-      tech: {
-        d1_title: 'Serverlose SQL-Datenbank',
-        edge_title: 'Globales Edge-Netzwerk-Deployment',
-        heading: 'Angetrieben von modernem Stack',
-        hono_title: 'Ultraschnelles Web-Framework',
-        jwt_title: 'Sichere token-basierte Authentifizierung'
+      "diagram": {
+        "title": "Der Weg einer Anfrage",
+        "description": "Architektur: Der Vue-3-Browser sendet HTTPS-Anfragen im JSON-Format an eine Hono-API auf Cloudflare Workers. Die API nutzt D1 für relationale Daten und Workers KV für die Konfiguration.",
+        "browser": "Browseroberfläche",
+        "api": "API und Authentifizierung",
+        "bindings": "Workers-Bindings",
+        "data": "Relationale Anwendungsdaten",
+        "config": "Konfiguration und Steuerung",
+        "note": "Architekturübersicht · keine Live-Anzeige des Dienststatus."
+      },
+      "technology": {
+        "title": "Technologien und ihre Aufgaben",
+        "note": "Kein Frontend-Build erforderlich",
+        "vue": "Oberflächenkomponenten",
+        "pinia": "Anwendungszustand",
+        "hono": "API-Routing",
+        "workers": "Edge-Laufzeit",
+        "d1": "Relationaler Speicher",
+        "kv": "Laufzeitkonfiguration"
+      },
+      "architecture": {
+        "eyebrow": "01 / Architektur",
+        "title": "Vom Browser bis zur Edge.",
+        "description": "Drei Aufgabenbereiche, verbunden durch eine HTTP-API. Die Oberfläche stellt Abläufe dar; das Backend steuert den Zugriff und verwaltet die Daten.",
+        "client_title": "Browseranwendung",
+        "client_body": "Vue-Einzeldateikomponenten werden im Browser geladen. Vue Router übernimmt die Navigation, Pinia verwaltet den Zustand und Axios verbindet die Oberfläche mit der gewählten API.",
+        "api_title": "Authentifizierungs-API",
+        "api_body": "Hono-Routen laufen auf Cloudflare Workers. Die API validiert Anfragen, prüft rollenbasierte Zugriffe und verwaltet JWT-Sitzungen mit Access- und Refresh-Tokens.",
+        "data_title": "Daten und Konfiguration",
+        "data_body": "D1 speichert relationale Anwendungsdaten. Workers KV stellt die Laufzeitkonfiguration bereit; administrative Änderungen erfolgen über die API."
+      },
+      "capabilities": {
+        "eyebrow": "02 / Funktionen",
+        "title": "Was die Oberfläche verbindet.",
+        "description": "Erkunden Sie die implementierten Abläufe in eigenen Ansichten. Verwaltungsfunktionen erfordern die entsprechenden Kontoberechtigungen.",
+        "users_title": "Benutzer und Rollen",
+        "users_body": "Verwalten Sie Benutzerdaten und Profile mit den Zugriffsebenen user, admin und super_admin.",
+        "audit_title": "Audit und Sicherheit",
+        "audit_body": "Prüfen Sie Audit-Verläufe, Token-Aktivitäten und Sicherheitsvorfälle mit Filtern und Detailansichten.",
+        "monitoring_title": "Monitoring und Diagnose",
+        "monitoring_body": "Untersuchen Sie Systemzustand, Statistiken, Echtzeit-Monitoring und Alarmsteuerung auf eigenen Verwaltungsseiten.",
+        "config_title": "Konfigurationsverwaltung",
+        "config_body": "Prüfen Sie KV-Konfigurationen, vergleichen Sie Umgebungen und verwalten Sie Ratenbegrenzungen mit super_admin-Zugriff."
+      },
+      "source": {
+        "eyebrow": "03 / Quellcode erkunden",
+        "title": "Zwei Repositorys. Klare Zuständigkeiten.",
+        "description": "Beginnen Sie bei der Oberfläche oder verfolgen Sie eine Anfrage ins Backend. Die Dokumentation beschreibt Laufzeit, Authentifizierung und Projektstruktur.",
+        "client_label": "Client / Browser",
+        "client_body": "Seiten, wiederverwendbare Komponenten, Zustandsspeicher, Übersetzungen und eine separate Prüfumgebung.",
+        "server_label": "Server / Workers",
+        "server_body": "Authentifizierungsrouten, Berechtigungsprüfung, Datendienste, Konfiguration und Cloudflare-Bindings.",
+        "docs": "Dokumentationsübersicht",
+        "runtime": "Browser-Laufzeit",
+        "auth": "Authentifizierungsablauf"
+      },
+      "explore": {
+        "eyebrow": "04 / Ausprobieren",
+        "title": "Vom Quellcode zur Konsole.",
+        "description": "Prüfen Sie öffentliche API-Informationen oder konfigurieren Sie die Verbindung. Geschützte Seiten erfordern eine Anmeldung; verfügbare Aktionen hängen von Ihrer Kontorolle ab.",
+        "health": "API-Zustand",
+        "version": "API-Version",
+        "settings": "API-Einstellungen",
+        "profile": "Profil öffnen",
+        "sign_in": "Anmelden"
       }
     },
     auth: {
