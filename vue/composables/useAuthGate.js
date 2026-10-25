@@ -44,6 +44,16 @@ export function useAuthGate(options) {
     ? [authStore.apiIdentity || '', authStore.sessionId || '', authStore.sessionGeneration ?? 0].join('|')
     : '');
 
+  let lastAuthenticatedContext = null;
+  const notifyAuthenticated = async () => {
+    // Record before awaiting: committing login can wake the page watcher before
+    // the modal emits success, even while the page's request is still pending.
+    lastAuthenticatedContext = sessionContextKey.value;
+    if (typeof onAuthenticated === 'function') {
+      await onAuthenticated();
+    }
+  };
+
   useSessionContextWatch(() => {
     if (typeof resetProtectedState === 'function') {
       resetProtectedState();
@@ -55,6 +65,7 @@ export function useAuthGate(options) {
    * Clears protected state locally to prevent data leaks.
    */
   const markUnauthenticated = () => {
+    lastAuthenticatedContext = null;
     if (typeof resetProtectedState === 'function') {
       resetProtectedState();
     }
@@ -73,9 +84,7 @@ export function useAuthGate(options) {
 
     if (isAuthenticated === true && showLoginRequired.value) {
       showLoginRequired.value = false;
-      if (typeof onAuthenticated === 'function') {
-        await onAuthenticated();
-      }
+      await notifyAuthenticated();
     }
   };
 
@@ -97,8 +106,10 @@ export function useAuthGate(options) {
           return;
         }
 
-        if (typeof onAuthenticated === 'function') {
-          await onAuthenticated();
+        // The observer may already have loaded this session. A modal-specific
+        // callback above remains explicit; only its default fallback is shared.
+        if (lastAuthenticatedContext !== sessionContextKey.value) {
+          await notifyAuthenticated();
         }
       },
       () => {
@@ -139,9 +150,7 @@ export function useAuthGate(options) {
     }
 
     showLoginRequired.value = false;
-    if (typeof onAuthenticated === 'function') {
-      await onAuthenticated();
-    }
+    await notifyAuthenticated();
     return true;
   };
 
