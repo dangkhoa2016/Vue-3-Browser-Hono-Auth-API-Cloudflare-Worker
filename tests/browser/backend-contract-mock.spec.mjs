@@ -80,6 +80,55 @@ async function signIn(page, { role = 'admin' } = {}) {
 const pdfButton = (page) => page.locator('button:has(i.bi-file-earmark-pdf)').first();
 const startButton = (page) => page.locator('button:has(i.bi-play-fill)').first();
 
+test('admin password reset exposes only lower-role targets and submits confirmed exact credentials once', async ({ page }) => {
+  await control('/__fake/reset');
+  await signIn(page);
+  await page.goto('/#/admin/users');
+  const resets = page.getByRole('button', { name: /^reset password$|^đặt lại mật khẩu$/i });
+  await expect(resets).toHaveCount(1);
+  await resets.first().click();
+  const dialog = page.getByRole('dialog', { name: /reset password|đặt lại mật khẩu/i });
+  await expect(dialog).toContainText('target@example.test');
+  await expect(page.locator('#admin-reset-password')).toBeFocused();
+  await page.locator('#admin-reset-password').fill(' Exact-browser-fixture-9! ');
+  // Refresh/profile synchronization may replace the user object without changing identity.
+  await page.evaluate(async () => {
+    const { useAuthStore } = await import('/assets/js/stores/authStore.js');
+    const auth = useAuthStore();
+    auth.user = { ...auth.user };
+    await window.Vue.nextTick();
+  });
+  await expect(dialog).toBeVisible();
+  await expect(page.locator('#admin-reset-password')).toHaveValue(' Exact-browser-fixture-9! ');
+  await page.locator('#admin-reset-confirm').fill('mismatched-password');
+  await dialog.getByRole('button', { name: /^reset password$|^đặt lại mật khẩu$/i }).click();
+  await expect(dialog.getByRole('alert')).toBeVisible();
+  expect((await apiRequests()).filter(r => r.path.endsWith('/reset-password'))).toHaveLength(0);
+  await page.locator('#admin-reset-confirm').fill(' Exact-browser-fixture-9! ');
+  const [sent] = await Promise.all([
+    page.waitForRequest(request => request.url().endsWith('/api/admin/users/2/reset-password') && request.method() === 'POST'),
+    dialog.getByRole('button', { name: /^reset password$|^đặt lại mật khẩu$/i }).click()
+  ]);
+  await expect(dialog).toBeHidden();
+  const mutations = (await apiRequests()).filter(r => r.path.endsWith('/reset-password'));
+  expect(mutations).toHaveLength(1);
+  expect(sent.postDataJSON()).toEqual({ newPassword: ' Exact-browser-fixture-9! ', confirmPassword: ' Exact-browser-fixture-9! ' });
+  await resets.first().click();
+  await expect(page.locator('#admin-reset-password')).toHaveValue('');
+  await page.locator('#admin-reset-password').fill('Discarded-fixture-9!');
+  await page.locator('#admin-reset-password').press('Escape');
+  await expect(dialog).toBeHidden();
+  await resets.first().click();
+  await expect(page.locator('#admin-reset-password')).toHaveValue('');
+});
+
+test('admin password reset lets a super admin reset users and admins while protecting peers and self', async ({ page }) => {
+  await control('/__fake/reset');
+  await signIn(page, { role: 'super_admin' });
+  await page.goto('/#/admin/users');
+  await expect(page.getByRole('button', { name: /^reset password$|^đặt lại mật khẩu$/i })).toHaveCount(2);
+});
+
 const waitForRecordState = (page, state) => page.waitForFunction(
   ({ key, expected }) => JSON.parse(window.localStorage.getItem(key) || 'null')?.state === expected,
   { key: RECORD_KEY, expected: state },

@@ -31,7 +31,7 @@ Static/unit npm hooks verify and restore the bundled historical checkpoints offl
 The direct browser command has one conditional served-identity probe. Supply the current digest to run that probe too:
 
 ```bash
-export FRONTEND_SERVED_DIGEST="$(node tools/frontend-source-identity.mjs --print-digest --quiet --out /tmp/frontend-source-manifest.json)"
+export FRONTEND_SERVED_DIGEST="$(node tools/frontend-source-identity.mjs --repo . --print-digest --quiet --out /tmp/frontend-source-manifest.json)"
 npm --prefix tests run test:browser
 ```
 

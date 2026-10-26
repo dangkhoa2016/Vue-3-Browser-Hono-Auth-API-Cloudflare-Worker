@@ -15,6 +15,7 @@ import { useI18nFallback } from '/vue/composables/useI18nFallback.js';
 import { useEnsureAuthenticatedLifecycle } from '/vue/composables/useEnsureAuthenticatedLifecycle.js';
 import { useMockApiChangeWatcher } from '/vue/composables/useMockApiChangeWatcher.js';
 import { getUserRoleBadgeClass, getUserStatusBadgeClass } from '/vue/composables/useUiClassMap.js';
+import { useAdminPasswordReset } from '/vue/composables/useAdminPasswordReset.js';
 
 export function useAdminUsersPage() {
   const { t, tf } = useI18nFallback();
@@ -23,6 +24,7 @@ export function useAdminUsersPage() {
   const modalStore = useModalStore();
   const userStore = useUserStore();
   const toastStore = useToastStore();
+  const passwordReset = useAdminPasswordReset({ authStore, mainStore, userStore, toastStore, t });
   const { formatDateTime } = useDateTimeFormatter();
   const search = ref('');
   const roleFilter = ref('all');
@@ -458,6 +460,7 @@ export function useAdminUsersPage() {
   useEnsureAuthenticatedLifecycle(ensureAuthenticated);
 
   return {
+    ...passwordReset,
     t,
     tf,
     authStore,

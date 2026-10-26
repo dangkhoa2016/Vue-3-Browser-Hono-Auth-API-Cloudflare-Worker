@@ -39,6 +39,7 @@ export const API_ENDPOINTS = {
   ADMIN_STATS: '/api/admin/stats',
   ADMIN_SYSTEM_HEALTH: '/api/admin/system-health',
   ADMIN_USER_ROLE: '/api/admin/users/:id/role', // Helper for pattern matching
+  ADMIN_USER_PASSWORD_RESET: '/api/admin/users/:id/reset-password',
   ADMIN_TOKEN_BLACKLIST: '/api/admin/token-blacklist',
   ADMIN_TOKEN_AUDIT: '/api/admin/token-audit',
   KV_ADMIN_CONFIGS: '/api/kv-admin/configs',
