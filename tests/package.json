@@ -19,7 +19,7 @@
     "test:history": "node ../tools/check-history.mjs"
   },
   "devDependencies": {
-    "@playwright/test": "1.56.1",
+    "@playwright/test": "1.64.1",
     "axios": "1.20.0"
   }
 }
