@@ -24,6 +24,7 @@ This is the main entry point for documentation inside `documents/`. Use it when 
 
 ## Release and operations
 
+- [Administrative password reset](ADMIN_PASSWORD_RESET.md)
 - [Verification and releases](VERIFICATION_AND_RELEASES.md)
 - [Session transitions and rollback](SESSION-ROLLBACK.md)
 

@@ -220,6 +220,14 @@
                           :aria-label="tf('message.common.edit', 'Edit')"
                         />
                         <ActionIconButton
+                          v-if="canResetPassword(userItem)"
+                          @click="openPasswordReset(userItem)"
+                          icon="bi bi-key-fill"
+                          tone="indigo"
+                          :title="t('message.admin_password_reset.title')"
+                          :aria-label="t('message.admin_password_reset.title')"
+                        />
+                        <ActionIconButton
                           @click="confirmDelete(userItem)"
                           icon="bi bi-trash-fill"
                           tone="rose"
@@ -284,6 +292,12 @@
       @update:role-value="selectedRoleValue = $event"
     />
 
+    <PasswordResetModal
+      :show="showPasswordReset" :user="passwordResetUser" :form="resetPasswordForm"
+      :loading="isResettingPassword" :error="resetPasswordError"
+      @close="closePasswordReset" @save="submitPasswordReset" @update:form="resetPasswordForm = $event"
+    />
+
     <!-- User Modal Component -->
     <UserModal
       :show="showModal"
@@ -305,6 +319,7 @@ export default {
 
 <script setup>
 import UserModal from '../components/UserModal.vue';
+import PasswordResetModal from '../components/PasswordResetModal.vue';
 import ConfirmDeleteModal from '../components/ConfirmDeleteModal.vue';
 import RoleChangeModal from '../components/RoleChangeModal.vue';
 import PaginationControls from '../components/PaginationControls.vue';
@@ -317,6 +332,8 @@ import StatCard from '../components/StatCard.vue';
 import { useAdminUsersPage } from '/vue/composables/useAdminUsersPage.js';
 
 const {
+  showPasswordReset, passwordResetUser, resetPasswordForm, resetPasswordError, isResettingPassword,
+  canResetPassword, openPasswordReset, closePasswordReset, submitPasswordReset,
   t,
   tf,
   authStore,

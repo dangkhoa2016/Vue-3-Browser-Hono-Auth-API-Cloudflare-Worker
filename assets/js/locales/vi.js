@@ -1,5 +1,16 @@
 export default {
   message: {
+    admin_password_reset: {
+      "title": "Đặt lại mật khẩu",
+      "warning": "Thao tác này thay mật khẩu và đăng xuất người dùng trên mọi thiết bị. Hãy chuyển mật khẩu mới qua kênh an toàn.",
+      "new_password": "Mật khẩu mới",
+      "confirm_password": "Nhập lại mật khẩu mới",
+      "policy": "Mật khẩu cần ít nhất 8 ký tự và tối đa 72 byte UTF-8.",
+      "mismatch": "Mật khẩu nhập lại không khớp.",
+      "success": "Đã đặt lại mật khẩu và kết thúc mọi phiên của người dùng này.",
+      "failed": "Không thể hoàn tất việc đặt lại mật khẩu.",
+      "mock_unavailable": "Đặt lại mật khẩu cần backend thật. Chức năng này không khả dụng ở chế độ mock."
+},
     token_blacklist: {
       "title": "Danh sách đen Token",
       "subtitle": "Quản lý các token truy cập đã bị thu hồi để vô hiệu hóa ngay lập tức các tài khoản bị xâm phạm và bảo mật hệ thống.",

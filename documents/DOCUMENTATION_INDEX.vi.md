@@ -24,6 +24,7 @@
 
 ## Phát hành và vận hành
 
+- [Reset mật khẩu quản trị](ADMIN_PASSWORD_RESET.vi.md)
 - [Kiểm chứng và phát hành](VERIFICATION_AND_RELEASES.vi.md)
 - [Chuyển phiên bản và rollback](SESSION-ROLLBACK.vi.md)
 

@@ -457,6 +457,23 @@ const handleFakeApi = async (request, response) => {
 
   // Profile must be a renderable response, not the empty fallback below. The session
   // invariant exercises this view before logout and after a fresh mount.
+  // User administration fixtures exercise the shipped client, not backend authorization.
+  if (url.pathname === '/api/admin/users' && request.method === 'GET') {
+    sendJson(response, 200, { success: true, data: {
+      users: [
+        { ...user(), full_name: 'Browser Test', status: 'active' },
+        { id: 2, full_name: 'Reset Target', email: 'target@example.test', role: 'user', status: 'active' },
+        { id: 3, full_name: 'Peer Admin', email: 'peer@example.test', role: 'admin', status: 'active' },
+        { id: 4, full_name: 'Protected Admin', email: 'protected@example.test', role: 'super_admin', status: 'active' }
+      ], pagination: { page: 1, limit: 10, total: 4, totalPages: 1 }
+    } });
+    return;
+  }
+  if (/^\/api\/admin\/users\/\d+\/reset-password$/.test(url.pathname) && request.method === 'POST') {
+    sendJson(response, 200, { success: true, message: 'Fixture password reset', data: { sessionsRevoked: true } });
+    return;
+  }
+
   if (url.pathname === '/api/user/profile' && request.method === 'GET') {
     sendJson(response, 200, {
       success: true,

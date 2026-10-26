@@ -549,6 +549,11 @@ export const setupMock = (enable) => {
       });
 
       // Users
+      mock.onPost(/\/api\/admin\/users\/[^/]+\/reset-password(?:$|\?)/).reply(() => [422, {
+        success: false, code: 'MOCK_RESET_UNAVAILABLE',
+        message: window.i18nInstance?.global?.t('message.admin_password_reset.mock_unavailable') || 'Password reset requires a real backend.'
+      }]);
+
       mock.onPost(MOCK_PATTERNS.USERS).reply(async () => {
         try {
           const data = await loadJson(DATA_PATHS.CREATE_USER_SUCCESS);

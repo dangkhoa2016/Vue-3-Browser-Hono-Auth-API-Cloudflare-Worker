@@ -1,5 +1,16 @@
 export default {
   message: {
+    admin_password_reset: {
+      "title": "Reset password",
+      "warning": "This will replace the password and sign this user out on every device. Share the new password securely.",
+      "new_password": "New password",
+      "confirm_password": "Confirm new password",
+      "policy": "Use at least 8 characters and at most 72 UTF-8 bytes.",
+      "mismatch": "Passwords do not match.",
+      "success": "Password reset. All sessions for this user have ended.",
+      "failed": "Password reset could not be completed.",
+      "mock_unavailable": "Password reset requires a real backend. It is unavailable in mock mode."
+},
     token_blacklist: {
       "title": "토큰 블랙리스트",
       "subtitle": "취소된 액세스 토큰을 관리하여 손상된 계정을 즉시 비활성화하고 시스템을 보호합니다.",

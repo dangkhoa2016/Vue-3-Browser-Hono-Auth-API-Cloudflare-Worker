@@ -219,6 +219,15 @@ export const useUserStore = defineStore('users', {
       }
     },
 
+    async resetUserPassword(userId, { newPassword, confirmPassword }) {
+      const endpoint = API_ENDPOINTS.ADMIN_USER_PASSWORD_RESET.replace(':id', encodeURIComponent(String(userId)));
+      const response = await apiClient.post(endpoint, { newPassword, confirmPassword });
+      if (!response.data?.success) {
+        throw new Error(response.data?.message || i18n.global.t('message.admin_password_reset.failed'));
+      }
+      return { success: true, message: response.data.message };
+    },
+
     async deleteUser(userId) {
       // For delete, we might want to show loading on the list, but let's be consistent
       this.error = null;
