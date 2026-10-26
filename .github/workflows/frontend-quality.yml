@@ -33,7 +33,7 @@ jobs:
         run: npm --prefix tests run test:static > "$RUNNER_TEMP/frontend-static.log" 2>&1
       - name: Unit and loopback transport tests
         run: npm --prefix tests run test:unit > "$RUNNER_TEMP/frontend-unit.log" 2>&1
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: static-unit-${{ github.sha }}
@@ -78,7 +78,7 @@ jobs:
           console.log(`FRONTEND_SERVED_DIGEST=${buildManifest(process.cwd()).digest}`);
           JS
       - run: npm --prefix tests run test:browser > "$RUNNER_TEMP/frontend-browser.log" 2>&1
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: chromium-${{ github.sha }}
